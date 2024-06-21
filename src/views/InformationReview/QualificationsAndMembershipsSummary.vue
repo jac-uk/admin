@@ -8,6 +8,87 @@
         Qualifications
       </h2>
       <div v-if="applicationHasQualifications">
+        <!-- applied schedules -->
+        <div>
+          <dl
+            v-if="exercise.schedule2Apply"
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <div
+              v-if="exercise.appliedSchedule == 'schedule-2-3'"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Are you applying under Schedule 2(3)?
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.applyingUnderSchedule2Three"
+                  field="applyingUnderSchedule2Three"
+                  :edit="editable"
+                  :options="[true, false]"
+                  type="selection"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
+
+            <div
+              v-if="exercise.appliedSchedule == 'schedule-2-d'"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Are you applying under Schedule 2(d)?
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.applyingUnderSchedule2d"
+                  field="applyingUnderSchedule2d"
+                  :edit="editable"
+                  :options="[true, false]"
+                  type="selection"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
+          </dl>
+
+          <dl
+            v-if="scheduleApplies"
+            class="govuk-summary-list govuk-!-margin-bottom-8"
+          >
+            <dt
+              class="govuk-summary-list__key widerColumn"
+            >
+              Explain how you've gained experience in law.
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <ul class="govuk-list">
+                <li v-if="exercise.appliedSchedule=='schedule-2-3'">
+                  <InformationReviewRenderer
+                    :data="application.experienceUnderSchedule2Three"
+                    field="experienceUnderSchedule2Three"
+                    :edit="editable"
+                    :is-asked="isApplicationPartAsked('relevantQualifications')"
+                    @change-field="changeQualificationOrMembership"
+                  />
+                </li>
+                <li v-if="exercise.appliedSchedule=='schedule-2-d'">
+                  <InformationReviewRenderer
+                    :data="application.experienceUnderSchedule2D"
+                    field="experienceUnderSchedule2D"
+                    :edit="editable"
+                    :is-asked="isApplicationPartAsked('relevantQualifications')"
+                    @change-field="changeQualificationOrMembership"
+                  />
+                </li>
+              </ul>
+            </dd>
+          </dl>
+        </div>
+
         <dl
           v-for="(qualification, index) in application.qualifications"
           :key="qualification.name"
@@ -306,86 +387,7 @@
         />
       </Modal>
     </div>
-    <!-- applied schedules -->
-    <div>
-      <dl
-        v-if="exercise.schedule2Apply"
-        class="govuk-summary-list govuk-!-margin-bottom-0"
-      >
-        <div
-          v-if="exercise.appliedSchedule == 'schedule-2-3'"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key widerColumn">
-            Are you applying under Schedule 2(3)?
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="application.applyingUnderSchedule2Three"
-              field="applyingUnderSchedule2Three"
-              :edit="editable"
-              :options="[true, false]"
-              type="selection"
-              :is-asked="isApplicationPartAsked('relevantQualifications')"
-              @change-field="changeQualificationOrMembership"
-            />
-          </dd>
-        </div>
 
-        <div
-          v-if="exercise.appliedSchedule == 'schedule-2-d'"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key widerColumn">
-            Are you applying under Schedule 2(d)?
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="application.applyingUnderSchedule2d"
-              field="applyingUnderSchedule2d"
-              :edit="editable"
-              :options="[true, false]"
-              type="selection"
-              :is-asked="isApplicationPartAsked('relevantQualifications')"
-              @change-field="changeQualificationOrMembership"
-            />
-          </dd>
-        </div>
-      </dl>
-
-      <dl
-        v-if="scheduleApplies"
-        class="govuk-summary-list govuk-!-margin-bottom-8"
-      >
-        <dt
-          class="govuk-summary-list__key widerColumn"
-        >
-          Explain how you've gained experience in law.
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li v-if="exercise.appliedSchedule=='schedule-2-3'">
-              <InformationReviewRenderer
-                :data="application.experienceUnderSchedule2Three"
-                field="experienceUnderSchedule2Three"
-                :edit="editable"
-                :is-asked="isApplicationPartAsked('relevantQualifications')"
-                @change-field="changeQualificationOrMembership"
-              />
-            </li>
-            <li v-if="exercise.appliedSchedule=='schedule-2-d'">
-              <InformationReviewRenderer
-                :data="application.experienceUnderSchedule2D"
-                field="experienceUnderSchedule2D"
-                :edit="editable"
-                :is-asked="isApplicationPartAsked('relevantQualifications')"
-                @change-field="changeQualificationOrMembership"
-              />
-            </li>
-          </ul>
-        </dd>
-      </dl>
-    </div>
     <!-- memberships + professional Memberships -->
     <div
       v-if="hasRelevantMemberships"
@@ -983,7 +985,12 @@ export default {
       }
     },
     qualificationOptions() {
-      return this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
+      const options = this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
+      if (this.application.applyingUnderSchedule2Three) {
+        options.push('no-legal-qualification');
+      }
+
+      return options;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
