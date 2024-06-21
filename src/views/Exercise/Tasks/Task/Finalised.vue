@@ -154,6 +154,11 @@ export default {
       // group scores
       const scoreMap = {};
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+        if (this.scoreType === 'zScore') {
+          let val = parseFloat(scoreData[this.scoreType]).toFixed(2);
+          if (val === '-0.00') val = '0.00';
+          scoreData[this.scoreType] = val;
+        }
         if (!scoreMap[scoreData[this.scoreType]]) {
           scoreMap[scoreData[this.scoreType]] = {
             applicationIds: [],
@@ -211,7 +216,10 @@ export default {
       // add outcome stats
       if (this.task.hasOwnProperty('passMark')) {
         scoresInDescendingOrder.forEach(key => {
-          const score = parseFloat(key);
+          let score = parseFloat(key);
+          if (this.scoreType === 'zScore') {
+            score = score.toFixed(2);
+          }
           if (score >= this.task.passMark) {
             if (this.task.overrides && this.task.overrides.fail) {
               const failMatches = this.task.overrides.fail.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
