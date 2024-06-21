@@ -349,6 +349,8 @@ import {
   isJAC00187
 } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { httpsCallable } from '@firebase/functions';
+import { functions } from '@/firebase';
 
 export default {
   name: 'Application',
@@ -532,6 +534,16 @@ export default {
       const env = this.$store.getters.appEnvironment;
       return isJAC00187(env, this.application.exerciseRef);
     },
+    uploadPath() {
+      return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
+    },
+    templatePath() {
+      return `exercise/${this.exercise.id}/${this.exercise.downloads.candidateAssessementForms[0].file}`;
+    },
+    documentPath() {
+      const path = `${this.uploadPath}/${this.application.uploadedSelfAssessment}`;
+      return path.substring(1);
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -662,11 +674,37 @@ export default {
       }
       this.$refs.modalRefWithdrawApplication.closeModal();
     },
-    changeApplication(obj) {
-      this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    async changeApplication(obj) {
+      await this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+
+      // If uploaded self assessment file then extract the content
+      if (Object.keys(obj).includes('uploadedSelfAssessment')) {
+        await this.triggerExtraction();
+      }
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);
+    },
+    setExtracting(value) {
+      this.$store.commit('application/set', { name: 'isExtractingSelfAssessment', value: value });
+    },
+    async triggerExtraction() {
+      try {
+        this.setExtracting(true);
+        const response = await httpsCallable(functions, 'extractDocumentContent')({
+          templatePath: this.templatePath,
+          documentPath: this.documentPath,
+          questions: this.exercise.selfAssessmentWordLimits.map(section => section.question ? section.question.trim() : ''),
+        });
+        await this.$store.dispatch('application/save', {
+          uploadedSelfAssessmentContent: response.data.result,
+          uploadedSelfAssessment: this.application.uploadedSelfAssessment,
+        });
+        this.setExtracting(false);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error occurred during extraction:', error);
+      }
     },
   },
 };
