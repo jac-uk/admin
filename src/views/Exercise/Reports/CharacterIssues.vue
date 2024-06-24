@@ -683,7 +683,7 @@ export default {
         }
         localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus));
+        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
         localParams.orderBy = 'documentId';
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
