@@ -570,9 +570,15 @@ export default {
     },
     availableStatuses() {
       const statusCounts = this.applicationStatusCounts[this.exerciseStage] || {};
-      return Object.entries(statusCounts)
+      const statuses = Object.entries(statusCounts)
         .filter(([,count]) => count > 0)
         .map(([status]) => status);
+      const blankStatusIndex = statuses.indexOf('blank');
+      if (blankStatusIndex > -1) {
+        // move 'blank' to the end of the list
+        return [...statuses.filter((_, index) => index !== blankStatusIndex), 'blank'];
+      }
+      return statuses;
     },
   },
   watch: {
