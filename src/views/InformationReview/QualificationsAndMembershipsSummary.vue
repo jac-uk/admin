@@ -29,7 +29,10 @@
                   :options="[true, false]"
                   type="selection"
                   :is-asked="isApplicationPartAsked('relevantQualifications')"
-                  @change-field="changeQualificationOrMembership"
+                  @change-field="(changes) => {
+                    changeQualificationSchedule()
+                    changeQualificationOrMembership(changes)
+                  }"
                 />
               </dd>
             </div>
@@ -49,7 +52,10 @@
                   :options="[true, false]"
                   type="selection"
                   :is-asked="isApplicationPartAsked('relevantQualifications')"
-                  @change-field="changeQualificationOrMembership"
+                  @change-field="(changes) => {
+                    changeQualificationSchedule()
+                    changeQualificationOrMembership(changes)
+                  }"
                 />
               </dd>
             </div>
@@ -1106,6 +1112,12 @@ export default {
 
       this.$refs.removeModal.closeModal();
 
+    },
+    changeQualificationSchedule() {
+      // reset all qualifications
+      this.$emit('updateApplication', {
+        qualifications: this.application.qualifications.map(q => { return { ...q, type: null };}),
+      });
     },
     changeQualificationOrMembership(obj) {
       let changedObj = this.application[obj.field] || {};
