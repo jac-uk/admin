@@ -280,7 +280,7 @@ export default {
   },
   computed: {
     applicationStatusOptions(){
-      return [...availableStatuses(this.exercise), ...''];
+      return availableStatuses(this.exercise);
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
