@@ -1043,7 +1043,7 @@ export default {
       return selected;
     },
     scheduleApplies(){
-      return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
+      return (this.exercise.appliedSchedule == 'schedule-3-d' && this.application.applyingUnderSchedule2Three) ||
         (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
     },
     notCompletedPupillage() {
