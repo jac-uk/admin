@@ -564,15 +564,17 @@ export default {
     },
     availableStages() {
       const stageCounts = this.applicationStageCounts || {};
-      return Object.entries(stageCounts)
-        .filter(([,count]) => count > 0)
-        .map(([stage]) => stage);
+      return Object.keys(stageCounts).filter(status => stageCounts[status] > 0);
     },
     availableStatuses() {
       const statusCounts = this.applicationStatusCounts[this.exerciseStage] || {};
-      return Object.entries(statusCounts)
-        .filter(([,count]) => count > 0)
-        .map(([status]) => status);
+      const statuses = Object.keys(statusCounts).filter(status => statusCounts[status] > 0);
+      const blankStatusIndex = statuses.indexOf('blank');
+      if (blankStatusIndex > -1) {
+        // move 'blank' to the end of the list
+        return [...statuses.filter((_, index) => index !== blankStatusIndex), 'blank'];
+      }
+      return statuses;
     },
   },
   watch: {
@@ -683,7 +685,7 @@ export default {
         }
         localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus));
+        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
         localParams.orderBy = 'documentId';
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
