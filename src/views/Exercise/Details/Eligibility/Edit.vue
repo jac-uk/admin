@@ -76,7 +76,7 @@
                 label="Schedule 2(d)"
               />
               <RadioItem
-                value="schedule-3-d"
+                value="schedule-2-3"
                 label="Schedule 3(d)"
               />
             </RadioGroup>
