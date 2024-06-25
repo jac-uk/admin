@@ -26,7 +26,6 @@
                     PERMISSIONS.exercises.permissions.canReadExercises.value,
                   ])
                 "
-                class="govuk-!-margin-right-2"
                 :action="exportData"
               >
                 Export to Excel
@@ -39,7 +38,7 @@
                     PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
                   ])
                 "
-                class="govuk-!-margin-right-2"
+                class="govuk-!-margin-left-2"
                 :action="exportCharacterAnnexReport"
               >
                 SCC Annex
@@ -53,9 +52,24 @@
                   ])
                 "
                 type="primary"
+                class="govuk-!-margin-left-2"
                 :action="refreshReport"
               >
                 Refresh
+              </ActionButton>
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                  ])
+                "
+                type="primary"
+                class="govuk-!-margin-left-2"
+                :action="refreshReport(true)"
+              >
+                Reset
               </ActionButton>
             </div>
           </div>
@@ -608,9 +622,9 @@ export default {
     }
   },
   methods: {
-    async refreshReport() {
+    async refreshReport(force = false) {
       try {
-        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id, force });
         return true;
       } catch (error) {
         return;
