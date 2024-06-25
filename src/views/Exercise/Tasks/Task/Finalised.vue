@@ -245,7 +245,8 @@ export default {
       if (!this.scores.length) return 0;
       if (!this.task) return 0;
       if (!this.task.passMark) return 0;
-      const scoreData = this.scores.find(scoreData => scoreData.score === this.task.passMark);
+      const scoreData = this.scores.find(scoreData => scoreData.score === this.formatScore(this.scoreType, this.task.passMark));
+      if (!scoreData) return 0;
       let total = scoreData.rank + scoreData.count - 1;
       if (this.task.overrides) {
         if (this.task.overrides.fail && this.task.overrides.fail.length) {
@@ -299,6 +300,7 @@ export default {
       if (type === 'zScore') {
         val = val.toFixed(2); // 2 decimal places
         if (val === '-0.00') val = '0.00';
+        return parseFloat(val);
       }
       return val;
     },
