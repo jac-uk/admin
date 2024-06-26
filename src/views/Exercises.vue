@@ -31,34 +31,12 @@
             View live exercises
           </button>
           <button
-            v-else
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showMyFavourites"
-          >
-            Show my favourites
-          </button>
-          <button
             v-if="isArchived"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
             @click="showAll"
           >
             View live exercises
           </button>
-          <button
-            v-else
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showArchived"
-          >
-            View archived exercises
-          </button>
-          <router-link
-            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
-            ref="linkToNewExercise"
-            to="/create-exercise"
-            class="govuk-button govuk-!-margin-bottom-0"
-          >
-            Create an exercise
-          </router-link>
         </div>
       </div>
     </div>
@@ -108,12 +86,10 @@
               </button>
             </template>
             <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
-                >
-                  {{ row.referenceNumber }}
-                </RouterLink>
+              <TableCell
+                :title="tableColumns[0].title"
+              >
+                {{ row.referenceNumber }}
               </TableCell>
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
@@ -171,13 +147,13 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
+        { title: 'Reference', sort: 'referenceNumber', direction: 'asc', default: true },
         { title: 'Name', sort: 'name' },
-        { title: 'Open date', sort: 'applicationOpenDate' },
-        { title: 'Close date', sort: 'applicationCloseDate' },
+        { title: 'Open', sort: 'applicationOpenDate' },
+        { title: 'Close', sort: 'applicationCloseDate' },
         { title: 'Status' },
         {
-          title: 'Submitted Applications',
+          title: 'Applications',
           sort: '_applications.applied',
           class: 'govuk-table__header--numeric',
         },
@@ -207,6 +183,7 @@ export default {
         const data = { ...row };
         data.id = row.id;
         data.applicationsCount = (row._applications && row._applications.applied) || 0;
+        data.rowLink = { name: 'exercise-dashboard', params: { id: row.id } };
         return data;
       });
     },

@@ -4,10 +4,7 @@
     :class="{ 'full-screen': fullScreen }"
     @mouseenter="onMouseOver"
   >
-    <header
-      ref="headerTester"
-      class="govuk-width-container"
-    >
+    <header class="govuk-width-container">
       <div class="jac-header clearfix">
         <div class="header-title">
           <a
@@ -34,106 +31,10 @@
             v-if="isSignedIn"
             class="float-right print-none"
           >
-            <ul class="govuk-header__navigation user-menu">
-              <li
-                v-if="hasPermissions([PERMISSIONS.logs.permissions.canReadLogs.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'events' }"
-                  class="govuk-header__link"
-                >
-                  Events
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.notifications.permissions.canReadNotifications.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'notifications' }"
-                  class="govuk-header__link"
-                >
-                  Notifications
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canReadExercises.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'exercises' }"
-                  class="govuk-header__link"
-                >
-                  Exercises
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.candidates.permissions.canReadCandidates.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'candidates-list' }"
-                  class="govuk-header__link"
-                >
-                  Candidates
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'panellists-list' }"
-                  class="govuk-header__link"
-                >
-                  Panellists
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'users' }"
-                  class="govuk-header__link"
-                >
-                  Users
-                </RouterLink>
-              </li>
-              <li class="govuk-header__navigation-item">
-                <a
-                  v-if="$route.name !== 'sign-in'"
-                  href="#"
-                  class="govuk-header__link"
-                  @click="signOut"
-                >
-                  Sign out
-                </a>
-                <span
-                  v-if="isSignedIn && isDevelopmentEnvironment"
-                  class="app-c-topic-list__item nostyle"
-                >
-                  <b>({{ userName }})</b>
-                </span>
-              </li>
-            </ul>
+            <TabMenu :tabs="tabs " />
           </nav>
         </div>
-        <div
-          class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container"
-        >
-          <p class="govuk-phase-banner__content">
-            <span class="govuk-phase-banner__text">
-              This is a new service – your <a
-                style="font-size: 16px"
-                class="govuk-link govuk-body info-link--header--feedback"
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdS7FDTzrwokQwiRriCzA45q2eiZT5xUX1dl9WfkJUYZAKiBQ/viewform"
-                target="_blank"
-              >feedback</a> will help us improve it.
-            </span>
-          </p>
-        </div>
+        <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container" />
       </div>
     </header>
 
@@ -266,6 +167,7 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
+import TabMenu from '@jac-uk/jac-kit/draftComponents/TabMenu.vue';
 
 export default {
   name: 'App',
@@ -274,19 +176,18 @@ export default {
     UserFeedbackModal,
     UserFeedbackLink,
     Modal,
+    TabMenu,
   },
   mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,
       rect: null,
-
-      // @TODO: May not need the ref of the button anymore!
-
       //buttonElement: null,
       linkBottom: '',
       isMounted: false,
       observer: null,
+      tabs: [],
     };
   },
   computed: {
@@ -300,7 +201,11 @@ export default {
       return this.$store.getters['auth/isSignedIn'];
     },
     userName() {
-      return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+      const currentUser = this.$store.state.auth.currentUser;
+      if (!currentUser) {
+        return '';
+      }
+      return currentUser.displayName || currentUser.email || '';
     },
     clipboardData() {
       return this.$store.state.clipboard.data;
@@ -395,6 +300,7 @@ export default {
       if (this.canReadMessages) {
         await this.getMessages();
       }
+      this.buildTabs();
     },
     async refresh() {
       if (this.$refs['modalRefSignOut']) {
@@ -433,6 +339,73 @@ export default {
     },
     async openFeedbackModal() {
       this.$refs.feedbackModal.openModal();
+    },
+    buildTabs() {
+      if (this.hasPermissions([this.PERMISSIONS.logs.permissions.canReadLogs.value])) {
+        this.tabs.push({
+          title: 'Events',
+          link: { name: 'events' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
+        this.tabs.push({
+          title: 'Notifications',
+          link: { name: 'notifications' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.exercises.permissions.canReadExercises.value])) {
+        this.tabs.push({
+          title: 'Exercises',
+          content: [
+            {
+              title: 'Live exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+            { title: 'Create exercise', link: { name: 'create-exercise' } },
+            {
+              title: 'View archived exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showArchived');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+          ],
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canReadCandidates.value])) {
+        this.tabs.push({
+          title: 'Candidates',
+          link: { name: 'candidates-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])) {
+        this.tabs.push({
+          title: 'Panellists',
+          link: { name: 'panellists-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.users.permissions.canReadUsers.value])) {
+        this.tabs.push({
+          title: 'Users',
+          link: { name: 'users' },
+        });
+      }
+      this.tabs.push({
+        title: this.userName,
+        content: [
+          { title: 'Sign out', link: () => { this.signOut(); } },
+          {
+            title: 'My favourites',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showFavourites');
+              this.$router.push({ name: 'exercises' });
+            },
+          },
+        ],
+      });
     },
   },
 };
