@@ -31,34 +31,12 @@
             View live exercises
           </button>
           <button
-            v-else
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showMyFavourites"
-          >
-            Show my favourites
-          </button>
-          <button
             v-if="isArchived"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
             @click="showAll"
           >
             View live exercises
           </button>
-          <button
-            v-else
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showArchived"
-          >
-            View archived exercises
-          </button>
-          <router-link
-            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
-            ref="linkToNewExercise"
-            to="/create-exercise"
-            class="govuk-button govuk-!-margin-bottom-0"
-          >
-            Create an exercise
-          </router-link>
         </div>
       </div>
     </div>
