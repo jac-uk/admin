@@ -370,6 +370,7 @@
                 field="experienceUnderSchedule2Three"
                 :edit="editable"
                 :is-asked="isApplicationPartAsked('relevantQualifications')"
+                required
                 @change-field="changeQualificationOrMembership"
               />
             </li>
@@ -379,6 +380,7 @@
                 field="experienceUnderSchedule2D"
                 :edit="editable"
                 :is-asked="isApplicationPartAsked('relevantQualifications')"
+                required
                 @change-field="changeQualificationOrMembership"
               />
             </li>
