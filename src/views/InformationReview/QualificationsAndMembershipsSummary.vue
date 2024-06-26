@@ -981,7 +981,7 @@ export default {
         details: null,
       },
       currentIndex: null,
-      applyingSchedule: false,
+      scheduleApplies: false,
     };
   },
   computed: {
@@ -994,7 +994,7 @@ export default {
     },
     qualificationOptions() {
       const options = this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
-      if (this.applyingSchedule) {
+      if (this.scheduleApplies) {
         options.push('no-legal-qualification');
       }
 
@@ -1044,10 +1044,6 @@ export default {
 
       return selected;
     },
-    scheduleApplies(){
-      return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
-        (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
-    },
     notCompletedPupillage() {
       if (_has(this.application, 'qualifications') && Array.isArray(this.application.qualifications)) {
         const matches = this.application.qualifications.filter(qualification => {
@@ -1061,7 +1057,7 @@ export default {
     },
   },
   mounted() {
-    this.applyingSchedule = this.application.applyingUnderSchedule2Three || this.application.applyingUnderSchedule2d;
+    this.scheduleApplies = this.application.applyingUnderSchedule2Three || this.application.applyingUnderSchedule2d;
   },
   methods: {
     membershipNumberLabel(type) {
@@ -1176,7 +1172,7 @@ export default {
       return isApplicationPartAsked(this.exercise, part);
     },
     scheduleInput(event) {
-      this.applyingSchedule = event.target.value.toLowerCase() === 'true';
+      this.scheduleApplies = event.target.value.toLowerCase() === 'true';
     },
   },
 };
