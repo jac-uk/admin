@@ -58,13 +58,7 @@
                 Refresh
               </ActionButton>
               <button
-                v-if="
-                  hasPermissions([
-                    PERMISSIONS.exercises.permissions.canReadExercises.value,
-                    PERMISSIONS.applications.permissions.canReadApplications.value,
-                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-                  ])
-                "
+                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canResetCharacterIssuesReport.value])"
                 class="govuk-button govuk-button--warning govuk-!-margin-left-2"
                 @click="openModal('modalRefReset')"
               >
