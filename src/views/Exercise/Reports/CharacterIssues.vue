@@ -652,18 +652,21 @@ export default {
         await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id, reset });
         return true;
       } catch (error) {
-        return;
+        return false;
       }
     },
     async resetReport() {
       try {
-        await this.refreshReport(true);
-        setTimeout(() => {
-          this.closeModal('modalRefReset');
-        }, 500);
-        return true;
+        const success = await this.refreshReport(true);
+        if (success) {
+          setTimeout(() => {
+            this.closeModal('modalRefReset');
+          }, 500);
+          return true;
+        }
+        return false;
       } catch (error) {
-        return;
+        return false;
       }
     },
     async gatherReportData() {
