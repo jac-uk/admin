@@ -266,6 +266,7 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
+import TabMenu from '@jac-uk/jac-kit/draftComponents/TabMenu.vue';
 
 export default {
   name: 'App',
@@ -274,6 +275,7 @@ export default {
     UserFeedbackModal,
     UserFeedbackLink,
     Modal,
+    TabMenu,
   },
   mixins: [permissionMixin],
   data() {
@@ -287,6 +289,7 @@ export default {
       linkBottom: '',
       isMounted: false,
       observer: null,
+      tabs: [],
     };
   },
   computed: {
@@ -300,7 +303,11 @@ export default {
       return this.$store.getters['auth/isSignedIn'];
     },
     userName() {
-      return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+      const currentUser = this.$store.state.auth.currentUser;
+      if (!currentUser) {
+        return '';
+      }
+      return currentUser.displayName || currentUser.email || '';
     },
     clipboardData() {
       return this.$store.state.clipboard.data;
@@ -395,6 +402,7 @@ export default {
       if (this.canReadMessages) {
         await this.getMessages();
       }
+      this.buildTabs();
     },
     async refresh() {
       if (this.$refs['modalRefSignOut']) {
@@ -433,6 +441,73 @@ export default {
     },
     async openFeedbackModal() {
       this.$refs.feedbackModal.openModal();
+    },
+    buildTabs() {
+      if (this.hasPermissions([this.PERMISSIONS.logs.permissions.canReadLogs.value])) {
+        this.tabs.push({
+          title: 'Events',
+          link: { name: 'events' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
+        this.tabs.push({
+          title: 'Notifications',
+          link: { name: 'notifications' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.exercises.permissions.canReadExercises.value])) {
+        this.tabs.push({
+          title: 'Exercises',
+          content: [
+            {
+              title: 'Live exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+            { title: 'Create exercise', link: { name: 'create-exercise' } },
+            {
+              title: 'View archived exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showArchived');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+          ],
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canReadCandidates.value])) {
+        this.tabs.push({
+          title: 'Candidates',
+          link: { name: 'candidates-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])) {
+        this.tabs.push({
+          title: 'Panellists',
+          link: { name: 'panellists-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.users.permissions.canReadUsers.value])) {
+        this.tabs.push({
+          title: 'Users',
+          link: { name: 'users' },
+        });
+      }
+      this.tabs.push({
+        title: this.userName,
+        content: [
+          { title: 'Sign out', link: () => { this.signOut(); } },
+          {
+            title: 'My favourites',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showFavourites');
+              this.$router.push({ name: 'exercises' });
+            },
+          },
+        ],
+      });
     },
   },
 };
