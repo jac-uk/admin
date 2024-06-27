@@ -53,7 +53,7 @@
                 "
                 type="primary"
                 class="govuk-!-margin-left-2"
-                :action="refreshReport"
+                :action="() =>refreshReport(false)"
               >
                 Refresh
               </ActionButton>
