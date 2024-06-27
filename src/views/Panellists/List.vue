@@ -1,19 +1,12 @@
 <template>
   <div>
-    <div class="govuk-grid-row print-none">
-      <div class="govuk-grid-column-full">
-        <div class="text-right">
-          <button
-            v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
-            class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
-            @click="$refs['createPanellistModal'].openModal()"
-          >
-            Add a panellist
-          </button>
-        </div>
-      </div>
-    </div>
-
+    <button
+      v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
+      class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0 float-right"
+      @click="$refs['createPanellistModal'].openModal()"
+    >
+      Add a panellist
+    </button>
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
