@@ -7,19 +7,19 @@
             v-if="isFavourites"
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Favourite exercises
+            Favourite Exercises
           </h1>
           <h1
             v-else-if="isArchived"
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Archived exercises
+            Archived Exercises
           </h1>
           <h1
             v-else
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Live exercises
+            Live Exercises
           </h1>
         </div>
         <div class="text-right print-none">
@@ -255,5 +255,8 @@ export default {
 <style>
 .exercises-table input[type="search"] {
   margin-left: 3px;
+}
+.govuk-table__cell a {
+  text-decoration: none;
 }
 </style>

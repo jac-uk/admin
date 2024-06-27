@@ -34,7 +34,7 @@
             <TabMenu :tabs="tabs " />
           </nav>
         </div>
-        <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container" />
+        <div class="govuk-phase-banner print-none govuk-width-container" />
       </div>
     </header>
 
@@ -168,7 +168,6 @@ import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 import TabMenu from '@jac-uk/jac-kit/draftComponents/TabMenu.vue';
-
 export default {
   name: 'App',
   components: {
