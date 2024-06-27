@@ -296,11 +296,13 @@ export default {
 
     },
     async load() {
+      this.buildTabs();
+
+      // Leave async calls til the end so dont block the instant calls
       await this.$store.dispatch('services/bind');
       if (this.canReadMessages) {
         await this.getMessages();
       }
-      this.buildTabs();
     },
     async refresh() {
       if (this.$refs['modalRefSignOut']) {
