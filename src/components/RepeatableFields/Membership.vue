@@ -60,9 +60,9 @@ export default {
     }
   },
   methods: {
-    updateValue(value) {
+    updateValue(event) {
       // @todo when we move lookup to db, we should add these to lookup
-      this.row.value = slugify(value);
+      this.row.value = slugify(event.target.value);
     },
   },
 };
