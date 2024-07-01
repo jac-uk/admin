@@ -131,9 +131,13 @@
           :field="field"
           :extension="extension"
           :type="type"
+          :type-props="typeProps"
           :index="index"
           :is-asked="isAsked"
+          :disable-submit-on-error="disableSubmitOnError"
+          :disable-universal-validation="disableUniversalValidation"
           @change-field="changeField"
+          @edit-field="editField"
         />
       </div>
     </div>
@@ -179,6 +183,12 @@ export default {
       type: String,
       required: false,
       default: () => 'text',
+    },
+    // Specify properties specific to the type of input (to assist with using the InformationReviewRenderer)
+    typeProps: {
+      type: Object,
+      required: false,
+      default: () => ({}),
     },
     dateFormat: {
       type: String,
@@ -229,8 +239,18 @@ export default {
       required: false,
       default: () => { false; },
     },
+    disableSubmitOnError: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disableUniversalValidation: { // Ignore other invalid fields
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
-  emits: ['changeField'],
+  emits: ['changeField', 'editField'],
   data() {
     return {
       filters: filters,
@@ -266,6 +286,9 @@ export default {
     },
     changeField(obj) {
       this.$emit('changeField', obj);
+    },
+    editField(obj) {
+      this.$emit('editField', obj);
     },
   },
 };
