@@ -66,7 +66,7 @@ describe.skip('views/Exercise/Edit/Eligibility', () => {
       expect(button.text()).toBe('Save and continue');
     });
 
-    describe('Does Schedule 2(d) or Schedule 3 apply?', () => {
+    describe('Does Schedule 2(d) or Schedule 3(d) apply?', () => {
       it('does not show the question if the role is a court role', () => {
         wrapper.setData({ isCourtOrTribunal: 'court' });
         expect(wrapper.find('#schedule-2d-apply').exists()).toBe(false);

@@ -18,7 +18,7 @@
             class="govuk-summary-list__row"
           >
             <dt class="govuk-summary-list__key widerColumn">
-              Are you applying under Schedule 2(3)?
+              Are you applying under Schedule 3(d)?
             </dt>
             <dd class="govuk-summary-list__value">
               <InformationReviewRenderer
