@@ -29,10 +29,10 @@
                 type="selection"
                 :is-asked="isApplicationPartAsked('relevantQualifications')"
                 @change-field="(changes) => {
-                  console.log('section changed')
                   changeQualificationSchedule()
                   changeQualificationOrMembership(changes)
                 }"
+                @input="scheduleInput"
               />
             </dd>
           </div>
@@ -56,6 +56,7 @@
                   changeQualificationSchedule()
                   changeQualificationOrMembership(changes)
                 }"
+                @input="scheduleInput"
               />
             </dd>
           </div>
@@ -980,6 +981,7 @@ export default {
         details: null,
       },
       currentIndex: null,
+      scheduleApplies: false,
     };
   },
   computed: {
@@ -992,7 +994,7 @@ export default {
     },
     qualificationOptions() {
       const options = this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
-      if (this.application.applyingUnderSchedule2Three) {
+      if (this.scheduleApplies) {
         options.push('no-legal-qualification');
       }
 
@@ -1042,10 +1044,6 @@ export default {
 
       return selected;
     },
-    scheduleApplies(){
-      return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
-        (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
-    },
     notCompletedPupillage() {
       if (_has(this.application, 'qualifications') && Array.isArray(this.application.qualifications)) {
         const matches = this.application.qualifications.filter(qualification => {
@@ -1057,6 +1055,9 @@ export default {
       }
       return null;
     },
+  },
+  mounted() {
+    this.scheduleApplies = this.application.applyingUnderSchedule2Three || this.application.applyingUnderSchedule2d;
   },
   methods: {
     membershipNumberLabel(type) {
@@ -1169,6 +1170,9 @@ export default {
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);
+    },
+    scheduleInput(event) {
+      this.scheduleApplies = event.target.value.toLowerCase() === 'true';
     },
   },
 };

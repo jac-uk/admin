@@ -154,6 +154,7 @@ export default {
       // group scores
       const scoreMap = {};
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+        scoreData[this.scoreType] = this.formatScore(this.scoreType, scoreData[this.scoreType]);
         if (!scoreMap[scoreData[this.scoreType]]) {
           scoreMap[scoreData[this.scoreType]] = {
             applicationIds: [],
@@ -211,7 +212,7 @@ export default {
       // add outcome stats
       if (this.task.hasOwnProperty('passMark')) {
         scoresInDescendingOrder.forEach(key => {
-          const score = parseFloat(key);
+          const score = this.formatScore(this.scoreType, key);
           if (score >= this.task.passMark) {
             if (this.task.overrides && this.task.overrides.fail) {
               const failMatches = this.task.overrides.fail.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
@@ -244,7 +245,8 @@ export default {
       if (!this.scores.length) return 0;
       if (!this.task) return 0;
       if (!this.task.passMark) return 0;
-      const scoreData = this.scores.find(scoreData => scoreData.score === this.task.passMark);
+      const scoreData = this.scores.find(scoreData => scoreData.score === this.formatScore(this.scoreType, this.task.passMark));
+      if (!scoreData) return 0;
       let total = scoreData.rank + scoreData.count - 1;
       if (this.task.overrides) {
         if (this.task.overrides.fail && this.task.overrides.fail.length) {
@@ -292,6 +294,15 @@ export default {
       const failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
       downloadMeritList(didNotTake, failed, this.task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
+    },
+    formatScore(type, score) {
+      let val = parseFloat(score);
+      if (type === 'zScore') {
+        val = val.toFixed(2); // 2 decimal places
+        if (val === '-0.00') val = '0.00';
+        return parseFloat(val);
+      }
+      return val;
     },
     async setPassMark(data) {
       if (data) {
