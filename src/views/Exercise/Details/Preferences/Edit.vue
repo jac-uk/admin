@@ -18,97 +18,46 @@
           :show-save-button="true"
           @save="save"
         />
-        <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h3 class="govuk-fieldset__heading">
-              Location question
-            </h3>
-          </legend>
-          <TextField
-            id="exercise-location-question"
-            v-model="formData.locationQuestion"
-            label="What question would you like to ask?"
-          />
-          <RadioGroup
-            id="exercise-location-question-type"
-            v-model="formData.locationQuestionType"
-            label="How would you like the question answered?"
-            :messages="{
-              required: 'Please choose one of the following options'
-            }"
-          >
-            <RadioItem
-              value="single-choice"
-              label="Single choice"
-            />
-            <RadioItem
-              value="multiple-choice"
-              label="Multiple choice"
-            />
-            <RadioItem
-              value="ranked-choice"
-              label="Ranked choice"
-            />
-          </RadioGroup>
-          <RepeatableFields
-            v-model="formData.locationQuestionAnswers"
-            :component="repeatableFields.Answer"
-            ident="location"
-            type-name="answer"
-            required
-          />
-        </fieldset>
 
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h3 class="govuk-fieldset__heading">
-              Jurisdiction question
-            </h3>
-          </legend>
-          <TextField
-            id="exercise-jurisdiction-question"
-            v-model="formData.jurisdictionQuestion"
-            label="What question would you like to ask?"
-          />
-          <RadioGroup
-            id="exercise-jurisdiction-question-type"
-            v-model="formData.jurisdictionQuestionType"
-            label="How would you like the question answered?"
-            :messages="{
-              required: 'Please choose one of the following options'
-            }"
-          >
-            <RadioItem
-              value="single-choice"
-              label="Single choice"
-            />
-            <RadioItem
-              value="multiple-choice"
-              label="Multiple choice"
-            />
-            <RadioItem
-              value="ranked-choice"
-              label="Ranked choice"
-            />
-          </RadioGroup>
-          <RepeatableFields
-            v-model="formData.jurisdictionQuestionAnswers"
-            :component="repeatableFields.Answer"
-            ident="jurisdiction"
-            type-name="answer"
-            required
-          />
-        </fieldset>
-
-        <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-5">
-
-        <RepeatableFields
-          v-model="formData.additionalWorkingPreferences"
-          :component="repeatableFields.WorkingPreferenceQuestion"
-          ident="additional-working-preferences"
-          type-name="question"
-          :allow-empty="true"
+        <TabsList
+          v-model:active-tab="activeTab"
+          :tabs="tabs"
         />
+
+        <div v-show="activeTab == 'location'">
+          <RepeatableFields
+            v-model="formData.locationPreferences"
+            :component="repeatableFields.QuestionConfig"
+            ident="location-preferences"
+            type-name="question"
+            :allow-empty="true"
+            type="locationPreference"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
+          />
+        </div>
+
+        <div v-show="activeTab == 'jurisdiction'">
+          <RepeatableFields
+            v-model="formData.jurisdictionPreferences"
+            :component="repeatableFields.QuestionConfig"
+            ident="jurisdiction-preferences"
+            type-name="question"
+            :allow-empty="true"
+            type="jurisdictionPreference"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
+          />
+        </div>
+
+        <div v-show="activeTab == 'additional'">
+          <RepeatableFields
+            v-model="formData.additionalWorkingPreferences"
+            :component="repeatableFields.QuestionConfig"
+            ident="additional-working-preferences"
+            type-name="question"
+            :allow-empty="true"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
+          />
+        </div>
 
         <button class="govuk-button">
           Save and continue
@@ -119,51 +68,90 @@
 </template>
 
 <script>
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
-import Answer from '@/components/RepeatableFields/Answer.vue';
-import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion.vue';
+import QuestionConfig from '@/components/RepeatableFields/QuestionConfig.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import { shallowRef } from 'vue';
 
 export default {
   components: {
+    TabsList,
     ErrorSummary,
     BackLink,
-    TextField,
     RepeatableFields,
-    RadioGroup,
-    RadioItem,
   },
   extends: Form,
   data() {
     const defaults = {
-      locationQuestion: null,
-      locationQuestionType: 'single-choice',
-      locationQuestionAnswers: null,
-      jurisdictionQuestion: null,
-      jurisdictionQuestionType: 'single-choice',
-      jurisdictionQuestionAnswers: null,
+      locationPreferences: [],
+      jurisdictionPreferences: [],
       additionalWorkingPreferences: [],
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      activeTab: 'location',
       formData: formData,
-      repeatableFields: {
-        Answer,
-        WorkingPreferenceQuestion,
-      },
+      repeatableFields: shallowRef({
+        QuestionConfig,
+      }),
     };
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
+    tabs() {
+      return [
+        {
+          ref: 'location',
+          title: 'Location',
+        },
+        {
+          ref: 'jurisdiction',
+          title: 'Jurisdiction',
+        },
+        {
+          ref: 'additional',
+          title: 'Additional',
+        },
+      ];
+    },
+    linkedQuestions() {
+      const linkableQuestions = [];
+      this.formData.locationPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
+      });
+      this.formData.jurisdictionPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
+      });
+      this.formData.additionalWorkingPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
+      });
+      return linkableQuestions;
+    },
   },
   methods: {
+    populateAnswers(question) {
+      if (question.answerSource === 'jurisdiction') {
+        question.answers = [];
+        this.exercise.jurisdiction.forEach(jurisdiction => {
+          if (jurisdiction === 'other') {
+            question.answers.push({ answer: this.exercise.otherJurisdiction, id: jurisdiction });
+          } else {
+            question.answers.push({ answer: this.$filters.lookup(jurisdiction), id: jurisdiction });
+          }
+        });
+        return question;
+      } else {
+        return question;
+      }
+    },
     async save(isValid) {
       this.formData['progress.workingPreferences'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);

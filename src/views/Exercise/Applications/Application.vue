@@ -234,6 +234,7 @@
               :is-asked="isApplicationPartAsked('equalityAndDiversitySurvey')"
               @update-application="changeApplication"
             />
+
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
@@ -241,6 +242,7 @@
               :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
+            
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"

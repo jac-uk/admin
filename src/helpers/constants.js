@@ -115,6 +115,11 @@ const APPLICATION_STATUS = {
   SCC_TO_RECONSIDER: 'sccToReconsider',
 };
 
+const LANGUAGES = {
+  ENGLISH: 'eng',
+  WELSH: 'cym',
+};
+
 const TASK_TYPE = {
   SIFT: 'sift',
   SCENARIO: 'scenarioTest',
@@ -275,7 +280,8 @@ export {
   APPLICATION_FORM_PARTS,
   DEFAULT_WORD_COUNT,
   SELF_ASSESSMENT_COMPETENCIES_QUESTIONS,
-  WORKING_BASIS
+  WORKING_BASIS,
+  LANGUAGES
 };
 
 // end
