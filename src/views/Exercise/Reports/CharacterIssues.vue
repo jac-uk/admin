@@ -26,7 +26,6 @@
                     PERMISSIONS.exercises.permissions.canReadExercises.value,
                   ])
                 "
-                class="govuk-!-margin-right-2"
                 :action="exportData"
               >
                 Export to Excel
@@ -39,7 +38,7 @@
                     PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
                   ])
                 "
-                class="govuk-!-margin-right-2"
+                class="govuk-!-margin-left-2"
                 :action="exportCharacterAnnexReport"
               >
                 SCC Annex
@@ -53,12 +52,44 @@
                   ])
                 "
                 type="primary"
-                :action="refreshReport"
+                class="govuk-!-margin-left-2"
+                :action="() =>refreshReport(false)"
               >
                 Refresh
               </ActionButton>
+              <button
+                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canResetCharacterIssuesReport.value])"
+                class="govuk-button govuk-button--warning govuk-!-margin-left-2"
+                @click="openModal('modalRefReset')"
+              >
+                Reset
+              </button>
             </div>
           </div>
+
+          <Modal ref="modalRefReset">
+            <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+              Are you sure to reset?
+            </div>
+            <div class="modal__content govuk-!-margin-6">
+              <p class="govuk-body">
+                Any edits made to this report will be lost. Are you sure you want to reset?
+              </p>
+              <ActionButton
+                type="primary"
+                class="govuk-!-margin-right-2"
+                :action="resetReport"
+              >
+                Reset
+              </ActionButton>
+              <button
+                class="govuk-button govuk-button--secondary"
+                @click="closeModal('modalRefReset')"
+              >
+                Cancel
+              </button>
+            </div>
+          </Modal>
         </div>
       </div>
     </div>
@@ -513,6 +544,7 @@ import { downloadBase64File } from '@/helpers/file';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 
 export default {
   name: 'CharacterIssues',
@@ -525,6 +557,7 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     InformationReviewRenderer,
+    Modal,
   },
   mixins: [permissionMixin],
   data() {
@@ -608,12 +641,32 @@ export default {
     }
   },
   methods: {
-    async refreshReport() {
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
+    async refreshReport(reset = false) {
       try {
-        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id, reset });
         return true;
       } catch (error) {
-        return;
+        return false;
+      }
+    },
+    async resetReport() {
+      try {
+        const success = await this.refreshReport(true);
+        if (success) {
+          setTimeout(() => {
+            this.closeModal('modalRefReset');
+          }, 500);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        return false;
       }
     },
     async gatherReportData() {

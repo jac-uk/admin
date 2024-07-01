@@ -58,7 +58,7 @@
           v-if="isLegal && isTribunal"
           id="schedule-2d-or-3-apply"
           v-model="formData.schedule2Apply"
-          label="Does Schedule 2(d) or Schedule 2(3) apply?"
+          label="Does Schedule 2(d) or Schedule 3(d) apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
           <RadioItem
@@ -77,7 +77,7 @@
               />
               <RadioItem
                 value="schedule-2-3"
-                label="Schedule 2(3)"
+                label="Schedule 3(d)"
               />
             </RadioGroup>
           </RadioItem>
