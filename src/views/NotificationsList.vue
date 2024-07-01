@@ -259,7 +259,7 @@ export default {
     },
     async processNow() {
       try {
-        await httpsCallable(functions, 'processNotifications')();
+        await httpsCallable(functions, 'processNotificationsNow')();
         return true;
       } catch (error) {
         return;
