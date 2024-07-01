@@ -42,13 +42,14 @@
           data-key="id"
           :data="applicationRecords"
           :columns="tableColumns"
-          page-item-type="uppercase-letter"
+          page-item-type="number"
           :page-size="50"
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
             field: 'candidate.id',
           }"
+          :total="total"
           @change="getTableData"
         >
           <template #row="{row}">
@@ -87,7 +88,7 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -114,6 +115,7 @@ export default {
       unsubscribe: null,
       unsubscribeReport: null,
       report: null,
+      total: 0,
     };
   },
   computed: {
@@ -156,7 +158,9 @@ export default {
         where('status', 'in', statuses)
       );
       params.orderBy = 'candidate.fullName';
-      firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
+      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
+      firestoreRef = res.queryRef;
+      this.total = res.total;
       if (firestoreRef) {
         this.unsubscribe = onSnapshot(
           firestoreRef,
