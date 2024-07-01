@@ -27,12 +27,11 @@
             class="govuk-body-xs govuk-!-padding-left-2"
           >{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
-          <nav
+          <TabMenu
             v-if="isSignedIn"
             class="float-right print-none"
-          >
-            <TabMenu :tabs="tabs " />
-          </nav>
+            :tabs="tabs"
+          />
         </div>
         <div class="govuk-phase-banner print-none govuk-width-container" />
       </div>
