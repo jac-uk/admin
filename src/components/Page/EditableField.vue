@@ -587,24 +587,32 @@ export default {
             field: this.field,
             change: this.localField,
           };
-        } if (this.config.id != undefined) { // is indexed item
-          resultObj = {
-            ...resultObj,
-            index: this.config.id,
-          };
-        } if (this.extension != undefined) { // is nested item
-          resultObj = {
-            ...resultObj,
-            extension: this.extension,
-          };
+          if (this.index != undefined) { // is indexed item
+            resultObj = {
+              ...resultObj,
+              index: this.index,
+            };
+          }
+          if (this.config.id != undefined) { // is indexed item
+            resultObj = {
+              ...resultObj,
+              index: this.config.id,
+            };
+          }
+          if (this.extension != undefined) { // is nested item
+            resultObj = {
+              ...resultObj,
+              extension: this.extension,
+            };
+          }
+        } else {
+          resultObj = { [this.field]: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField }; // else
         }
-      } else {
-        resultObj = { [this.field]: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField }; // else
+
+        this.$emit('changeField', resultObj);
+
+        this.editField = false;
       }
-
-      this.$emit('changeField', resultObj);
-
-      this.editField = false;
     },
     getConfigAnswer(answerId) {
       const match = this.config.answers.find(ans => ans.id === answerId);
