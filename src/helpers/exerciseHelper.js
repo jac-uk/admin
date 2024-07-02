@@ -284,7 +284,7 @@ function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
   let timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
   let supportedTaskTypes = [];
-  if (exercise._processingVersion >= 2) {
+  if (exercise._processingVersion >= 3) {
     supportedTaskTypes = [
       TASK_TYPE.TELEPHONE_ASSESSMENT,
       TASK_TYPE.SIFT,
