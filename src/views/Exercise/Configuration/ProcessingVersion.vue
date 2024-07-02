@@ -16,9 +16,14 @@
         required
       >
         <RadioItem
+          :value="3"
+          label="Processing version 3.0"
+          hint="Introduced in July 2024, processing version 3.0 includes a number of new tasks"
+        />
+        <RadioItem
           :value="2"
           label="Processing version 2.0"
-          hint="Introduced in March 2024, processing version 2.0 updates stages and statuses and includes a number of new tasks"
+          hint="Introduced in March 2024, processing version 2.0 updates stages and statuses"
         />
         <RadioItem
           :value="1"
