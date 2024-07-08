@@ -57,6 +57,7 @@ import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View.vue';
 import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit.vue';
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View.vue';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit.vue';
+import ExerciseDetailsPreferencesEditV1 from '@/views/Exercise/Details/Preferences/Edit.v1.vue';  // previous edit page
 import ExerciseDetailsAdditionalSettings from '@/views/Exercise/Details/AdditionalSettings/View.vue';
 import ExerciseDetailsAdditionalSettingsEdit from '@/views/Exercise/Details/AdditionalSettings/Edit.vue';
 
@@ -571,6 +572,15 @@ const routes = [
                 meta: {
                   requiresAuth: true,
                   title: 'Preferences | Exercise Details',
+                },
+              },
+              {
+                name: 'exercise-details-preferences-edit-v1',
+                path: 'edit-v1',
+                component: ExerciseDetailsPreferencesEditV1,
+                meta: {
+                  requiresAuth: true,
+                  title: 'Edit Preferences | Exercise Details',
                 },
               },
               {
