@@ -266,7 +266,7 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
-
+import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
 export default {
   name: 'App',
   components: {
@@ -433,6 +433,73 @@ export default {
     },
     async openFeedbackModal() {
       this.$refs.feedbackModal.openModal();
+    },
+    buildTabs() {
+      if (this.hasPermissions([this.PERMISSIONS.logs.permissions.canReadLogs.value])) {
+        this.tabs.push({
+          title: 'Events',
+          link: { name: 'events' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
+        this.tabs.push({
+          title: 'Notifications',
+          link: { name: 'notifications' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.exercises.permissions.canReadExercises.value])) {
+        this.tabs.push({
+          title: 'Exercises',
+          content: [
+            {
+              title: 'Live exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+            { title: 'Create exercise', link: { name: 'create-exercise' } },
+            {
+              title: 'Archived exercises',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showArchived');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+            {
+              title: 'My favourites',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showFavourites');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+          ],
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canReadCandidates.value])) {
+        this.tabs.push({
+          title: 'Candidates',
+          link: { name: 'candidates-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])) {
+        this.tabs.push({
+          title: 'Panellists',
+          link: { name: 'panellists-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.users.permissions.canReadUsers.value])) {
+        this.tabs.push({
+          title: 'Users',
+          link: { name: 'users' },
+        });
+      }
+      this.tabs.push({
+        title: this.userName,
+        content: [
+          { title: 'Sign out', link: () => { this.signOut(); } },
+        ],
+      });
     },
   },
 };

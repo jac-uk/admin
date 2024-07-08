@@ -106,9 +106,11 @@
       </div>
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
-          <SubNavigation
-            v-if="!isAdvertTypeExternal && !hasJourney && subNavigation.length > 1"
-            :pages="subNavigation"
+          <TabMenu
+            v-if="!isAdvertTypeExternal && !hasJourney && tabs.length > 1"
+            class="sub-navigation moj-sub-navigation govuk-!-margin-bottom-4"
+            :tabs="tabs"
+            :full-width-menu="true"
           />
         </div>
       </div>
@@ -135,9 +137,9 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import { httpsCallable } from '@firebase/functions';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
-import SubNavigation from '@/components/Navigation/SubNavigation.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -148,18 +150,28 @@ import permissionMixin from '@/permissionMixin';
 import { logEvent } from '@/helpers/logEvent';
 import { functions } from '@/firebase';
 import { ADVERT_TYPES } from '../helpers/constants';
+import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
+import { useExercise } from '@/composables/useExercise';
 
 export default {
   name: 'ExerciseView',
   components: {
     LoadingMessage,
-    SubNavigation,
     Modal,
     ModalInner,
     ActionButton,
     ChangeNoOfTestApplications,
+    TabMenu,
   },
   mixins: [permissionMixin],
+  setup() {
+    const { getExerciseProgress } = useExercise();
+    const exerciseProgress = computed(() => getExerciseProgress().value);
+
+    return {
+      exerciseProgress,
+    };
+  },
   data() {
     return {
       loaded: false,
@@ -256,21 +268,46 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
-    subNavigation() {
+    tabs() {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       if (this.applicationCounts._total) {
-        subNavigation.push({ path: `${path}/dashboard`, title: 'Dashboard' });
+        subNavigation.push({ link: `${path}/dashboard`, title: 'Dashboard' });
       }
-      subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
+      const content = [];
+      content.push({ title: 'Overview', link: { path: `${path}/details` } });
+      //if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
+      //  if (this.exerciseProgress) {
+      content.push(
+        { title: 'Website listing', link: { name: 'exercise-details-summary' } },
+        { title: 'Vacancy information', link: { name: 'exercise-details-vacancy' } },
+        { title: 'Contacts', link: { name: 'exercise-details-contacts' } },
+        { title: 'Shortlisting', link: { name: 'exercise-details-shortlisting' } },
+        { title: 'Timeline', link: { name: 'exercise-details-timeline' } },
+        { title: 'Eligibility information', link: { name: 'exercise-details-eligibility' } },
+        { title: 'Working preferences', link: { name: 'exercise-details-preferences' } },
+        { title: 'Assessment options', link: { name: 'exercise-details-assessments' } },
+        { title: 'Exercise downloads', link: { name: 'exercise-details-downloads' } },
+        { title: 'Application process', link: { name: 'exercise-details-application-content' } },
+        { title: 'Additional settings', link: { name: 'exercise-details-additional-settings' } }
+      );
+      //  }
+      //}
+      if (content.length) {
+        subNavigation.push({
+          title: 'Exercise',
+          content: content,
+        });
+      }
+
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
-        subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
+        subNavigation.push({ link: `${path}/applications`, title: 'Applications' });
       }
       if (this.isProcessing) {
-        subNavigation.push({ path: `${path}/tasks/all`, title: 'Tasks' });
-        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        subNavigation.push({ link: `${path}/tasks/all`, title: 'Tasks' });
+        subNavigation.push({ link: `${path}/stages`, title: 'Stages' });
+        subNavigation.push({ link: `${path}/reports`, title: 'Reports' });
       }
       return subNavigation;
     },
