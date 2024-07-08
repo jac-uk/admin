@@ -366,9 +366,16 @@ export default {
             },
             { title: 'Create exercise', link: { name: 'create-exercise' } },
             {
-              title: 'View archived exercises',
+              title: 'Archived exercises',
               link: () => {
                 this.$store.dispatch('exerciseCollection/showArchived');
+                this.$router.push({ name: 'exercises' });
+              },
+            },
+            {
+              title: 'My favourites',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showFavourites');
                 this.$router.push({ name: 'exercises' });
               },
             },
@@ -397,13 +404,6 @@ export default {
         title: this.userName,
         content: [
           { title: 'Sign out', link: () => { this.signOut(); } },
-          {
-            title: 'My favourites',
-            link: () => {
-              this.$store.dispatch('exerciseCollection/showFavourites');
-              this.$router.push({ name: 'exercises' });
-            },
-          },
         ],
       });
     },

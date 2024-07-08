@@ -22,22 +22,6 @@
             Live Exercises
           </h1>
         </div>
-        <div class="text-right print-none">
-          <button
-            v-if="isFavourites"
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showAll"
-          >
-            View live exercises
-          </button>
-          <button
-            v-if="isArchived"
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showAll"
-          >
-            View live exercises
-          </button>
-        </div>
       </div>
     </div>
     <div class="govuk-grid-row">
