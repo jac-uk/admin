@@ -284,7 +284,7 @@ function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
   let timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
   let supportedTaskTypes = [];
-  if (exercise._processingVersion >= 2) {
+  if (exercise._processingVersion >= 3) {
     supportedTaskTypes = [
       TASK_TYPE.TELEPHONE_ASSESSMENT,
       TASK_TYPE.SIFT,
@@ -757,10 +757,10 @@ function exerciseApplicationParts(data, newValues) {
   if (exercise.isSPTWOffered) {
     applicationParts.push('partTimeWorkingPreferences');
   }
-  if (exercise.locationQuestion) {
+  if (exercise.locationQuestion || (exercise.locationPreferences && exercise.locationPreferences.length)) {
     applicationParts.push('locationPreferences');
   }
-  if (exercise.jurisdictionQuestion) {
+  if (exercise.jurisdictionQuestion || (exercise.jurisdictionPreferences && exercise.jurisdictionPreferences.length)) {
     applicationParts.push('jurisdictionPreferences');
   }
   if (exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length) {
@@ -1286,7 +1286,11 @@ function shortlistingStatuses(exercise) {
         statuses.push(APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT);
       }
     }
-    // TODO other
+    // other
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.OTHER) >= 0) {
+      statuses.push(APPLICATION_STATUS.OTHER_PASSED);
+      statuses.push(APPLICATION_STATUS.OTHER_FAILED);
+    }
   }
   return statuses;
 }

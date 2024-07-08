@@ -1,8 +1,9 @@
-import { collection, doc, updateDoc, setDoc, addDoc, serverTimestamp, runTransaction } from '@firebase/firestore';
+import { collection, doc, updateDoc, setDoc, getDoc, addDoc, serverTimestamp, runTransaction } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+// import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { getStageWithdrawalStatus } from '../helpers/exerciseHelper';
 import clone from 'clone';
 
 const collectionName = 'applications';
@@ -83,7 +84,7 @@ export default {
     withdraw: async (context, data ) => {
       const applicationId = data.applicationId;
 
-      await context.dispatch('update', { data: { status: STATUS.WITHDRAWN }, id: applicationId });
+      await context.dispatch('update', { data: { status: getStageWithdrawalStatus(context.rootState.exerciseDocument.record) }, id: applicationId });
 
       //  If IAs has started ensure relevant assessments documents are removed (soft deleted)
       context.dispatch('assessment/delete', { id: applicationId }, { root: true });
@@ -123,10 +124,16 @@ export default {
   },
   state: {
     record: null,
+    isExtractingSelfAssessment: false,
   },
   getters: {
     data: (state) => () => {
       return clone(state.record);
+    },
+    exists: () => async (id) => {
+      const applicationRef = doc(firestore, 'applicationRecords', id);
+      const applicationDoc = await getDoc(applicationRef);
+      return applicationDoc.exists();
     },
   },
 };

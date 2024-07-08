@@ -36,7 +36,7 @@
             </ActionButton>
             <button
               v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-left-2"
               data-module="govuk-button"
               @click="openModal"
             >
@@ -82,6 +82,12 @@
         <TableCell :title="tableColumns[3].title">
           <span v-if="row._processing && row._processing.status">
             {{ $filters.lookup(row._processing.status) }}
+          </span>
+          <span v-else-if="row.status">
+            {{ $filters.lookup(row.status) }}
+          </span>
+          <span v-else>
+            Error: No status
           </span>
         </TableCell>
       </template>

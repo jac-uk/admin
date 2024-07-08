@@ -111,6 +111,7 @@
       </dl>
     </div>
 
+    <!-- SELF ASSESSMENT COMPETENCIES -->
     <div
       v-if="hasSelfAssessment"
       class="govuk-!-margin-top-9"
@@ -136,13 +137,34 @@
               />
             </div>
             <span v-else>Not yet received</span>
+
+            <!-- UPLOAD SELF ASSESSMENT -->
+            <div>
+              <FileUpload
+                v-if="editable"
+                id="self-assessment-upload"
+                ref="self-assessment"
+                v-model="application.uploadedSelfAssessment"
+                name="self-assessment"
+                :path="uploadPath"
+                label="Upload finished self assessment"
+                required
+                :acceptable-extensions="['docx']"
+                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
+              />
+            </div>
           </dd>
         </div>
+        <!-- SELF ASSESSMENT SECTIONS -->
         <div
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
             Self assessment content
+            <Spinner
+              v-if="isExtractingSelfAssessment"
+              class="govuk-!-margin-left-2"
+            />
           </dt>
           <dd class="govuk-summary-list__value">
             <div v-if="selfAssessmentSections">
@@ -151,12 +173,18 @@
                 :key="i"
                 style="white-space: pre-line;"
               >
-                <strong>
-                  {{ `${i + 1}. ${section.question}` }}
-                </strong>
-                <br>
-                {{ application.uploadedSelfAssessmentContent[i] || '' }}
-                <hr v-if="i !== selfAssessmentSections.length - 1">
+                <AssessmentSection
+                  :application="application"
+                  :section="section"
+                  :content="application.uploadedSelfAssessmentContent[i]||''"
+                  :editable="editable"
+                  :index="i"
+                  @update-application="changeSelfAssessmentAnswer"
+                />
+                <hr
+                  v-if="i !== selfAssessmentSections.length - 1"
+                  class="govuk-!-margin-top-3 govuk-!-margin-bottom-3"
+                >
               </div>
             </div>
             <span v-else>Not yet received</span>
@@ -165,6 +193,7 @@
       </dl>
     </div>
 
+    <!-- CV -->
     <div
       v-if="hasCV"
       class="govuk-!-margin-top-9"
@@ -211,6 +240,7 @@
       </dl>
     </div>
 
+    <!-- COVERING LETTER -->
     <div
       v-if="hasCoveringLetter"
       class="govuk-!-margin-top-9"
@@ -269,13 +299,16 @@ import {
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
-
+import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
+import AssessmentSection from '@/components/RepeatableFields/AssessmentSection.vue';
 export default {
   name: 'AssessmentsSummary',
   components: {
     DownloadLink,
     FileUpload,
     InformationReviewRenderer,
+    Spinner,
+    AssessmentSection,
   },
   props: {
     application: {
@@ -298,6 +331,7 @@ export default {
   data() {
     return {
       assessorDetails: {},
+      isLoadingFile: false,
     };
   },
   computed: {
@@ -334,6 +368,9 @@ export default {
     selfAssessmentSections() {
       return this.exercise.selfAssessmentWordLimits || [];
     },
+    isExtractingSelfAssessment() {
+      return this.$store.state.application.isExtractingSelfAssessment;
+    },
   },
   methods: {
     hasAscAnswerDetails(index){
@@ -351,9 +388,7 @@ export default {
       }
     },
     changeAssessmentInfo(obj) {
-
       let changedObj = this.application[obj.field] || [];
-
       if (!changedObj[obj.index]) {
         changedObj = {
           [obj.index]: {
@@ -363,10 +398,13 @@ export default {
       } else {
         changedObj[obj.index][obj.extension] = obj.change;
       }
-
       this.$emit('updateApplication', { [obj.field]: changedObj });
     },
-    doFileUpload(val, field) {
+    changeSelfAssessmentAnswer(obj) {
+      this.$emit('updateApplication', obj);
+    },
+
+    async doFileUpload(val, field) {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }

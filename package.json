@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "1.31.0",
+  "version": "1.50.0",
   "private": true,
   "scripts": {
     "dev": "npm run local:serve",
@@ -26,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "4.0.2",
+    "@jac-uk/jac-kit": "4.1.14",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.61.1",
     "@sentry/vue": "^7.61.1",
@@ -34,6 +34,7 @@
     "autoprefixer": "^10.4.14",
     "buffer": "^6.0.3",
     "chart.js": "^4.2.1",
+    "dayjs": "^1.11.11",
     "detect-browser": "^5.3.0",
     "firebaseui": "^4.8.0",
     "govuk-frontend": "^3.12.0",
@@ -46,6 +47,7 @@
     "vue": "^3.2.36",
     "vue-chartjs": "^5.2.0",
     "vue-dompurify-html": "^3.1.2",
+    "vue-gtag": "^2.0.1",
     "vue-json-pretty": "^2.2.3",
     "vue-router": "^4.1.6",
     "vuedraggable": "^4.1.0",

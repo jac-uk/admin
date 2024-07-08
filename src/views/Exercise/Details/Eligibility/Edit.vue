@@ -29,6 +29,7 @@
           v-model="formData.postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
+          required
         >
           <RadioItem
             value="5"
@@ -57,7 +58,7 @@
           v-if="isLegal && isTribunal"
           id="schedule-2d-or-3-apply"
           v-model="formData.schedule2Apply"
-          label="Does Schedule 2(d) or Schedule 2(3) apply?"
+          label="Does Schedule 2(d) or Schedule 3(d) apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
           <RadioItem
@@ -76,7 +77,7 @@
               />
               <RadioItem
                 value="schedule-2-3"
-                label="Schedule 2(3)"
+                label="Schedule 3(d)"
               />
             </RadioGroup>
           </RadioItem>
@@ -92,7 +93,6 @@
           v-model="formData.authorisations"
           label="Authorisations"
           hint="Select all that apply."
-          required
         >
           <CheckboxItem
             value="s9-1"
@@ -100,11 +100,7 @@
           />
           <CheckboxItem
             value="s9-4"
-            label="s9(4)"
-          />
-          <CheckboxItem
-            value="none"
-            label="None"
+            label="Class 1 ticket"
           />
         </CheckboxGroup>
 

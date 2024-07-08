@@ -36,7 +36,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          Does Schedule 2(d) or Schedule 3 apply?
+          Does Schedule 2(d) or Schedule 3(d) apply?
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.schedule2DOr3Apply === true || exercise.schedule2Apply">

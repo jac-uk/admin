@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!questionConfig">
       <div
         v-if="isDate"
       >
@@ -10,6 +10,7 @@
           :value="data"
           :field="field"
           :type="type"
+          :date-format="dateFormat"
           :index="index"
           :extension="extension"
           :display-month-year-only="displayMonthYearOnly"
@@ -130,17 +131,36 @@
           :field="field"
           :extension="extension"
           :type="type"
+          :type-props="typeProps"
           :index="index"
           :is-asked="isAsked"
+          :disable-submit-on-error="disableSubmitOnError"
+          :disable-universal-validation="disableUniversalValidation"
           @change-field="changeField"
+          @edit-field="editField"
         />
       </div>
+    </div>
+    <div v-else>
+      <EditableField
+        :edit-mode="edit"
+        :value="data"
+        :field="field"
+        :index="index"
+        :type="type"
+        :extension="extension"
+        :options="options"
+        :is-asked="isAsked"
+        :config="questionConfig"
+        @change-field="changeField"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+// import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+import EditableField from './EditableField.vue';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
@@ -164,6 +184,17 @@ export default {
       required: false,
       default: () => 'text',
     },
+    // Specify properties specific to the type of input (to assist with using the InformationReviewRenderer)
+    typeProps: {
+      type: Object,
+      required: false,
+      default: () => ({}),
+    },
+    dateFormat: {
+      type: String,
+      required: false,
+      default: () => '',
+    },
     extension: {
       type: String,
       required: false,
@@ -180,7 +211,7 @@ export default {
       default: () => '',
     },
     data: {
-      type: [String, Date, Boolean, Array],
+      type: [String, Date, Boolean, Array, Object],
       required: false,
       default: () => null,
     },
@@ -203,8 +234,23 @@ export default {
       required: false,
       default: true,
     },
+    questionConfig: {
+      type: Object,
+      required: false,
+      default: () => { false; },
+    },
+    disableSubmitOnError: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disableUniversalValidation: { // Ignore other invalid fields
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
-  emits: ['changeField'],
+  emits: ['changeField', 'editField'],
   data() {
     return {
       filters: filters,
@@ -240,6 +286,9 @@ export default {
     },
     changeField(obj) {
       this.$emit('changeField', obj);
+    },
+    editField(obj) {
+      this.$emit('editField', obj);
     },
   },
 };

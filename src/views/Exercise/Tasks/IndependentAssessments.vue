@@ -297,25 +297,26 @@
           ])"
         >
           <select
-            id="exercise-stage"
-            v-model="exerciseStage"
+            id="exercise-status"
+            v-model="exerciseStatus"
             class="govuk-select govuk-!-margin-right-3"
           >
             <option value="">
               Choose applications
             </option>
             <option
-              v-for="stage in availableStages"
-              :key="stage"
-              :value="stage"
+              v-for="availableStatus in availableStatuses"
+              :key="availableStatus"
+              :value="availableStatus"
             >
-              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
+              {{ $filters.lookup(availableStatus) }}
+              ({{ applicationRecordCounts.status ? $filters.formatNumber(applicationRecordCounts.status[availableStatus]) : 0 }})
             </option>
           </select>
 
           <ActionButton
             type="primary"
-            :disabled="!exerciseStage"
+            :disabled="!exerciseStatus"
             :action="initialiseAssessments"
           >
             Start assessments
@@ -364,7 +365,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
 import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
-import { isArchived, applicationRecordCounts, availableStages } from '@/helpers/exerciseHelper';
+import { isArchived, applicationRecordCounts, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';
@@ -383,13 +384,6 @@ export default {
     TabsList,
   },
   mixins: [permissionMixin],
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', {
-      exerciseId: this.exercise.id,
-      status: this.getStatus(),
-    });
-    next();
-  },
   data() {
     const tabs = [
       {
@@ -419,7 +413,7 @@ export default {
     ];
 
     return {
-      exerciseStage: '',
+      exerciseStatus: '',
       uploadAsssessmentProps: {},
       tabs,
       activeTab: 'notrequested',
@@ -468,9 +462,13 @@ export default {
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
-    availableStages() {
-      const stages = availableStages(this.exercise);
-      return stages.filter(stage => this.applicationRecordCounts[stage]);
+    availableStatuses() {
+      let statuses = availableStatuses(this.exercise);
+      statuses = statuses.filter(status => this.applicationRecordCounts?.status && this.applicationRecordCounts?.status[status]);
+      if (this.applicationRecordCounts?.status && this.applicationRecordCounts?.status['blank']) {
+        statuses.push('blank');
+      }
+      return statuses;
     },
     warningMessage() {
       let msg = 'Please add';
@@ -569,9 +567,9 @@ export default {
   },
   methods: {
     async initialiseAssessments() {
-      if (!this.exerciseStage) return;
+      if (!this.exerciseStatus) return;
       try {
-        await httpsCallable(functions, 'initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
+        await httpsCallable(functions, 'initialiseAssessments')({ exerciseId: this.exercise.id, status: this.exerciseStatus });
         return true;
       } catch (error) {
         return;

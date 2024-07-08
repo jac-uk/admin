@@ -79,6 +79,10 @@ const PERMISSIONS = {
         label: 'Can configure exercise',
         value: 'e11',
       },
+      canResetCharacterIssuesReport: {
+        label: 'Can reset character issues report',
+        value: 'e12',
+      },
     },
   },
   candidates: {
@@ -156,7 +160,7 @@ const PERMISSIONS = {
         value: 'pa1',
       },
     },
-  },  
+  },
   panels: {
     label: 'Panels',
     permissions: {
@@ -374,7 +378,16 @@ const PERMISSIONS = {
         value: 'cf4',
       },
     },
-  },  
+  },
+  releases: {
+    label: 'Releases',
+    permissions: {
+      canReadReleases: {
+        label: 'Can read releases',
+        value: 'r1',
+      },
+    },
+  },
 };
 
 export default PERMISSIONS;

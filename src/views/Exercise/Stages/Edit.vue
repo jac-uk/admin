@@ -58,8 +58,8 @@
           :value="false"
           label="No - EMP has not been Applied"
         />
-      </RadioGroup>         
-    </Checkbox>     
+      </RadioGroup>
+    </Checkbox>
     <button class="govuk-button">
       Save and continue
     </button>

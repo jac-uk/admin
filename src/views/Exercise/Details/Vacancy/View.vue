@@ -124,6 +124,14 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+          Location (Welsh)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.locationWelsh }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
           Welsh requirement
         </dt>
         <dd class="govuk-summary-list__value">

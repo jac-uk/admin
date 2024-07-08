@@ -59,6 +59,7 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import PanellistsForm from './components/AddEdit.vue';
 import PanellistsView from './components/View.vue';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -66,27 +67,25 @@ export default {
     PanellistsForm,
     PanellistsView,
   },
+  mixins: [permissionMixin],
   data() {
+    const TabList = [
+      {
+        ref: 'details',
+        title: 'Details',
+      },
+      {
+        ref: 'notes',
+        title: 'Notes',
+      },
+      {
+        ref: 'panels',
+        title: 'Panels',
+      },
+    ];
     return {
       editMode: false,
-      tabs: [
-        {
-          ref: 'details',
-          title: 'Details',
-        },
-        {
-          ref: 'edit',
-          title: 'Edit',
-        },
-        {
-          ref: 'notes',
-          title: 'Notes',
-        },
-        {
-          ref: 'panels',
-          title: 'Panels',
-        },
-      ],
+      tabs: TabList,
       activeTab: 'details',
     };
   },
@@ -100,6 +99,15 @@ export default {
   },
   async created() {
     this.$store.dispatch('panellist/bind', this.panellistId);
+  },
+  mounted() {
+    // add edit tab if user has permissions
+    if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])){
+      this.$data.tabs.splice(1,0, {
+        ref: 'edit',
+        title: 'Edit',
+      });
+    }
   },
   unmounted() {
     this.$store.dispatch('panellist/unbind');

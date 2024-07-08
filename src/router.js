@@ -57,6 +57,7 @@ import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View.vue';
 import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit.vue';
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View.vue';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit.vue';
+import ExerciseDetailsPreferencesEditV1 from '@/views/Exercise/Details/Preferences/Edit.v1.vue';  // previous edit page
 import ExerciseDetailsAdditionalSettings from '@/views/Exercise/Details/AdditionalSettings/View.vue';
 import ExerciseDetailsAdditionalSettingsEdit from '@/views/Exercise/Details/AdditionalSettings/Edit.vue';
 
@@ -75,6 +76,7 @@ import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/Eligibili
 import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments.vue';
 import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency.vue';
 import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover.vue';
+import ExerciseReportsDeployment from '@/views/Exercise/Reports/Deployment.vue';
 import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation.vue';
 import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels.vue';
 import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew.vue';
@@ -143,6 +145,9 @@ import Sandbox from '@/views/Sandbox.vue';
 // Users
 import Users from '@/views/Users/Users.vue';
 
+// Latest Releases
+import ReleasesList from '@/views/ReleasesList.vue';
+
 const routes = [
   {
     path: '/:pathMatch(.*)*',
@@ -165,6 +170,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Events',
+    },
+  },
+  {
+    path: '/latest-releases',
+    name: 'releases',
+    component: ReleasesList,
+    meta: {
+      requiresAuth: true,
+      title: 'Latest Releases',
     },
   },
   {
@@ -302,7 +316,7 @@ const routes = [
               requiresAuth: true,
               title: 'Processing Version | Exercise Configuration',
             },
-          },          
+          },
         ],
       },
       {
@@ -558,6 +572,15 @@ const routes = [
                 meta: {
                   requiresAuth: true,
                   title: 'Preferences | Exercise Details',
+                },
+              },
+              {
+                name: 'exercise-details-preferences-edit-v1',
+                path: 'edit-v1',
+                component: ExerciseDetailsPreferencesEditV1,
+                meta: {
+                  requiresAuth: true,
+                  title: 'Edit Preferences | Exercise Details',
                 },
               },
               {
@@ -1042,6 +1065,15 @@ const routes = [
             meta: {
               requiresAuth: true,
               title: 'Handover | Exercise Reports',
+            },
+          },
+          {
+            name: 'deployment',
+            path: 'deployment',
+            component: ExerciseReportsDeployment,
+            meta: {
+              requiresAuth: true,
+              title: 'Deployment | Exercise Reports',
             },
           },
           {

@@ -16,7 +16,19 @@
           >
             JAC Digital Platform
           </a>
-          <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
+
+          <RouterLink
+            v-if="hasPermissions([PERMISSIONS.releases.permissions.canReadReleases.value])"
+            :to="{ name: 'releases' }"
+            class="govuk-body-xs govuk-!-padding-left-2 govuk-!-font-weight-bold"
+          >
+            {{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}
+          </RouterLink>
+
+          <span
+            v-else
+            class="govuk-body-xs govuk-!-padding-left-2"
+          >{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
           <nav
             v-if="isSignedIn"
@@ -134,7 +146,7 @@
     </main>
 
     <UserFeedbackLink
-      v-show="isSignedIn && isMounted"
+      v-show="showFeedbackLink"
       :style="{ 'bottom': linkBottom }"
       @open-feedback-modal="openFeedbackModal()"
     />
@@ -281,6 +293,9 @@ export default {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
     },
+    environment() {
+      return this.$store.getters.appEnvironment;
+    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
     },
@@ -301,6 +316,10 @@ export default {
     },
     currentUser() {
       return this.$store.state.auth.currentUser;
+    },
+    showFeedbackLink() {
+      // Enable when the environment and app are defined (these are used when creating the bug request number)
+      return this.isSignedIn && this.isMounted && this.environment && (import.meta.env.PACKAGE_NAME !== undefined && import.meta.env.PACKAGE_NAME !== null);
     },
   },
   watch: {
@@ -330,6 +349,9 @@ export default {
     this.bindObserver();
 
     this.isMounted = true;
+    if (!this.showFeedbackLink) {
+      console.log('The user feedback link is not enabled for this environment');
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleDebouncedScroll);

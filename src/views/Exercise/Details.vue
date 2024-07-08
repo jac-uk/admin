@@ -74,7 +74,7 @@ export default {
           path: `${path}/application-content`,
         },
       ];
-      if (this.exercise._processingVersion >= 2) {
+      if (this.exercise._processingVersion >= 3) {
         sideNavigation.push({
           title: 'Additional settings',
           path: `${path}/additional-settings`,

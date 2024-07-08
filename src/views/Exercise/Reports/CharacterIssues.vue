@@ -1,52 +1,99 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <h1 class="govuk-heading-l">
-        Character Issues
-      </h1>
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Character Issues
+          </h2>
+          <span
+            v-if="characterIssuesReport"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ $filters.formatDate(characterIssuesReport.createdAt, 'longdatetime') }}
+          </span>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  ])
+                "
+                :action="exportData"
+              >
+                Export to Excel
+              </ActionButton>
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                  ])
+                "
+                class="govuk-!-margin-left-2"
+                :action="exportCharacterAnnexReport"
+              >
+                SCC Annex
+              </ActionButton>
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                  ])
+                "
+                type="primary"
+                class="govuk-!-margin-left-2"
+                :action="() =>refreshReport(false)"
+              >
+                Refresh
+              </ActionButton>
+              <button
+                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canResetCharacterIssuesReport.value])"
+                class="govuk-button govuk-button--warning govuk-!-margin-left-2"
+                @click="openModal('modalRefReset')"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <Modal ref="modalRefReset">
+            <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+              Are you sure to reset?
+            </div>
+            <div class="modal__content govuk-!-margin-6">
+              <p class="govuk-body">
+                Any edits made to this report will be lost. Are you sure you want to reset?
+              </p>
+              <ActionButton
+                type="primary"
+                class="govuk-!-margin-right-2"
+                :action="resetReport"
+              >
+                Reset
+              </ActionButton>
+              <button
+                class="govuk-button govuk-button--secondary"
+                @click="closeModal('modalRefReset')"
+              >
+                Cancel
+              </button>
+            </div>
+          </Modal>
+        </div>
+      </div>
     </div>
-    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
-    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-          ])
-        "
-        class="govuk-!-margin-right-2"
-        :action="exportData"
-      >
-        Export to Excel
-      </ActionButton>
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-          ])
-        "
-        class="govuk-!-margin-right-2"
-        :action="exportToGoogleDoc"
-      >
-        Generate Report
-      </ActionButton>
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-          ])
-        "
-        type="primary"
-        :action="refreshReport"
-      >
-        Refresh
-      </ActionButton>
-    </div>
+
     <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <div>
@@ -151,26 +198,99 @@
                   View application
                 </RouterLink>
               </div>
+              <div class="govuk-grid-column-full govuk-!-margin-top-2 text-right">
+                <button
+                  v-if="editMode"
+                  class="govuk-button govuk-button btn-unlock"
+                  @click="toggleEdit"
+                >
+                  Done
+                </button>
+                <button
+                  v-else
+                  class="govuk-button govuk-button--secondary btn-mark-as-applied"
+                  @click="toggleEdit"
+                >
+                  Edit
+                </button>
+              </div>
 
-              <div class="govuk-grid-column-full">
+              <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
                 <div
                   v-for="(issue, index) in row.issues.characterIssues"
                   :key="index"
-                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                  class="govuk-grid-row govuk-!-margin-0"
                 >
-                  <hr
-                    v-if="index !== 0"
-                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  >
                   <div class="govuk-grid-column-full">
+                    <hr
+                      v-if="index !== 0"
+                      class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                    >
                     <div class="issue govuk-!-margin-top-4">
-                      <p class="govuk-body">
+                      <p class="govuk-body govuk-!-font-weight-bold">
                         {{ issue.summary }}
                       </p>
-                      <EventRenderer
-                        v-if="issue.events"
-                        :events="issue.events"
-                      />
+
+                      <div v-if="issue.events">
+                        <ul
+                          v-for="(item, i) in issue.events"
+                          :key="item.name"
+                          class="govuk-list"
+                        >
+                          <InformationReviewRenderer
+                            v-if="item.date || editMode"
+                            type="date"
+                            field="date"
+                            :edit="editMode"
+                            :data="item.date"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <InformationReviewRenderer
+                            v-if="item.title || editMode"
+                            field="title"
+                            :edit="editMode"
+                            :data="item.title"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigations:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="(item.investigations !== null && item.investigations !== undefined) || editMode"
+                              field="investigations"
+                              type="selection"
+                              :options="[true, false]"
+                              :edit="editMode"
+                              :data="item.investigations"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigation conclusion date:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="item.investigationConclusionDate || editMode"
+                              field="investigationConclusionDate"
+                              type="date"
+                              :edit="editMode"
+                              :data="item.investigationConclusionDate"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
+                          <InformationReviewRenderer
+                            v-if="item.details || editMode"
+                            type="textarea"
+                            field="details"
+                            :edit="editMode"
+                            :data="item.details"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                        </ul>
+                      </div>
                     </div>
                     <div
                       v-if="issue.comments"
@@ -235,13 +355,46 @@
                           >
                           <div class="govuk-grid-column-full">
                             <div class="issue">
-                              <p class="govuk-body">
+                              <p class="govuk-body govuk-!-font-weight-bold">
                                 {{ issue.summary }}
                               </p>
-                              <EventRenderer
-                                v-if="issue.events"
-                                :events="issue.events"
-                              />
+                              <div v-if="issue.events">
+                                <ul
+                                  v-for="item in issue.events"
+                                  :key="item.name"
+                                  class="govuk-list"
+                                >
+                                  <li
+                                    v-if="item.date"
+                                    class="govuk-body"
+                                  >
+                                    {{ $filters.formatDate(item.date) }}
+                                  </li>
+                                  <li
+                                    v-if="item.title"
+                                    class="govuk-body"
+                                  >
+                                    {{ item.title }}
+                                  </li>
+                                  <template v-if="issue.summary === 'Professional Conduct'">
+                                    <li
+                                      v-if="item.investigations !== null && item.investigations !== undefined"
+                                      class="govuk-body"
+                                    >
+                                      Investigations: {{ item.investigations ? 'Yes' : 'No' }}
+                                    </li>
+                                    <li
+                                      v-if="item.investigationConclusionDate"
+                                      class="govuk-body"
+                                    >
+                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate) }}
+                                    </li>
+                                  </template>
+                                  <li v-if="item.details">
+                                    {{ item.details }}
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
                             <div
                               v-if="issue.comments"
@@ -289,6 +442,24 @@
 
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Guidance reference
+                </h4>
+                <CheckboxGroup
+                  id="guidance-reference"
+                  :model-value="row.issues.characterIssuesGuidanceReferences || []"
+                  @update:model-value="saveIssueGuidanceReferences(row, $event)"
+                >
+                  <CheckboxItem
+                    v-for="value in guidanceReference"
+                    :key="value"
+                    :value="value"
+                    :label="$filters.lookup(value)"
+                  />
+                </CheckboxGroup>
+              </div>
+
+              <div class="govuk-grid-column-one-half">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                   Recommended SCC approach
                 </h4>
                 <Select
@@ -308,6 +479,28 @@
                   </option>
                   <option value="discuss">
                     Discuss
+                  </option>
+                </Select>
+              </div>
+
+              <div class="govuk-grid-column-one-half">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  SCC decision
+                </h4>
+                <Select
+                  id="issue-status"
+                  :model-value="row.issues.characterIssuesSCCDecision || ''"
+                  @update:model-value="saveIssueSCCDecision(row, $event)"
+                >
+                  <option value="" />
+                  <option value="proceed">
+                    Proceed
+                  </option>
+                  <option value="reject">
+                    Reject
+                  </option>
+                  <option value="defer">
+                    Defer
                   </option>
                 </Select>
               </div>
@@ -335,10 +528,9 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, onSnapshot, where } from '@firebase/firestore';
+import { query, collection, doc, onSnapshot, where, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
@@ -346,22 +538,32 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
+import { OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { downloadBase64File } from '@/helpers/file';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 
 export default {
   name: 'CharacterIssues',
   components: {
-    EventRenderer,
     Select,
     Table,
     TableCell,
     TextareaInput,
     ActionButton,
+    CheckboxGroup,
+    CheckboxItem,
+    InformationReviewRenderer,
+    Modal,
   },
   mixins: [permissionMixin],
   data() {
     return {
+      characterIssuesReport: null,
+      unsubscribeCharacterIssuesReport: null,
       recordVersion: 0,
       exerciseStage: '',
       candidateStatus: '',
@@ -373,6 +575,8 @@ export default {
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
+      guidanceReference: GUIDANCE_REFERENCE,
+      editMode: false,
     };
   },
   computed: {
@@ -393,15 +597,17 @@ export default {
     },
     availableStages() {
       const stageCounts = this.applicationStageCounts || {};
-      return Object.entries(stageCounts)
-        .filter(([,count]) => count > 0)
-        .map(([stage]) => stage);
+      return Object.keys(stageCounts).filter(status => stageCounts[status] > 0);
     },
     availableStatuses() {
       const statusCounts = this.applicationStatusCounts[this.exerciseStage] || {};
-      return Object.entries(statusCounts)
-        .filter(([,count]) => count > 0)
-        .map(([status]) => status);
+      const statuses = Object.keys(statusCounts).filter(status => statusCounts[status] > 0);
+      const blankStatusIndex = statuses.indexOf('blank');
+      if (blankStatusIndex > -1) {
+        // move 'blank' to the end of the list
+        return [...statuses.filter((_, index) => index !== blankStatusIndex), 'blank'];
+      }
+      return statuses;
     },
   },
   watch: {
@@ -413,22 +619,54 @@ export default {
       this.$refs['issuesTable'].reload();
     },
   },
+  created() {
+    this.unsubscribeCharacterIssuesReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/characterIssues`),
+      (snap) => {
+        if (snap.exists) {
+          this.characterIssuesReport = vuexfireSerialize(snap);
+        }
+      });
+  },
   mounted() {
     this.exerciseStage = this.availableStages[0] || '';
     this.candidateStatus = this.availableStatuses[0] || '';
   },
   unmounted() {
+    if (this.unsubscribeCharacterIssuesReport) {
+      this.unsubscribeCharacterIssuesReport();
+    }
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport() {
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
+    async refreshReport(reset = false) {
       try {
-        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id, reset });
         return true;
       } catch (error) {
-        return;
+        return false;
+      }
+    },
+    async resetReport() {
+      try {
+        const success = await this.refreshReport(true);
+        if (success) {
+          setTimeout(() => {
+            this.closeModal('modalRefReset');
+          }, 500);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        return false;
       }
     },
     async gatherReportData() {
@@ -500,7 +738,7 @@ export default {
         }
         localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus));
+        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
         localParams.orderBy = 'documentId';
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
@@ -527,6 +765,10 @@ export default {
       applicationRecord.issues.characterIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    async saveIssueSCCDecision(applicationRecord, decision) {
+      applicationRecord.issues.characterIssuesSCCDecision = decision;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
     async saveIssueStatusReason(applicationRecord, reason) {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
@@ -541,16 +783,21 @@ export default {
       applicationRecord.issues.characterIssuesOffenceCategory = category;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    async saveIssueGuidanceReferences(applicationRecord, guidanceReferences) {
+      applicationRecord.issues.characterIssuesGuidanceReferences = guidanceReferences;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
     async getOtherApplicationRecords(applicationRecord) {
       const match = this.otherApplicationRecords.find((item) => item.candidateId === applicationRecord.candidate.id);
       if (match) return; // already have the data for this candidate
 
       // get other application records for this candidate
-      const firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('candidate.id', '==', applicationRecord.candidate.id)
-        .where('exercise.id', '!=', applicationRecord.exercise.id); // exclude current exercise
-      const snapshot = await firestoreRef.get();
+      const firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('candidate.id', '==', applicationRecord.candidate.id),
+        where('exercise.id', '!=', applicationRecord.exercise.id) // exclude current exercise
+      );
+      const snapshot = await getDocs(firestoreRef);
       const otherRecords = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -568,6 +815,33 @@ export default {
       const exerciseId = applicationRecord.exercise.id;
       const record = this.otherApplicationRecords.find((item) => item.candidateId === candidateId);
       return record ? record.otherRecords.filter((ar) => ar.exercise.id !== exerciseId) : [];
+    },
+    async exportCharacterAnnexReport() {
+      if (!this.exercise.referenceNumber) return; // abort if no ref
+      try {
+        const result = await httpsCallable(functions, 'exportApplicationCharacterIssues')({
+          exerciseId: this.exercise.id,
+          format: 'annex',
+        });
+        if (!result.data) return;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_SCC Annex Report.docx`
+        );
+        return true;
+      } catch (error) {
+        return;
+      }
+    },
+    toggleEdit(){
+      this.editMode = !this.editMode;
+    },
+    async updateIssue(applicationRecord, index1, index2, obj) {
+      for (const [key, value] of Object.entries(obj)) {
+        applicationRecord.issues.characterIssues[index1].events[index2][key] = value !== undefined ? value : null;
+      }
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
 };

@@ -45,11 +45,11 @@ export default {
       if (items.some(item => item === 'date')) {
         obj.date = new Date();
       }
-      if (items.some(item => item === 'investigationConclusionDate')) {
-        obj.investigationConclusionDate = new Date();
-      }
       if (items.some(item => item === 'investigations')) {
         obj.investigations = '';
+      }
+      if (items.some(item => item === 'investigationConclusionDate')) {
+        obj.investigationConclusionDate = new Date();
       }
       if (items.some(item => item === 'details')) {
         obj.details = '';

@@ -137,7 +137,7 @@ import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { applicationCounts, availableStages } from '@/helpers/exerciseHelper';
-//import { EXERCISE_STAGE } from '@/helpers/constants';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
 //import QualifyingTest from './ScoresDistribution/QualifyingTest';
@@ -245,10 +245,28 @@ export default {
       });
     },
     labels() {
-      return this.availableStages.map(stage => ({
-        key: stage,
-        title: this.$filters.lookup(stage),
-      }));
+      return this.availableStages.map((stage) => {
+        const tab = {};
+        tab.key = stage;
+        switch (stage) {
+        case EXERCISE_STAGE.SHORTLISTING:
+        case EXERCISE_STAGE.REVIEW:
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SELECTION:
+          tab.title = 'Shortlisted';
+          break;
+        case EXERCISE_STAGE.SCC:
+          tab.title = 'Passed SD';
+          break;
+        case EXERCISE_STAGE.RECOMMENDATION:
+          tab.title = 'Recommended to JO';
+          break;
+        default:
+          tab.title = this.$filters.lookup(stage);
+        }
+        return tab;
+      });      
     },
     legend() {
       if (this.selectedDiversityReportType) {
