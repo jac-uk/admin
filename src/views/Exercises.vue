@@ -7,19 +7,19 @@
             v-if="isFavourites"
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Favourite exercises
+            Favourite Exercises
           </h1>
           <h1
             v-else-if="isArchived"
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Archived exercises
+            Archived Exercises
           </h1>
           <h1
             v-else
             class="govuk-heading-xl govuk-!-margin-bottom-4"
           >
-            Live exercises
+            Live Exercises
           </h1>
         </div>
       </div>
@@ -70,12 +70,10 @@
               </button>
             </template>
             <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
-                >
-                  {{ row.referenceNumber }}
-                </RouterLink>
+              <TableCell
+                :title="tableColumns[0].title"
+              >
+                {{ row.referenceNumber }}
               </TableCell>
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
@@ -133,13 +131,13 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
+        { title: 'Reference', sort: 'referenceNumber', direction: 'asc', default: true },
         { title: 'Name', sort: 'name' },
-        { title: 'Open date', sort: 'applicationOpenDate' },
-        { title: 'Close date', sort: 'applicationCloseDate' },
+        { title: 'Open', sort: 'applicationOpenDate' },
+        { title: 'Close', sort: 'applicationCloseDate' },
         { title: 'Status' },
         {
-          title: 'Submitted Applications',
+          title: 'Applications',
           sort: '_applications.applied',
           class: 'govuk-table__header--numeric',
         },
@@ -169,6 +167,7 @@ export default {
         const data = { ...row };
         data.id = row.id;
         data.applicationsCount = (row._applications && row._applications.applied) || 0;
+        data.rowLink = { name: 'exercise-dashboard', params: { id: row.id } };
         return data;
       });
     },
@@ -240,5 +239,8 @@ export default {
 <style>
 .exercises-table input[type="search"] {
   margin-left: 3px;
+}
+.govuk-table__cell a {
+  text-decoration: none;
 }
 </style>

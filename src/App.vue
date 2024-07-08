@@ -4,10 +4,7 @@
     :class="{ 'full-screen': fullScreen }"
     @mouseenter="onMouseOver"
   >
-    <header
-      ref="headerTester"
-      class="govuk-width-container"
-    >
+    <header class="govuk-width-container">
       <div class="jac-header clearfix">
         <div class="header-title">
           <a
@@ -30,110 +27,13 @@
             class="govuk-body-xs govuk-!-padding-left-2"
           >{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
-          <nav
+          <TabMenu
             v-if="isSignedIn"
             class="float-right print-none"
-          >
-            <ul class="govuk-header__navigation user-menu">
-              <li
-                v-if="hasPermissions([PERMISSIONS.logs.permissions.canReadLogs.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'events' }"
-                  class="govuk-header__link"
-                >
-                  Events
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.notifications.permissions.canReadNotifications.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'notifications' }"
-                  class="govuk-header__link"
-                >
-                  Notifications
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canReadExercises.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'exercises' }"
-                  class="govuk-header__link"
-                >
-                  Exercises
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.candidates.permissions.canReadCandidates.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'candidates-list' }"
-                  class="govuk-header__link"
-                >
-                  Candidates
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'panellists-list' }"
-                  class="govuk-header__link"
-                >
-                  Panellists
-                </RouterLink>
-              </li>
-              <li
-                v-if="hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'users' }"
-                  class="govuk-header__link"
-                >
-                  Users
-                </RouterLink>
-              </li>
-              <li class="govuk-header__navigation-item">
-                <a
-                  v-if="$route.name !== 'sign-in'"
-                  href="#"
-                  class="govuk-header__link"
-                  @click="signOut"
-                >
-                  Sign out
-                </a>
-                <span
-                  v-if="isSignedIn && isDevelopmentEnvironment"
-                  class="app-c-topic-list__item nostyle"
-                >
-                  <b>({{ userName }})</b>
-                </span>
-              </li>
-            </ul>
-          </nav>
+            :tabs="tabs"
+          />
         </div>
-        <div
-          class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container"
-        >
-          <p class="govuk-phase-banner__content">
-            <span class="govuk-phase-banner__text">
-              This is a new service – your <a
-                style="font-size: 16px"
-                class="govuk-link govuk-body info-link--header--feedback"
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdS7FDTzrwokQwiRriCzA45q2eiZT5xUX1dl9WfkJUYZAKiBQ/viewform"
-                target="_blank"
-              >feedback</a> will help us improve it.
-            </span>
-          </p>
-        </div>
+        <div class="govuk-phase-banner print-none govuk-width-container" />
       </div>
     </header>
 
@@ -266,6 +166,7 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
+import TabMenu from '@jac-uk/jac-kit/draftComponents/TabMenu.vue';
 export default {
   name: 'App',
   components: {
@@ -273,19 +174,18 @@ export default {
     UserFeedbackModal,
     UserFeedbackLink,
     Modal,
+    TabMenu,
   },
   mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,
       rect: null,
-
-      // @TODO: May not need the ref of the button anymore!
-
       //buttonElement: null,
       linkBottom: '',
       isMounted: false,
       observer: null,
+      tabs: [],
     };
   },
   computed: {
@@ -299,7 +199,11 @@ export default {
       return this.$store.getters['auth/isSignedIn'];
     },
     userName() {
-      return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+      const currentUser = this.$store.state.auth.currentUser;
+      if (!currentUser) {
+        return '';
+      }
+      return currentUser.displayName || currentUser.email || '';
     },
     clipboardData() {
       return this.$store.state.clipboard.data;
@@ -390,6 +294,9 @@ export default {
 
     },
     async load() {
+      this.buildTabs();
+
+      // Leave async calls til the end so dont block the instant calls
       await this.$store.dispatch('services/bind');
       if (this.canReadMessages) {
         await this.getMessages();
