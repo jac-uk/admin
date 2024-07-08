@@ -266,7 +266,6 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
-import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
 export default {
   name: 'App',
   components: {
