@@ -32,8 +32,8 @@ const timelineOptions = ref({
   editable: false,
   selectable: false,
   margin: {
-    item: 10, // minimal margin between items
-    axis: 5, // minimal margin between items and the axis
+    item: 8, // minimal margin between items
+    axis: 8, // minimal margin between items and the axis
   },
   orientation: {
     axis: 'top',
@@ -329,6 +329,12 @@ const getExerciseTimeline = (data) => {
 </template>
 
 <style>
+.vis-timeline {
+  border-radius: 4px;
+}
+.vis-item {
+  border-radius: 4px;
+}
 .vis-item.vis-range {
   border: none !important;
 }
