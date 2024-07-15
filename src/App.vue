@@ -379,6 +379,13 @@ export default {
                 this.$router.push({ name: 'exercises' });
               },
             },
+            {
+              title: 'Exercises timeline',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises-timeline' });
+              },
+            },
           ],
         });
       }
