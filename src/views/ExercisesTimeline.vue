@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import Timeline from '@/components/Timeline.vue';
+import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 const store = useStore();
 const router = useRouter();
@@ -42,7 +43,7 @@ const timelineOptions = ref({
     const container = document.createElement('div');
 
     const anchor = document.createElement('a');
-    anchor.href = '#';
+    anchor.href = `/exercise/${group.id}/dashboard`;
     anchor.textContent = group.content;
     anchor.addEventListener('click', (event) => {
       event.preventDefault();
@@ -117,7 +118,7 @@ const getExerciseTimeline = (data) => {
         id: `Launch to close - ${data.referenceNumber}`,
         type: 'point',
         name: 'Launch to close',
-        title: 'Launch to close',
+        title: `Launch to close (${formatDate(data.applicationOpenDate, 'long')} - ${formatDate(data.applicationCloseDate, 'long')})`,
         start: data.applicationOpenDate,
         end: data.applicationCloseDate,
         style: 'background-color: #fa9901',
@@ -130,7 +131,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Sift - ${data.referenceNumber}`,
         name: 'Sift',
-        title: 'Sift',
+        title: `Sift (${formatDate(data.siftStartDate, 'long')} - ${formatDate(data.siftEndDate, 'long')})`,
         start: data.siftStartDate,
         end: data.siftEndDate,
         style: 'background-color: #fbf445',
@@ -143,7 +144,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Name-blind Sift - ${data.referenceNumber}`,
         name: 'Name-blind Sift',
-        title: 'Name-blind Sift',
+        title: `Name-blind Sift (${formatDate(data.nameBlindSiftStartDate, 'long')} - ${formatDate(data.nameBlindSiftEndDate, 'long')})`,
         start: data.nameBlindSiftStartDate,
         end: data.nameBlindSiftEndDate,
         style: 'background-color: #fbf445',
@@ -159,7 +160,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Independent Assessors - ${data.referenceNumber}`,
         name: 'Independent Assessors',
-        title: 'Independent Assessors',
+        title: `Independent Assessors (${formatDate(data.contactIndependentAssessors, 'long')} - ${formatDate(data.independentAssessmentsReturnDate, 'long')})`,
         start: data.contactIndependentAssessors,
         end: data.independentAssessmentsReturnDate,
         style: 'background-color: #3dfdff',
@@ -172,7 +173,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Character checks - ${data.referenceNumber}`,
         name: 'Character checks',
-        title: 'Character checks',
+        title: `Character checks (${formatDate(data.characterChecksDate, 'long')} - ${formatDate(data.characterChecksProfessionalReturnDate, 'long')})`,
         start: data.characterChecksDate,
         end: data.characterChecksProfessionalReturnDate,
         style: 'background-color: #349bf0',
@@ -189,7 +190,7 @@ const getExerciseTimeline = (data) => {
           {
             id: `Selection Day - ${data.referenceNumber} ${i + 1} - ${selectionDay.selectionDayLocation}`,
             name: `Selection Day ${i + 1} - ${selectionDay.selectionDayLocation}`,
-            title: `Selection Day - ${selectionDay.selectionDayLocation}`,
+            title: `Selection Day - ${selectionDay.selectionDayLocation} (${formatDate(selectionDayStart, 'long')} - ${formatDate(selectionDayEnd, 'long')})`,
             start: selectionDayStart,
             end: selectionDayEnd,
             style: 'color: white; background-color: #3502ff',
@@ -204,7 +205,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Situational judgement qualifying test - ${data.referenceNumber}`,
         name: 'Situational judgement qualifying test',
-        title: 'Situational judgement qualifying test',
+        title: `Situational judgement qualifying test (${formatDate(data.situationalJudgementTestDate, 'long')})`,
         type: 'point',
         start: data.situationalJudgementTestDate,
         style: 'color: white; background-color: #e51e42',
@@ -217,7 +218,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Critical analysis qualifying test - ${data.referenceNumber}`,
         name: 'Critical analysis qualifying test',
-        title: 'Critical analysis qualifying test',
+        title: `Critical analysis qualifying test (${formatDate(data.criticalAnalysisTestDate, 'long')})`,
         type: 'point',
         start: data.criticalAnalysisTestDate,
         style: 'color: white; background-color: #e51e42',
@@ -230,7 +231,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Scenario test - ${data.referenceNumber}`,
         name: 'Scenario test',
-        title: 'Scenario test',
+        title: `Scenario test (${formatDate(data.scenarioTestDate, 'long')})`,
         type: 'point',
         start: data.scenarioTestDate,
         style: 'color: white; background-color: #e51e42',
@@ -243,7 +244,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Eligibility SCC - ${data.referenceNumber}`,
         name: 'Eligibility SCC',
-        title: 'Eligibility SCC',
+        title: `Eligibility SCC (${formatDate(data.eligibilitySCCDate, 'long')})`,
         type: 'point',
         start: data.eligibilitySCCDate,
         style: 'background-color: #1afe00',
@@ -256,7 +257,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Character and Selection SCC - ${data.referenceNumber}`,
         name: 'Character and Selection SCC',
-        title: 'Character and Selection SCC',
+        title: `Character and Selection SCC (${formatDate(data.characterAndSCCDate, 'long')})`,
         type: 'point',
         start: data.characterAndSCCDate,
         style: 'color: white; background-color: #088001',
@@ -269,7 +270,7 @@ const getExerciseTimeline = (data) => {
       {
         id: `Statutory consultation - ${data.referenceNumber}`,
         name: 'Statutory consultation',
-        title: 'Statutory consultation',
+        title: `Statutory consultation (${formatDate(data.statutoryConsultationDate, 'long')})`,
         type: 'point',
         start: data.statutoryConsultationDate,
         style: 'background-color: #cc99ff',
@@ -282,13 +283,18 @@ const getExerciseTimeline = (data) => {
       {
         id: `Final outcome - ${data.referenceNumber}`,
         name: 'Final outcome',
-        title: 'Final outcome',
+        title: `Final outcome (${formatDate(data.finalOutcome, 'long')})`,
         type: 'point',
         start: data.finalOutcome,
         style: 'color: white; background-color: #9510ac',
       }
     );
   }
+
+  // sort timeline by start date
+  timeline.sort((a, b) => {
+    return a.start - b.start;
+  });
 
   return timeline;
 };
