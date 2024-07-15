@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Timeline from '@/components/Timeline.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
@@ -22,6 +23,7 @@ const getDefaultTimeRange = () => {
   return [startDate, endDate];
 };
 
+const loading = ref(true);
 const timelineOptions = ref({
   stack: true,
   verticalScroll: true,
@@ -59,12 +61,12 @@ const timelineOptions = ref({
   },
 });
 
-const tableData = computed(() => {
+const exerciseRecords = computed(() => {
   return store.state.exerciseCollection.records || [];
 });
 
 const timelineGroups = computed(() => {
-  return tableData.value.map(exercise => ({
+  return exerciseRecords.value.map(exercise => ({
     id: exercise.id,
     title: exercise.name,
     content: exercise.referenceNumber,
@@ -74,10 +76,10 @@ const timelineGroups = computed(() => {
 
 const timelineItems = computed(() => {
   const items = [];
-  tableData.value.forEach(exercise => {
-    const timelines = getExerciseTimeline(exercise);
-    if (!Array.isArray(timelines)) return;
-    timelines.forEach(timeline => {
+  exerciseRecords.value.forEach(exercise => {
+    const exerciseTimelineItems = getExerciseTimelineItems(exercise);
+    if (!Array.isArray(exerciseTimelineItems)) return;
+    exerciseTimelineItems.forEach(timeline => {
       const item = {};
       item.id = `${exercise.id} - ${timeline.name}`;
       item.title = `<div>${timeline.title}</div>`;
@@ -95,13 +97,18 @@ const timelineItems = computed(() => {
   return items;
 });
 
+watch(timelineGroups, () => {
+  if (loading.value) loading.value = false;
+}, { deep: true });
+
 onMounted(() => {
   const params = {
     direction: 'asc',
     orderBy: 'applicationOpenDate',
     pageSize: 1000,
     searchMap: '_search',
-    where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
+    where: [],
+    // where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
   };
   store.dispatch(
     'exerciseCollection/bind',
@@ -113,194 +120,167 @@ onUnmounted(() => {
   store.dispatch('exerciseCollection/unbind');
 });
 
-const getExerciseTimeline = (data) => {
-  const timeline = [];
+const getExerciseTimelineItems = (data) => {
+  const items = [];
 
   if (data.applicationOpenDate && data.applicationCloseDate) {
-    timeline.push(
-      {
-        id: `Launch to close - ${data.referenceNumber}`,
-        type: 'point',
-        name: 'Launch to close',
-        title: `Launch to close (${formatDate(data.applicationOpenDate, 'long')} - ${formatDate(data.applicationCloseDate, 'long')})`,
-        start: data.applicationOpenDate,
-        end: data.applicationCloseDate,
-        style: 'background-color: #fa9901',
-      }
-    );
+    items.push({
+      id: `Launch to close - ${data.referenceNumber}`,
+      name: 'Launch to close',
+      title: `Launch to close (${formatDate(data.applicationOpenDate, 'long')} - ${formatDate(data.applicationCloseDate, 'long')})`,
+      start: data.applicationOpenDate,
+      end: data.applicationCloseDate,
+      style: 'background-color: #fa9901',
+    });
   }
 
   if (data.shortlistingMethods?.includes('paper-sift') && data.siftStartDate && data.siftEndDate) {
-    timeline.push(
-      {
-        id: `Sift - ${data.referenceNumber}`,
-        name: 'Sift',
-        title: `Sift (${formatDate(data.siftStartDate, 'long')} - ${formatDate(data.siftEndDate, 'long')})`,
-        start: data.siftStartDate,
-        end: data.siftEndDate,
-        style: 'background-color: #fbf445',
-      }
-    );
+    items.push({
+      id: `Sift - ${data.referenceNumber}`,
+      name: 'Sift',
+      title: `Sift (${formatDate(data.siftStartDate, 'long')} - ${formatDate(data.siftEndDate, 'long')})`,
+      start: data.siftStartDate,
+      end: data.siftEndDate,
+      style: 'background-color: #fbf445',
+    });
   }
 
   if (data.shortlistingMethods?.includes('name-blind-paper-sift') && data.nameBlindSiftStartDate && data.nameBlindSiftEndDate) {
-    timeline.push(
-      {
-        id: `Name-blind Sift - ${data.referenceNumber}`,
-        name: 'Name-blind Sift',
-        title: `Name-blind Sift (${formatDate(data.nameBlindSiftStartDate, 'long')} - ${formatDate(data.nameBlindSiftEndDate, 'long')})`,
-        start: data.nameBlindSiftStartDate,
-        end: data.nameBlindSiftEndDate,
-        style: 'background-color: #fbf445',
-      }
-    );
+    items.push({
+      id: `Name-blind Sift - ${data.referenceNumber}`,
+      name: 'Name-blind Sift',
+      title: `Name-blind Sift (${formatDate(data.nameBlindSiftStartDate, 'long')} - ${formatDate(data.nameBlindSiftEndDate, 'long')})`,
+      start: data.nameBlindSiftStartDate,
+      end: data.nameBlindSiftEndDate,
+      style: 'background-color: #fbf445',
+    });
   }
 
   if (!(data.assessmentMethods && data.assessmentMethods.independentAssessments === false)
     && data.contactIndependentAssessors
     && data.independentAssessmentsReturnDate
   ) {
-    timeline.push(
-      {
-        id: `Independent Assessors - ${data.referenceNumber}`,
-        name: 'Independent Assessors',
-        title: `Independent Assessors (${formatDate(data.contactIndependentAssessors, 'long')} - ${formatDate(data.independentAssessmentsReturnDate, 'long')})`,
-        start: data.contactIndependentAssessors,
-        end: data.independentAssessmentsReturnDate,
-        style: 'background-color: #3dfdff',
-      }
-    );
+    items.push({
+      id: `Independent Assessors - ${data.referenceNumber}`,
+      name: 'Independent Assessors',
+      title: `Independent Assessors (${formatDate(data.contactIndependentAssessors, 'long')} - ${formatDate(data.independentAssessmentsReturnDate, 'long')})`,
+      start: data.contactIndependentAssessors,
+      end: data.independentAssessmentsReturnDate,
+      style: 'background-color: #3dfdff',
+    });
   }
 
   if (data.characterChecksDate && data.characterChecksProfessionalReturnDate) {
-    timeline.push(
-      {
-        id: `Character checks - ${data.referenceNumber}`,
-        name: 'Character checks',
-        title: `Character checks (${formatDate(data.characterChecksDate, 'long')} - ${formatDate(data.characterChecksProfessionalReturnDate, 'long')})`,
-        start: data.characterChecksDate,
-        end: data.characterChecksProfessionalReturnDate,
-        style: 'background-color: #349bf0',
-      }
-    );
+    items.push({
+      id: `Character checks - ${data.referenceNumber}`,
+      name: 'Character checks',
+      title: `Character checks (${formatDate(data.characterChecksDate, 'long')} - ${formatDate(data.characterChecksProfessionalReturnDate, 'long')})`,
+      start: data.characterChecksDate,
+      end: data.characterChecksProfessionalReturnDate,
+      style: 'background-color: #349bf0',
+    });
   }
 
   if (data.selectionDays && data.selectionDays.length > 0) {
     for (let i = 0; i < data.selectionDays.length; i++) {
       const selectionDay = data.selectionDays[i];
-      const { selectionDayStart, selectionDayEnd } = selectionDay;
+      const { selectionDayStart, selectionDayEnd, selectionDayLocation = '' } = selectionDay;
       if (selectionDayStart && selectionDayEnd) {
-        timeline.push(
-          {
-            id: `Selection Day - ${data.referenceNumber} ${i + 1} - ${selectionDay.selectionDayLocation}`,
-            name: `Selection Day ${i + 1} - ${selectionDay.selectionDayLocation}`,
-            title: `Selection Day - ${selectionDay.selectionDayLocation} (${formatDate(selectionDayStart, 'long')} - ${formatDate(selectionDayEnd, 'long')})`,
-            start: selectionDayStart,
-            end: selectionDayEnd,
-            style: 'color: white; background-color: #3502ff',
-          }
-        );
+        items.push({
+          id: `Selection Day - ${data.referenceNumber} ${i + 1} - ${selectionDayLocation}`,
+          name: `Selection Day ${i + 1} - ${selectionDayLocation}`,
+          title: `Selection Day - ${selectionDayLocation} (${formatDate(selectionDayStart, 'long')} - ${formatDate(selectionDayEnd, 'long')})`,
+          start: selectionDayStart,
+          end: selectionDayEnd,
+          style: 'color: white; background-color: #3502ff',
+        });
       }
     }
   }
 
   if (data.shortlistingMethods?.includes('situational-judgement-qualifying-test') && data.situationalJudgementTestDate) {
-    timeline.push(
-      {
-        id: `Situational judgement qualifying test - ${data.referenceNumber}`,
-        name: 'Situational judgement qualifying test',
-        title: `Situational judgement qualifying test (${formatDate(data.situationalJudgementTestDate, 'long')})`,
-        type: 'point',
-        start: data.situationalJudgementTestDate,
-        style: 'color: white; background-color: #e51e42',
-      }
-    );
+    items.push({
+      id: `Situational judgement qualifying test - ${data.referenceNumber}`,
+      name: 'Situational judgement qualifying test',
+      title: `Situational judgement qualifying test (${formatDate(data.situationalJudgementTestDate, 'long')})`,
+      type: 'point',
+      start: data.situationalJudgementTestDate,
+      style: 'color: white; background-color: #e51e42',
+    });
   }
 
   if (data.shortlistingMethods?.includes('critical-analysis-qualifying-test') && data.criticalAnalysisTestDate) {
-    timeline.push(
-      {
-        id: `Critical analysis qualifying test - ${data.referenceNumber}`,
-        name: 'Critical analysis qualifying test',
-        title: `Critical analysis qualifying test (${formatDate(data.criticalAnalysisTestDate, 'long')})`,
-        type: 'point',
-        start: data.criticalAnalysisTestDate,
-        style: 'color: white; background-color: #e51e42',
-      }
-    );
+    items.push({
+      id: `Critical analysis qualifying test - ${data.referenceNumber}`,
+      name: 'Critical analysis qualifying test',
+      title: `Critical analysis qualifying test (${formatDate(data.criticalAnalysisTestDate, 'long')})`,
+      type: 'point',
+      start: data.criticalAnalysisTestDate,
+      style: 'color: white; background-color: #e51e42',
+    });
   }
 
   if (data.shortlistingMethods?.includes('scenario-test-qualifying-test') && data.scenarioTestDate) {
-    timeline.push(
-      {
-        id: `Scenario test - ${data.referenceNumber}`,
-        name: 'Scenario test',
-        title: `Scenario test (${formatDate(data.scenarioTestDate, 'long')})`,
-        type: 'point',
-        start: data.scenarioTestDate,
-        style: 'color: white; background-color: #e51e42',
-      }
-    );
+    items.push({
+      id: `Scenario test - ${data.referenceNumber}`,
+      name: 'Scenario test',
+      title: `Scenario test (${formatDate(data.scenarioTestDate, 'long')})`,
+      type: 'point',
+      start: data.scenarioTestDate,
+      style: 'color: white; background-color: #e51e42',
+    });
   }
 
   if (data.eligibilitySCCDate) {
-    timeline.push(
-      {
-        id: `Eligibility SCC - ${data.referenceNumber}`,
-        name: 'Eligibility SCC',
-        title: `Eligibility SCC (${formatDate(data.eligibilitySCCDate, 'long')})`,
-        type: 'point',
-        start: data.eligibilitySCCDate,
-        style: 'background-color: #1afe00',
-      }
-    );
+    items.push({
+      id: `Eligibility SCC - ${data.referenceNumber}`,
+      name: 'Eligibility SCC',
+      title: `Eligibility SCC (${formatDate(data.eligibilitySCCDate, 'long')})`,
+      type: 'point',
+      start: data.eligibilitySCCDate,
+      style: 'background-color: #1afe00',
+    });
   }
 
   if (data.characterAndSCCDate) {
-    timeline.push(
-      {
-        id: `Character and Selection SCC - ${data.referenceNumber}`,
-        name: 'Character and Selection SCC',
-        title: `Character and Selection SCC (${formatDate(data.characterAndSCCDate, 'long')})`,
-        type: 'point',
-        start: data.characterAndSCCDate,
-        style: 'color: white; background-color: #088001',
-      }
-    );
+    items.push({
+      id: `Character and Selection SCC - ${data.referenceNumber}`,
+      name: 'Character and Selection SCC',
+      title: `Character and Selection SCC (${formatDate(data.characterAndSCCDate, 'long')})`,
+      type: 'point',
+      start: data.characterAndSCCDate,
+      style: 'color: white; background-color: #088001',
+    });
   }
 
   if (data.statutoryConsultationDate) {
-    timeline.push(
-      {
-        id: `Statutory consultation - ${data.referenceNumber}`,
-        name: 'Statutory consultation',
-        title: `Statutory consultation (${formatDate(data.statutoryConsultationDate, 'long')})`,
-        type: 'point',
-        start: data.statutoryConsultationDate,
-        style: 'background-color: #cc99ff',
-      }
-    );
+    items.push({
+      id: `Statutory consultation - ${data.referenceNumber}`,
+      name: 'Statutory consultation',
+      title: `Statutory consultation (${formatDate(data.statutoryConsultationDate, 'long')})`,
+      type: 'point',
+      start: data.statutoryConsultationDate,
+      style: 'background-color: #cc99ff',
+    });
   }
 
   if (data.finalOutcome) {
-    timeline.push(
-      {
-        id: `Final outcome - ${data.referenceNumber}`,
-        name: 'Final outcome',
-        title: `Final outcome (${formatDate(data.finalOutcome, 'long')})`,
-        type: 'point',
-        start: data.finalOutcome,
-        style: 'color: white; background-color: #9510ac',
-      }
-    );
+    items.push({
+      id: `Final outcome - ${data.referenceNumber}`,
+      name: 'Final outcome',
+      title: `Final outcome (${formatDate(data.finalOutcome, 'long')})`,
+      type: 'point',
+      start: data.finalOutcome,
+      style: 'color: white; background-color: #9510ac',
+    });
   }
 
-  // sort timeline by start date
-  timeline.sort((a, b) => {
+  // sort items by start date
+  items.sort((a, b) => {
     return a.start - b.start;
   });
 
-  return timeline;
+  return items;
 };
 </script>
 
@@ -318,7 +298,9 @@ const getExerciseTimeline = (data) => {
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
+        <LoadingMessage v-if="loading" />
         <Timeline
+          v-else
           :groups="timelineGroups"
           :items="timelineItems"
           :options="timelineOptions"
