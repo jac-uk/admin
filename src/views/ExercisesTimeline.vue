@@ -36,7 +36,7 @@ const timelineOptions = ref({
     axis: 5, // minimal margin between items and the axis
   },
   orientation: {
-    axis: 'both',
+    axis: 'top',
     item: 'top',
   },
   xss: {
