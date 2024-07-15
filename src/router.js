@@ -17,7 +17,7 @@ import EventsList from '@/views/EventsList.vue';
 import CreateExercise from '@/views/CreateExercise.vue';
 import Exercises from '@/views/Exercises.vue';
 import ExercisesExport from '@/views/ExercisesExport.vue';
-import ExercisesTimeline from '@/views/ExercisesTimeline.vue';
+import ExercisesGanttChart from '@/views/ExercisesGanttChart.vue';
 import Exercise from '@/views/Exercise.vue';
 
 // Exercise Dashboard
@@ -201,12 +201,12 @@ const routes = [
     },
   },
   {
-    path: '/exercises/timeline',
-    name: 'exercises-timeline',
-    component: ExercisesTimeline,
+    path: '/exercises/gantt-chart',
+    name: 'exercises-gantt-chart',
+    component: ExercisesGanttChart,
     meta: {
       requiresAuth: true,
-      title: 'Exercises Timeline',
+      title: 'Exercises Gantt Chart',
     },
   },
   {

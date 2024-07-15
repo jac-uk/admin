@@ -310,7 +310,7 @@ const getExerciseTimeline = (data) => {
       <div class="govuk-grid-column-full">
         <div class="float-left">
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
-            Exercises Timeline
+            Exercises Gantt Chart
           </h1>
         </div>
       </div>

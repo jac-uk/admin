@@ -380,10 +380,10 @@ export default {
               },
             },
             {
-              title: 'Exercises timeline',
+              title: 'Gantt Chart',
               link: () => {
                 this.$store.dispatch('exerciseCollection/showAll');
-                this.$router.push({ name: 'exercises-timeline' });
+                this.$router.push({ name: 'exercises-gantt-chart' });
               },
             },
           ],
