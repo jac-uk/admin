@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import Timeline from '@/components/Timeline.vue';
 
 const store = useStore();
+const router = useRouter();
 
 const getDefaultTimeRange = () => {
   const currentDate = new Date();
@@ -23,10 +25,11 @@ const timelineOptions = ref({
   stack: true,
   verticalScroll: true,
   zoomKey: 'ctrlKey',
-  maxHeight: 500,
+  maxHeight: 800,
   start: getDefaultTimeRange()[0],
   end: getDefaultTimeRange()[1],
   editable: false,
+  selectable: false,
   margin: {
     item: 10, // minimal margin between items
     axis: 5, // minimal margin between items and the axis
@@ -34,6 +37,20 @@ const timelineOptions = ref({
   orientation: 'both',
   xss: {
     disabled: true,
+  },
+  groupTemplate: function (group) {
+    const container = document.createElement('div');
+
+    const anchor = document.createElement('a');
+    anchor.href = '#';
+    anchor.textContent = group.content;
+    anchor.addEventListener('click', (event) => {
+      event.preventDefault();
+      router.push({ name: 'exercise-dashboard', params: { id: group.id } });
+    });
+    container.insertAdjacentElement('afterBegin', anchor);
+
+    return container;
   },
 });
 
@@ -76,7 +93,7 @@ const timelineItems = computed(() => {
 onMounted(() => {
   const params = {
     direction: 'asc',
-    orderBy: 'referenceNumber',
+    orderBy: 'applicationOpenDate',
     pageSize: 1000,
     searchMap: '_search',
     where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
