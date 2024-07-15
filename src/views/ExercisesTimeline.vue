@@ -48,6 +48,7 @@ const timelineOptions = ref({
     const anchor = document.createElement('a');
     anchor.href = `/exercise/${group.id}/dashboard`;
     anchor.textContent = group.content;
+    anchor.style = 'text-decoration: none;';
     anchor.addEventListener('click', (event) => {
       event.preventDefault();
       router.push({ name: 'exercise-dashboard', params: { id: group.id } });
