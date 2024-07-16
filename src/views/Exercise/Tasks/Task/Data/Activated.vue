@@ -17,7 +17,7 @@
       Upload scores to the platform by taking the following steps:
     </p>
     <ol class="govuk-list govuk-list--number">
-      <li>If necessary, rename the column containing application references to <strong>Reference</strong> or <strong>Reference number</strong></li>
+      <li>If necessary, rename the column containing application references to <strong>Reference number</strong></li>
       <li>Rename the score columns as follows:
           <span 
             v-for="(col, index) in scoreSheetColumns"
@@ -70,14 +70,14 @@
         </div>
       </div>
     </div>
-
+<!-- 
     <Table
       v-if="completeRows.length"
       ref="scoreSheet"
       data-key="id"
       :data="tableData"
       :columns="tableColumns"
-      :page-size="500"
+      :page-size="1000"
       local-data
       sticky
       class="score-sheet"
@@ -86,7 +86,7 @@
         v-if="scoreSheetHeaders.length"
         #header
       >
-        <tr class="govuk-table__row">
+        <tr class="govuk-table__row sticky-row">
           <th
             scope="col"
             class="govuk-table__header table-cell-application"
@@ -118,8 +118,9 @@
           class="text-center table-cell-score"
           :title="column.ref"
         >
+          <span v-if="!scoreSheet[row.id]">Can't find scoresheet entry row for {{ row.id }}. Scoresheet = {{ row.scoreSheet }}</span>
           <input
-            v-if="column.type == 'number'"
+            v-else-if="column.type == 'number'"
             :id="`row-${index}_col-${columnIndex}`"
             v-model="scoreSheet[row.id][column.parent][column.ref]"
             type="number"
@@ -130,7 +131,7 @@
             @input="onCellValueChange(row, column)"
           >
           <input
-            v-if="column.type == 'select'"
+            v-else-if="column.type == 'select'"
             :id="`row-${index}_col-${columnIndex}`"
             v-model="scoreSheet[row.id][column.parent][column.ref]"
             type="text"
@@ -142,7 +143,7 @@
             @input="onCellValueChange(row, column)"
           >
           <input
-            v-if="column.type == 'grade' && !column.parent"
+            v-else-if="column.type == 'grade' && !column.parent"
             :id="`row-${index}_col-${columnIndex}`"
             v-model="scoreSheet[row.id][column.ref]"
             type="text"
@@ -154,7 +155,7 @@
             @input="onCellValueChange(row, column)"
           >
           <input
-            v-if="column.type == 'grade' && column.parent"
+            v-else-if="column.type == 'grade' && column.parent"
             :id="`row-${index}_col-${columnIndex}`"
             v-model="scoreSheet[row.id][column.parent][column.ref]"
             type="text"
@@ -171,7 +172,7 @@
           {{ row.score }}
         </TableCell>
       </template>
-    </Table>
+    </Table> -->
 
     <Modal ref="modalCheckDataComplete">
       <ModalInner
@@ -189,7 +190,7 @@
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
+import { getScoreSheetTotal, GRADES, isScoreSheetComplete, getCompleteScoreSheet } from '@/helpers/taskHelper';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -218,7 +219,7 @@ export default {
   data() {
     const task = this.$store.getters['tasks/getTask'](this.type);
     return {
-      scoreSheet: task.scoreSheet,
+      scoreSheet: getCompleteScoreSheet(task),
     };
   },
   computed: {
@@ -309,7 +310,7 @@ export default {
           id: application.id,
           fullName: application.fullName,
           referenceNumber: application.ref,
-          scoreSheet: this.scoreSheet[application.id],
+          scoreSheet: this.scoreSheet[application.id], // ? this.scoreSheet[application.id] : clone(this.task.emptyScoreSheet),
           score: getScoreSheetTotal(this.task.markingScheme, this.scoreSheet[application.id]),
           isComplete: isScoreSheetComplete(this.task.markingScheme, this.scoreSheet[application.id]),
         };
@@ -329,7 +330,7 @@ export default {
   },
   watch: {
     task() {
-      this.scoreSheet = this.task.scoreSheet;
+      this.scoreSheet = getCompleteScoreSheet(this.task);
     },
   },
   methods: {
@@ -504,5 +505,16 @@ export default {
       border: 0;
     }
   }
+
+  // TODO the following needs to be moved to our `Table` component however I was pressed for time and couldn't get it to work within scoped style using `:slotted()` selector
+  tr.sticky-row > th,
+  tr.sticky-row > td {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    border: 0;
+  }
+
 }
 </style>

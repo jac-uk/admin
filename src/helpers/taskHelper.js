@@ -2,12 +2,14 @@
 
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import clone from 'clone';
 
 export {
   MARKING_TYPE,
   GRADES,
   GRADE_VALUES,
   DOWNLOAD_TYPES,
+  getCompleteScoreSheet,
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
@@ -43,6 +45,15 @@ const DOWNLOAD_TYPES = {
     sheetName: 'All data - staff only',
   },
 };
+
+function getCompleteScoreSheet(task) {
+  const emptyScoreSheet = {};
+  task.applications.forEach(application => {
+    emptyScoreSheet[application.id] = clone(task.emptyScoreSheet);
+  });
+  const populatedScoreSheet = task.scoreSheet ? { ...emptyScoreSheet, ...task.scoreSheet } : { ...emptyScoreSheet };
+  return populatedScoreSheet;
+}
 
 function getScoreSheetTotal(markingScheme, scoreSheet) {
   let score = 0;
