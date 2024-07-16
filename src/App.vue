@@ -382,6 +382,7 @@ export default {
             {
               title: 'Gantt Chart',
               link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
                 this.$router.push({ name: 'exercises-gantt-chart' });
               },
             },
