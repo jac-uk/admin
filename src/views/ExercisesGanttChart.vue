@@ -27,7 +27,7 @@ const loading = ref(true);
 const timelineOptions = ref({
   stack: true,
   verticalScroll: true,
-  zoomKey: 'ctrlKey',
+  preferZoom: true,
   maxHeight: 800,
   start: getDefaultTimeRange()[0],
   end: getDefaultTimeRange()[1],
