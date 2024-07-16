@@ -99,6 +99,8 @@ export default {
       let url = '';
       if (this.$store.getters.isProduction) {
         url = 'https://qt-admin.judicialappointments.digital';
+      } else if (this.$store.getters.isLocal) {
+        url = 'http://localhost:8083';
       } else {
         url = 'https://qt-admin-develop.judicialappointments.digital';
       }
