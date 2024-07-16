@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
@@ -123,10 +123,6 @@ onMounted(() => {
     'exerciseCollection/bind',
     params
   );
-});
-
-onUnmounted(() => {
-  store.dispatch('exerciseCollection/unbind');
 });
 
 const getExerciseTimelineItems = (data) => {
