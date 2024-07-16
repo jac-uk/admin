@@ -292,12 +292,12 @@ function getTimelineTasks(exercise, taskType) {
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
-      TASK_TYPE.SHORTLISTING_OUTCOME,
-      TASK_TYPE.ELIGIBILITY_SCC,
-      TASK_TYPE.STATUTORY_CONSULTATION,
-      TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
+      // TASK_TYPE.SHORTLISTING_OUTCOME,
+      // TASK_TYPE.ELIGIBILITY_SCC,
+      // TASK_TYPE.STATUTORY_CONSULTATION,
+      // TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       TASK_TYPE.EMP_TIEBREAKER,
-      TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
+      // TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
       TASK_TYPE.SELECTION_DAY,
     ];
   } else {
@@ -487,8 +487,19 @@ function taskEntryStatus(exercise, type) {
   if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SCC_TO_RECONSIDER;  // TODO: remove this eventually: override entry status for EMP tie-breakers
   const prevTaskType = previousTaskType(exercise, type);
   if (prevTaskType) {
-    status = `${prevTaskType}Passed`;
-  }
+    switch (prevTaskType) {
+    case TASK_TYPE.CRITICAL_ANALYSIS:
+    case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+    case TASK_TYPE.QUALIFYING_TEST:
+      status = APPLICATION_STATUS.QUALIFYING_TEST_PASSED;
+      break;
+    case TASK_TYPE.SCENARIO:
+      status = APPLICATION_STATUS.SCENARIO_TEST_PASSED;
+      break;
+    default:
+      status = `${prevTaskType}Passed`;
+    }
+  }  
   return status;
 }
 

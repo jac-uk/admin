@@ -32,7 +32,7 @@
           :path="buildFileFolder"
           :file-path="$attrs.filePath"
           label=""
-          :types="'.docx'"
+          :types="$attrs.types"
           required
           @update:model-value="changeFileName"
         />
