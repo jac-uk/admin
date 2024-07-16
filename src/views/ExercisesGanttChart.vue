@@ -2,9 +2,9 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import dayjs from 'dayjs';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Timeline from '@/components/Timeline.vue';
-import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 const store = useStore();
 const router = useRouter();
@@ -42,7 +42,7 @@ const timelineOptions = ref({
     item: 'top',
   },
   xss: {
-    disabled: true,
+    disabled: false,
   },
   groupTemplate: function (group) {
     const container = document.createElement('div');
@@ -79,17 +79,26 @@ const timelineItems = computed(() => {
   exerciseRecords.value.forEach(exercise => {
     const exerciseTimelineItems = getExerciseTimelineItems(exercise);
     if (!Array.isArray(exerciseTimelineItems)) return;
-    exerciseTimelineItems.forEach(timeline => {
+    exerciseTimelineItems.forEach(timelineItem => {
       const item = {};
-      item.id = `${exercise.id} - ${timeline.name}`;
-      item.title = `<div>${timeline.title}</div>`;
+      item.id = `${exercise.id} - ${timelineItem.name}`;
+
+      let dateString = dayjs(timelineItem.start).format('D MMM YYYY');
+      if (timelineItem.end) dateString += ` - ${dayjs(timelineItem.end).format('D MMM YYYY')}`;
+      item.title = `
+        <div>
+          <p><b>${timelineItem.title}</b></p>
+          <p>${dateString}</p>
+        </div>
+      `;
+
       item.group = exercise.id;
 
-      if (timeline.type) item.type = timeline.type;
-      item.content = timeline.name;
-      if (timeline.start) item.start = timeline.start;
-      if (timeline.end) item.end = timeline.end;
-      item.style = timeline.style;
+      item.content = timelineItem.name;
+      item.start = dayjs(timelineItem.start).startOf('day').toDate();
+      item.end = timelineItem.end ? timelineItem.end : dayjs(item.start).endOf('day').toDate();
+      item.style = timelineItem.style;
+
       items.push(item);
     });
   });
@@ -127,7 +136,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Launch to close - ${data.referenceNumber}`,
       name: 'Launch to close',
-      title: `Launch to close (${formatDate(data.applicationOpenDate, 'long')} - ${formatDate(data.applicationCloseDate, 'long')})`,
+      title: 'Launch to close',
       start: data.applicationOpenDate,
       end: data.applicationCloseDate,
       style: 'background-color: #fa9901',
@@ -138,7 +147,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Sift - ${data.referenceNumber}`,
       name: 'Sift',
-      title: `Sift (${formatDate(data.siftStartDate, 'long')} - ${formatDate(data.siftEndDate, 'long')})`,
+      title: 'Sift',
       start: data.siftStartDate,
       end: data.siftEndDate,
       style: 'background-color: #fbf445',
@@ -149,7 +158,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Name-blind Sift - ${data.referenceNumber}`,
       name: 'Name-blind Sift',
-      title: `Name-blind Sift (${formatDate(data.nameBlindSiftStartDate, 'long')} - ${formatDate(data.nameBlindSiftEndDate, 'long')})`,
+      title: 'Name-blind Sift',
       start: data.nameBlindSiftStartDate,
       end: data.nameBlindSiftEndDate,
       style: 'background-color: #fbf445',
@@ -163,7 +172,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Independent Assessors - ${data.referenceNumber}`,
       name: 'Independent Assessors',
-      title: `Independent Assessors (${formatDate(data.contactIndependentAssessors, 'long')} - ${formatDate(data.independentAssessmentsReturnDate, 'long')})`,
+      title: 'Independent Assessors',
       start: data.contactIndependentAssessors,
       end: data.independentAssessmentsReturnDate,
       style: 'background-color: #3dfdff',
@@ -174,7 +183,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Character checks - ${data.referenceNumber}`,
       name: 'Character checks',
-      title: `Character checks (${formatDate(data.characterChecksDate, 'long')} - ${formatDate(data.characterChecksProfessionalReturnDate, 'long')})`,
+      title: 'Character checks',
       start: data.characterChecksDate,
       end: data.characterChecksProfessionalReturnDate,
       style: 'background-color: #349bf0',
@@ -187,9 +196,9 @@ const getExerciseTimelineItems = (data) => {
       const { selectionDayStart, selectionDayEnd, selectionDayLocation = '' } = selectionDay;
       if (selectionDayStart && selectionDayEnd) {
         items.push({
-          id: `Selection Day - ${data.referenceNumber} ${i + 1} - ${selectionDayLocation}`,
-          name: `Selection Day ${i + 1} - ${selectionDayLocation}`,
-          title: `Selection Day - ${selectionDayLocation} (${formatDate(selectionDayStart, 'long')} - ${formatDate(selectionDayEnd, 'long')})`,
+          id: `Selection Day - ${selectionDayLocation}`,
+          name: `Selection Day - ${selectionDayLocation} (${i + 1})`,
+          title: `Selection Day - ${selectionDayLocation}`,
           start: selectionDayStart,
           end: selectionDayEnd,
           style: 'color: white; background-color: #3502ff',
@@ -202,8 +211,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Situational judgement qualifying test - ${data.referenceNumber}`,
       name: 'Situational judgement qualifying test',
-      title: `Situational judgement qualifying test (${formatDate(data.situationalJudgementTestDate, 'long')})`,
-      type: 'point',
+      title: 'Situational judgement qualifying test',
       start: data.situationalJudgementTestDate,
       style: 'color: white; background-color: #e51e42',
     });
@@ -213,8 +221,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Critical analysis qualifying test - ${data.referenceNumber}`,
       name: 'Critical analysis qualifying test',
-      title: `Critical analysis qualifying test (${formatDate(data.criticalAnalysisTestDate, 'long')})`,
-      type: 'point',
+      title: 'Critical analysis qualifying test',
       start: data.criticalAnalysisTestDate,
       style: 'color: white; background-color: #e51e42',
     });
@@ -224,8 +231,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Scenario test - ${data.referenceNumber}`,
       name: 'Scenario test',
-      title: `Scenario test (${formatDate(data.scenarioTestDate, 'long')})`,
-      type: 'point',
+      title: 'Scenario test',
       start: data.scenarioTestDate,
       style: 'color: white; background-color: #e51e42',
     });
@@ -235,8 +241,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Eligibility SCC - ${data.referenceNumber}`,
       name: 'Eligibility SCC',
-      title: `Eligibility SCC (${formatDate(data.eligibilitySCCDate, 'long')})`,
-      type: 'point',
+      title: 'Eligibility SCC',
       start: data.eligibilitySCCDate,
       style: 'background-color: #1afe00',
     });
@@ -246,8 +251,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Character and Selection SCC - ${data.referenceNumber}`,
       name: 'Character and Selection SCC',
-      title: `Character and Selection SCC (${formatDate(data.characterAndSCCDate, 'long')})`,
-      type: 'point',
+      title: 'Character and Selection SCC',
       start: data.characterAndSCCDate,
       style: 'color: white; background-color: #088001',
     });
@@ -257,8 +261,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Statutory consultation - ${data.referenceNumber}`,
       name: 'Statutory consultation',
-      title: `Statutory consultation (${formatDate(data.statutoryConsultationDate, 'long')})`,
-      type: 'point',
+      title: 'Statutory consultation',
       start: data.statutoryConsultationDate,
       style: 'background-color: #cc99ff',
     });
@@ -268,8 +271,7 @@ const getExerciseTimelineItems = (data) => {
     items.push({
       id: `Final outcome - ${data.referenceNumber}`,
       name: 'Final outcome',
-      title: `Final outcome (${formatDate(data.finalOutcome, 'long')})`,
-      type: 'point',
+      title: 'Final outcome',
       start: data.finalOutcome,
       style: 'color: white; background-color: #9510ac',
     });
@@ -319,8 +321,5 @@ const getExerciseTimelineItems = (data) => {
 }
 .vis-item.vis-range {
   border: none !important;
-}
-.vis-item.vis-dot {
-  border-color: transparent !important;
 }
 </style>
