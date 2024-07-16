@@ -212,6 +212,7 @@ export default {
         id: 'candidateAssessementForms',
         name: 'candidate-assessement-forms',
         mandatory: false,
+        types: '.docx',
       });
 
       data.push({
