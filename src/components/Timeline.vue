@@ -61,8 +61,8 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  if (timelineInstance.value) {
-    timelineInstance.value.destroy();
+  if (timelineInstance) {
+    timelineInstance.destroy();
   }
 });
 </script>
