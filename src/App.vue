@@ -373,17 +373,17 @@ export default {
               },
             },
             {
+              title: 'Programme view',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises-programme-view' });
+              },
+            },
+            {
               title: 'My favourites',
               link: () => {
                 this.$store.dispatch('exerciseCollection/showFavourites');
                 this.$router.push({ name: 'exercises' });
-              },
-            },
-            {
-              title: 'Gantt Chart',
-              link: () => {
-                this.$store.dispatch('exerciseCollection/showAll');
-                this.$router.push({ name: 'exercises-gantt-chart' });
               },
             },
           ],

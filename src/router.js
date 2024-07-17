@@ -17,7 +17,7 @@ import EventsList from '@/views/EventsList.vue';
 import CreateExercise from '@/views/CreateExercise.vue';
 import Exercises from '@/views/Exercises.vue';
 import ExercisesExport from '@/views/ExercisesExport.vue';
-import ExercisesGanttChart from '@/views/ExercisesGanttChart.vue';
+import ExercisesProgrammeView from '@/views/ExercisesProgrammeView.vue';
 import Exercise from '@/views/Exercise.vue';
 
 // Exercise Dashboard
@@ -201,12 +201,12 @@ const routes = [
     },
   },
   {
-    path: '/exercises/gantt-chart',
-    name: 'exercises-gantt-chart',
-    component: ExercisesGanttChart,
+    path: '/exercises/programme-view',
+    name: 'exercises-programme-view',
+    component: ExercisesProgrammeView,
     meta: {
       requiresAuth: true,
-      title: 'Exercises Gantt Chart',
+      title: 'Programme view',
     },
   },
   {
