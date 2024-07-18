@@ -69,12 +69,6 @@ onBeforeUnmount(() => {
   }
 });
 
-const fitAll = () => {
-  if (timelineInstance) {
-    timelineInstance.fit();
-  }
-};
-
 const zoomIn = (scale) => {
   if (timelineInstance) {
     timelineInstance.zoomIn(scale);
@@ -138,12 +132,6 @@ const setWindow = (mode) => {
       </div>
       <div>
         <div style="display: flex; justify-content: end; gap: 8px;">
-          <button
-            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-            @click="fitAll"
-          >
-            Fit
-          </button>
           <button
             class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => zoomIn(defaultScale)"
