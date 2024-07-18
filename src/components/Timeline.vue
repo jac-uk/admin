@@ -2,6 +2,7 @@
 import { defineProps, ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { Timeline } from 'vis-timeline/standalone';
 import { DataSet } from 'vis-data';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 
 const defaultScale = 0.5; // default scale of the timeline actions (e.g. zoom in, zoom out, move left, move right)
@@ -132,63 +133,67 @@ const setWindow = (mode) => {
       class="timeline-control-panel"
       style="display: flex; justify-content: space-between; align-items: end;"
     >
-      <div class="govuk-body-s">
-        Ctrl + Scroll to zoom in/out on the timeline
+      <div class="govuk-body-s govuk-!-margin-0">
+        Ctrl + Scroll to zoom in/out
       </div>
       <div>
         <div style="display: flex; justify-content: end; gap: 8px;">
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="fitAll"
           >
             Fit
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => zoomIn(defaultScale)"
           >
             Zoom in
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => zoomOut(defaultScale)"
           >
             Zoom out
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => move(defaultScale)"
           >
             Move left
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => move(-defaultScale)"
           >
             Move right
           </button>
+          <FullScreenButton />
         </div>
-        <div style="display: flex; justify-content: end; gap: 8px;">
+        <div
+          class="govuk-!-margin-top-3"
+          style="display: flex; justify-content: end; gap: 8px;"
+        >
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="moveToCurrent"
           >
             Now
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => setWindow('year')"
           >
             Year
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => setWindow('month')"
           >
             Month
           </button>
           <button
-            class="govuk-button govuk-button--secondary"
+            class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
             @click="() => setWindow('day')"
           >
             Day
@@ -197,12 +202,9 @@ const setWindow = (mode) => {
       </div>
     </div>
 
-    <div ref="timeline" />
+    <div
+      ref="timeline"
+      class="govuk-!-margin-top-3"
+    />
   </div>
 </template>
-
-<style>
-.timeline-control-panel button {
-  margin-bottom: 16px;
-}
-</style>
