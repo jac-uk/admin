@@ -27,7 +27,9 @@ const loading = ref(true);
 const timelineOptions = ref({
   stack: true,
   verticalScroll: true,
-  preferZoom: true,
+  zoomKey: 'ctrlKey',
+  zoomMin: 1000 * 60 * 60 * 12, // half day in milliseconds
+  zoomMax: 1000 * 60 * 60 * 24 * 365 * 10, // ten years in milliseconds
   maxHeight: 800,
   start: getDefaultTimeRange()[0],
   end: getDefaultTimeRange()[1],
@@ -45,8 +47,9 @@ const timelineOptions = ref({
     disabled: false,
   },
   groupTemplate: function (group) {
-    const container = document.createElement('div');
+    if (!group) return '';
 
+    const container = document.createElement('div');
     const anchor = document.createElement('a');
     anchor.href = `/exercise/${group.id}/dashboard`;
     anchor.textContent = group.content;
