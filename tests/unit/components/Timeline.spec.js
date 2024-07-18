@@ -16,6 +16,13 @@ vi.mock('vis-timeline/standalone', () => ({
   Timeline: vi.fn(() => mockTimelineInstance),
 }));
 
+// Mock the FullScreenButton component
+vi.mock('@/components/Page/FullScreenButton.vue', () => ({
+  default: {
+    template: '<div>Full screen</div>',
+  },
+}));
+
 describe('TimelineComponent', () => {
   let wrapper;
 
