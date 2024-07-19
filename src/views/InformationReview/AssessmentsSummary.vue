@@ -112,7 +112,6 @@
     </div>
 
     <!-- SELF ASSESSMENT COMPETENCIES -->
-    HERE: {{ hasSelfAssessment }}
     <div
       v-if="hasSelfAssessment"
       class="govuk-!-margin-top-9"
