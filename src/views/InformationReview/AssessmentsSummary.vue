@@ -173,7 +173,6 @@
                 :key="i"
                 style="white-space: pre-line;"
               >
-                <!-- :content="" -->
                 <AssessmentSection
                   :content="application.hasOwnProperty('uploadedSelfAssessmentContent') ? application.uploadedSelfAssessmentContent[i] : ''"
                   :application="application"
