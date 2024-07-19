@@ -115,7 +115,16 @@ export {
 // };
 
 // application process config
-const APPLICATION_STEPS = ['registration', 'passedTests', 'shortlisted', 'selected', 'recommended'];
+const APPLICATION_STEPS = [
+  'registration',
+  'passedTests', 
+  EXERCISE_STAGE.SHORTLISTED,  // v1
+  EXERCISE_STAGE.SELECTED,   // v1
+  EXERCISE_STAGE.RECOMMENDED, // v1
+  EXERCISE_STAGE.SELECTION, // v2
+  EXERCISE_STAGE.SCC, // v2
+  EXERCISE_STAGE.RECOMMENDATION // v2
+];
 const APPLICATION_PARTS = [
   'personalDetails',
   'characterInformation',
