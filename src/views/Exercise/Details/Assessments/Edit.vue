@@ -22,28 +22,31 @@
           v-for="method in Object.values(ASSESSMENT_METHOD)"
           :key="method"
         >
-          <Checkbox
-            :id="`assessment-method-${method}`"
-            v-model="formData.assessmentMethods[method]"
-          >
-            {{ $filters.lookup(method) }}
-          </Checkbox>
-          <div
-            v-if="method == ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES && formData.assessmentMethods[method]"
-          >
-            <span
-              class="govuk-hint"
+          <!-- remove CV assessment option -->
+          <template v-if="method !== ASSESSMENT_METHOD.CV">
+            <Checkbox
+              :id="`assessment-method-${method}`"
+              v-model="formData.assessmentMethods[method]"
             >
-              Please add a word limit for each question within the self assessment.
-            </span>
-            <RepeatableFields
-              v-model="formData.selfAssessmentWordLimits"
-              :component="repeatableFields.SelfAssessmentSection"
-              type-name="Self Assessment Section"
-              required
-            />
-            <slot name="removeButton" />
-          </div>
+              {{ $filters.lookup(method) }}
+            </Checkbox>
+            <div
+              v-if="method == ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES && formData.assessmentMethods[method]"
+            >
+              <span
+                class="govuk-hint"
+              >
+                Please add a word limit for each question within the self assessment.
+              </span>
+              <RepeatableFields
+                v-model="formData.selfAssessmentWordLimits"
+                :component="repeatableFields.SelfAssessmentSection"
+                type-name="Self Assessment Section"
+                required
+              />
+              <slot name="removeButton" />
+            </div>
+          </template>
         </div>
         <button class="govuk-button">
           Save and continue
