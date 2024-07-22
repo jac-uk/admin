@@ -671,7 +671,12 @@ function configuredApplicationContentSteps(exercise) {
   if (!exercise) { return []; }
   if (!exercise._applicationContent) { return []; }
   return applicationContentSteps(exercise)
-    .filter(step => Object.values(exercise._applicationContent[step]).filter(value => value === true).length);
+    .filter(step => {
+      if (exercise._applicationContent[step]) {
+        return Object.values(exercise._applicationContent[step]).filter(value => value === true).length;
+      }
+      return false;
+    });
 }
 function hasIndependentAssessments(data) {
   return !(data.assessmentMethods && data.assessmentMethods.independentAssessments === false);
