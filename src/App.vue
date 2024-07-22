@@ -373,6 +373,13 @@ export default {
               },
             },
             {
+              title: 'Programme view',
+              link: () => {
+                this.$store.dispatch('exerciseCollection/showAll');
+                this.$router.push({ name: 'exercises-programme-view' });
+              },
+            },
+            {
               title: 'My favourites',
               link: () => {
                 this.$store.dispatch('exerciseCollection/showFavourites');
