@@ -174,9 +174,9 @@
                 style="white-space: pre-line;"
               >
                 <AssessmentSection
+                  :content="application.hasOwnProperty('uploadedSelfAssessmentContent') ? application.uploadedSelfAssessmentContent[i] : ''"
                   :application="application"
                   :section="section"
-                  :content="application.uploadedSelfAssessmentContent[i]||''"
                   :editable="editable"
                   :index="i"
                   @update-application="changeSelfAssessmentAnswer"

@@ -17,6 +17,7 @@ import EventsList from '@/views/EventsList.vue';
 import CreateExercise from '@/views/CreateExercise.vue';
 import Exercises from '@/views/Exercises.vue';
 import ExercisesExport from '@/views/ExercisesExport.vue';
+import ExercisesProgrammeView from '@/views/ExercisesProgrammeView.vue';
 import Exercise from '@/views/Exercise.vue';
 
 // Exercise Dashboard
@@ -197,6 +198,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Notifications',
+    },
+  },
+  {
+    path: '/exercises/programme-view',
+    name: 'exercises-programme-view',
+    component: ExercisesProgrammeView,
+    meta: {
+      requiresAuth: true,
+      title: 'Programme view',
     },
   },
   {

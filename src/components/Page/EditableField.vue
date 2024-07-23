@@ -593,7 +593,7 @@ export default {
               index: this.index,
             };
           }
-          if (this.config.id != undefined) { // is indexed item
+          if (this?.config?.id != undefined) { // is indexed item
             resultObj = {
               ...resultObj,
               index: this.config.id,
