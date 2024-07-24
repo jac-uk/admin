@@ -116,6 +116,7 @@ export default {
       }
       else {
         this.submenu = [];
+        this.showSubmenu = false;
       }
       // Selecting the same item again
       if (this.arrowOpenIndex === index) {
