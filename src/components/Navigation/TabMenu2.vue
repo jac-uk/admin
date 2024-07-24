@@ -66,6 +66,7 @@
       :full-width-menu="true"
       :items="submenu"
       aria-label="Sub navigation"
+      @close="closeSubmenu"
     >
       <template #item="{ item, navigate }">
         <a
@@ -156,10 +157,7 @@ export default {
         !event.target.closest('.tab-content');
 
       if (clickedOutside) {
-        this.showSubmenu = false;
-        this.selectTabIndex(null);
-        this.arrowOpenIndex = null;
-        this.submenu = [];
+        this.closeSubmenu();
       }
     },
     findParentTab(items, subMenuItemName) {
@@ -172,6 +170,12 @@ export default {
         }
       }
       return null;
+    },
+    closeSubmenu() {
+      this.showSubmenu = false;
+      this.selectTabIndex(null);
+      this.arrowOpenIndex = null;
+      this.submenu = [];
     },
   },
 };
