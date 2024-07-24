@@ -209,13 +209,13 @@
                   </Select>
                 </div>
 
-                <!-- reasons not satisfied / JAC comments -->
+                <!-- JAC comments -->
                 <div
                   v-if="issue.result && (showRecommendation(issue, index) || isForStatutoryReasons(issueGroup.issues, issue, index))"
                   class="govuk-!-margin-top-0 govuk-grid-column-full"
                 >
                   <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                    {{ isForStatutoryReasons(issueGroup.issues, issue, index) ? 'Reasons not satisfied' : 'JAC comments' }}
+                    JAC comments
                   </h4>
                   <TextareaInput
                     :id="`${row.id}_${index}_${issue.type}_reason`"
