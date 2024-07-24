@@ -11,20 +11,17 @@
         @click.stop="onTabClick(tab, index)"
       >
         <router-link
-          v-slot="{ href, navigate }"
+          v-if="'content' in tab"
           :to="tab.link"
           custom
         >
           <a
             class="moj-sub-navigation__link govuk-!-display-inline-block"
-            :class="{ 'govuk-!-display-inline-block': ('content' in tab) }"
+            style="cursor:pointer"
             :active="isActiveRoute(tab.link.name) ? 'true' : 'false'"
             :aria-current="isActiveRoute(tab.link.name) ? 'page' : 'false'"
-            :href="href"
-            @click="navigate"
           >
             <span
-              v-if="'content' in tab"
               class="icon-expand"
               :class="arrowOpenIndex === index ? 'open' : 'close'"
             >
@@ -41,6 +38,23 @@
                 />
               </svg>
             </span>
+            {{ tab.title }}
+          </a>
+        </router-link>
+
+        <router-link
+          v-else
+          v-slot="{ href, navigate }"
+          :to="tab.link"
+          custom
+        >
+          <a
+            class="moj-sub-navigation__link"
+            :active="isActiveRoute(tab.link.name) ? 'true' : 'false'"
+            :aria-current="isActiveRoute(tab.link.name) ? 'page' : 'false'"
+            :href="href"
+            @click="navigate"
+          >
             {{ tab.title }}
           </a>
         </router-link>
