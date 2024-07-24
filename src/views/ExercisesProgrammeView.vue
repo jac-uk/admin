@@ -64,12 +64,23 @@ const timelineOptions = ref({
   },
 });
 
-const exerciseRecords = computed(() => (store.state.exerciseCollection.records || []));
-
-const enabledJACUsers = computed(() => {
-  const users = store.getters['users/enabledJACUsers'] || [];
-  return users.map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+const roleRecords = computed(() => (store.state.roles.records || []));
+const operationsSeniorManagers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Senior Manager');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
 });
+const operationsTeamMembers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Team Member');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
+});
+
+const exerciseRecords = computed(() => (store.state.exerciseCollection.records || []));
 
 const filters = computed(() => ([
   {
@@ -81,19 +92,24 @@ const filters = computed(() => ([
     title: 'Exercise Type',
     field: 'typeOfExercise',
     type: 'checkbox',
-    options: ['legal', 'non-legal', 'leadership'],
+    options: [
+      { label: 'Legal', value: 'legal' },
+      { label: 'Non-Legal', value: 'non-legal' },
+      { label: 'Leadership', value: 'leadership' },
+    ],
+    defaultValue: ['legal', 'non-legal', 'leadership'],
   },
   {
     title: 'Senior Selection Exercise Manager',
     field: 'seniorSelectionExerciseManager',
-    type: 'select',
-    options: enabledJACUsers.value,
+    type: 'option',
+    options: operationsSeniorManagers.value,
   },
   {
     title: 'Selection Exercise Manager',
     field: 'selectionExerciseManager',
-    type: 'select',
-    options: enabledJACUsers.value,
+    type: 'option',
+    options: operationsTeamMembers.value,
   },
   {
     type: 'singleCheckbox',
@@ -145,15 +161,21 @@ const timelineItems = computed(() => {
   return items;
 });
 
+watch(roleRecords, () => {
+  const roleIds = roleRecords.value.map(role => role.id);
+  store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc', where: [{ field: 'role.id', comparator: 'in', value: roleIds }] });
+}, { deep: true });
+
 watch(timelineGroups, () => {
   if (loading.value) loading.value = false;
 }, { deep: true });
 
 onMounted(() => {
-  store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
+  store.dispatch('roles/bind', { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Senior Manager', 'Operations Team Member'] }] });
 });
 
 onBeforeUnmount(() => {
+  store.dispatch('roles/unbind');
   store.dispatch('users/unbind');
   store.dispatch('exerciseCollection/unbind');
 });
@@ -315,10 +337,14 @@ const getExerciseTimelineItems = (data) => {
 };
 
 const getTableData = (params) => {
-  store.dispatch(
-    'exerciseCollection/bind',
-    params
-  );
+  if (Array.isArray(params.where)) {
+    params.where.forEach((item, index) => {
+      if (['seniorSelectionExerciseManager', 'selectionExerciseManager'].includes(item.field)) {
+        params.where[index].value = [{ name: item.value }];
+      }
+    });
+  }
+  store.dispatch('exerciseCollection/bind', params);
 };
 </script>
 
