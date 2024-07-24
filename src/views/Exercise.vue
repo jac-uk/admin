@@ -56,9 +56,9 @@
       </div>
       <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
-          <span class="govuk-caption-xl">
+          <!-- <span class="govuk-caption-xl">
             {{ exercise.referenceNumber }}
-          </span>
+          </span> -->
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exerciseName }}
           </h1>
@@ -106,11 +106,10 @@
       </div>
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
+          <span class="float-right govuk-!-margin-top-3">{{ exercise.referenceNumber }}</span>
           <TabMenu
             v-if="!isAdvertTypeExternal && !hasJourney && tabs.length > 1"
-            class="sub-navigation moj-sub-navigation govuk-!-margin-bottom-4"
             :tabs="tabs"
-            :full-width-menu="true"
           />
         </div>
       </div>
@@ -149,9 +148,9 @@ import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isAppr
 import permissionMixin from '@/permissionMixin';
 import { logEvent } from '@/helpers/logEvent';
 import { functions } from '@/firebase';
-import { ADVERT_TYPES } from '../helpers/constants';
-import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
+import { STATUS, ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
 import { useExercise } from '@/composables/useExercise';
+import TabMenu from '@/components/Navigation/TabMenu2.vue';
 
 export default {
   name: 'ExerciseView',
@@ -273,10 +272,10 @@ export default {
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       if (this.applicationCounts._total) {
-        subNavigation.push({ link: `${path}/dashboard`, title: 'Dashboard' });
+        subNavigation.push({ link: { path: `${path}/dashboard`, name: 'exercise-dashboard' }, title: 'Dashboard' });
       }
       const content = [];
-      content.push({ title: 'Overview', link: { path: `${path}/details` } });
+      content.push({ title: 'Overview', link: { name: 'exercise-overview' } });
       //if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
       //  if (this.exerciseProgress) {
       content.push(
@@ -294,20 +293,22 @@ export default {
       );
       //  }
       //}
+
       if (content.length) {
         subNavigation.push({
           title: 'Exercise',
+          link: { name: 'exercise-overview' },
           content: content,
         });
       }
 
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
-        subNavigation.push({ link: `${path}/applications`, title: 'Applications' });
+        subNavigation.push({ link: { name: `exercise-applications-${STATUS.APPLIED}` }, title: 'Applications' });
       }
       if (this.isProcessing) {
-        subNavigation.push({ link: `${path}/tasks/all`, title: 'Tasks' });
-        subNavigation.push({ link: `${path}/stages`, title: 'Stages' });
-        subNavigation.push({ link: `${path}/reports`, title: 'Reports' });
+        subNavigation.push({ link: { name: 'exercise-tasks', params: { stage: 'all' } }, title: 'Tasks' });
+        subNavigation.push({ link: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } }, title: 'Stages' });
+        subNavigation.push({ link: { name: 'exercise-reports-diversity' }, title: 'Reports' });
       }
       return subNavigation;
     },

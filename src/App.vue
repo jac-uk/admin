@@ -166,7 +166,12 @@ import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
-import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
+
+// @TODO: COMPARE THE LOCAL TABMENU WITH THAT IN THE JAC-KIT TO GET THE CHANGES!!
+//import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
+//import TabMenu from '@/components/TESTER/TabMenu1.vue';
+import TabMenu from '@/components/Navigation/TabMenu1.vue';
+
 export default {
   name: 'App',
   components: {
