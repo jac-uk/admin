@@ -155,23 +155,30 @@
         </button>
       </div>
     </Modal>
+
+    <Modal ref="archiveModal">
+      <ModalInner
+        :title="archiveTitle"
+        :message="archiveMessage"
+        :button-text="archiveButtonText"
+        @close="closeArchiveModal"
+        @confirmed="archive"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import { auth } from '@/firebase';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';import { auth } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
-
-// @TODO: COMPARE THE LOCAL TABMENU WITH THAT IN THE JAC-KIT TO GET THE CHANGES!!
-//import TabMenu from '@jac-uk/jac-kit/draftComponents/Navigation/TabMenu.vue';
-//import TabMenu from '@/components/TESTER/TabMenu1.vue';
+import { isApproved, isArchived } from '@/helpers/exerciseHelper';
+import { logEvent } from '@/helpers/logEvent';
 import TabMenu from '@/components/Navigation/TabMenu1.vue';
-
 export default {
   name: 'App',
   components: {
@@ -179,6 +186,7 @@ export default {
     UserFeedbackModal,
     UserFeedbackLink,
     Modal,
+    ModalInner,
     TabMenu,
   },
   mixins: [permissionMixin],
@@ -186,11 +194,9 @@ export default {
     return {
       authorisedToPerformAction: false,
       rect: null,
-      //buttonElement: null,
       linkBottom: '',
       isMounted: false,
       observer: null,
-      tabs: [],
     };
   },
   computed: {
@@ -222,12 +228,149 @@ export default {
     canReadMessages() {
       return this.hasPermissions([this.PERMISSIONS.messages.permissions.canReadMessages.value]);
     },
+    canUpdateExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
+    },
+    canArchiveExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
     currentUser() {
       return this.$store.state.auth.currentUser;
     },
     showFeedbackLink() {
       // Enable when the environment and app are defined (these are used when creating the bug request number)
       return this.isSignedIn && this.isMounted && this.environment && (import.meta.env.PACKAGE_NAME !== undefined && import.meta.env.PACKAGE_NAME !== null);
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
+    isApproved() {
+      return isApproved(this.exercise);
+    },
+    isArchived() {
+      return isArchived(this.exercise);
+    },
+    isPublished() {
+      return this.exercise.published;
+    },
+    archiveTitle() {
+      if (this.isArchived) {
+        return 'Unarchive exercise';
+      } else {
+        return 'Archive exercise';
+      }
+    },
+    archiveMessage() {
+      if (this.isArchived) {
+        return 'By clicking accept you authorise the exercise to be unarchived';
+      } else if (this.isPublished) {
+        return 'This exercise is Live on Apply; by clicking accept, you authorise the exercise to be removed from Apply and archived';
+      } else {
+        return 'By clicking accept you authorise the exercise to be archived';
+      }
+    },
+    archiveButtonText() {
+      if (this.isArchived) {
+        return 'Accept - unarchive this exercise';
+      } else {
+        return 'Accept - archive this exercise';
+      }
+    },
+    tabs() {
+      const tabs = [];
+      if (this.hasPermissions([this.PERMISSIONS.logs.permissions.canReadLogs.value])) {
+        tabs.push({
+          title: 'Events',
+          link: { name: 'events' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
+        tabs.push({
+          title: 'Notifications',
+          link: { name: 'notifications' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.exercises.permissions.canReadExercises.value])) {
+        const exerciseContent = [];
+        exerciseContent.push(
+          {
+            title: 'Live exercises',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showAll');
+              this.$router.push({ name: 'exercises' });
+            },
+          },
+          {
+            title: 'Archived exercises',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showArchived');
+              this.$router.push({ name: 'exercises' });
+            },
+          },
+          { title: 'Create exercise', link: { name: 'create-exercise' } }
+        );
+        if (this.canUpdateExercises && this.isApproved) {
+          exerciseContent.push(
+            {
+              title: 'Copy exercise to clipboard',
+              link: () => {
+                this.copyToClipboard();
+              },
+            }
+          );
+        }
+        if (this.canArchiveExercises) {
+          exerciseContent.push(
+            {
+              title: this.archiveTitle,
+              link: () => {
+                this.openArchiveModal();
+              },
+            }
+          );
+        }
+        exerciseContent.push(
+          {
+            title: 'My favourites',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showFavourites');
+              this.$router.push({ name: 'exercises' });
+            },
+          }
+        );
+        tabs.push({
+          title: 'Exercises',
+          content: exerciseContent,
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canReadCandidates.value])) {
+        tabs.push({
+          title: 'Candidates',
+          link: { name: 'candidates-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])) {
+        tabs.push({
+          title: 'Panellists',
+          link: { name: 'panellists-list' },
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.users.permissions.canReadUsers.value])) {
+        tabs.push({
+          title: 'Users',
+          link: { name: 'users' },
+        });
+      }
+      tabs.push({
+        title: this.userName,
+        content: [
+          { title: 'Sign out', link: () => { this.signOut(); } },
+        ],
+      });
+      return tabs;
     },
   },
   watch: {
@@ -299,8 +442,6 @@ export default {
 
     },
     async load() {
-      this.buildTabs();
-
       // Leave async calls til the end so dont block the instant calls
       await this.$store.dispatch('services/bind');
       if (this.canReadMessages) {
@@ -345,72 +486,42 @@ export default {
     async openFeedbackModal() {
       this.$refs.feedbackModal.openModal();
     },
-    buildTabs() {
-      if (this.hasPermissions([this.PERMISSIONS.logs.permissions.canReadLogs.value])) {
-        this.tabs.push({
-          title: 'Events',
-          link: { name: 'events' },
+    async copyToClipboard() {
+      try {
+        const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+        await this.$store.dispatch('clipboard/write', {
+          environment: this.$store.getters.appEnvironment,
+          type: 'exercise',
+          title: `${exercise.referenceNumber} ${exercise.name}`,
+          content: exercise,
+        });
+        return true;
+      } catch (error) {
+        return;
+      }
+    },
+    openArchiveModal() {
+      this.$refs.archiveModal.openModal();
+    },
+    closeArchiveModal() {
+      this.$refs.archiveModal.closeModal();
+    },
+    archive() {
+      if (this.isArchived) {
+        this.$store.dispatch('exerciseDocument/unarchive');
+        logEvent('info', 'Exercise unarchived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
         });
       }
-      if (this.hasPermissions([this.PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
-        this.tabs.push({
-          title: 'Notifications',
-          link: { name: 'notifications' },
+      else {
+        this.$store.dispatch('exerciseDocument/archive');
+        logEvent('info', 'Exercise archived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
         });
       }
-      if (this.hasPermissions([this.PERMISSIONS.exercises.permissions.canReadExercises.value])) {
-        this.tabs.push({
-          title: 'Exercises',
-          content: [
-            {
-              title: 'Live exercises',
-              link: () => {
-                this.$store.dispatch('exerciseCollection/showAll');
-                this.$router.push({ name: 'exercises' });
-              },
-            },
-            { title: 'Create exercise', link: { name: 'create-exercise' } },
-            {
-              title: 'Archived exercises',
-              link: () => {
-                this.$store.dispatch('exerciseCollection/showArchived');
-                this.$router.push({ name: 'exercises' });
-              },
-            },
-            {
-              title: 'My favourites',
-              link: () => {
-                this.$store.dispatch('exerciseCollection/showFavourites');
-                this.$router.push({ name: 'exercises' });
-              },
-            },
-          ],
-        });
-      }
-      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canReadCandidates.value])) {
-        this.tabs.push({
-          title: 'Candidates',
-          link: { name: 'candidates-list' },
-        });
-      }
-      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])) {
-        this.tabs.push({
-          title: 'Panellists',
-          link: { name: 'panellists-list' },
-        });
-      }
-      if (this.hasPermissions([this.PERMISSIONS.users.permissions.canReadUsers.value])) {
-        this.tabs.push({
-          title: 'Users',
-          link: { name: 'users' },
-        });
-      }
-      this.tabs.push({
-        title: this.userName,
-        content: [
-          { title: 'Sign out', link: () => { this.signOut(); } },
-        ],
-      });
+      this.$refs.archiveModal.closeModal();
     },
   },
 };
