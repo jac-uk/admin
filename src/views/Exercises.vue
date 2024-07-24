@@ -180,7 +180,7 @@ export default {
       this.reloadTable();
     },
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   methods: {

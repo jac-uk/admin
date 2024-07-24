@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import Timeline from '@/components/Timeline.vue';
 
 const store = useStore();
@@ -64,9 +64,45 @@ const timelineOptions = ref({
   },
 });
 
-const exerciseRecords = computed(() => {
-  return store.state.exerciseCollection.records || [];
+const exerciseRecords = computed(() => (store.state.exerciseCollection.records || []));
+
+const enabledJACUsers = computed(() => {
+  const users = store.getters['users/enabledJACUsers'] || [];
+  return users.map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
 });
+
+const filters = computed(() => ([
+  {
+    type: 'dateRange',
+    field: 'applicationOpenDate',
+    title: 'Open Date',
+  },
+  {
+    title: 'Exercise Type',
+    field: 'typeOfExercise',
+    type: 'checkbox',
+    options: ['legal', 'non-legal', 'leadership'],
+  },
+  {
+    title: 'Senior Selection Exercise Manager',
+    field: 'seniorSelectionExerciseManager',
+    type: 'select',
+    options: enabledJACUsers.value,
+  },
+  {
+    title: 'Selection Exercise Manager',
+    field: 'selectionExerciseManager',
+    type: 'select',
+    options: enabledJACUsers.value,
+  },
+  {
+    type: 'singleCheckbox',
+    field: 'state',
+    inputLabel: 'Exclude Exercises in Draft status',
+    fieldComparator: 'notEqual',
+    value: 'draft',
+  },
+]));
 
 const timelineGroups = computed(() => {
   return exerciseRecords.value.map(exercise => ({
@@ -114,18 +150,12 @@ watch(timelineGroups, () => {
 }, { deep: true });
 
 onMounted(() => {
-  const params = {
-    direction: 'asc',
-    orderBy: 'applicationOpenDate',
-    pageSize: 1000,
-    searchMap: '_search',
-    where: [],
-    // where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
-  };
-  store.dispatch(
-    'exerciseCollection/bind',
-    params
-  );
+  store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
+});
+
+onBeforeUnmount(() => {
+  store.dispatch('users/unbind');
+  store.dispatch('exerciseCollection/unbind');
 });
 
 const getExerciseTimelineItems = (data) => {
@@ -283,6 +313,13 @@ const getExerciseTimelineItems = (data) => {
 
   return items;
 };
+
+const getTableData = (params) => {
+  store.dispatch(
+    'exerciseCollection/bind',
+    params
+  );
+};
 </script>
 
 <template>
@@ -299,13 +336,23 @@ const getExerciseTimelineItems = (data) => {
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <LoadingMessage v-if="loading" />
-        <Timeline
-          v-else
-          :groups="timelineGroups"
-          :items="timelineItems"
-          :options="timelineOptions"
+        <Table
+          ref="exercisesTable"
+          data-key="id"
+          :data="exerciseRecords"
+          :page-size="1000"
+          :columns="[]"
+          :filters="filters"
+          @change="getTableData"
         />
+
+        <div v-if="!loading">
+          <Timeline
+            :groups="timelineGroups"
+            :items="timelineItems"
+            :options="timelineOptions"
+          />
+        </div>
       </div>
     </div>
   </div>
