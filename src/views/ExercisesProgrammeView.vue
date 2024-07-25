@@ -100,16 +100,22 @@ const filters = computed(() => ([
     defaultValue: ['legal', 'non-legal', 'leadership'],
   },
   {
-    title: 'Senior Selection Exercise Manager',
-    field: 'seniorSelectionExerciseManager',
-    type: 'option',
-    options: operationsSeniorManagers.value,
-  },
-  {
-    title: 'Selection Exercise Manager',
-    field: 'selectionExerciseManager',
-    type: 'option',
-    options: operationsTeamMembers.value,
+    title: '',
+    type: 'groupOption',
+    groups: [
+      {
+        title: 'Senior Selection Exercise Manager',
+        field: 'seniorSelectionExerciseManager',
+        type: 'option',
+        options: operationsSeniorManagers.value,
+      },
+      {
+        title: 'Selection Exercise Manager',
+        field: 'selectionExerciseManager',
+        type: 'option',
+        options: operationsTeamMembers.value,
+      },
+    ],
   },
   {
     type: 'singleCheckbox',
