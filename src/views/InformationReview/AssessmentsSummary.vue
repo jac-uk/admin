@@ -155,7 +155,7 @@
                 />
               </div>
 
-              <template v-if="editable">
+              <template v-if="editable && !isExtractingSelfAssessment">
                 <a
                   v-if="!editUploadSelfAssessmentMode"
                   href="#"
@@ -427,6 +427,9 @@ export default {
     },
 
     async doFileUpload(val, field) {
+      if (field === 'uploadedSelfAssessment') {
+        this.editUploadSelfAssessmentMode = false;
+      }
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }
