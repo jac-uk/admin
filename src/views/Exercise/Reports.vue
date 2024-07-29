@@ -40,7 +40,7 @@ export default {
           name: 'character-issues',
         },
         {
-          title: 'Eligibility Issues',
+          title: 'Eligibility Annex',
           name: 'eligibility-issues',
         },
         {

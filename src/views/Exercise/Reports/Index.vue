@@ -38,7 +38,7 @@
           class="govuk-link govuk-body-l"
           :to="{name: 'exercise-show-report-eligibility-issues'}"
         >
-          Eligibility Issues
+          Eligibility Annex
         </router-link>
       </li>
 
