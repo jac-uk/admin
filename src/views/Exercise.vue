@@ -127,7 +127,10 @@
       </div>
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
-          <span class="float-right govuk-!-margin-top-3">{{ exercise.referenceNumber }}</span>
+          <span
+            class="float-right govuk-!-margin-top-3"
+            style="font-size: 1.1875rem"
+          >{{ exercise.referenceNumber }}</span>
           <TabMenu
             v-if="!isAdvertTypeExternal && !hasJourney && tabs.length > 1"
             :tabs="tabs"
