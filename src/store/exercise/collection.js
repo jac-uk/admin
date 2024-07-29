@@ -30,7 +30,7 @@ export default {
         // Ensure if the where clause uses an inequality that it appears as the first argument to Query.orderBy()
         if (params.where.length) {
           for (const w of params.where) {
-            if (['<', '<=', '!=', 'not-in', '>', '>='].includes(w.comparator)) {
+            if (['<', '<=', '!=', 'not-in', '>', '>='].includes(w.comparator) && params.orderBy !== w.field) {
               firestoreRef = query(firestoreRef, orderBy(w.field));
             }
           }

@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import Timeline from '@/components/Timeline.vue';
 
 const store = useStore();
@@ -64,9 +64,67 @@ const timelineOptions = ref({
   },
 });
 
-const exerciseRecords = computed(() => {
-  return store.state.exerciseCollection.records || [];
+const roleRecords = computed(() => (store.state.roles.records || []));
+const operationsSeniorManagers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Senior Manager');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
 });
+const operationsTeamMembers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Team Member');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
+});
+
+const exerciseRecords = computed(() => (store.state.exerciseCollection.records || []));
+
+const filters = computed(() => ([
+  {
+    type: 'dateRange',
+    field: 'applicationOpenDate',
+    title: 'Open Date',
+  },
+  {
+    title: 'Exercise Type',
+    field: 'typeOfExercise',
+    type: 'checkbox',
+    options: [
+      { label: 'Legal', value: 'legal' },
+      { label: 'Non-Legal', value: 'non-legal' },
+      { label: 'Leadership', value: 'leadership' },
+    ],
+    defaultValue: ['legal', 'non-legal', 'leadership'],
+  },
+  {
+    title: '',
+    type: 'groupOption',
+    groups: [
+      {
+        title: 'Senior Selection Exercise Manager',
+        field: 'seniorSelectionExerciseManager',
+        type: 'option',
+        options: operationsSeniorManagers.value,
+      },
+      {
+        title: 'Selection Exercise Manager',
+        field: 'selectionExerciseManager',
+        type: 'option',
+        options: operationsTeamMembers.value,
+      },
+    ],
+  },
+  {
+    type: 'singleCheckbox',
+    field: 'state',
+    inputLabel: 'Exclude Exercises in Draft status',
+    fieldComparator: 'notEqual',
+    value: 'draft',
+  },
+]));
 
 const timelineGroups = computed(() => {
   return exerciseRecords.value.map(exercise => ({
@@ -109,23 +167,23 @@ const timelineItems = computed(() => {
   return items;
 });
 
+watch(roleRecords, () => {
+  const roleIds = roleRecords.value.map(role => role.id);
+  store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc', where: [{ field: 'role.id', comparator: 'in', value: roleIds }] });
+}, { deep: true });
+
 watch(timelineGroups, () => {
   if (loading.value) loading.value = false;
 }, { deep: true });
 
 onMounted(() => {
-  const params = {
-    direction: 'asc',
-    orderBy: 'applicationOpenDate',
-    pageSize: 1000,
-    searchMap: '_search',
-    where: [],
-    // where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
-  };
-  store.dispatch(
-    'exerciseCollection/bind',
-    params
-  );
+  store.dispatch('roles/bind', { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Senior Manager', 'Operations Team Member'] }] });
+});
+
+onBeforeUnmount(() => {
+  store.dispatch('roles/unbind');
+  store.dispatch('users/unbind');
+  store.dispatch('exerciseCollection/unbind');
 });
 
 const getExerciseTimelineItems = (data) => {
@@ -283,6 +341,17 @@ const getExerciseTimelineItems = (data) => {
 
   return items;
 };
+
+const getTableData = (params) => {
+  if (Array.isArray(params.where)) {
+    params.where.forEach((item, index) => {
+      if (['seniorSelectionExerciseManager', 'selectionExerciseManager'].includes(item.field)) {
+        params.where[index].value = [{ name: item.value }];
+      }
+    });
+  }
+  store.dispatch('exerciseCollection/bind', params);
+};
 </script>
 
 <template>
@@ -299,13 +368,23 @@ const getExerciseTimelineItems = (data) => {
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <LoadingMessage v-if="loading" />
-        <Timeline
-          v-else
-          :groups="timelineGroups"
-          :items="timelineItems"
-          :options="timelineOptions"
+        <Table
+          ref="exercisesTable"
+          data-key="id"
+          :data="exerciseRecords"
+          :page-size="2000"
+          :columns="[]"
+          :filters="filters"
+          @change="getTableData"
         />
+
+        <div v-if="!loading">
+          <Timeline
+            :groups="timelineGroups"
+            :items="timelineItems"
+            :options="timelineOptions"
+          />
+        </div>
       </div>
     </div>
   </div>
