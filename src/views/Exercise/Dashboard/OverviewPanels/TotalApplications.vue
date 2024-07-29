@@ -6,27 +6,42 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-third">
         <span class="govuk-body-s govuk-!-margin-bottom-0">
-          Draft
-        </span>
-        <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
-          {{ numberOfDraftApplications }}
-        </h2>
-      </div>
-      <div class="govuk-grid-column-one-third">
-        <span class="govuk-body-s govuk-!-margin-bottom-0">
           Applied
         </span>
-        <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
-          {{ numberOfAppliedApplications }}
-        </h2>
+        <router-link
+          :to="{ path: `/exercise/${exerciseId}/applications/applied`}"
+          class="govuk-link govuk-link--no-underline govuk-link-active-colour"
+        >
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ numberOfAppliedApplications }}
+          </h2>
+        </router-link>
       </div>
       <div class="govuk-grid-column-one-third">
         <span class="govuk-body-s govuk-!-margin-bottom-0">
-          Withdrawn
+          Draft
         </span>
-        <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
-          {{ numberOfWithdrawnApplications }}
-        </h2>
+        <router-link
+          :to="{ path: `/exercise/${exerciseId}/applications/draft`}"
+          class="govuk-link govuk-link--no-underline govuk-link-active-colour"
+        >
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ numberOfDraftApplications }}
+          </h2>
+        </router-link>
+      </div>
+      <div class="govuk-grid-column-one-third">
+        <span class="govuk-body-s govuk-!-margin-bottom-0">
+          Withdrew
+        </span>
+        <router-link
+          :to="{ path: `/exercise/${exerciseId}/applications/withdrawn`}"
+          class="govuk-link govuk-link--no-underline govuk-link-active-colour"
+        >
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ numberOfWithdrawnApplications }}
+          </h2>
+        </router-link>
       </div>
     </div>
     <!-- <span class="govuk-body-s tiny-text">Last Updated: {{ $filters.formatDate(applicationCounts._lastUpdated, 'datetime') }}</span> -->
@@ -37,6 +52,9 @@ import { applicationCounts } from '@/helpers/exerciseHelper';
 export default {
   name: 'TotalApplications',
   computed: {
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
