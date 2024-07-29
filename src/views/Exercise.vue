@@ -118,7 +118,7 @@ import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived, availableStages } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { functions } from '@/firebase';
-import { STATUS, ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
 import { useExercise } from '@/composables/useExercise';
 import TabMenu from '@/components/Navigation/TabMenu2.vue';
 import { availableReportLinks } from '../helpers/exerciseHelper';
