@@ -264,15 +264,12 @@ export default {
 
       if (content.length) {
         subNavigation.push({
-          title: 'Exercise',
+          title: 'Exercise Set-up',
           link: { name: 'exercise-overview' },
           content: content,
         });
       }
 
-      if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
-        subNavigation.push({ link: { name: `exercise-applications-${STATUS.APPLIED}` }, title: 'Applications' });
-      }
       if (this.isProcessing) {
         subNavigation.push({ link: { name: 'exercise-tasks', params: { stage: 'all' } }, title: 'Tasks' });
         subNavigation.push({ link: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } }, title: 'Stages', content: this.stageLinks });
