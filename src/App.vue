@@ -310,6 +310,13 @@ export default {
               this.$router.push({ name: 'exercises' });
             },
           },
+          {
+            title: 'Programme view',
+            link: () => {
+              this.$store.dispatch('exerciseCollection/showAll');
+              this.$router.push({ name: 'exercises-programme-view' });
+            },
+          },
           { title: 'Create exercise', link: { name: 'create-exercise' } }
         );
         if (this.canUpdateExercises && this.isApproved) {
