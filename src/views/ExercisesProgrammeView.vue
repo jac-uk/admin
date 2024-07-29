@@ -372,7 +372,7 @@ const getTableData = (params) => {
           ref="exercisesTable"
           data-key="id"
           :data="exerciseRecords"
-          :page-size="1000"
+          :page-size="2000"
           :columns="[]"
           :filters="filters"
           @change="getTableData"
