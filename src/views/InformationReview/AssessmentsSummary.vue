@@ -139,19 +139,40 @@
             <span v-else>Not yet received</span>
 
             <!-- UPLOAD SELF ASSESSMENT -->
-            <div>
-              <FileUpload
-                v-if="editable"
-                id="self-assessment-upload"
-                ref="self-assessment"
-                v-model="application.uploadedSelfAssessment"
-                name="self-assessment"
-                :path="uploadPath"
-                label="Upload finished self assessment"
-                required
-                :acceptable-extensions="['docx']"
-                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
-              />
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <FileUpload
+                  v-if="editUploadSelfAssessmentMode"
+                  id="self-assessment-upload"
+                  ref="self-assessment"
+                  v-model="application.uploadedSelfAssessment"
+                  name="self-assessment"
+                  :path="uploadPath"
+                  label="Upload finished self assessment"
+                  required
+                  :acceptable-extensions="['docx']"
+                  @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                />
+              </div>
+
+              <template v-if="editable && !isExtractingSelfAssessment">
+                <a
+                  v-if="!editUploadSelfAssessmentMode"
+                  href="#"
+                  class="govuk-link change-link print-none"
+                  @click.prevent="toggleEditUploadSelfAssessment"
+                >
+                  Change
+                </a>
+                <button
+                  v-else
+                  type="submit"
+                  class="govuk-button govuk-button--warning"
+                  @click.prevent="toggleEditUploadSelfAssessment"
+                >
+                  Cancel
+                </button>
+              </template>
             </div>
           </dd>
         </div>
@@ -332,6 +353,7 @@ export default {
     return {
       assessorDetails: {},
       isLoadingFile: false,
+      editUploadSelfAssessmentMode: false,
     };
   },
   computed: {
@@ -405,12 +427,18 @@ export default {
     },
 
     async doFileUpload(val, field) {
+      if (field === 'uploadedSelfAssessment') {
+        this.editUploadSelfAssessmentMode = false;
+      }
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);
+    },
+    toggleEditUploadSelfAssessment() {
+      this.editUploadSelfAssessmentMode = !this.editUploadSelfAssessmentMode;
     },
   },
 };
