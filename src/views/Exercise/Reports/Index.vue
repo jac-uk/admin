@@ -20,7 +20,7 @@
           class="govuk-link govuk-body-l"
           :to="{name: 'exercise-show-report-character-issues'}"
         >
-          Character Issues
+          Character Annex
         </router-link>
       </li>
 

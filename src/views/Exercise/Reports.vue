@@ -36,7 +36,7 @@ export default {
           name: 'outreach',
         },
         {
-          title: 'Character Issues',
+          title: 'Character Annex',
           name: 'character-issues',
         },
         {

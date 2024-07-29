@@ -29,7 +29,7 @@ const routes = [
   ['exercise-not-found', 'Exercise Not Found'],
   ['page-not-found', 'Page Not Found'],
   ['exercise-reports-character-checks', 'Character Checks'],
-  ['exercise-reports-character-issues', 'Character Issues'],
+  ['exercise-reports-character-issues', 'Character Annex'],
   ['exercise-reports-diversity-dashboard', 'Diversity Dashboard'],
   ['exercise-reports-eligibility-issues', 'Eligibility Annex'],
   ['exercise-reports-education-and-career-history', 'Education and Career History'],
