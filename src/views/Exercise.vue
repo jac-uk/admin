@@ -15,53 +15,32 @@
           </router-link>
         </div>
       </div>
-      <div class="govuk-grid-row govuk-!-margin-top-4">
-        <div
-          class="govuk-grid-column-full"
-          style="display: flex; justify-content: space-between; align-items: center;"
-        >
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+        <div class="govuk-grid-column-full">
           <div>
+            <h1
+              class="govuk-heading-xl govuk-!-margin-bottom-0"
+              style="display:inline-block"
+            >
+              {{ exerciseName }}
+            </h1>
             <span
               v-show="isInFavourites"
-              class="favourite-tag govuk-tag--yellow govuk-!-margin-right-3"
-              style="display: inline-block; padding: 5px 8px 4px 8px; font-weight: 700; font-size: 16px; line-height: 16px; letter-spacing: 1px;"
+              class="favourite-tag govuk-tag--yellow govuk-!-margin-left-3"
+              style="display: inline-block; vertical-align: super; padding: 5px 8px 4px 8px; font-weight: 700; font-size: 16px; line-height: 16px; letter-spacing: 1px;"
             >
               FAVOURITE
             </span>
-            <a
-              href="#"
-              class="govuk-link print-none"
-              @click.prevent="updateFavourites"
-            >
-              {{ isInFavourites ? 'Remove from favourite' : 'Add to favourite' }}
-            </a>
           </div>
-          <div class="print-none govuk-!-margin-0">
-            <ActionButton
-              v-if="canUpdateExercises && isApproved"
-              class="govuk-!-margin-bottom-0"
-              :action="copyToClipboard"
-            >
-              Copy to clipboard
-            </ActionButton>
-            <button
-              v-if="canArchiveExercises"
-              class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-left-3"
-              @click="openArchiveModal"
-            >
-              {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
-        <div class="govuk-grid-column-full">
-          <span class="govuk-caption-xl">
-            {{ exercise.referenceNumber }}
-          </span>
-          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ exerciseName }}
-          </h1>
+
+          <a
+            href="#"
+            class="govuk-!-margin-right-4 govuk-link print-none"
+            @click.prevent="updateFavourites"
+          >
+            {{ isInFavourites ? 'Remove from favourite' : 'Add to favourite' }}
+          </a>
+
           <router-link
             v-if="!isAdvertTypeExternal && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link govuk-!-margin-right-4 print-none"
@@ -106,23 +85,17 @@
       </div>
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
-          <SubNavigation
-            v-if="!isAdvertTypeExternal && !hasJourney && subNavigation.length > 1"
-            :pages="subNavigation"
+          <span
+            class="float-right govuk-!-margin-top-3"
+            style="font-size: 1.1875rem"
+          >{{ exercise.referenceNumber }}</span>
+          <TabMenu
+            v-if="!isAdvertTypeExternal && !hasJourney && tabs.length > 1"
+            :tabs="tabs"
           />
         </div>
       </div>
       <RouterView />
-
-      <Modal ref="archiveModal">
-        <ModalInner
-          :title="archiveTitle"
-          :message="archiveMessage"
-          :button-text="archiveButtonText"
-          @close="closeArchiveModal"
-          @confirmed="archive"
-        />
-      </Modal>
       <Modal ref="modalChangeNoOfTestApplications">
         <ChangeNoOfTestApplications
           :no-of-test-applications="1"
@@ -135,31 +108,39 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import { httpsCallable } from '@firebase/functions';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
-import SubNavigation from '@/components/Navigation/SubNavigation.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications.vue';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import { logEvent } from '@/helpers/logEvent';
 import { functions } from '@/firebase';
-import { ADVERT_TYPES } from '../helpers/constants';
+import { STATUS, ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
+import { useExercise } from '@/composables/useExercise';
+import TabMenu from '@/components/Navigation/TabMenu2.vue';
 
 export default {
   name: 'ExerciseView',
   components: {
     LoadingMessage,
-    SubNavigation,
     Modal,
-    ModalInner,
+    //ModalInner,
     ActionButton,
     ChangeNoOfTestApplications,
+    TabMenu,
   },
   mixins: [permissionMixin],
+  setup() {
+    const { getExerciseProgress } = useExercise();
+    const exerciseProgress = computed(() => getExerciseProgress().value);
+
+    return {
+      exerciseProgress,
+    };
+  },
   data() {
     return {
       loaded: false,
@@ -224,29 +205,6 @@ export default {
     isProduction() {
       return this.$store.getters['isProduction'];
     },
-    archiveTitle() {
-      if (this.isArchived) {
-        return 'Unarchive exercise';
-      } else {
-        return 'Archive exercise';
-      }
-    },
-    archiveMessage() {
-      if (this.isArchived) {
-        return 'By clicking accept you authorise the exercise to be unarchived';
-      } else if (this.isPublished) {
-        return 'This exercise is Live on Apply; by clicking accept, you authorise the exercise to be removed from Apply and archived';
-      } else {
-        return 'By clicking accept you authorise the exercise to be archived';
-      }
-    },
-    archiveButtonText() {
-      if (this.isArchived) {
-        return 'Accept - unarchive this exercise';
-      } else {
-        return 'Accept - archive this exercise';
-      }
-    },
     hasOpened() {
       if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {
         return true;
@@ -256,21 +214,48 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
-    subNavigation() {
+    tabs() {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       if (this.applicationCounts._total) {
-        subNavigation.push({ path: `${path}/dashboard`, title: 'Dashboard' });
+        subNavigation.push({ link: { path: `${path}/dashboard`, name: 'exercise-dashboard' }, title: 'Dashboard' });
       }
-      subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
+      const content = [];
+      content.push({ title: 'Overview', link: { name: 'exercise-overview' } });
+      //if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
+      //  if (this.exerciseProgress) {
+      content.push(
+        { title: 'Website listing', link: { name: 'exercise-details-summary' } },
+        { title: 'Vacancy information', link: { name: 'exercise-details-vacancy' } },
+        { title: 'Contacts', link: { name: 'exercise-details-contacts' } },
+        { title: 'Shortlisting', link: { name: 'exercise-details-shortlisting' } },
+        { title: 'Timeline', link: { name: 'exercise-details-timeline' } },
+        { title: 'Eligibility information', link: { name: 'exercise-details-eligibility' } },
+        { title: 'Working preferences', link: { name: 'exercise-details-preferences' } },
+        { title: 'Assessment options', link: { name: 'exercise-details-assessments' } },
+        { title: 'Exercise downloads', link: { name: 'exercise-details-downloads' } },
+        { title: 'Application process', link: { name: 'exercise-details-application-content' } },
+        { title: 'Additional settings', link: { name: 'exercise-details-additional-settings' } }
+      );
+      //  }
+      //}
+
+      if (content.length) {
+        subNavigation.push({
+          title: 'Exercise',
+          link: { name: 'exercise-overview' },
+          content: content,
+        });
+      }
+
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
-        subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
+        subNavigation.push({ link: { name: `exercise-applications-${STATUS.APPLIED}` }, title: 'Applications' });
       }
       if (this.isProcessing) {
-        subNavigation.push({ path: `${path}/tasks/all`, title: 'Tasks' });
-        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        subNavigation.push({ link: { name: 'exercise-tasks', params: { stage: 'all' } }, title: 'Tasks' });
+        subNavigation.push({ link: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } }, title: 'Stages' });
+        subNavigation.push({ link: { name: 'exercise-reports-diversity' }, title: 'Reports' });
       }
       return subNavigation;
     },
@@ -320,42 +305,6 @@ export default {
       } else {
         this.$store.dispatch('exerciseDocument/addToFavourites', this.userId);
       }
-    },
-    async copyToClipboard() {
-      try {
-        const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
-        await this.$store.dispatch('clipboard/write', {
-          environment: this.$store.getters.appEnvironment,
-          type: 'exercise',
-          title: `${exercise.referenceNumber} ${exercise.name}`,
-          content: exercise,
-        });
-        return true;
-      } catch (error) {
-        return;
-      }
-    },
-    openArchiveModal() {
-      this.$refs.archiveModal.openModal();
-    },
-    closeArchiveModal() {
-      this.$refs.archiveModal.closeModal();
-    },
-    archive() {
-      if (this.isArchived) {
-        this.$store.dispatch('exerciseDocument/unarchive');
-        logEvent('info', 'Exercise unarchived', {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        });
-      } else {
-        this.$store.dispatch('exerciseDocument/archive');
-        logEvent('info', 'Exercise archived', {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        });
-      }
-      this.$refs.archiveModal.closeModal();
     },
     changeNoOfTestApplications() {
       this.$refs['modalChangeNoOfTestApplications'].openModal();
