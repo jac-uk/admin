@@ -117,7 +117,7 @@ export {
 // application process config
 const APPLICATION_STEPS = [
   'registration',
-  'passedTests', 
+  'passedTests',
   EXERCISE_STAGE.SHORTLISTED,  // v1
   EXERCISE_STAGE.SELECTED,   // v1
   EXERCISE_STAGE.RECOMMENDED, // v1
@@ -578,7 +578,7 @@ function isReadyForApproval(data) {
 }
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
-  return (!data.advertType || data.advertType === ADVERT_TYPES.FULL || data.advertType === ADVERT_TYPES.EXTERNAL);
+  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL, ADVERT_TYPES.LISTING].includes(data.advertType));
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
