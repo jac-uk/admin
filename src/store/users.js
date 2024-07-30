@@ -124,6 +124,7 @@ export default {
         });
     },
     getUsersByRoleId: (state) => (roleId) => {
+      if (!Array.isArray(state.records)) return [];
       return state.records.filter(user => user.role.id === roleId);
     },
   },

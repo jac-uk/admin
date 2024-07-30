@@ -56,20 +56,23 @@
         <RepeatableFields
           v-model="formData.seniorSelectionExerciseManager"
           :component="repeatableFields.SeniorSelectionExerciseManager"
-          required
           :pattern="patternJACEmail"
+          :extra-props="{ users: operationsTeamMembers }"
+          required
         />
 
         <RepeatableFields
           v-model="formData.selectionExerciseManager"
           :component="repeatableFields.SelectionExerciseManager"
-          required
           :pattern="patternJACEmail"
+          :extra-props="{ users: operationsTeamMembers }"
+          required
         />
 
         <RepeatableFields
           v-model="formData.selectionExerciseOfficer"
           :component="repeatableFields.SelectionExerciseOfficer"
+          :extra-props="{ users: operationsTeamMembers }"
           required
         />
 
@@ -171,6 +174,7 @@
 </template>
 
 <script>
+import { shallowRef } from 'vue';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
@@ -219,7 +223,7 @@ export default {
     return {
       formData: formData,
       patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
-      repeatableFields: {
+      repeatableFields: shallowRef({
         SeniorSelectionExerciseManager,
         SelectionExerciseManager,
         DraftingJudge,
@@ -227,8 +231,7 @@ export default {
         StatutoryConsultee,
         SelectionExerciseOfficer,
         AssignedCommissioner,
-      },
-      users: [],
+      }),
       //@TODO@ add pattern for mobile number
     };
   },
@@ -236,12 +239,23 @@ export default {
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
+    roles() {
+      return this.$store.state.roles.records;
+    },
+    operationsTeamMembers() {
+      const role = this.roles.find(role => role.roleName === 'Operations Team Member');
+      if (!role) return [];
+      const users = this.$store.getters['users/getUsersByRoleId'](role.id);
+      return users;
+    },
   },
   async mounted() {
+    await this.$store.dispatch('roles/bind',  { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Team Member'] }] });
     await this.$store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
   },
   async unmounted() {
     await this.$store.dispatch('users/unbind');
+    await this.$store.dispatch('roles/unbind');
   },
   methods: {
     async save(isValid) {
