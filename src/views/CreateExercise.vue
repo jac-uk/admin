@@ -86,6 +86,27 @@
 
         <RadioGroup
           v-if="isAdvertTypeExternal !== null && !isAdvertTypeExternal"
+          id="is-a-Welsh-government-exercise"
+          v-model="isWelshGov"
+          label="Is this a Welsh government exercise"
+          required
+          :messages="{
+            required: 'Please specify whether the exercise a Welsh government exercise'
+          }"
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          />
+
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
+        <RadioGroup
+          v-if="isAdvertTypeExternal !== null && !isAdvertTypeExternal"
           id="is-more-info-needed"
           v-model="addMoreInfo"
           label="Do you want to add more information about this exercise now?"
@@ -197,6 +218,7 @@ export default {
     return {
       exerciseName: null,
       isAdvertTypeExternal: null,
+      isWelshGov: false,
       addMoreInfo: null,
       addMoreInfoSelection: null,
     };
@@ -214,6 +236,7 @@ export default {
           name: this.exerciseName,
           exerciseMailbox: this.$store.state.auth.currentUser.email,
           characterChecksEnabled: true,
+          isWelshGov: this.isWelshGov,
         };
 
         if (this.isAdvertTypeExternal) {
