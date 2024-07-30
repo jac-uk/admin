@@ -4,7 +4,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
-            Character Issues
+            Character Annex
           </h2>
           <span
             v-if="characterIssuesReport"
@@ -690,7 +690,7 @@ export default {
     async exportData() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        const title = 'Character Issues';
+        const title = 'Character Annex';
         const xlsxData = await this.gatherReportData();
 
         downloadXLSX(xlsxData, {

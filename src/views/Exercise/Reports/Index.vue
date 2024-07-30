@@ -20,7 +20,7 @@
           class="govuk-link govuk-body-l"
           :to="{name: 'exercise-show-report-character-issues'}"
         >
-          Character Issues
+          Character Annex
         </router-link>
       </li>
 
@@ -38,7 +38,7 @@
           class="govuk-link govuk-body-l"
           :to="{name: 'exercise-show-report-eligibility-issues'}"
         >
-          Eligibility Issues
+          Eligibility Annex
         </router-link>
       </li>
 

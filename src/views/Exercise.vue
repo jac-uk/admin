@@ -115,12 +115,14 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications.vue';
 import { mapState } from 'vuex';
-import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived } from '@/helpers/exerciseHelper';
+import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived, availableStages, availableReportLinks, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { functions } from '@/firebase';
-import { STATUS, ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
 import { useExercise } from '@/composables/useExercise';
 import TabMenu from '@/components/Navigation/TabMenu2.vue';
+import { TASK_TYPE } from '@/helpers/constants';
+import { lookup } from '@/filters';
 
 export default {
   name: 'ExerciseView',
@@ -214,6 +216,142 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
+    stageLinks() {
+      const exercise = this.exercise;
+      const path = `/exercise/${exercise.id}/stages`;
+      const stages = availableStages(exercise);
+      const links = [];
+      stages.forEach(stage => {
+        const count = (exercise._applicationRecords && exercise._applicationRecords[stage]) || 0;
+        links.push({
+          title: `${this.$filters.lookup(stage)} (${this.$filters.formatNumber(count)})`, // TODO get label
+          link: `${path}/${stage}`,
+        });
+      });
+      return links;
+    },
+    reportLinks() {
+      return availableReportLinks(this.exercise).map((link) => ({
+        title: link.title,
+        link,
+      }));
+    },
+    taskLinks() {
+      const exercise = this.exercise;
+      const stage = 'all';
+      const path = `/exercise/${exercise.id}/tasks/${stage}`;
+      const links = [];
+      switch (stage) {
+      case 'all':
+        getTaskTypes(exercise).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
+          links.push(
+            {
+              title: lookup(taskType),
+              link: {
+                tag: tag,
+                path: `${path}/${taskType}`,
+              },
+            }
+          );
+        });
+        if (isProcessing(exercise)) {
+          if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
+            links.push({
+              title: 'Independent Assessments',
+              link: {
+                path: `${path}/independent-assessments`,
+              },
+            });
+          }
+          links.push(
+            {
+              title: 'Character Checks',
+              link: {
+                path: `${path}/character-checks`,
+              },
+            }
+          );
+        }
+        break;
+      case 'shortlisting':
+        if (isProcessing(exercise)) {
+          if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
+            links.push({
+              title: 'Independent Assessments',
+              link: {
+                path: `${path}/independent-assessments`,
+              },
+            });
+          }
+        }
+        getTaskTypes(exercise, stage).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
+          links.push(
+            {
+              title: lookup(taskType),
+              link: {
+                tag: tag,
+                path: `${path}/${taskType}`,
+              },
+            }
+          );
+        });
+        break;
+      case 'selection':
+        links.push(
+          {
+            title: 'Character Checks',
+            link: {
+              path: `${path}/character-checks`,
+            },
+          }
+        );
+        getTaskTypes(exercise, stage).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
+          links.push(
+            {
+              title: lookup(taskType),
+              link: {
+                tag: tag,
+                path: `${path}/${taskType}`,
+              },
+            }
+          );
+        });
+        links.push({
+          title: lookup(TASK_TYPE.SELECTION_OUTCOME),
+          link: {
+            path: `${path}/${TASK_TYPE.SELECTION_OUTCOME}`,
+          },
+        }
+
+        );
+        break;
+      }
+      return links;
+    },
     tabs() {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
@@ -243,19 +381,16 @@ export default {
 
       if (content.length) {
         subNavigation.push({
-          title: 'Exercise',
+          title: 'Exercise Set-up',
           link: { name: 'exercise-overview' },
           content: content,
         });
       }
 
-      if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
-        subNavigation.push({ link: { name: `exercise-applications-${STATUS.APPLIED}` }, title: 'Applications' });
-      }
       if (this.isProcessing) {
-        subNavigation.push({ link: { name: 'exercise-tasks', params: { stage: 'all' } }, title: 'Tasks' });
-        subNavigation.push({ link: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } }, title: 'Stages' });
-        subNavigation.push({ link: { name: 'exercise-reports-diversity' }, title: 'Reports' });
+        subNavigation.push({ link: { name: 'exercise-tasks', params: { stage: 'all' } }, title: 'Tasks', content: this.taskLinks });
+        subNavigation.push({ link: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } }, title: 'Stages', content: this.stageLinks });
+        subNavigation.push({ link: { name: 'exercise-reports-diversity' }, title: 'Reports', content: this.reportLinks });
       }
       return subNavigation;
     },

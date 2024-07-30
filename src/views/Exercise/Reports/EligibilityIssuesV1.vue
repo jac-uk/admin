@@ -4,7 +4,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
-            Eligibility Issues
+            Eligibility Annex
           </h2>
           <span
             v-if="eligibilityIssuesReport"
@@ -320,7 +320,7 @@ export default {
     },
     async exportData() {
       try {
-        const title = 'Eligibility Issues';
+        const title = 'Eligibility Annex';
         const xlsxData = await this.gatherReportData();
 
         downloadXLSX(

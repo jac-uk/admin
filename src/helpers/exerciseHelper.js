@@ -89,6 +89,7 @@ export {
   applicationRecordCounts,
   availableStages,
   availableStatuses,
+  availableReportLinks,
   getPreviousStage,
   getNextStage,
   getStagePassingStatuses,
@@ -1265,6 +1266,97 @@ function availableStatuses(exercise, stage) {
       return statuses;
     }
   }
+}
+
+function availableReportLinks(exercise) {
+  const path = `/exercise/${exercise.id}/reports`;
+  const links = [
+    {
+      title: 'Diversity',
+      name: 'exercise-reports-diversity',
+    },
+    {
+      title: 'Merit List',
+      name: 'merit-list',
+    },
+    {
+      title: 'Outreach',
+      name: 'outreach',
+    },
+    {
+      title: 'Character Annex',
+      name: 'character-issues',
+    },
+    {
+      title: 'Eligibility Annex',
+      name: 'eligibility-issues',
+    },
+    {
+      title: 'Reasonable Adjustments',
+      name: 'reasonable-adjustments',
+    },
+    {
+      title: 'Agency',
+      name: 'agency',
+    },
+    {
+      title: 'Handover',
+      name: 'handover',
+    },
+    {
+      title: 'Deployment',
+      name: 'deployment',
+    },
+    {
+      title: 'Statutory Consultation',
+      name: 'statutory-consultation',
+    },
+    {
+      title: 'Custom',
+      name: 'custom',
+    },
+  ];
+
+  if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+    if (
+      (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
+      || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+    ) {
+      links.push(
+        {
+          title: 'Sift',
+          path: `${path}/sift`,
+        }
+      );
+    }
+  }
+  if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
+    links.push(
+      {
+        title: 'Scenario Responses',
+        path: `${path}/scenario`,
+      }
+    );
+  }
+  if (exercise.selectionDays) {
+    links.push(
+      {
+        title: 'Selection day',
+        path: `${path}/selection`,
+      }
+    );
+  }
+  if (exercise?._applicationContent?.registration?.commissionerConflicts) {
+    links.push(
+      {
+        title: 'Commissioner conflicts',
+        path: `${path}/commissioner-conflicts`,
+      }
+    );
+  }
+
+  links.sort((a, b) => a.title.localeCompare(b.title));
+  return links;
 }
 
 function shortlistingStatuses(exercise) {

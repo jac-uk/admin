@@ -40,7 +40,7 @@
               data-module="govuk-button"
               @click="openModal"
             >
-              Late Application
+              A Late Application
             </button>
           </div>
         </div>
