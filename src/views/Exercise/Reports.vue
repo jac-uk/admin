@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters print-full-width">
+    <div class="print-full-width">
       <RouterView />
     </div>
   </div>
