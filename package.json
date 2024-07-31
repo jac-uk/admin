@@ -69,7 +69,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^8.7.1",
     "firebase": "^10.7.1",
-    "firebase-mock": "^2.3.2",
+    "firebase-mock": "^2.2.4",
     "jsdom": "^23.0.1",
     "postcss": "^8.4.31",
     "process": "^0.11.10",
