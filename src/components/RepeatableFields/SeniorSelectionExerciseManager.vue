@@ -21,7 +21,6 @@
 
 <script>
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'SeniorSelectionExerciseManager',
@@ -37,11 +36,10 @@ export default {
       required: true,
       type: Number,
     },
-  },
-  computed: {
-    ...mapGetters({
-      users: 'users/enabledJACUsers',
-    }),
+    users: {
+      type: Array,
+      default: () => [],
+    },
   },
 };
 </script>
