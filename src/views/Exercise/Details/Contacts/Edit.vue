@@ -57,7 +57,7 @@
           v-model="formData.seniorSelectionExerciseManager"
           :component="repeatableFields.SeniorSelectionExerciseManager"
           :pattern="patternJACEmail"
-          :extra-props="{ users: operationsTeamMembers }"
+          :extra-props="{ users: operationsSeniorManagers }"
           required
         />
 
@@ -242,6 +242,12 @@ export default {
     roles() {
       return this.$store.state.roles.records;
     },
+    operationsSeniorManagers() {
+      const role = this.roles.find(role => role.roleName === 'Operations Senior Manager');
+      if (!role) return [];
+      const users = this.$store.getters['users/getUsersByRoleId'](role.id);
+      return users;
+    },
     operationsTeamMembers() {
       const role = this.roles.find(role => role.roleName === 'Operations Team Member');
       if (!role) return [];
@@ -250,7 +256,7 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('roles/bind',  { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Team Member'] }] });
+    await this.$store.dispatch('roles/bind',  { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Senior Manager', 'Operations Team Member'] }] });
     await this.$store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
   },
   async unmounted() {
