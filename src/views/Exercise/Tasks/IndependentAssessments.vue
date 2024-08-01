@@ -97,6 +97,21 @@
         >
           Send requests
         </button>
+
+        <button
+          v-if="isNotRequested && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
+          class="govuk-button govuk-!-margin-right-3"
+          @click="openModal('modalRefRequests', 'request', { sendToAll: true }, sendAllRequests)"
+        >
+          Send All requests
+        </button>
+
         <button
           v-if="isNotRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value
@@ -586,6 +601,11 @@ export default {
     async sendRequests({ assessmentIds }) {
       this.resetSelectedItems();
       const result = await httpsCallable(functions, 'sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentIds });
+      this.processSendAssessmentResult(result);
+    },
+    async sendAllRequests() {
+      this.resetSelectedItems();
+      const result = await httpsCallable(functions, 'sendAssessmentRequests')({ exerciseId: this.exercise.id });
       this.processSendAssessmentResult(result);
     },
     async sendReminders({ assessmentIds }) {
