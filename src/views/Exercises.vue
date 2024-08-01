@@ -131,7 +131,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Reference', sort: 'createdAt', direction: 'desc', default: true },
+        { title: 'Reference', sort: 'createdAt', direction: 'asc', default: true },
         { title: 'Name', sort: 'name' },
         { title: 'Open', sort: 'applicationOpenDate' },
         { title: 'Close', sort: 'applicationCloseDate' },
