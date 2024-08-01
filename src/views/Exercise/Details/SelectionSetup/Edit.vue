@@ -10,7 +10,7 @@
         </div>
 
         <h2 class="govuk-heading-l">
-          Additional settings
+          Selection set-up
         </h2>
 
         <ErrorSummary
@@ -98,7 +98,7 @@ export default {
     async save(isValid) {
       this.formData['progress.additionalSettings'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-additional-settings'));
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-selection-setup'));
     },
   },
 };
