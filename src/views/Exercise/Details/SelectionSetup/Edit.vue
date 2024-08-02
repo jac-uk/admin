@@ -19,35 +19,52 @@
           @save="save"
         />
 
-        <CheckboxGroup
-          id="capabilities"
-          v-model="formData.capabilities"
-          required
-          label="Selection Criteria"
-          :messages="{required: 'Please choose at least one capability'}"
+        <RadioGroup
+          id="assessment-framework"
+          v-model="formData.assessmentFramework"
+          label="The assessment framework used in this exercise is:"
         >
-          <CheckboxItem
-            v-for="capability in capabilities"
-            :key="capability"
-            :value="capability"
-            :label="$filters.lookup(capability)"
+          <RadioItem
+            label="Competencies"
+            value="competencies"
           />
-        </CheckboxGroup>
+          <RadioItem
+            label="Skills & Abilities"
+            value="skills-abilities"
+          />
+        </RadioGroup>
 
-        <CheckboxGroup
-          id="selectionCategories"
-          v-model="formData.selectionCategories"
-          required
-          label="Selection Tools"
-          :messages="{required: 'Please choose at least one'}"
-        >
-          <CheckboxItem
-            v-for="item in selectionCategories"
-            :key="item"
-            :value="item"
-            :label="$filters.lookup(item)"
-          />
-        </CheckboxGroup>
+        <template v-if="formData.assessmentFramework">
+          <CheckboxGroup
+            id="capabilities"
+            v-model="formData.capabilities"
+            required
+            label="Selection Criteria"
+            :messages="{required: 'Please choose at least one capability'}"
+          >
+            <CheckboxItem
+              v-for="capability in capabilities"
+              :key="capability"
+              :value="capability"
+              :label="$filters.lookup(capability)"
+            />
+          </CheckboxGroup>
+
+          <CheckboxGroup
+            id="selectionCategories"
+            v-model="formData.selectionCategories"
+            required
+            label="Selection Tools"
+            :messages="{required: 'Please choose at least one'}"
+          >
+            <CheckboxItem
+              v-for="item in selectionCategories"
+              :key="item"
+              :value="item"
+              :label="$filters.lookup(item)"
+            />
+          </CheckboxGroup>
+        </template>
 
         <button class="govuk-button">
           Save and continue
@@ -60,14 +77,22 @@
 <script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+
+const competenciesCapabilities = ['EJ', 'PBK', 'ACI', 'WCO', 'MWE'];
+const competenciesSelectionCategories = ['interview', 'situational', 'roleplay'];
+const skillsAbilitiesCapabilities = ['L&J', 'PQ', 'L'];
+const skillsAbilitiesSelectionCategories = ['interview', 'situational', 'leadership', 'roleplay'];
 
 export default {
   components: {
     ErrorSummary,
+    RadioGroup,
+    RadioItem,
     CheckboxGroup,
     CheckboxItem,
     BackLink,
@@ -75,10 +100,12 @@ export default {
   extends: Form,
   data(){
     const defaults = {
+      assessmentFramework: null,
       capabilities: null,
       selectionCategories: null,
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
+
     return {
       formData: formData,
     };
@@ -88,10 +115,36 @@ export default {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
     capabilities() {
-      return CAPABILITIES;
+      switch (this.formData.assessmentFramework) {
+      case 'competencies':
+        return competenciesCapabilities;
+      case 'skills-abilities':
+        return skillsAbilitiesCapabilities;
+      default:
+        return [];
+      }
     },
     selectionCategories() {
-      return SELECTION_CATEGORIES;
+      switch (this.formData.assessmentFramework) {
+      case 'competencies':
+        return competenciesSelectionCategories;
+      case 'skills-abilities':
+        return skillsAbilitiesSelectionCategories;
+      default:
+        return [];
+      }
+    },
+  },
+  watch: {
+    'formData.assessmentFramework': function (newValue) {
+      // set default capabilities and selection categories based on the assessment framework
+      if (newValue === 'competencies') {
+        this.formData.capabilities = competenciesCapabilities;
+        this.formData.selectionCategories = competenciesSelectionCategories;
+      } else if (newValue === 'skills-abilities') {
+        this.formData.capabilities = skillsAbilitiesCapabilities;
+        this.formData.selectionCategories = skillsAbilitiesSelectionCategories;
+      }
     },
   },
   methods: {
