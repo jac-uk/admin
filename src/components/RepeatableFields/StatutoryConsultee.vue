@@ -5,7 +5,7 @@
       v-model="row.name"
       type="email"
       label="Statutory Consultee"
-      required
+      :required="!exercise.statutoryConsultationWaived"
     />
     <slot name="removeButton" />
   </div>
@@ -27,6 +27,11 @@ export default {
     index: {
       required: true,
       type: Number,
+    },
+  },
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
     },
   },
 };
