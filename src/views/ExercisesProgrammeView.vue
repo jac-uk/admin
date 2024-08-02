@@ -304,7 +304,6 @@ const filters = computed(() => ([
     field: 'activity',
     type: 'checkbox',
     options: activityOptions,
-    defaultValue: activities,
   },
 ]));
 
