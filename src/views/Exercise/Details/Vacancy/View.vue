@@ -56,11 +56,10 @@
           Waived statutory consultation?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span
-            v-if="exercise.statutoryConsultationWaivedDetails && exercise.statutoryConsultationWaived == true"
-          >
-            Yes: {{ exercise.statutoryConsultationWaivedDetails }}
+          <span v-if="exercise.statutoryConsultationWaived === true">
+            Yes{{ exercise.statutoryConsultationWaivedDetails ? `: ${exercise.statutoryConsultationWaivedDetails}` : '' }}
           </span>
+          <span v-else-if="exercise.statutoryConsultationWaived === false">No</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
