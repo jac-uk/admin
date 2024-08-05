@@ -4,13 +4,13 @@
       <router-link
         v-if="isEditable"
         class="govuk-link"
-        :to="{name: 'exercise-details-additional-settings-edit'}"
+        :to="{name: 'exercise-details-selection-setup-edit'}"
       >
-        Update additional settings
+        Update selection set-up
       </router-link>
     </div>
     <h2 class="govuk-heading-l">
-      Additional settings
+      Selection set-up
     </h2>
     <div class="govuk-summary-list">
       <div class="govuk-summary-list__row">

@@ -374,7 +374,7 @@ export default {
         { title: 'Assessment options', link: { name: 'exercise-details-assessments' } },
         { title: 'Exercise downloads', link: { name: 'exercise-details-downloads' } },
         { title: 'Application process', link: { name: 'exercise-details-application-content' } },
-        { title: 'Additional settings', link: { name: 'exercise-details-additional-settings' } }
+        { title: 'Selection set-up', link: { name: 'exercise-details-selection-setup' } }
       );
       //  }
       //}
