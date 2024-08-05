@@ -107,9 +107,9 @@ const getExerciseTimelineItems = (data) => {
       const { selectionDayStart, selectionDayEnd, selectionDayLocation = '' } = selectionDay;
       if (selectionDayStart && selectionDayEnd) {
         items.push({
-          id: `Selection Day - ${selectionDayLocation}`,
-          name: `Selection Day - ${selectionDayLocation} (${i + 1})`,
-          title: `Selection Day - ${selectionDayLocation}`,
+          id: selectionDayLocation ? `Selection Day - ${selectionDayLocation}` : `Selection Day (${i + 1})`,
+          name: selectionDayLocation ? `Selection Day - ${selectionDayLocation} (${i + 1})` : `Selection Day (${i + 1})`,
+          title: selectionDayLocation ? `Selection Day - ${selectionDayLocation}` : 'Selection Day',
           start: selectionDayStart,
           end: selectionDayEnd,
           style: 'color: white; background-color: #3502ff',
@@ -314,7 +314,7 @@ const timelineData = computed(() => {
   exerciseRecords.value.forEach(exercise => {
     let exerciseTimelineItems = getExerciseTimelineItems(exercise);
     if (filteredActivities.value.length) {
-      exerciseTimelineItems = exerciseTimelineItems.filter(timelineItem => filteredActivities.value.includes(timelineItem.name));
+      exerciseTimelineItems = exerciseTimelineItems.filter(timelineItem => filteredActivities.value.some(item => timelineItem.name.includes(item)));
     }
     if (!Array.isArray(exerciseTimelineItems)) return;
 
