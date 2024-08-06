@@ -131,7 +131,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Reference', sort: 'referenceNumber', direction: 'asc', default: true },
+        { title: 'Reference', sort: 'createdAt', direction: 'asc', default: true },
         { title: 'Name', sort: 'name' },
         { title: 'Open', sort: 'applicationOpenDate' },
         { title: 'Close', sort: 'applicationCloseDate' },
@@ -180,7 +180,7 @@ export default {
       this.reloadTable();
     },
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   methods: {

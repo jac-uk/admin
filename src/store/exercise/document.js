@@ -7,6 +7,7 @@ import clone from 'clone';
 import { getExerciseSaveData } from '@/helpers/exerciseHelper';
 import { logEvent } from '@/helpers/logEvent';
 import { checkNested } from '@/helpersTMP/object';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 const collectionName = 'exercises';
 const collectionRef = collection(firestore, collectionName);
@@ -56,8 +57,15 @@ export default {
         const metaDoc = await transaction.get(metaRef);
         const newExercisesCount = metaDoc.data().exercisesCount + 1;
         const exerciseRef = doc(collection(firestore, 'exercises'));
+
+        let prefix = 'JAC';
+        if (data.advertType === ADVERT_TYPES.EXTERNAL) {
+          prefix = 'EXT';
+        } else if (data.isWelshGov) {
+          prefix = 'GOW';
+        }
         transaction.update(metaRef, { exercisesCount: newExercisesCount });
-        data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
+        data.referenceNumber = `${prefix}${  (100000 + newExercisesCount).toString().substr(1)}`;
         data.progress = data.progress || { started: true };
         data.state = 'draft';
         data.published = false;

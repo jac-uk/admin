@@ -1,10 +1,27 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import Timeline from '@/components/Timeline.vue';
+
+const activities = [
+  'Launch to close',
+  'Sift',
+  'Name-blind Sift',
+  'Independent Assessors',
+  'Character checks',
+  'Selection Day',
+  'Situational judgement qualifying test',
+  'Critical analysis qualifying test',
+  'Scenario test',
+  'Eligibility SCC',
+  'Character and Selection SCC',
+  'Statutory consultation',
+  'Final outcome',
+];
+const activityOptions = activities.map((activity) => ({ label: activity, value: activity }));
 
 const store = useStore();
 const router = useRouter();
@@ -22,111 +39,6 @@ const getDefaultTimeRange = () => {
 
   return [startDate, endDate];
 };
-
-const loading = ref(true);
-const timelineOptions = ref({
-  stack: true,
-  verticalScroll: true,
-  zoomKey: 'ctrlKey',
-  zoomMin: 1000 * 60 * 60 * 12, // half day in milliseconds
-  zoomMax: 1000 * 60 * 60 * 24 * 365 * 10, // ten years in milliseconds
-  maxHeight: 800,
-  start: getDefaultTimeRange()[0],
-  end: getDefaultTimeRange()[1],
-  editable: false,
-  selectable: false,
-  margin: {
-    item: 8, // minimal margin between items
-    axis: 8, // minimal margin between items and the axis
-  },
-  orientation: {
-    axis: 'top',
-    item: 'top',
-  },
-  xss: {
-    disabled: false,
-  },
-  groupTemplate: function (group) {
-    if (!group) return '';
-
-    const container = document.createElement('div');
-    const anchor = document.createElement('a');
-    anchor.href = `/exercise/${group.id}/dashboard`;
-    anchor.textContent = group.content;
-    anchor.style = 'text-decoration: none;';
-    anchor.addEventListener('click', (event) => {
-      event.preventDefault();
-      router.push({ name: 'exercise-dashboard', params: { id: group.id } });
-    });
-    container.insertAdjacentElement('afterBegin', anchor);
-
-    return container;
-  },
-});
-
-const exerciseRecords = computed(() => {
-  return store.state.exerciseCollection.records || [];
-});
-
-const timelineGroups = computed(() => {
-  return exerciseRecords.value.map(exercise => ({
-    id: exercise.id,
-    title: exercise.name,
-    content: exercise.referenceNumber,
-    ref: exercise.referenceNumber,
-  }));
-});
-
-const timelineItems = computed(() => {
-  const items = [];
-  exerciseRecords.value.forEach(exercise => {
-    const exerciseTimelineItems = getExerciseTimelineItems(exercise);
-    if (!Array.isArray(exerciseTimelineItems)) return;
-    exerciseTimelineItems.forEach(timelineItem => {
-      const item = {};
-      item.id = `${exercise.id} - ${timelineItem.name}`;
-
-      let dateString = dayjs(timelineItem.start).format('D MMM YYYY');
-      if (timelineItem.end) dateString += ` - ${dayjs(timelineItem.end).format('D MMM YYYY')}`;
-      item.title = `
-        <div>
-          <p><b>${timelineItem.title}</b></p>
-          <p>${dateString}</p>
-        </div>
-      `;
-
-      item.group = exercise.id;
-
-      item.content = timelineItem.name;
-      item.start = dayjs(timelineItem.start).startOf('day').toDate();
-      item.end = timelineItem.end ? timelineItem.end : dayjs(item.start).endOf('day').toDate();
-      item.style = timelineItem.style;
-
-      items.push(item);
-    });
-  });
-
-  return items;
-});
-
-watch(timelineGroups, () => {
-  if (loading.value) loading.value = false;
-}, { deep: true });
-
-onMounted(() => {
-  const params = {
-    direction: 'asc',
-    orderBy: 'applicationOpenDate',
-    pageSize: 1000,
-    searchMap: '_search',
-    where: [],
-    // where: [{ field: 'state', comparator: 'in', value: ['ready', 'approved'] }],
-  };
-  store.dispatch(
-    'exerciseCollection/bind',
-    params
-  );
-});
 
 const getExerciseTimelineItems = (data) => {
   const items = [];
@@ -195,9 +107,9 @@ const getExerciseTimelineItems = (data) => {
       const { selectionDayStart, selectionDayEnd, selectionDayLocation = '' } = selectionDay;
       if (selectionDayStart && selectionDayEnd) {
         items.push({
-          id: `Selection Day - ${selectionDayLocation}`,
-          name: `Selection Day - ${selectionDayLocation} (${i + 1})`,
-          title: `Selection Day - ${selectionDayLocation}`,
+          id: selectionDayLocation ? `Selection Day - ${selectionDayLocation}` : `Selection Day (${i + 1})`,
+          name: selectionDayLocation ? `Selection Day - ${selectionDayLocation} (${i + 1})` : `Selection Day (${i + 1})`,
+          title: selectionDayLocation ? `Selection Day - ${selectionDayLocation}` : 'Selection Day',
           start: selectionDayStart,
           end: selectionDayEnd,
           style: 'color: white; background-color: #3502ff',
@@ -283,6 +195,201 @@ const getExerciseTimelineItems = (data) => {
 
   return items;
 };
+
+const loading = ref(true);
+const timelineOptions = ref({
+  stack: true,
+  verticalScroll: true,
+  zoomKey: 'ctrlKey',
+  zoomMin: 1000 * 60 * 60 * 12, // half day in milliseconds
+  zoomMax: 1000 * 60 * 60 * 24 * 365 * 10, // ten years in milliseconds
+  maxHeight: 800,
+  start: getDefaultTimeRange()[0],
+  end: getDefaultTimeRange()[1],
+  editable: false,
+  selectable: false,
+  margin: {
+    item: 8, // minimal margin between items
+    axis: 8, // minimal margin between items and the axis
+  },
+  orientation: {
+    axis: 'top',
+    item: 'top',
+  },
+  xss: {
+    disabled: false,
+  },
+  groupTemplate: function (group) {
+    if (!group) return '';
+
+    const container = document.createElement('div');
+    const anchor = document.createElement('a');
+    anchor.href = `/exercise/${group.id}/dashboard`;
+    anchor.textContent = group.content;
+    anchor.style = 'text-decoration: none;';
+    anchor.addEventListener('click', (event) => {
+      event.preventDefault();
+      router.push({ name: 'exercise-dashboard', params: { id: group.id } });
+    });
+    container.insertAdjacentElement('afterBegin', anchor);
+
+    return container;
+  },
+});
+
+const filteredActivities = ref([]);
+
+const roleRecords = computed(() => (store.state.roles.records || []));
+const operationsSeniorManagers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Senior Manager');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
+});
+const operationsTeamMembers = computed(() => {
+  const role = roleRecords.value.find(role => role.roleName === 'Operations Team Member');
+  if (!role) return [];
+  const users = store.getters['users/getUsersByRoleId'](role.id).map(user => ({ value: user.email, label: `${user.displayName} (${user.email})` }));
+  if (users.length > 0) return [{ value: '', label: '' }, ...users];
+  return [];
+});
+
+const exerciseRecords = computed(() => (store.state.exerciseCollection.records || []));
+
+const filters = computed(() => ([
+  {
+    type: 'dateRange',
+    field: 'applicationOpenDate',
+    title: 'Open Date',
+  },
+  {
+    title: 'Exercise Type',
+    field: 'typeOfExercise',
+    type: 'checkbox',
+    options: [
+      { label: 'Legal', value: 'legal' },
+      { label: 'Non-Legal', value: 'non-legal' },
+      { label: 'Leadership', value: 'leadership' },
+    ],
+    defaultValue: ['legal', 'non-legal', 'leadership'],
+  },
+  {
+    title: '',
+    type: 'groupOption',
+    groups: [
+      {
+        title: 'Senior Selection Exercise Manager',
+        field: 'seniorSelectionExerciseManager',
+        type: 'option',
+        options: operationsSeniorManagers.value,
+      },
+      {
+        title: 'Selection Exercise Manager',
+        field: 'selectionExerciseManager',
+        type: 'option',
+        options: operationsTeamMembers.value,
+      },
+    ],
+  },
+  {
+    type: 'singleCheckbox',
+    field: 'state',
+    inputLabel: 'Exclude Exercises in Draft status',
+    fieldComparator: 'notEqual',
+    value: 'draft',
+  },
+  {
+    title: 'Exercise Activity',
+    field: 'activity',
+    type: 'checkbox',
+    options: activityOptions,
+  },
+]));
+
+const timelineData = computed(() => {
+  const groups = [];
+  const items = [];
+
+  exerciseRecords.value.forEach(exercise => {
+    let exerciseTimelineItems = getExerciseTimelineItems(exercise);
+    if (filteredActivities.value.length) {
+      exerciseTimelineItems = exerciseTimelineItems.filter(timelineItem => filteredActivities.value.some(item => timelineItem.name.includes(item)));
+    }
+    if (!Array.isArray(exerciseTimelineItems)) return;
+
+    const exerciseActivities = [];
+    exerciseTimelineItems.forEach(timelineItem => {
+      const item = {};
+      item.id = `${exercise.id} - ${timelineItem.name}`;
+
+      let dateString = dayjs(timelineItem.start).format('D MMM YYYY');
+      if (timelineItem.end) dateString += ` - ${dayjs(timelineItem.end).format('D MMM YYYY')}`;
+      item.title = `
+        <div>
+          <p><b>${timelineItem.title}</b></p>
+          <p>${dateString}</p>
+        </div>
+      `;
+
+      item.group = exercise.id;
+
+      item.content = timelineItem.name;
+      item.start = dayjs(timelineItem.start).startOf('day').toDate();
+      item.end = timelineItem.end ? timelineItem.end : dayjs(item.start).endOf('day').toDate();
+      item.style = timelineItem.style;
+
+      exerciseActivities.push(item);
+    });
+
+    if (exerciseActivities.length) {
+      groups.push({
+        id: exercise.id,
+        title: exercise.name,
+        content: exercise.referenceNumber,
+        ref: exercise.referenceNumber,
+      });
+      items.push(...exerciseActivities);
+    }
+  });
+
+  return { groups, items };
+});
+
+watch(roleRecords, () => {
+  const roleIds = roleRecords.value.map(role => role.id);
+  store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc', where: [{ field: 'role.id', comparator: 'in', value: roleIds }] });
+}, { deep: true });
+
+watch(timelineData, () => {
+  if (loading.value) loading.value = false;
+}, { deep: true });
+
+onMounted(() => {
+  store.dispatch('roles/bind', { where: [{ field: 'roleName', comparator: 'in', value: ['Operations Senior Manager', 'Operations Team Member'] }] });
+});
+
+onBeforeUnmount(() => {
+  store.dispatch('roles/unbind');
+  store.dispatch('users/unbind');
+  store.dispatch('exerciseCollection/unbind');
+});
+
+const getTableData = (params) => {
+  if (Array.isArray(params.where)) {
+    const activityField = params.where.find(item => item.field === 'activity');
+    if (activityField) {
+      filteredActivities.value = activityField.value;
+      params.where.splice(params.where.indexOf(activityField), 1);
+    }
+    params.where.forEach((item, index) => {
+      if (['seniorSelectionExerciseManager', 'selectionExerciseManager'].includes(item.field)) {
+        params.where[index].value = [{ name: item.value }];
+      }
+    });
+  }
+  store.dispatch('exerciseCollection/bind', params);
+};
 </script>
 
 <template>
@@ -299,13 +406,23 @@ const getExerciseTimelineItems = (data) => {
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <LoadingMessage v-if="loading" />
-        <Timeline
-          v-else
-          :groups="timelineGroups"
-          :items="timelineItems"
-          :options="timelineOptions"
+        <Table
+          ref="exercisesTable"
+          data-key="id"
+          :data="exerciseRecords"
+          :page-size="2000"
+          :columns="[]"
+          :filters="filters"
+          @change="getTableData"
         />
+
+        <div v-if="!loading">
+          <Timeline
+            :groups="timelineData.groups"
+            :items="timelineData.items"
+            :options="timelineOptions"
+          />
+        </div>
       </div>
     </div>
   </div>

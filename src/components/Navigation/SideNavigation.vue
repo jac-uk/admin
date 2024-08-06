@@ -13,7 +13,7 @@
       >
         <li
           class="moj-side-navigation__item"
-          :class="{'moj-side-navigation__item--active': isActive}"
+          :class="{'moj-side-navigation__item--active': isActive || href === $route.path}"
         >
           <a
             class="moj-side-navigation__link"

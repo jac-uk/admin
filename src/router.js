@@ -1038,7 +1038,7 @@ const routes = [
             component: ExerciseReportsCharacterIssues,
             meta: {
               requiresAuth: true,
-              title: 'Character Issues | Exercise Reports',
+              title: 'Character Annex | Exercise Reports',
             },
           },
           {
@@ -1047,7 +1047,7 @@ const routes = [
             component: ExerciseReportsEligibilityIssues,
             meta: {
               requiresAuth: true,
-              title: 'Eligibility Issues | Exercise Reports',
+              title: 'Eligibility Annex | Exercise Reports',
             },
           },
           {
