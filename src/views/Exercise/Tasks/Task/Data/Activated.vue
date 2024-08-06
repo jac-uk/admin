@@ -70,6 +70,16 @@
         </div>
       </div>
     </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      <a
+        class="govuk-link"
+        @click="copyToClipboard"
+      >
+        Copy scoresheet to clipboard
+      </a>
+    </div>
+
 <!-- 
     <Table
       v-if="completeRows.length"
@@ -297,7 +307,7 @@ export default {
     },
     clipboardColumns() {
       const columns = [];
-      columns.push({ title: 'Reference', ref: 'reference', editable: false, matches: [ 'Reference', 'Reference Number', 'Reference number', 'Ref' ] });
+      columns.push({ title: 'Reference', ref: 'ref', editable: false, matches: [ 'Reference', 'Reference Number', 'Reference number', 'Ref' ] });
       this.scoreSheetColumns.forEach(column => {
         columns.push({ editable: true, ...column });
       });
@@ -394,31 +404,35 @@ export default {
         }
       }
     },
-    // async copyToClipboard() {
-    //   const rows = [];
-    //   const headers = this.clipboardColumns.map(column => column.title);
-    //   rows.push(headers);
-    //   this.task.applications.forEach(application => {
-    //     const row = [];
-    //     this.clipboardColumns.forEach(column => {
-    //       if (column.editable) {
-    //         if (column.parent) {
-    //           row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
-    //         } else {
-    //           row.push(this.task.scoreSheet[application.id][column.ref]);
-    //         }
-    //       } else {
-    //         row.push(application[column.ref]);
-    //       }
-    //     });
-    //     rows.push(row);
-    //   });
-    //   let data = '';
-    //   rows.forEach(row => data += `${row.join('\t')}\n` );
-    //   if (navigator && navigator.clipboard) {
-    //     await navigator.clipboard.writeText(data);
-    //   }
-    // },
+    async copyToClipboard() {
+      const rows = [];
+      const headers = this.clipboardColumns.map(column => column.title);
+      rows.push(headers);
+      this.task.applications.forEach(application => {
+        const row = [];
+        this.clipboardColumns.forEach(column => {
+          if (column.editable) {
+            if (this.task.scoreSheet && this.task.scoreSheet[application.id]) {
+              if (column.parent) {
+                row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
+              } else {
+                row.push(this.task.scoreSheet[application.id][column.ref]);
+              }
+            } else {
+              row.push('');
+            }
+          } else {
+            row.push(application[column.ref]);
+          }
+        });
+        rows.push(row);
+      });
+      let data = '';
+      rows.forEach(row => data += `${row.join('\t')}\n` );
+      if (navigator && navigator.clipboard) {
+        await navigator.clipboard.writeText(data);
+      }
+    },
     async pasteFromClipboard() {
       if (navigator && navigator.clipboard && navigator.clipboard.readText) {
         const clipboardText = await navigator.clipboard.readText();

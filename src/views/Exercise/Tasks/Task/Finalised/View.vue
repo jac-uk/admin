@@ -240,6 +240,7 @@ import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import _has from 'lodash/has';
 import _find from 'lodash/find';
+import { isPass } from './meritListHelper';
 
 export default {
   components: {
@@ -250,9 +251,9 @@ export default {
     TitleBar,
   },
   props: {
-    type: {
+    task: {
       required: true,
-      type: String,
+      type: Object,
     },
     scores: {
       required: true,
@@ -277,8 +278,8 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    task() {
-      return this.$store.getters['tasks/getTask'](this.type);
+    type() {
+      return this.task.type;
     },
     passMark() {
       return this.task && this.task.passMark || null;
@@ -384,16 +385,7 @@ export default {
   methods: {
     hasDiversityCharacteristic,
     isPass(row) {
-      if (this.task && this.task.overrides && this.task.overrides.pass && this.task.overrides.pass.indexOf(row.id) >= 0) {
-        return true;
-      }
-      if (this.task && this.task.overrides && this.task.overrides.fail && this.task.overrides.fail.indexOf(row.id) >= 0) {
-        return false;
-      }
-      if (this.task && this.task.passMark && this.task.passMark <= row.score) {
-        return true;
-      }
-      return false;
+      return isPass(this.task, row.id, row.score);
     },
     toggleShowDetail() {
       this.showDetail = !this.showDetail;
