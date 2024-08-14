@@ -1,21 +1,30 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">
-        Commissioner Conflicts
-      </h1>
-    </div>
-    <div class="govuk-grid-column-one-third text-right govuk-!-padding-bottom-7">
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="exportToGoogleDoc"
-      >
-        Export to Word
-      </ActionButton>
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions govuk-!-margin-bottom-0">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Commissioner Conflicts
+          </h2>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value
+                ])"
+                :action="exportToGoogleDoc"
+              >
+                Export to Word
+              </ActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="govuk-grid-column-full">

@@ -1,100 +1,102 @@
 <template>
-  <div class="govuk-grid-column-full">
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
-        <h2 class="govuk-heading-l">
-          Deployment Report - Location & Jurisdiction Details only
-        </h2>
-        <span
-          v-if="report"
-          class="govuk-body govuk-!-font-size-14"
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Deployment Report - Location & Jurisdiction Details only
+          </h2>
+          <span
+            v-if="report"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ $filters.formatDate(report.createdAt, 'longdatetime') }}
+          </span>
+        </div>
+
+        <div
+          class="moj-page-header-actions__actions float-right"
         >
-          {{ $filters.formatDate(report.createdAt, 'longdatetime') }}
-        </span>
-      </div>
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
+                :disabled="!hasReportData"
+                @click="exportData()"
+              >
+                Export data
+              </button>
 
-      <div
-        class="moj-page-header-actions__actions float-right"
-      >
-        <div class="moj-button-menu">
-          <div class="moj-button-menu__wrapper">
-            <button
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
-              :disabled="!hasReportData"
-              @click="exportData()"
-            >
-              Export data
-            </button>
-
-            <ActionButton
-              v-if="hasPermissions([
-                PERMISSIONS.exercises.permissions.canReadExercises.value,
-                PERMISSIONS.applications.permissions.canReadApplications.value,
-                PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-              ])"
-              type="primary"
-              :action="refreshReport"
-            >
-              Refresh
-            </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                ])"
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-9">
-          <span class="govuk-caption-m">
-            {{ $filters.lookup(applicationRecordStatus) }}
-          </span>
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ $filters.formatNumber(totalApplicationRecords) }}
-          </h2>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-9">
+            <span class="govuk-caption-m">
+              {{ $filters.lookup(applicationRecordStatus) }}
+            </span>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ $filters.formatNumber(totalApplicationRecords) }}
+            </h2>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-9">
+            <span class="govuk-caption-m">Type of exercise</span>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ $filters.lookup(exerciseType) }}
+            </h2>
+          </div>
         </div>
       </div>
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-9">
-          <span class="govuk-caption-m">Type of exercise</span>
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ $filters.lookup(exerciseType) }}
-          </h2>
-        </div>
-      </div>
-    </div>
 
-    <Table
-      v-if="report != null"
-      data-key="id"
-      :data="report.rows"
-      :columns="tableColumns"
-      :page-size="1000"
-      local-data
-      @change="getTableData"
-    >
-      <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
-          <RouterLink
-            :to="{ name: 'exercise-application', params: { applicationId: row.applicationId } }"
-          >
-            {{ row.referenceNumber }}
-          </RouterLink>
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
-          <RouterLink
-            :to="{ name: 'candidates-view', params: { id: row.candidateId } }"
-          >
-            {{ row.fullName }}
-          </RouterLink>
-        </TableCell>
-      </template>
-    </Table>
-    <Modal
-      ref="infoModal"
-    >
-      <ReportInfo @close="closeModal" />
-    </Modal>
+      <Table
+        v-if="report != null"
+        data-key="id"
+        :data="report.rows"
+        :columns="tableColumns"
+        :page-size="1000"
+        local-data
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.applicationId } }"
+            >
+              {{ row.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            <RouterLink
+              :to="{ name: 'candidates-view', params: { id: row.candidateId } }"
+            >
+              {{ row.fullName }}
+            </RouterLink>
+          </TableCell>
+        </template>
+      </Table>
+      <Modal
+        ref="infoModal"
+      >
+        <ReportInfo @close="closeModal" />
+      </Modal>
+    </div>
   </div>
 </template>
 

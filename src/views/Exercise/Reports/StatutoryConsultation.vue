@@ -1,79 +1,81 @@
 <template>
-  <div class="govuk-grid-column-full">
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
-        <h2 class="govuk-heading-l">
-          Statutory Consultation
-        </h2>
-      </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Statutory Consultation
+          </h2>
+        </div>
 
-      <div
-        class="moj-page-header-actions__actions float-right"
-      >
-        <div class="moj-button-menu">
-          <div class="moj-button-menu__wrapper">
-            <button
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
-              :disabled="!hasReportData"
-              @click="exportData()"
-            >
-              Export data
-            </button>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
+                :disabled="!hasReportData"
+                @click="exportData()"
+              >
+                Export data
+              </button>
 
-            <ActionButton
-              v-if="hasPermissions([
-                PERMISSIONS.applications.permissions.canReadApplications.value,
-                PERMISSIONS.exercises.permissions.canReadExercises.value
-              ])"
-              type="primary"
-              :action="refreshReport"
-            >
-              Refresh
-            </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.exercises.permissions.canReadExercises.value
+                ])"
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <Table
-          data-key="id"
-          :data="applicationRecords"
-          :columns="tableColumns"
-          page-item-type="number"
-          :page-size="50"
-          :custom-search="{
-            placeholder: 'Search candidate names',
-            handler: candidateSearch,
-            field: 'candidate.id',
-          }"
-          :total="total"
-          @change="getTableData"
-        >
-          <template #row="{row}">
-            <TableCell :title="tableColumns[0].title">
-              <RouterLink
-                class="govuk-link"
-                :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: 'applied' }}"
-                target="_blank"
-              >
-                {{ row.application.referenceNumber }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumns[1].title">
-              {{ row.candidate && row.candidate.fullName }}
-            </TableCell>
-            <TableCell :title="tableColumns[2].title">
-              <TextareaInput
-                :id="`statutory-consultation-note-${row.candidate.id}`"
-                :value="row.statutoryConsultation && row.statutoryConsultation.note"
-                @input="saveStatutoryConsultationNote(row, $event)"
-              />
-            </TableCell>
-          </template>
-        </Table>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <Table
+            data-key="id"
+            :data="applicationRecords"
+            :columns="tableColumns"
+            page-item-type="number"
+            :page-size="50"
+            :custom-search="{
+              placeholder: 'Search candidate names',
+              handler: candidateSearch,
+              field: 'candidate.id',
+            }"
+            :total="total"
+            @change="getTableData"
+          >
+            <template #row="{row}">
+              <TableCell :title="tableColumns[0].title">
+                <RouterLink
+                  class="govuk-link"
+                  :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: 'applied' }}"
+                  target="_blank"
+                >
+                  {{ row.application.referenceNumber }}
+                </RouterLink>
+              </TableCell>
+              <TableCell :title="tableColumns[1].title">
+                {{ row.candidate && row.candidate.fullName }}
+              </TableCell>
+              <TableCell :title="tableColumns[2].title">
+                <TextareaInput
+                  :id="`statutory-consultation-note-${row.candidate.id}`"
+                  :value="row.statutoryConsultation && row.statutoryConsultation.note"
+                  @input="saveStatutoryConsultationNote(row, $event)"
+                />
+              </TableCell>
+            </template>
+          </Table>
+        </div>
       </div>
     </div>
   </div>
