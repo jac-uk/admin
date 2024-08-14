@@ -8,7 +8,7 @@
       hint="Type any part of reference number or candidate name"
       :data="applications"
       :search-fields="['name', 'referenceNumber']"
-      @update:modelValue="handleSelection"
+      @update:model-value="handleSelection"
     />
     <div v-if="formData.application">
       <h2>Selected Application:</h2>
