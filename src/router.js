@@ -59,8 +59,8 @@ import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit.vu
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View.vue';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit.vue';
 import ExerciseDetailsPreferencesEditV1 from '@/views/Exercise/Details/Preferences/Edit.v1.vue';  // previous edit page
-import ExerciseDetailsAdditionalSettings from '@/views/Exercise/Details/AdditionalSettings/View.vue';
-import ExerciseDetailsAdditionalSettingsEdit from '@/views/Exercise/Details/AdditionalSettings/Edit.vue';
+import ExerciseDetailsSelectionSetup from '@/views/Exercise/Details/SelectionSetup/View.vue';
+import ExerciseDetailsSelectionSetupEdit from '@/views/Exercise/Details/SelectionSetup/Edit.vue';
 
 // Appplications
 import ExerciseApplications from '@/views/Exercise/Applications.vue';
@@ -629,25 +629,25 @@ const routes = [
             ],
           },
           {
-            path: 'additional-settings/',
+            path: 'selection-setup/',
             component: EmptyRouterView,
             children: [
               {
-                name: 'exercise-details-additional-settings',
+                name: 'exercise-details-selection-setup',
                 path: '',
-                component: ExerciseDetailsAdditionalSettings,
+                component: ExerciseDetailsSelectionSetup,
                 meta: {
                   requiresAuth: true,
-                  title: 'Additional Settings | Exercise Details',
+                  title: 'Selection Set-up | Exercise Details',
                 },
               },
               {
-                name: 'exercise-details-additional-settings-edit',
+                name: 'exercise-details-selection-setup-edit',
                 path: 'edit',
-                component: ExerciseDetailsAdditionalSettingsEdit,
+                component: ExerciseDetailsSelectionSetupEdit,
                 meta: {
                   requiresAuth: true,
-                  title: 'Edit Additional Settings | Exercise Details',
+                  title: 'Edit Selection Set-up | Exercise Details',
                 },
               },
             ],
