@@ -41,7 +41,7 @@ import permissionMixin from '@/permissionMixin';
 import dayjs from 'dayjs';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '@/firebase';
 
 export default {
