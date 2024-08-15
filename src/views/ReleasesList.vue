@@ -84,20 +84,11 @@ export default {
     async fetchFileUploadStatus() {
       try {
         // Reference to the 'settings' collection
-        const settingsRef = collection(firestore, 'settings');
-
-        // Reference to the 'candidateSettings' subcollection within 'settings'
-        const candidateSettingsRef = collection(settingsRef, 'candidateSettings');
-
-        // Reference to the 'bypasses' subcollection within 'candidateSettings'
-        const bypassesRef = collection(candidateSettingsRef, 'bypasses');
-
-        // Reference to the 'fileUpload' document within 'bypasses'
-        const fileUploadDoc = doc(bypassesRef, 'fileUpload');
+        const settingsRef = doc(firestore, 'settings/candidateSettings');
 
         // Fetch the feature flag
-        const docSnapshot = await getDoc(fileUploadDoc);
-        this.fileUploadEnabled = docSnapshot.exists() ? docSnapshot.data().enabled : false;
+        const docSnapshot = await getDoc(settingsRef);
+        this.fileUploadEnabled = docSnapshot.exists() ? docSnapshot.data().fileUpload.enabled : false;
       } catch (error) {
         console.error('Failed to fetch file upload status:', error);
         this.fileUploadEnabled = false; // Default to false if there's an error
