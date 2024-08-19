@@ -73,16 +73,6 @@ const DOWNLOAD_TYPES = {
   },
 };
 
-function formatScore(type, score) {
-  let val = parseFloat(score);
-  if (type === 'zScore') {
-    val = val.toFixed(2); // 2 decimal places
-    if (val === '-0.00') val = '0.00';
-    return parseFloat(val);
-  }
-  return val;
-}
-
 function scoreType(task) {
   if (!task) return 'score';
   if (task.scoreType) return task.scoreType;
@@ -98,7 +88,6 @@ function scores(task, scoreType, exerciseDiversity) {
   // group scores
   const scoreMap = {};
   task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
-    scoreData[scoreType] = formatScore(scoreType, scoreData[scoreType]);
     if (!scoreMap[scoreData[scoreType]]) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
@@ -156,7 +145,7 @@ function scores(task, scoreType, exerciseDiversity) {
   // add outcome stats
   if (task.hasOwnProperty('passMark')) {
     scoresInDescendingOrder.forEach(key => {
-      const score = formatScore(scoreType, key);
+      const score = parseFloat(key);
       if (score >= task.passMark) {
         if (task.overrides && task.overrides.fail) {
           const failMatches = Object.keys(task.overrides.fail).filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
@@ -248,8 +237,7 @@ function totalPassed(task, scoreType, scores) {
   if (!scores.length) return 0;
   if (!task) return 0;
   if (!task.passMark) return 0;
-  const scoreData = scores.find(scoreData => scoreData.score === formatScore(scoreType, task.passMark));
-  if (!scoreData) return 0;
+  const scoreData = scores.find(scoreData => scoreData.score === task.passMark);
   let total = scoreData.rank + scoreData.count - 1;
   if (task.overrides) {
     const numPasses = task.overrides.pass ? Object.keys(task.overrides.pass).length : 0;
