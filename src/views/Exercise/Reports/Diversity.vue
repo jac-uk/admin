@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <!-- diversity header -->
     <div class="govuk-grid-column-full">
       <div class="moj-page-header-actions">

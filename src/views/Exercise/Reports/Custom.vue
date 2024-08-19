@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <!-- diversity header -->
     <div
       v-if="hasPermissions([
