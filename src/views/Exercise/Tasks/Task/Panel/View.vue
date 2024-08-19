@@ -72,65 +72,21 @@
     </div>
 
     <div v-show="panel.scoreSheet && activeTab == 'scoreSheet'">
-      <Table
+      <ScoreSheet
         ref="scoreSheet"
         data-key="id"
-        :data="scoreSheetRows"
-        :columns="scoreSheetColumns"
-        :page-size="500"
-        class="merit-list"
-        @change="onChangeScoreSheet"
+        :marking-scheme="panel.markingScheme"
+        :data="scoreSheetData"
+        :columns-before="[{ title: 'Application', class: 'table-cell-application' }]"
+        :editable="canEditScoreSheet"
+        :moderation="isModerationRequired"
       >
-        <template
-          v-if="panel.type == 'selection'"
-          #header
-        >
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header table-cell-application"
-            />
-            <th
-              v-for="category in selectionCategories"
-              :key="category"
-              scope="col"
-              :colspan="capabilities.length"
-              class="govuk-table__header text-center"
-            >
-              {{ $filters.lookup(category) }}
-            </th>
-          </tr>
-        </template>
-        <template #row="{row}">
-          <TableCell class="table-cell-application">
+        <template #columns-before="{row}">
+          <TableCell class="table-cell-application nowrap sticky-left">
             {{ row.referenceNumber }}
           </TableCell>
-
-          <template v-if="panel.type == 'sift'">
-            <TableCell
-              v-for="(cap, index) in capabilities"
-              :key="`sift_${index}`"
-              class="text-center table-cell-score"
-            >
-              {{ row.scoreSheet[cap] }}
-            </TableCell>
-          </template>
-
-          <template v-if="panel.type == 'selection'">
-            <template
-              v-for="category in selectionCategories"
-            >
-              <TableCell
-                v-for="(cap, index) in capabilities"
-                :key="`${category}_${index}`"
-                class="text-center table-cell-score"
-              >
-                {{ row.scoreSheet[category][cap] }}
-              </TableCell>
-            </template>
-          </template>
         </template>
-      </Table>
+      </ScoreSheet>      
     </div>
 
     <!-- APPLICATIONS LIST -->
@@ -237,7 +193,8 @@ import PanelForm from './components/AddEdit.vue';
 import EditPanellists from './Panellists/Edit.vue';
 import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { getScoreSheetTotal } from '@/helpers/taskHelper';
+import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
 export default {
   components: {
@@ -248,6 +205,7 @@ export default {
     PanelForm,
     EditPanellists,
     ViewPanellists,
+    ScoreSheet,
   },
   props: {
     type: {
@@ -282,37 +240,22 @@ export default {
       tabs.push({ ref: 'edit', title: 'Edit' });
       return tabs;
     },
-    scoreSheetRows() {
+    scoreSheetData() {
       const rows = [];
       if (!this.panel) return rows;
       if (!this.panel.applicationIds) return rows;
-      if (!this.panel.capabilities) return rows;
       if (!this.panel.scoreSheet) return rows;
       this.panel.applicationIds.forEach(applicationId => {
         const row = {
           id: applicationId,
           referenceNumber: this.panel.applications[applicationId].referenceNumber,
           scoreSheet: this.panel.scoreSheet[applicationId],
-          report: this.panel.reports ? this.panel.reports[applicationId] : null,
+          score: getScoreSheetTotal(this.panel.markingScheme, this.panel.scoreSheet[applicationId]),
+          // report: this.panel.reports ? this.panel.reports[applicationId] : null,
         };
         rows.push(row);
       });
       return rows;
-    },
-    scoreSheetColumns() {
-      const columns = [];
-      if (!this.panel) return columns;
-      if (!this.panel.capabilities) return columns;
-      if (!this.panel.scoreSheet) return columns;
-      columns.push({ title: 'Application', class: 'table-cell-application' });
-      if (this.type == 'sift') {
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-      }
-      if (this.type == 'selection') {
-        this.selectionCategories.forEach(() => this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' })));
-      }
-      // columns.push({ title: 'Report', class: 'text-center' });
-      return columns;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -320,13 +263,12 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
-    capabilities() {
-      if (!this.task) return [];
-      return CAPABILITIES.filter(cap => this.task.capabilities.indexOf(cap) >= 0);  // Using CAPABILITIES to ensure display order of selected capabilities
+    canEditScoreSheet() {
+      return true;
     },
-    selectionCategories() {
-      if (!this.task) return [];
-      return SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
+    isModerationRequired() {
+      if (!this.task) return false;
+      return this.task.panelIds.length > 1;
     },
     grades() {
       return this.task ? this.task.grades : [];
@@ -391,9 +333,6 @@ export default {
       this.panel &&
       this.panel.scoreSheet
     ) {
-      if (this.$refs['scoreSheet']) {
-        this.$refs['scoreSheet'].loaded();
-      }
       this.tabs.unshift({
         ref: 'scoreSheet',
         title: 'Score sheet',
@@ -436,16 +375,11 @@ export default {
       if (data[ROLES.CHAIR]) {
         const chair = this.panellists.find(item => item.id === data[ROLES.CHAIR]);
         if (chair) {
-          saveData.editors = [ chair.email ]; // `editors` just has a single editor for now however is named in case we want to add more in the future
+          saveData.editors = [chair.email]; // `editors` just has a single editor for now however is named in case we want to add more in the future
         }
       }
       await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );
       this.isEditingPanellists = false;
-    },
-    onChangeScoreSheet() {
-      if (this.$refs['scoreSheet']) {
-        this.$refs['scoreSheet'].loaded();
-      }
     },
     getTableDataApplications(params) {
       if (this.panel) {
@@ -510,11 +444,5 @@ export default {
 <style scoped>
 .govuk-summary-list__key {
   vertical-align: top;
-}
-.table-cell-application {
-  width: 160px;
-}
-.table-cell-score {
-  width: 50px;
 }
 </style>

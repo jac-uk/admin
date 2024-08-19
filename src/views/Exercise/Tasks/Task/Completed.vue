@@ -32,7 +32,6 @@
       :score-type="scoreType"
       :show-diversity="false"
     />
-
   </div>
 </template>
 
@@ -41,9 +40,6 @@ import { beforeRouteEnter } from './helper';
 import { getTaskSteps } from '@/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
-import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import _has from 'lodash/has';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -53,8 +49,6 @@ import MeritList from './Finalised/List.vue';
 
 export default {
   components: {
-    Table,
-    TableCell,
     FullScreenButton,
     ProgressBar,
     ActionButton,

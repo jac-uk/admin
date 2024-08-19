@@ -426,6 +426,7 @@ function taskStatuses(taskType) { // also on DP
       break;
     case TASK_TYPE.SIFT:
       availableStatuses = [
+        TASK_STATUS.DATA_INITIALISED,
         TASK_STATUS.PANELS_INITIALISED,
         TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.FINALISED,
@@ -434,10 +435,10 @@ function taskStatuses(taskType) { // also on DP
       break;
     case TASK_TYPE.SELECTION_DAY:
       availableStatuses = [
-        TASK_STATUS.PANELS_INITIALISED,
-        TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.DATA_INITIALISED,
-        TASK_STATUS.DATA_ACTIVATED,
+        // TASK_STATUS.DATA_ACTIVATED,
+        TASK_STATUS.PANELS_INITIALISED,
+        TASK_STATUS.PANELS_ACTIVATED,        
         TASK_STATUS.FINALISED,
         TASK_STATUS.COMPLETED,
       ];

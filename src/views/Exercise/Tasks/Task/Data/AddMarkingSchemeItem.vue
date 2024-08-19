@@ -3,35 +3,30 @@
     @save="save"
     @cancel="cancel"
   >
+    <TextField
+      id="ref"
+      v-model="formData.ref"
+      type="text"
+      label="Title"
+      required
+    />
+
     <Select
       id="type"
       v-model="formData.type"
       label="Please select a type"
       required
+      @change="onChangeType"
     >
       <option
         v-for="type in types"
         :key="type.value"
         :value="type.value"
       >
-        {{ type.title }}
+        {{ type.label }}
       </option>
     </Select>
 
-    <TextField
-      id="title"
-      v-model="formData.title"
-      type="text"
-      label="Title"
-      required
-    />
-    <TextField
-      id="ref"
-      v-model="formData.ref"
-      type="text"
-      label="Ref"
-      required
-    />
     <Checkbox
       id="exclude-from-score"
       v-model="formData.excludeFromScore"
@@ -46,6 +41,7 @@ import Form from '@/components/Page/Form.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import { MARKING_TYPE } from '@/helpers/taskHelper';
 
 export default {
   name: 'SelectPanel',
@@ -59,24 +55,23 @@ export default {
   data() {
     return {
       types: [
-        {
-          value: 'grade',
-          title: 'Grade',
-        },
-        {
-          value: 'bool',
-          title: 'Boolean',
-        },
-        {
-          value: 'number',
-          title: 'Number',
-        },
-        // {
-        //   value: 'select',
-        //   title: 'Choice',
-        // },
+        MARKING_TYPE.GRADE,
+        MARKING_TYPE.YES_NO,
+        MARKING_TYPE.PASS_FAIL,
+        MARKING_TYPE.LEVEL,
+        MARKING_TYPE.NUMBER,
       ],
     };
+  },
+  methods: {
+    onChangeType() {
+      if (this.formData.type) {
+        const type = this.types.find(item => item.value === this.formData.type);
+        if (type) {
+          this.formData.excludeFromScore = type.excludeFromScore;
+        }        
+      }
+    },
   },
 };
 </script>

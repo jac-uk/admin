@@ -9,6 +9,26 @@ function getRandomString(length = 3) {
   return randomCharacters;
 }
 
+function getValueAtObjectPath(object, path) {
+  if (path && path.indexOf('.') >= 0) {
+    let currentPath = path.substring(0, path.indexOf('.'));
+    let remainingPath = path.substring(path.indexOf('.') + 1);
+    let valueAtPath = object[currentPath];
+    while (valueAtPath && remainingPath.indexOf('.') >= 0) {
+      currentPath = remainingPath.substring(0, remainingPath.indexOf('.'));
+      remainingPath = remainingPath.substring(remainingPath.indexOf('.') + 1);
+      valueAtPath = valueAtPath[currentPath];
+    }
+    if (valueAtPath) {
+      valueAtPath = valueAtPath[remainingPath];
+    }
+    return valueAtPath;
+  } else {
+    return object[path];
+  }
+}
+
 export {
-  getRandomString
+  getRandomString,
+  getValueAtObjectPath
 };

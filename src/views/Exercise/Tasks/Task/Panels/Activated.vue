@@ -247,105 +247,29 @@
 
     <!-- SCORE SHEET -->
     <div v-show="activeTab == 'scoreSheet'">
-      <Table
+      <ScoreSheet
         ref="scoreSheet"
         data-key="id"
-        :data="tableData"
-        :columns="tableColumns"
-        :page-size="500"
-        local-data
-        class="merit-list"
+        :marking-scheme="task.markingScheme"
+        :data="scoreSheetData"
+        :columns-before="[{ title: 'Application', class: 'table-cell-application' }, { title: 'Panel', class: 'table-cell' }]"
+        :editable="canEditScoreSheet"
+        :moderation="isModerationRequired"
       >
-        <template
-          v-if="scoreSheetHeaders.length"
-          #header
-        >
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header table-cell-application"
-            />
-            <th
-              scope="col"
-              class="govuk-table__header table-cell"
-            />
-            <th
-              v-for="header in scoreSheetHeaders"
-              :key="header.ref"
-              scope="col"
-              :colspan="header.colspan"
-              class="govuk-table__header text-center"
-            >
-              {{ $filters.lookup(header.ref) }}
-            </th>
-            <th
-              v-if="isModerationRequired"
-              scope="col"
-              class="govuk-table__header table-cell"
-            />
-          </tr>
-        </template>
-        <template #row="{row}">
-          <TableCell class="table-cell-application">
+        <template #columns-before="{row}">
+          <TableCell class="table-cell-application nowrap sticky-left">
             {{ row.referenceNumber }}
           </TableCell>
-          <TableCell class="table-cell">
+          <TableCell class="table-cell-value nowrap">
             <RouterLink
               :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
               class="govuk-link"
             >
               {{ row.panel.name }}
             </RouterLink>
-          </TableCell>
-
-          <template
-            v-for="(item, index) in task.markingScheme"
-          >
-            <template v-if="item.type === 'group'">
-              <TableCell
-                v-for="(child, childIndex) in item.children"
-                :key="`${type}_${index}_${childIndex}`"
-                class="text-center table-cell-score"
-              >
-                {{ row.scoreSheet[item.ref][child.ref] }}
-              </TableCell>
-            </template>
-            <template v-else>
-              <TableCell
-                :key="`${type}_${index}`"
-                class="text-center table-cell-score"
-              >
-                {{ row.scoreSheet[item.ref] }}
-              </TableCell>
-            </template>
-          </template>
-
-          <TableCell class="table-cell table-cell-score">
-            {{ row.score }}
-          </TableCell>
-
-          <TableCell
-            v-if="isModerationRequired"
-            class="govuk-!-padding-0 v-top"
-          >
-            <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-left-7">
-              <div class="govuk-checkboxes__item">
-                <input
-                  :id="`moderation-${row.id}`"
-                  :checked="row.scoreSheet.flagForModeration"
-                  class="govuk-checkboxes__input"
-                  type="checkbox"
-                  @input="updateModeration(row.panel.id, row.id, $event)"
-                >
-                <label
-                  class="govuk-label govuk-checkboxes__label"
-                  :for="`moderation-${row.id}`"
-                />
-              </div>
-            </div>
-          </TableCell>
+          </TableCell>          
         </template>
-      </Table>
+      </ScoreSheet>
     </div>
     <!-- // END SCORE SHEET -->
   </div>
@@ -364,6 +288,7 @@ import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
 import { functions } from '@/firebase';
+import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
 export default {
   components: {
@@ -373,6 +298,7 @@ export default {
     ActionButton,
     FullScreenButton,
     ProgressBar,
+    ScoreSheet,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -434,9 +360,12 @@ export default {
           else return -1;
         });
     },
+    canEditScoreSheet() {
+      return true;
+    },
     isModerationRequired() {
-      if (!this.panels) return false;
-      return this.panels.length > 1;
+      if (!this.task) return false;
+      return this.task.panelIds.length > 1;
     },
     hasAllPanelsCompleted() {
       if (!this.stats) return false;
@@ -463,56 +392,7 @@ export default {
       if (!this.panels) return [];
       return this.panels.map(panel => { return { title: panel.name }; });
     },
-    scoreSheetHeaders() {
-      const headers = [];
-      if (!this.task) return headers;
-      if (!this.task.markingScheme) return headers;
-      let columns = 0;
-      this.task.markingScheme.forEach(item => {
-        if (item.type === 'group') {
-          if (columns > 0) {
-            headers.push({
-              ref: '',
-              colspan: columns,
-            });
-            columns = 0;
-          }
-          headers.push({
-            ref: item.ref,
-            colspan: item.children.length,
-          });
-        } else {
-          columns += 1;
-        }
-      });
-      return headers;
-    },
-    scoreSheetColumns() {
-      const columns = [];
-      if (!this.task) return columns;
-      if (!this.task.markingScheme) return columns;
-      this.task.markingScheme.forEach(item => {
-        if (item.type === 'group') {
-          item.children.forEach(child => columns.push(child));
-        } else {
-          columns.push(item);
-        }
-      });
-      return columns;
-    },
-    tableColumns() {
-      const columns = [];
-      columns.push({ title: 'Application', class: 'table-cell-application' });
-      columns.push({ title: 'Panel', class: 'table-cell' });
-      this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'text-center table-cell-score' }));
-      columns.push({ title: 'Score', class: 'table-cell table-cell-score' });
-      if (this.isModerationRequired) {
-        columns.push({ title: 'Moderation?', class: 'text-center' });
-      }
-      // columns.push({ title: 'Report', class: 'text-center' });
-      return columns;
-    },
-    tableData() {
+    scoreSheetData() {
       const rows = [];
       this.panels.forEach(panel => {
         if (!panel.applicationIds) return;
@@ -528,6 +408,7 @@ export default {
             referenceNumber: panel.applications[applicationId].referenceNumber,
             scoreSheet: panel.scoreSheet[applicationId],
             score: getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId]),
+            isCompleted: panel.status === PANEL_STATUS.SUBMITTED,
             report: panel.reports ? panel.reports[applicationId] : null,
             outcome: panel.outcome,
           };
@@ -602,11 +483,6 @@ export default {
         type: this.type,
       });
       this.btnNext();
-    },
-    async updateModeration(panelId, applicationId, event) {
-      const saveData = {};
-      saveData[`scoreSheet.${applicationId}.flagForModeration`] = event.target.checked;
-      await this.$store.dispatch('panel/update', { id: panelId, data: saveData } );
     },
   },
 };

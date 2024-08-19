@@ -24,7 +24,7 @@ import candidateApplications from '@/store/candidateApplications';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
-// import panels from '@/store/panels';
+import xpanels from '@/store/xpanels';
 import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
@@ -79,6 +79,7 @@ const store = createStore({
     messageBase: new messageBase().getModule(),
     notes,
     notifications,
+    xpanels,
     panel,
     panels,
     panellist,

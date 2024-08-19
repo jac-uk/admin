@@ -6,19 +6,53 @@ export {
   MARKING_TYPE,
   GRADES,
   GRADE_VALUES,
+  getMarkingType,
   getCompleteScoreSheet,
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
+  markingScheme2Columns,
+  markingScheme2ColumnHeaders
 };
 
 const MARKING_TYPE = {
-  GROUP: 'group',
-  SCORE: 'score',
-  NUMBER: 'number',
-  GRADE: 'grade',
-  BOOL: 'bool',
+  GROUP: {
+    value: 'group',
+    label: 'Group',
+    excludeFromScore: true,
+  },
+  SCORE: {
+    value: 'score',
+    label: 'Score',
+    excludeFromScore: true,
+  },
+  NUMBER: {
+    value: 'number',
+    label: 'Number',
+    excludeFromScore: false,
+  },
+  GRADE: {
+    value: 'grade',
+    label: 'Grade',
+    excludeFromScore: false,
+  },
+  YES_NO: {
+    value: 'yesNo',
+    label: 'Yes / No',
+    excludeFromScore: true,
+  },
+  PASS_FAIL: {
+    value: 'passFail',
+    label: 'Pass / Fail',
+    excludeFromScore: true,
+  },
+  LEVEL: {
+    value: 'level',
+    label: 'None / Basic / Medium / High',
+    excludeFromScore: true,
+  },
 };
+
 const GRADES = ['A', 'B', 'C', 'D'];
 const GRADE_VALUES = {
   'A': 4,
@@ -26,6 +60,12 @@ const GRADE_VALUES = {
   'C': 2,
   'D': 1,
 };
+
+function getMarkingType(type) {
+  const markingType = Object.values(MARKING_TYPE).find(item => item.value === type);
+  if (markingType) return markingType;
+  return { value: null, label: null };
+}
 
 function getCompleteScoreSheet(task) {
   const emptyScoreSheet = {};
@@ -41,7 +81,7 @@ function getScoreSheetTotal(markingScheme, scoreSheet) {
   if (!markingScheme) return score;
   if (!scoreSheet) return score;
   markingScheme.forEach(item => {
-    if (item.type === MARKING_TYPE.GROUP) {
+    if (item.type === MARKING_TYPE.GROUP.value) {
       item.children.forEach(child => {
         score += getScoreSheetItemTotal(child, scoreSheet[item.ref]);
       });
@@ -55,17 +95,17 @@ function getScoreSheetTotal(markingScheme, scoreSheet) {
 function getScoreSheetItemTotal(item, scoreSheet) {
   if (!item.excludeFromScore) {
     switch (item.type) {
-    case MARKING_TYPE.GRADE:
+    case MARKING_TYPE.GRADE.value:
       if (scoreSheet[item.ref] && GRADE_VALUES[scoreSheet[item.ref]]) {
         return GRADE_VALUES[scoreSheet[item.ref]];
       }
       break;
-    case MARKING_TYPE.SCORE:
+    case MARKING_TYPE.SCORE.value:
       if (scoreSheet[item.ref]) {
         return parseFloat(scoreSheet[item.ref].score);
       }
       break;
-    case MARKING_TYPE.NUMBER:
+    case MARKING_TYPE.NUMBER.value:
       if (scoreSheet[item.ref]) {
         return parseFloat(scoreSheet[item.ref]);
       }
@@ -103,7 +143,7 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
   if (!scoreSheet) return false;
   let isComplete = true;
   markingScheme.forEach(item => {
-    if (item.type === MARKING_TYPE.GROUP) {
+    if (item.type === MARKING_TYPE.GROUP.value) {
       item.children.forEach(child => {
         if (!scoreSheet[item.ref][child.ref]) {
           isComplete = false;
@@ -116,4 +156,41 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
     }
   });
   return isComplete;
+}
+
+function markingScheme2Columns(markingScheme, editable = false) {
+  const columns = [];
+  if (!markingScheme) return columns;
+  markingScheme.forEach(item => {
+    if (item.type === 'group') {
+      item.children.forEach(child => columns.push({ parent: item.ref, ...child, editable: editable }));
+    } else {
+      columns.push({ ...item, editable: editable });
+    }
+  });
+  return columns;  
+}
+
+function markingScheme2ColumnHeaders(markingScheme) {
+  const headers = [];
+  if (!markingScheme) return headers;
+  let columns = 0;
+  markingScheme.forEach(item => {
+    if (item.type === 'group') {
+      if (columns > 0) {
+        headers.push({
+          ref: '',
+          colspan: columns,
+        });
+        columns = 0;
+      }
+      headers.push({
+        ref: item.ref,
+        colspan: item.children.length,
+      });
+    } else {
+      columns += 1;
+    }
+  });
+  return headers;
 }

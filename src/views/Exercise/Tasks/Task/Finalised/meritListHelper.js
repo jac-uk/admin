@@ -24,40 +24,40 @@ export {
   totalDidNotParticipate,
   downloadMeritList,
   getDownloadTypes
-}
+};
 
 const OUTCOME = {
   PASS: {
     value: 'pass',
-    label: 'Pass'
+    label: 'Pass',
   },
   FAIL: {
     value: 'fail',
-    label: 'Fail'
-  }
+    label: 'Fail',
+  },
 };
 
 const OVERRIDE_REASON = {
   EMP_GENDER: {
     code: 'g',
     value: 'emp-gender',
-    label: 'EMP applied on basis of gender'
+    label: 'EMP applied on basis of gender',
   },
   EMP_ETHNICITY: {
     code: 'e',
     value: 'emp-ethnicity',
-    label: 'EMP applied on basis of ethnicity'
+    label: 'EMP applied on basis of ethnicity',
   },
   TECHNICAL: {
     code: 't',
     value: 'technical',
-    label: 'Technical glitches encountered'
+    label: 'Technical glitches encountered',
   },
   PERSONAL: {
     code: 'p',
     value: 'personal',
-    label: 'Personal circumstances'
-  }
+    label: 'Personal circumstances',
+  },
 };
 
 const DOWNLOAD_TYPES = {
@@ -226,7 +226,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
       prevRank = prevRank + prevCount;
       prevCount = 1;
     }
-    scoreData.rank = prevRank
+    scoreData.rank = prevRank;
   });
 
   return sortedScoreData;
@@ -265,10 +265,9 @@ function totalFailed(task, scoreType, scores) {
   return task.finalScores.length - totalPassed(task, scoreType, scores);
 }
 
-function totalDidNotParticipate(task, scoreType, scores) {
+function totalDidNotParticipate(task) {
   if (!task) return 0;
   if (!task.passMark) return 0;
-
   return totalApplications(task) - task.finalScores.length;
 }
 
@@ -276,15 +275,15 @@ function getOverrideReasons() {
   return Object.values(OVERRIDE_REASON);
 }
 
-function convertOverrideCode2Value(code) {
-  const match = getOverrideReasons().find(reason => reason.code === code);
-  return match ? match.value : '';
-}
+// function convertOverrideCode2Value(code) {
+//   const match = getOverrideReasons().find(reason => reason.code === code);
+//   return match ? match.value : '';
+// }
 
-function convertOverrideValue2Code(value) {
-  const match = getOverrideReasons().find(reason => reason.value === value);
-  return match ? match.code : '';
-}
+// function convertOverrideValue2Code(value) {
+//   const match = getOverrideReasons().find(reason => reason.value === value);
+//   return match ? match.code : '';
+// }
 
 function isPassingScore(task, score) {
   if (task && task.passMark && task.passMark <= score) {
@@ -379,7 +378,6 @@ function getOverride(task, applicationId) {
 
   return false;
 }
-
 
 // function meritList(task) {
 //   if (!task.applications) return [];

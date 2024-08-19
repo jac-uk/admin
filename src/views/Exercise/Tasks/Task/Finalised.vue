@@ -129,7 +129,7 @@ export default {
     },
     totalFailed() {
       return totalFailed(this.task, this.scoreType, this.scores);
-    }
+    },
   },
   async created() {
     await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);

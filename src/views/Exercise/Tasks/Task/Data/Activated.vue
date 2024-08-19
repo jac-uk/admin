@@ -18,11 +18,12 @@
     </p>
     <ol class="govuk-list govuk-list--number">
       <li>If necessary, rename the column containing application references to <strong>Reference number</strong></li>
-      <li>Rename the score columns as follows:
-          <span 
-            v-for="(col, index) in scoreSheetColumns"
-            :key="col"
-          ><strong>{{ col.title }}</strong><span v-if="index < scoreSheetColumns.length - 1">, </span></span>
+      <li>
+        Rename the score columns as follows:
+        <span 
+          v-for="(col, index) in scoreSheetColumns"
+          :key="col"
+        ><strong>{{ col.title }}</strong><span v-if="index < scoreSheetColumns.length - 1">, </span></span>
       </li>
       <li>Select all and copy all</li>
       <li>Return to this page and click ‘Paste from clipboard’</li>
@@ -80,7 +81,7 @@
       </a>
     </div>
 
-<!-- 
+    <!-- 
     <Table
       v-if="completeRows.length"
       ref="scoreSheet"
@@ -202,8 +203,6 @@ import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete, getCompleteScoreSheet } from '@/helpers/taskHelper';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
-import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
@@ -212,8 +211,6 @@ import clone from 'clone';
 
 export default {
   components: {
-    Table,
-    TableCell,
     FullScreenButton,
     Modal,
     ModalInner,
@@ -291,9 +288,9 @@ export default {
       if (!this.task.markingScheme) return columns;
       this.task.markingScheme.forEach(item => {
         if (item.type === 'group') {
-          item.children.forEach(child => columns.push({ ...child, parent: item.ref, title: `${item.ref}. ${child.ref}. Score`, matches: [ `${item.ref}.${child.ref}`, `${item.ref}.${child.ref}.`, `${item.ref}. ${child.ref}.`, `${item.ref} ${child.ref}`, `${item.ref}.${child.ref} Score`, `${item.ref}.${child.ref}. Score`, `${item.ref}. ${child.ref}. Score`, `${item.ref} ${child.ref} Score` ] }));
+          item.children.forEach(child => columns.push({ ...child, parent: item.ref, title: `${item.ref}. ${child.ref}. Score`, matches: [`${item.ref}.${child.ref}`, `${item.ref}.${child.ref}.`, `${item.ref}. ${child.ref}.`, `${item.ref} ${child.ref}`, `${item.ref}.${child.ref} Score`, `${item.ref}.${child.ref}. Score`, `${item.ref}. ${child.ref}. Score`, `${item.ref} ${child.ref} Score`] }));
         } else {
-          columns.push({ ...item, title: `${item.ref}. Score`, matches: [ item.ref, `${item.ref}. Score`, `${item.ref} Score` ] });
+          columns.push({ ...item, title: `${item.ref}. Score`, matches: [item.ref, `${item.ref}. Score`, `${item.ref} Score`] });
         }
       });
       return columns;
@@ -307,7 +304,7 @@ export default {
     },
     clipboardColumns() {
       const columns = [];
-      columns.push({ title: 'Reference', ref: 'ref', editable: false, matches: [ 'Reference', 'Reference Number', 'Reference number', 'Ref' ] });
+      columns.push({ title: 'Reference', ref: 'ref', editable: false, matches: ['Reference', 'Reference Number', 'Reference number', 'Ref'] });
       this.scoreSheetColumns.forEach(column => {
         columns.push({ editable: true, ...column });
       });
@@ -498,37 +495,5 @@ export default {
 <style lang="scss">
 .vertical-align-middle {
   vertical-align: middle !important;
-}
-
-.score-sheet {
-  .table-cell-value {
-    min-width: 50px;
-    padding: 0 10px !important;
-    text-align: center;
-  }
-  .govuk-table__body .table-cell-application {
-    padding: 0 10px;
-    border-left: 1px solid govuk-colour("mid-grey");
-    border-right: 1px solid govuk-colour("mid-grey");
-  }
-  .table-cell-score {
-    padding: 0;
-    border-right: 1px solid govuk-colour("mid-grey");
-    > .govuk-input {
-      text-align: center;
-      border: 0;
-    }
-  }
-
-  // TODO the following needs to be moved to our `Table` component however I was pressed for time and couldn't get it to work within scoped style using `:slotted()` selector
-  tr.sticky-row > th,
-  tr.sticky-row > td {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 1;
-    border: 0;
-  }
-
 }
 </style>

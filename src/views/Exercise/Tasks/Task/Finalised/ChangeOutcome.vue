@@ -5,8 +5,14 @@
   >
     <p class="govuk-body-l">
       Would you like to change outcome to
-      <strong v-if="isPassingScore" class="govuk-tag govuk-tag--red">FAIL</strong>
-      <strong v-else class="govuk-tag govuk-tag--green">PASS</strong>?<br>
+      <strong
+        v-if="isPassingScore"
+        class="govuk-tag govuk-tag--red"
+      >FAIL</strong>
+      <strong
+        v-else
+        class="govuk-tag govuk-tag--green"
+      >PASS</strong>?<br>
       <!-- <span class="govuk-hint">With a pass mark of {{ task.passMark }} and a score of {{ item.score }} the expected outcome is 
       <strong v-if="isPassingScore" class="govuk-tag govuk-tag--green">PASS</strong>
       <strong v-else class="govuk-tag govuk-tag--red">FAIL</strong>.</span> -->
@@ -72,8 +78,13 @@ export default {
   },
   data() {
     return {
-      reasons: getOverrideReasons()
+      reasons: getOverrideReasons(),
     };
+  },
+  computed: {
+    isPassingScore() {
+      return isPassingScore(this.task, this.item.score);
+    },
   },
   created() {
     this.formData.defaultOutcome = getDefaultOutcome(this.task, this.item.score).value;
@@ -84,11 +95,6 @@ export default {
       this.formData.changeOutcome = true;
       this.formData.reason = override.reason;
     }
-  },
-  computed: {
-    isPassingScore() {
-      return isPassingScore(this.task, this.item.score);
-    },
   },
 };
 </script>

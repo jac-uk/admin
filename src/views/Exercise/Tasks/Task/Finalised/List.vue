@@ -54,7 +54,7 @@
         <a
           class="govuk-link"
           @click="btnFind"
-        >Find</a>
+        >Find an application</a>
         <a
           class="govuk-link govuk-!-margin-left-4"
           @click="btnExport"
@@ -122,7 +122,10 @@
             </div>
           </template>
         </TableCell>
-        <TableCell title="Expand/collapse" class="expand-collapse">
+        <TableCell
+          title="Expand/collapse"
+          class="expand-collapse"
+        >
           <div 
             class="govuk-!-padding-left-2 govuk-!-padding-right-2 clickable"
             @click="toggleScore(row.score)"
@@ -138,59 +141,62 @@
       </template>
 
       <template #extra-row="{row}">
-      <tr
-        v-if="isScoreExpanded(row.score)"
-        v-for="item in getScoreDataForScore(row.score)"
-        :key="item.id"
-        class="govuk-table__row extra-row"
-      >
-        <TableCell colspan="3">
-          {{ item.fullName || item.ref }}
-        </TableCell>
-        <template v-if="showDiversity">
-          <TableCell :title="tableColumns[3].title">
-            {{ $filters.toYesNo(item.diversity.female) }}
-          </TableCell>
-          <TableCell :title="tableColumns[4].title">
-            {{ $filters.toYesNo(item.diversity.bame) }}
-          </TableCell>
-          <TableCell :title="tableColumns[5].title">
-            {{ $filters.toYesNo(item.diversity.solicitor) }}
-          </TableCell>
-          <TableCell :title="tableColumns[6].title">
-            {{ $filters.toYesNo(item.diversity.disability) }}
-          </TableCell>
-        </template>
-        <TableCell :title="showDiversity ? tableColumns[7].title : tableColumns[3].title">
-          <strong
-            v-if="passMark && isPass(item)"
-            class="govuk-tag govuk-tag--green"
-            :class="{ 'clickable': editable }"
-            @click="openChangeOutcomeModal(item)"
-          >PASS</strong>
-          <strong
-            v-else-if="passMark"
-            class="govuk-tag govuk-tag--red"
-            :class="{ 'clickable': editable }"
-            @click="openChangeOutcomeModal(item)"
-          >FAIL</strong>
-        </TableCell>
-        <TableCell title="Expand collapse all rows" class="expand-collapse">
-          <div 
-            class="govuk-!-padding-left-2 govuk-!-padding-right-2 clickable"
-            @click="toggleScore(row.score)"
+        <template v-if="isScoreExpanded(row.score)">
+          <tr
+            v-for="item in getScoreDataForScore(row.score)"
+            :key="item.id"
+            class="govuk-table__row extra-row"
           >
-            <span
-              class="icon-expand govuk-!-margin-left-0"
-              :class="isScoreExpanded(row.score) ? 'open' : 'close'"
+            <TableCell colspan="3">
+              {{ item.fullName || item.ref }}
+            </TableCell>
+            <template v-if="showDiversity">
+              <TableCell :title="tableColumns[3].title">
+                {{ $filters.toYesNo(item.diversity.female) }}
+              </TableCell>
+              <TableCell :title="tableColumns[4].title">
+                {{ $filters.toYesNo(item.diversity.bame) }}
+              </TableCell>
+              <TableCell :title="tableColumns[5].title">
+                {{ $filters.toYesNo(item.diversity.solicitor) }}
+              </TableCell>
+              <TableCell :title="tableColumns[6].title">
+                {{ $filters.toYesNo(item.diversity.disability) }}
+              </TableCell>
+            </template>
+            <TableCell :title="showDiversity ? tableColumns[7].title : tableColumns[3].title">
+              <strong
+                v-if="passMark && isPass(item)"
+                class="govuk-tag govuk-tag--green"
+                :class="{ 'clickable': editable }"
+                @click="openChangeOutcomeModal(item)"
+              >PASS</strong>
+              <strong
+                v-else-if="passMark"
+                class="govuk-tag govuk-tag--red"
+                :class="{ 'clickable': editable }"
+                @click="openChangeOutcomeModal(item)"
+              >FAIL</strong>
+            </TableCell>
+            <TableCell
+              title="Expand collapse all rows"
+              class="expand-collapse"
             >
-              <img src="@/assets/expand.svg">
-            </span>
-          </div>
-        </TableCell>
-      </tr>
+              <div 
+                class="govuk-!-padding-left-2 govuk-!-padding-right-2 clickable"
+                @click="toggleScore(row.score)"
+              >
+                <span
+                  class="icon-expand govuk-!-margin-left-0"
+                  :class="isScoreExpanded(row.score) ? 'open' : 'close'"
+                >
+                  <img src="@/assets/expand.svg">
+                </span>
+              </div>
+            </TableCell>
+          </tr>
+        </template>
       </template>
-
     </Table>
     <Modal ref="changeOutcomeModal">
       <TitleBar>
@@ -220,9 +226,19 @@
         Find an application
       </TitleBar>
       <div style="padding: 0 20px">
-        <p>Type any part of reference number or candidate name</p>
-        <input class="govuk-input govuk-input--width-10" id="search" name="search" type="text">
-        <div style="height: 20em"><br>top 5 matches appear here<br>click one to navigate to it on merit list<br>or press enter to select the first match<br>or use up/down and enter to select another match<br>(probably users will type and press enter or click)</div>
+        <TextField
+          id="lookahead"
+          label="Find an application"
+          hint="Type any part of reference number or candidate name"
+          type="text"
+        />
+        <div style="height: 20em">
+          - Tom Russell<br>
+          - Tomoko Linton<br>
+          - Robertom Jones<br>
+          - Antomnia Norwich<br>
+          - Jennifer Evertom<br>       
+        </div>
       </div>
     </Modal>    
   </div>
@@ -248,7 +264,7 @@ export default {
     Modal,
     TitleBar,
     ChangeOutcome,
-    ConfigureExport
+    ConfigureExport,
   },
   props: {
     task: {
@@ -369,7 +385,7 @@ export default {
       this.$refs['changeOutcomeModal'].closeModal();
       if (!this.selectedItem) return false;
       if (!this.passMark) return false;
-      let data = {};
+      const data = {};
       if (params.changeOutcome) {
         data[`overrides.${params.newOutcome}.${this.selectedItem.id}`] = params.reason;
       } else {
@@ -393,7 +409,7 @@ export default {
       let didNotTake = []; // TODO task.applications.filter( no score )
       let failed = []; // TODO check for pass mark; check for overrides
       switch (this.type) {
-      case TASK_TYPE.QUALIFYING_TEST:
+      case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
         const CAT = this.$store.getters['tasks/getTask'](TASK_TYPE.CRITICAL_ANALYSIS);
         const SJT = this.$store.getters['tasks/getTask'](TASK_TYPE.SITUATIONAL_JUDGEMENT);
@@ -405,6 +421,7 @@ export default {
         const failedIDs = failedCATIDs.concat(failedSJTIDs).filter((value, index, array) => array.indexOf(value) === index);
         failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
         break;
+      }
       default:
       }
       downloadMeritList(title, didNotTake, failed, this.task, this.exerciseDiversity, saveData.type, fileName);
