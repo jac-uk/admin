@@ -1,31 +1,28 @@
 <template>
   <div>
-    <Select
+    <PredictiveSearch
       :id="`senior_selection_exercise_manager_${index}`"
       v-model="row.name"
       label="Senior selection exercise manager"
       hint="An email address is required."
+      :show-full-list-on-focus="true"
+      :data="users"
+      :search-fields="['email', 'displayName']"
       required
-    >
-      <option
-        v-for="user in users"
-        :key="user.uid"
-        :value="user.email"
-      >
-        {{ user.displayName }} ({{ user.email }})
-      </option>
-    </Select>
+    />
+    <!-- @update:model-value="handleSelection" -->
     <slot name="removeButton" />
+    HERE
   </div>
 </template>
 
 <script>
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import PredictiveSearch from './PredictiveSearch.vue';
 
 export default {
   name: 'SeniorSelectionExerciseManager',
   components: {
-    Select,
+    PredictiveSearch,
   },
   props: {
     row: {
@@ -40,6 +37,16 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  methods: {
+  //   handleSelection(selectedItem) {
+  //     console.log('Selected Item:', selectedItem); // Debugging output
+  //     if (selectedItem && selectedItem.email) {
+  //       this.row.name = selectedItem.email;
+  //     } else {
+  //       console.error('No email found on selected item'); // Debugging output
+  //     }
+  //   },
   },
 };
 </script>
