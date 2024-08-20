@@ -15,6 +15,9 @@
           :extension="extension"
           :display-month-year-only="displayMonthYearOnly"
           :is-asked="isAsked"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
           @change-field="changeField"
         />
       </div>
@@ -32,6 +35,9 @@
           :extension="extension"
           type="route"
           :is-asked="isAsked"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
           @change-field="changeField"
         />
       </div>
@@ -48,6 +54,9 @@
           type="email"
           :extension="extension"
           :is-asked="isAsked"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
           @change-field="changeField"
         />
       </div>
@@ -64,6 +73,9 @@
           type="tel"
           :extension="extension"
           :is-asked="isAsked"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
           @change-field="changeField"
         />
       </div>
@@ -119,6 +131,30 @@
             @change-field="changeField"
           />
         </span>
+      </div>
+
+      <div
+        v-else-if="isTextarea"
+      >
+        <EditableField
+          :id="field"
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :extension="extension"
+          :type="type"
+          :type-props="typeProps"
+          :index="index"
+          :is-asked="isAsked"
+          :disable-submit-on-error="disableSubmitOnError"
+          :disable-universal-validation="disableUniversalValidation"
+          :word-limit="typeProps.wordLimit"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
+          @change-field="changeField"
+          @edit-field="editField"
+        />
       </div>
 
       <div
@@ -249,6 +285,18 @@ export default {
       required: false,
       default: false,
     },
+    displayLabel: {
+      type: Boolean,
+      default: false,
+    },
+    isRequired: {
+      type: Boolean,
+      default: false,
+    },
+    errorFieldName: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['changeField', 'editField'],
   data() {
@@ -278,6 +326,9 @@ export default {
     },
     isRouted() {
       return this.$props.type === 'route';
+    },
+    isTextarea() {
+      return this.$props.type === 'textarea';
     },
   },
   methods: {
