@@ -95,6 +95,7 @@ export {
   getStagePassingStatuses,
   getStageMoveBackStatuses,
   getStageWithdrawalStatus,
+  shortlistingStatuses,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
   isJAC00187
@@ -438,7 +439,7 @@ function taskStatuses(taskType) { // also on DP
         TASK_STATUS.DATA_INITIALISED,
         // TASK_STATUS.DATA_ACTIVATED,
         TASK_STATUS.PANELS_INITIALISED,
-        TASK_STATUS.PANELS_ACTIVATED,        
+        TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.FINALISED,
         TASK_STATUS.COMPLETED,
       ];
@@ -510,7 +511,7 @@ function taskEntryStatus(exercise, type) {
     default:
       status = `${prevTaskType}Passed`;
     }
-  }  
+  }
   return status;
 }
 
