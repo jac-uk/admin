@@ -16,6 +16,7 @@ export default {
   namespaced: true,
   mutations: {
     set(state, { name, value }) {
+      console.trace(value);
       state[name] = value;
     },
     setNoOfTestApplications(state, noOfTestApplications) {

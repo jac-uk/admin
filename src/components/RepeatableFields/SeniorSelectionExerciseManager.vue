@@ -9,8 +9,8 @@
       :data="users"
       :search-fields="['email', 'displayName']"
       required
+      @update:model-value="handleSelection"
     />
-    <!-- @update:model-value="handleSelection" -->
     <slot name="removeButton" />
     HERE
   </div>
@@ -39,14 +39,9 @@ export default {
     },
   },
   methods: {
-  //   handleSelection(selectedItem) {
-  //     console.log('Selected Item:', selectedItem); // Debugging output
-  //     if (selectedItem && selectedItem.email) {
-  //       this.row.name = selectedItem.email;
-  //     } else {
-  //       console.error('No email found on selected item'); // Debugging output
-  //     }
-  //   },
+    handleSelection(selectedItem) {
+      this.row.name = selectedItem.email;
+    },
   },
 };
 </script>

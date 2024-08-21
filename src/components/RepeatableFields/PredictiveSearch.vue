@@ -43,7 +43,7 @@
         class="govuk-list govuk-list--unstyled autocomplete-list"
       >
         <li
-          v-for="(result, index) in filteredResults.slice(0, 5)"
+          v-for="(result, index) in filteredResults"
           :key="result.id"
           :class="{'govuk-list__item--highlighted': highlightedIndex === index}"
           @mousedown="onSelect(result)"
@@ -62,7 +62,7 @@
 // import FormField from '.FormField.vue';
 // import FormFieldError from './FormFieldError.vue';
 import FormField from '@jac-uk/jac-kit/draftComponents/Form/FormField.vue';
-import FormFieldError from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import FormFieldError from '@jac-uk/jac-kit/draftComponents/Form/FormFieldError.vue';
 
 export default {
   components: {
@@ -88,9 +88,10 @@ export default {
     },
     showFullListOnFocus: {
       type: Boolean,
-      default: false, // Toggle full list display
+      default: false,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       searchTerm: '',
@@ -143,12 +144,12 @@ export default {
       }
     },
     onSelect(result) {
-      // Update the searchTerm to reflect the selected item's name or email
-      result = result[this.searchFields[0]];
+      const selectedValue = result[this.searchFields[0]];
+
+      this.searchTerm = selectedValue;
 
       // Emit the selected value as an update to the parent component
-      // this.$emit('update:modelValue', result);
-      this.modelValue = result;
+      this.$emit('update:modelValue', selectedValue);
 
       // Clear the filtered results and reset the highlighted index
       this.filteredResults = [];
