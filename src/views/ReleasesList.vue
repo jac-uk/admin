@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">
-      Latest Releases
-    </h1>
-
     <!-- New section for file upload status -->
     <div>
-      <h2 class="govuk-heading-m">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
         Virus Scanner functionality: {{ fileUploadStatus }}
       </h2>
     </div>
+
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+      Latest Releases
+    </h2>
 
     <Table
       data-key="id"
