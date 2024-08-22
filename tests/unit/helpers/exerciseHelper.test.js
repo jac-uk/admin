@@ -9,7 +9,7 @@ import {
 import { EXERCISE_STAGE, SHORTLISTING, APPLICATION_STATUS } from '@/helpers/constants';
 
 describe('availableStatuses', () => {
-  it('returns statuses for shortlisting stage when processing version is 2 or higher', () => {
+  it('should return statuses for shortlisting stage when processing version is 2 or higher', () => {
     const exercise = { _processingVersion: 2 };
     const stage = EXERCISE_STAGE.SHORTLISTING;
     const expectedStatuses = [
@@ -22,7 +22,7 @@ describe('availableStatuses', () => {
     expect(availableStatuses(exercise, stage)).toEqual(expect.arrayContaining(expectedStatuses));
   });
 
-  it('returns statuses for selection stage when processing version is 2 or higher', () => {
+  it('should return statuses for selection stage when processing version is 2 or higher', () => {
     const exercise = { _processingVersion: 2 };
     const stage = EXERCISE_STAGE.SELECTION;
     const expectedStatuses = [
@@ -34,7 +34,7 @@ describe('availableStatuses', () => {
     expect(availableStatuses(exercise, stage)).toEqual(expect.arrayContaining(expectedStatuses));
   });
 
-  it('returns default statuses when stage is not recognized and processing version is 2 or higher', () => {
+  it('should return default statuses when stage is not recognized and processing version is 2 or higher', () => {
     const exercise = { _processingVersion: 2 };
     const stage = ' invalid stage ';
     const expectedStatuses = [
@@ -51,7 +51,7 @@ describe('availableStatuses', () => {
     expect(availableStatuses(exercise, stage)).toEqual(expect.arrayContaining(expectedStatuses));
   });
 
-  it('returns statuses for review stage when processing version is less than 2', () => {
+  it('should return statuses for review stage when processing version is less than 2', () => {
     const exercise = { _processingVersion: 1 };
     const stage = EXERCISE_STAGE.REVIEW;
     const expectedStatuses = [
@@ -61,7 +61,7 @@ describe('availableStatuses', () => {
     expect(availableStatuses(exercise, stage)).toEqual(expect.arrayContaining(expectedStatuses));
   });
 
-  it('returns default statuses when stage is not recognized and processing version is less than 2', () => {
+  it('should return default statuses when stage is not recognized and processing version is less than 2', () => {
     const exercise = { _processingVersion: 1 };
     const stage = ' invalid stage ';
     const expectedStatuses = [
@@ -145,7 +145,7 @@ describe('availableReportLinks', () => {
 });
 
 describe('shortlistingStatuses', () => {
-  it('returns correct statuses when exercise._processingVersion is less than 2', () => {
+  it('should return correct statuses when exercise._processingVersion is less than 2', () => {
     const exercise = {
       shortlistingMethods: [
         SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
@@ -176,7 +176,7 @@ describe('shortlistingStatuses', () => {
     expect(shortlistingStatuses(exercise)).toEqual(expectedStatuses);
   });
 
-  it('returns correct statuses when exercise._processingVersion is greater or equal to 2', () => {
+  it('should return correct statuses when exercise._processingVersion is greater or equal to 2', () => {
     const exercise = {
       shortlistingMethods: [
         SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
@@ -205,7 +205,7 @@ describe('shortlistingStatuses', () => {
     expect(shortlistingStatuses(exercise)).toEqual(expectedStatuses);
   });
 
-  it('returns an empty array when exercise is null or undefined', () => {
+  it('should return an empty array when exercise is null or undefined', () => {
     expect(shortlistingStatuses(null)).toEqual([]);
     expect(shortlistingStatuses(undefined)).toEqual([]);
   });
@@ -214,19 +214,19 @@ describe('shortlistingStatuses', () => {
 describe('isApplicationVersionGreaterThan', () => {
   const exercise = { _applicationVersion: 2 };
 
-  it('returns true when exercise._applicationVersion is greater than the specified version', () => {
+  it('should return true when exercise._applicationVersion is greater than the specified version', () => {
     expect(isApplicationVersionGreaterThan(exercise, 1)).toBe(true);
   });
 
-  it('returns false when exercise._applicationVersion is less than the specified version', () => {
+  it('should return false when exercise._applicationVersion is less than the specified version', () => {
     expect(isApplicationVersionGreaterThan(exercise, 3)).toBe(false);
   });
 
-  it('returns false when exercise._applicationVersion is equal to the specified version', () => {
+  it('should return false when exercise._applicationVersion is equal to the specified version', () => {
     expect(isApplicationVersionGreaterThan(exercise, 2)).toBe(false);
   });
 
-  it('returns false when exercise object is null or undefined', () => {
+  it('should return false when exercise object is null or undefined', () => {
     expect(isApplicationVersionGreaterThan({}, 3)).toBe(false);
     expect(isApplicationVersionGreaterThan(null, 3)).toBe(false);
     expect(isApplicationVersionGreaterThan(undefined, 3)).toBe(false);
@@ -236,19 +236,19 @@ describe('isApplicationVersionGreaterThan', () => {
 describe('isApplicationVersionLessThan', () => {
   const exercise = { _applicationVersion: 2 };
 
-  it('returns true when exercise._applicationVersion is less than the specified version', () => {
+  it('should return true when exercise._applicationVersion is less than the specified version', () => {
     expect(isApplicationVersionLessThan(exercise, 3)).toBe(true);
   });
 
-  it('returns false when exercise._applicationVersion is greater than the specified version', () => {
+  it('should return false when exercise._applicationVersion is greater than the specified version', () => {
     expect(isApplicationVersionLessThan(exercise, 1)).toBe(false);
   });
 
-  it('returns false when exercise._applicationVersion is equal to the specified version', () => {
+  it('should return false when exercise._applicationVersion is equal to the specified version', () => {
     expect(isApplicationVersionLessThan(exercise, 2)).toBe(false);
   });
 
-  it('returns false when exercise object is null or undefined', () => {
+  it('should return false when exercise object is null or undefined', () => {
     expect(isApplicationVersionLessThan({}, 3)).toBe(false);
     expect(isApplicationVersionLessThan(null, 3)).toBe(false);
     expect(isApplicationVersionLessThan(undefined, 3)).toBe(false);
@@ -256,19 +256,19 @@ describe('isApplicationVersionLessThan', () => {
 });
 
 describe('isJAC00187', () => {
-  it('returns true when env is DEVELOP and referenceNumber is JAC00696', () => {
+  it('should return true when env is DEVELOP and referenceNumber is JAC00696', () => {
     expect(isJAC00187('DEVELOP', 'JAC00696')).toBe(true);
   });
 
-  it('returns true when env is STAGING and referenceNumber is JAC00695', () => {
+  it('should return true when env is STAGING and referenceNumber is JAC00695', () => {
     expect(isJAC00187('STAGING', 'JAC00695')).toBe(true);
   });
 
-  it('returns true when env is PRODUCTION and referenceNumber is JAC00187', () => {
+  it('should return true when env is PRODUCTION and referenceNumber is JAC00187', () => {
     expect(isJAC00187('PRODUCTION', 'JAC00187')).toBe(true);
   });
 
-  it('returns false when env or referenceNumber is null', () => {
+  it('should return false when env or referenceNumber is null', () => {
     expect(isJAC00187(null, 'JAC00696')).toBe(false);
     expect(isJAC00187('DEVELOP', null)).toBe(false);
     expect(isJAC00187(null, null)).toBe(false);
@@ -276,31 +276,31 @@ describe('isJAC00187', () => {
 });
 
 describe('isJAC00187', () => {
-  it('returns true for DEVELOP environment and JAC00696 reference number', () => {
+  it('should return true for DEVELOP environment and JAC00696 reference number', () => {
     expect(isJAC00187('DEVELOP', 'JAC00696')).toBe(true);
   });
 
-  it('returns true for STAGING environment and JAC00695 reference number', () => {
+  it('should return true for STAGING environment and JAC00695 reference number', () => {
     expect(isJAC00187('STAGING', 'JAC00695')).toBe(true);
   });
 
-  it('returns true for PRODUCTION environment and JAC00187 reference number', () => {
+  it('should return true for PRODUCTION environment and JAC00187 reference number', () => {
     expect(isJAC00187('PRODUCTION', 'JAC00187')).toBe(true);
   });
 
-  it('returns false for invalid environment', () => {
+  it('should return false for invalid environment', () => {
     expect(isJAC00187('INVALID', 'JAC00696')).toBe(false);
   });
 
-  it('returns false for invalid reference number', () => {
+  it('should return false for invalid reference number', () => {
     expect(isJAC00187('DEVELOP', 'INVALID')).toBe(false);
   });
 
-  it('returns false for null environment', () => {
+  it('should return false for null environment', () => {
     expect(isJAC00187(null, 'JAC00696')).toBe(false);
   });
 
-  it('returns false for null reference number', () => {
+  it('should return false for null reference number', () => {
     expect(isJAC00187('DEVELOP', null)).toBe(false);
   });
 });
