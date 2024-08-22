@@ -1,4 +1,8 @@
 import {
+  getNextStage,
+  getStagePassingStatuses,
+  getStageMoveBackStatuses,
+  getStageWithdrawalStatus,
   availableStatuses,
   availableReportLinks,
   shortlistingStatuses,
@@ -7,6 +11,56 @@ import {
   isJAC00187
 } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE, SHORTLISTING, APPLICATION_STATUS } from '@/helpers/constants';
+import { describe } from 'vitest';
+
+describe('getNextStage', () => {
+  it('should return the next stage when a valid new status is provided', () => {
+    const exercise = { _processingVersion: 2 };
+    expect(getNextStage(exercise, EXERCISE_STAGE.SHORTLISTING, APPLICATION_STATUS.SHORTLISTING_PASSED)).toBe(EXERCISE_STAGE.SELECTION);
+  });
+});
+
+describe('getStagePassingStatuses', () => {
+  it('should return correct statuses when _processingVersion is 2 or higher', () => {
+    const exercise = { _processingVersion: 2 };
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.SHORTLISTING)).toEqual([APPLICATION_STATUS.SHORTLISTING_PASSED]);
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.SELECTION)).toEqual([APPLICATION_STATUS.PASSED_RECOMMENDED]);
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.SCC)).toEqual([APPLICATION_STATUS.RECOMMENDED_IMMEDIATE, APPLICATION_STATUS.RECOMMENDED_FUTURE, APPLICATION_STATUS.SECOND_STAGE_PASSED]);
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.RECOMMENDATION)).toEqual([]);
+  });
+  it('should return correct statuses when _processingVersion is less than 2', () => {
+    const exercise = { _processingVersion: 1 };
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.REVIEW)).toEqual('');
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.SHORTLISTED)).toEqual([APPLICATION_STATUS.INVITED_TO_SELECTION_DAY]);
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.SELECTED)).toEqual([APPLICATION_STATUS.PASSED_SELECTION]);
+    expect(getStagePassingStatuses(exercise, EXERCISE_STAGE.RECOMMENDED)).toEqual([APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT, APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT]);
+  });
+});
+
+describe('getStageMoveBackStatuses', () => {
+  it('should return [APPLICATION_STATUS.RECONSIDER] when exercise._processingVersion is >= 2 and stage is EXERCISE_STAGE.RECOMMENDATION', () => {
+    const exercise = { _processingVersion: 2 };
+    expect(getStageMoveBackStatuses(exercise, EXERCISE_STAGE.RECOMMENDATION)).toEqual([APPLICATION_STATUS.RECONSIDER]);
+  });
+
+  it('should return an empty array when stage is undefined or null', () => {
+    const exercise = { _processingVersion: 2 };
+    expect(getStageMoveBackStatuses(exercise, undefined)).toEqual([]);
+    expect(getStageMoveBackStatuses(exercise, null)).toEqual([]);
+  });
+});
+
+describe('getStageWithdrawalStatus', () => {
+  it('should return APPLICATION_STATUS.WITHDRAWN when exercise._processingVersion is 2 or greater', () => {
+    const exercise = { _processingVersion: 2 };
+    expect(getStageWithdrawalStatus(exercise)).toBe(APPLICATION_STATUS.WITHDRAWN);
+  });
+
+  it('should return APPLICATION_STATUS.WITHDREW_APPLICATION when exercise._processingVersion is less than 2', () => {
+    const exercise = { _processingVersion: 1 };
+    expect(getStageWithdrawalStatus(exercise)).toBe(APPLICATION_STATUS.WITHDREW_APPLICATION);
+  });
+});
 
 describe('availableStatuses', () => {
   it('should return statuses for shortlisting stage when processing version is 2 or higher', () => {

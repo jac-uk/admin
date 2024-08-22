@@ -77,12 +77,12 @@ describe('getScoreSheetTotal', () => {
   });
 });
 
-describe('getScoreSheetItemTotal', () => {});
+// describe('getScoreSheetItemTotal', () => {});
 
-describe('markingScheme2ScoreSheet', () => {});
+// describe('markingScheme2ScoreSheet', () => {});
 
-describe('isScoreSheetComplete', () => {});
+// describe('isScoreSheetComplete', () => {});
 
-describe('markingScheme2Columns', () => {});
+// describe('markingScheme2Columns', () => {});
 
-describe('markingScheme2ColumnHeaders', () => {});
+// describe('markingScheme2ColumnHeaders', () => {});
