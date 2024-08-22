@@ -35,7 +35,7 @@
         @focus="onFocus"
         @keydown.down="onArrowDown"
         @keydown.up="onArrowUp"
-        @keydown.enter="onEnter"
+        @keydown.enter.prevent="onEnter"
       >
       <ul
         v-if="filteredResults.length"
@@ -94,7 +94,7 @@ export default {
   emits: ['update:modelValue'],
   data() {
     return {
-      searchTerm: '',
+      searchTerm: this.modelValue,
       filteredResults: [],
       highlightedIndex: -1,
     };

@@ -12,7 +12,6 @@
       @update:model-value="handleSelection"
     />
     <slot name="removeButton" />
-    HERE
   </div>
 </template>
 
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     handleSelection(selectedItem) {
-      this.row.name = selectedItem.email;
+      this.row.name = selectedItem;
     },
   },
 };

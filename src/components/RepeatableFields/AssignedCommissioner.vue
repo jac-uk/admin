@@ -1,31 +1,26 @@
 <template>
   <div>
-    <Select
+    <PredictiveSearch
       :id="`assigned_comissioner_${index}`"
       v-model="row.name"
       label="Assigned commissioner"
       hint="An email address is required."
+      :show-full-list-on-focus="true"
+      :data="sortedCommissioners"
+      :search-fields="['email', 'name']"
       required
-    >
-      <option
-        v-for="commissioner in sortedCommissioners"
-        :key="commissioner.email"
-        :value="commissioner.email"
-      >
-        {{ commissioner.name }} ({{ commissioner.email }})
-      </option>
-    </Select>
-    <slot name="removeButton" />
+      @update:model-value="handleSelection"
+    />    <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import PredictiveSearch from './PredictiveSearch.vue';
 
 export default {
   name: 'AssignedCommissioner',
   components: {
-    Select,
+    PredictiveSearch,
   },
   props: {
     row: {
@@ -48,6 +43,11 @@ export default {
         return 0;
       });
       return commissioners;
+    },
+  },
+  methods: {
+    handleSelection(selectedItem) {
+      this.row.name = selectedItem;
     },
   },
 };
