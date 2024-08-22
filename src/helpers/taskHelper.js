@@ -12,7 +12,9 @@ export {
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
   markingScheme2Columns,
-  markingScheme2ColumnHeaders
+  markingScheme2ColumnHeaders,
+  markingTypeHasOptions,
+  markingTypeGetOptions
 };
 
 const MARKING_TYPE = {
@@ -34,21 +36,41 @@ const MARKING_TYPE = {
   GRADE: {
     value: 'grade',
     label: 'Grade',
+    options: [
+      { value: 'a', label: 'A', score: 4 },
+      { value: 'b', label: 'B', score: 3 },
+      { value: 'c', label: 'C', score: 2 },
+      { value: 'd', label: 'D', score: 1 },
+    ],
     excludeFromScore: false,
   },
   YES_NO: {
     value: 'yesNo',
     label: 'Yes / No',
+    options: [
+      { value: true, label: 'Yes' },
+      { value: false, label: 'No' },
+    ],
     excludeFromScore: true,
   },
   PASS_FAIL: {
     value: 'passFail',
     label: 'Pass / Fail',
+    options: [
+      { value: true, label: 'Pass' },
+      { value: false, label: 'False' },
+    ],
     excludeFromScore: true,
   },
   LEVEL: {
     value: 'level',
     label: 'None / Basic / Medium / High',
+    options: [
+      { value: 'none', label: 'None' },
+      { value: 'basic', label: 'Basic' },
+      { value: 'medium', label: 'Medium' },
+      { value: 'high', label: 'High' },
+    ],
     excludeFromScore: true,
   },
 };
@@ -65,6 +87,16 @@ function getMarkingType(type) {
   const markingType = Object.values(MARKING_TYPE).find(item => item.value === type);
   if (markingType) return markingType;
   return { value: null, label: null };
+}
+
+function markingTypeHasOptions(type) {
+  const markingType = getMarkingType(type);
+  return markingType.options && markingType.options.length ? true : false;
+}
+
+function markingTypeGetOptions(type) {
+  const markingType = getMarkingType(type);
+  return markingTypeHasOptions(type) ? markingType.options : [];
 }
 
 function getCompleteScoreSheet(task) {

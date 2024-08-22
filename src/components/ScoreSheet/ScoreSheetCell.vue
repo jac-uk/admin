@@ -11,19 +11,7 @@
 
     <template v-else>
       <input
-        v-if="column.type == 'grade'"
-        :id="`row-${rowIndex}_col-${columnIndex}`"
-        v-model="localValue"
-        type="text"
-        maxlength="1"
-        class="govuk-input"
-        spellcheck="false"
-        autocomplete="off"
-        @keydown="onKeyDown($event, rowIndex, columnIndex)"
-        @input="onCellValueChange($event, row, column)"
-      >
-      <input
-        v-else-if="column.type == 'number'"
+        v-if="column.type == MARKING_TYPE.NUMBER.value"
         :id="`row-${rowIndex}_col-${columnIndex}`"
         v-model="localValue"
         type="number"
@@ -31,27 +19,26 @@
         spellcheck="false"
         autocomplete="off"
         @keydown="onKeyDown($event, rowIndex, columnIndex)"
-        @input="onCellValueChange(row, column)"
       >
-      <input
-        v-else-if="column.type == 'select'"
+      <select 
+        v-else-if="hasOptions(column.type)"
         :id="`row-${rowIndex}_col-${columnIndex}`"
         v-model="localValue"
-        type="text"
-        maxlength="1"
-        class="govuk-input"
-        spellcheck="false"
-        autocomplete="grade"
+        class="govuk-select" 
         @keydown="onKeyDown($event, rowIndex, columnIndex)"
-        @input="onCellValueChange(row, column)"
-      >      
+      >
+        <option 
+          v-for="option in getOptions(column.type)"
+          :key="option.value"
+          :value="option.value">{{ option.label }}</option>
+      </select>
     </template>  
   </TableCell>
 </template>
 
 <script>
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { GRADES } from '@/helpers/taskHelper';
+import { GRADES, MARKING_TYPE, markingTypeHasOptions, markingTypeGetOptions } from '@/helpers/taskHelper';
 
 export default {
   name: 'ScoreSheetCell',
@@ -77,6 +64,11 @@ export default {
     },
   },
   emits: ['updated'],
+  data() {
+    return {
+      MARKING_TYPE: MARKING_TYPE,
+    };
+  },
   computed: {
     localValue: {
       get() {
@@ -92,17 +84,12 @@ export default {
     },
   },
   methods: {
-    onCellValueChange(event, row, column) {
-      let value = event.target.value;
-      if (column.type === 'grade') {
-        value = value.toUpperCase();
-        if (GRADES.indexOf(value) < 0) {
-          value = '';
-        }
-        event.target.value = value;
-      }
+    hasOptions(type) {
+      return markingTypeHasOptions(type);
     },
-
+    getOptions(type) {
+      return markingTypeGetOptions(type);
+    },
     onKeyDown(event, rowIndex, colIndex) {
       let newRow = rowIndex;
       let newCol = colIndex;
@@ -130,7 +117,7 @@ export default {
         const element = document.getElementById(`row-${newRow}_col-${newCol}`);
         if (element) {
           element.focus();
-          element.select();
+          if (element.select) element.select();
         }
       }
     },    
@@ -143,10 +130,19 @@ export default {
   .table-cell-score {
     padding: 0 !important;
     border-right: 1px solid govuk-colour("mid-grey");
+    vertical-align:top;
     > .govuk-input {
       text-align: center;
       border: 0;
+      height: 46px;
     }
+    > .govuk-select {
+      text-align: center;
+      border: 0;
+      height: 46px;
+      min-width: 100%;
+    }
+
   }
   .table-cell-value {
     padding: 10px !important;
