@@ -97,7 +97,8 @@ export {
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
-  isJAC00187
+  isJAC00187,
+  isPublished
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -603,6 +604,10 @@ function isArchived(data) {
     default:
       return false;
   }
+}
+function isPublished(data) {
+  if (!data) return false;
+  return data.published;
 }
 function isApproved(data) {
   if (!data) return false;
