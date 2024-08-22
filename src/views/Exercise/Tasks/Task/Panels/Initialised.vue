@@ -216,6 +216,7 @@ import TitleBar from '@/components/Page/TitleBar.vue';
 import SelectPanel from '../Panel/components/SelectPanel.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
+import { totalApplications } from '../Finalised/meritListHelper';
 
 export default {
   components: {
@@ -265,7 +266,7 @@ export default {
       return steps;
     },
     totalApplications() {
-      return this.task ? this.task._stats.totalApplications : 0;
+      return totalApplications(this.task);
     },
     tabs() {
       const data = [];

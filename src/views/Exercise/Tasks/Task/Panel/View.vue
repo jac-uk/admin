@@ -268,6 +268,7 @@ export default {
     },
     isModerationRequired() {
       if (!this.task) return false;
+      if (!this.task.panelIds) return false;
       return this.task.panelIds.length > 1;
     },
     grades() {
