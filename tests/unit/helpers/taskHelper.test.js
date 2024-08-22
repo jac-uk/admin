@@ -1,10 +1,10 @@
 import {
   MARKING_TYPE,
   getMarkingType,
-  getCompleteScoreSheet
-  // getScoreSheetTotal,
-  // getScoreSheetItemTotal,
-  // markingScheme2ScoreSheet,
+  getCompleteScoreSheet,
+  getScoreSheetTotal,
+  getScoreSheetItemTotal,
+  markingScheme2ScoreSheet
   // isScoreSheetComplete,
   // markingScheme2Columns,
   // markingScheme2ColumnHeaders
@@ -69,17 +69,83 @@ describe('getCompleteScoreSheet', () => {
 });
 
 describe('getScoreSheetTotal', () => {
-  it('should return an empty score sheet when task has an empty applications array', () => {
-    const task = {
-      applications: [],
+  it('should return total score of score sheet', () => {
+    const markingSchema = [
+      {
+        children: [
+          {
+            ref: 'CA',
+            type: 'score',
+          },
+          {
+            ref: 'SJ',
+            type: 'score',
+          },
+        ],
+        ref: 'qualifyingTest',
+        type: 'group',
+      },
+    ];
+
+    const scoreSheet = {
+      qualifyingTest: {
+        CA: {
+          score: 1,
+        },
+        SJ: {
+          score: 2,
+        },
+      },
     };
-    expect(getCompleteScoreSheet(task)).toEqual({});
+    expect(getScoreSheetTotal(markingSchema, scoreSheet)).toEqual(3);
   });
 });
 
-// describe('getScoreSheetItemTotal', () => {});
+describe('getScoreSheetItemTotal', () => {
+  it('should return total score of score sheet', () => {
+    const item = {
+        ref: 'CA',
+        type: 'score',
+      };
 
-// describe('markingScheme2ScoreSheet', () => {});
+    const scoreSheet = {
+        CA: {
+          score: 1,
+        },
+        SJ: {
+          score: 2,
+        },
+    };
+    expect(getScoreSheetItemTotal(item, scoreSheet)).equal(1);
+  });
+});
+
+describe('markingScheme2ScoreSheet', () => {
+  it('should return score sheet for group marking schema', () => {
+    const markingSchema = [
+      {
+        children: [
+          {
+            ref: 'CA',
+            type: 'score',
+          },
+          {
+            ref: 'SJ',
+            type: 'score',
+          },
+        ],
+        ref: 'qualifyingTest',
+        type: 'group',
+      },
+    ];
+    expect(markingScheme2ScoreSheet(markingSchema)).toEqual({
+      qualifyingTest: {
+        CA: '',
+        SJ: '',
+      },
+    });
+  });
+});
 
 // describe('isScoreSheetComplete', () => {});
 

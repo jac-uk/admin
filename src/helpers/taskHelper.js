@@ -12,7 +12,8 @@ export {
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
   markingScheme2Columns,
-  markingScheme2ColumnHeaders
+  markingScheme2ColumnHeaders,
+  getScoreSheetItemTotal
 };
 
 const MARKING_TYPE = {
@@ -102,6 +103,7 @@ function getScoreSheetItemTotal(item, scoreSheet) {
       break;
     case MARKING_TYPE.SCORE.value:
       if (scoreSheet[item.ref]) {
+        console.log('scoreSheet[item.ref].score', scoreSheet[item.ref].score);
         return parseFloat(scoreSheet[item.ref].score);
       }
       break;
@@ -168,7 +170,7 @@ function markingScheme2Columns(markingScheme, editable = false) {
       columns.push({ ...item, editable: editable });
     }
   });
-  return columns;  
+  return columns;
 }
 
 function markingScheme2ColumnHeaders(markingScheme) {
