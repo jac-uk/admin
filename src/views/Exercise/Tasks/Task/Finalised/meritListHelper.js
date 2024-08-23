@@ -277,6 +277,7 @@ function isPassingScore(task, score) {
   if (task && task.passMark && task.passMark <= score) {
     return true;
   }
+  return false;
 }
 
 function isPass(task, applicationId, score) {
@@ -316,8 +317,8 @@ function getCurrentOutcome(task, score) {
 
 /**
  * function getOverride(task, applicationId)
- * @param {*} task 
- * @param {*} applicationId 
+ * @param {*} task
+ * @param {*} applicationId
  * @returns false or an `override` object of the form `{ id: string, outcome: enum('pass', 'fail'), reason: enum('emp-gender', 'emp-ethnicity', 'technical', 'personal') }`
  */
 function getOverride(task, applicationId) {
@@ -330,7 +331,7 @@ function getOverride(task, applicationId) {
         return {
           outcome: OUTCOME.PASS.value,
           id: applicationId,
-        };  
+        };
       } else {
         return false;
       }
@@ -350,7 +351,7 @@ function getOverride(task, applicationId) {
         return {
           outcome: OUTCOME.FAIL.value,
           id: applicationId,
-        };  
+        };
       } else {
         return false;
       }
@@ -438,18 +439,18 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
         row.push(item.email);
         row.push(item.scoreSheet.qualifyingTest.SJ.score);
         row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-        row.push(item.scoreSheet.qualifyingTest.CA.score);      
+        row.push(item.scoreSheet.qualifyingTest.CA.score);
         row.push(item.scoreSheet.qualifyingTest.CA.percent);
         row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
         row.push(item.scoreSheet.qualifyingTest.CA.zScore);
       }
-      row.push(item.zScore);      
+      row.push(item.zScore);
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
       }
-      row.push(item.score);      
+      row.push(item.score);
     }
     row.push(item.rank); // TODO rank
     // row.push(''); // TODO notes
@@ -535,7 +536,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push();
     }
     rows.push(row);
-  });  
+  });
   return rows;
 }
 
