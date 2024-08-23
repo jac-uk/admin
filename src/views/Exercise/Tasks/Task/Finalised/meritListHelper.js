@@ -76,7 +76,7 @@ const DOWNLOAD_TYPES = {
 function scoreType(task) {
   if (!task) return 'score';
   if (task.scoreType) return task.scoreType;
-  if (task.finalScores[0].hasOwnProperty('percent')) return 'percent';
+  if (task.finalScores && task.finalScores[0].hasOwnProperty('percent')) return 'percent';
   return 'score';
 }
 
@@ -237,8 +237,10 @@ function totalPassed(task, scoreType, scores) {
   if (!scores.length) return 0;
   if (!task) return 0;
   if (!task.passMark) return 0;
-  const scoreData = scores.find(scoreData => scoreData.score === task.passMark);
-  let total = scoreData.rank + scoreData.count - 1;
+  // TODO: confirm if the score counts are cumulative
+  let total = scores.filter((data) => data.score >= task.passMark)
+                    .map((data) => data.count)
+                    .reduce((a, b) => a + b, 0);
   if (task.overrides) {
     const numPasses = task.overrides.pass ? Object.keys(task.overrides.pass).length : 0;
     const numFails = task.overrides.fail ? Object.keys(task.overrides.fail).length : 0;
@@ -256,7 +258,8 @@ function totalFailed(task, scoreType, scores) {
 function totalDidNotParticipate(task) {
   if (!task) return 0;
   if (!task.passMark) return 0;
-  return totalApplications(task) - task.finalScores.length;
+  const totalDidNotParticipate = totalApplications(task) - task.finalScores.length;
+  return totalDidNotParticipate > 0 ? totalDidNotParticipate : 0;
 }
 
 function getOverrideReasons() {
@@ -308,7 +311,7 @@ function getNewOutcome(task, score) {
 }
 
 function getCurrentOutcome(task, score) {
-  if (isPass(task, score)) {
+  if (isPassingScore(task, score)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;
