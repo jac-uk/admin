@@ -321,7 +321,7 @@ import {
   hasCoveringLetter,
   hasSelfAssessment,
   isApplicationPartAsked
-} from '@/helpers/exerciseHelper';
+} from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';

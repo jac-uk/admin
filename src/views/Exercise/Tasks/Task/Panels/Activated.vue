@@ -350,8 +350,8 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
+import { getScoreSheetTotal, GRADE_VALUES } from '@jac-uk/jac-kit/helpers/taskHelper.js';
 import { functions } from '@/firebase';
 
 export default {

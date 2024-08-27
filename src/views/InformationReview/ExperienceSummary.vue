@@ -410,7 +410,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
-import { isNonLegal, isLegal, isApplicationPartAsked, isApplicationVersionLessThan } from '@/helpers/exerciseHelper';
+import { isNonLegal, isLegal, isApplicationPartAsked, isApplicationVersionLessThan } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'ExperienceSummary',

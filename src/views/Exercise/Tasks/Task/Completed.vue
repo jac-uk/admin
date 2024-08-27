@@ -116,7 +116,7 @@
 
 <script>
 import { beforeRouteEnter } from './helper';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';

@@ -64,7 +64,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
-import { configuredApplicationContentSteps } from '@/helpers/exerciseHelper';
+import { configuredApplicationContentSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'EditCurrentStep',

@@ -62,7 +62,7 @@ import { btnNext } from '../helper';
 import { functions } from '@/firebase';
 import defaultView from '../New/default';
 import { APPLICATION_STATUS } from '@/helpers/constants';
-import { getNextProcessingStage, previousTaskType, getTaskTypes, getProcessingEntryStage, getProcessingExitStage } from '@/helpers/exerciseHelper';
+import { getNextProcessingStage, previousTaskType, getTaskTypes, getProcessingEntryStage, getProcessingExitStage } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   extends: defaultView,

@@ -82,7 +82,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';

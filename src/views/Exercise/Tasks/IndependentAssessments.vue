@@ -365,7 +365,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
 import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
-import { isArchived, applicationRecordCounts, availableStatuses } from '@/helpers/exerciseHelper';
+import { isArchived, applicationRecordCounts, availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';

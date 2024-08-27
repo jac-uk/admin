@@ -200,7 +200,7 @@
 </template>
 
 <script>
-import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
+import { isEditable, isLegal, isNonLegal, isTribunal } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML.vue';
 

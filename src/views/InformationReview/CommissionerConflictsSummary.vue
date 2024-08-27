@@ -55,7 +55,7 @@
 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
-import { isApplicationPartAsked } from '@/helpers/exerciseHelper';
+import { isApplicationPartAsked } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'CommissionerConflictsSummary',

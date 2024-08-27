@@ -196,7 +196,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { lookup } from '@/filters';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
-import { isArchived, isApproved, isProcessing, applicationCounts, isReadyForApproval, isApprovalRejected, isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
+import { isArchived, isApproved, isProcessing, applicationCounts, isReadyForApproval, isApprovalRejected, isReadyForApprovalFromAdvertType } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 import ExercisePreApprovalTaskList from '@/components/ModalViews/ExercisePreApprovalTaskList.vue';

@@ -143,7 +143,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import SetStatusForm from './SetStatus.vue';

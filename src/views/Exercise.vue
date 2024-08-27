@@ -115,7 +115,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications.vue';
 import { mapState } from 'vuex';
-import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived, availableStages, availableReportLinks, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
+import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived, availableStages, availableReportLinks, getTaskTypes, TASK_STATUS } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { functions } from '@/firebase';
 import { ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';

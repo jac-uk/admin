@@ -1,5 +1,5 @@
-import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
-import createTimeline from '@/helpersTMP/Timeline/createTimeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/exerciseHelper.js';
+import createTimeline from '@jac-uk/jac-kit/helpers/createTimeline';
 
 const ADVERT_TYPES = {
   LISTING: 'listing',

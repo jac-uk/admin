@@ -66,7 +66,7 @@
 
 <script>
 import permissionMixin from '@/permissionMixin';
-import { isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
+import { isReadyForApprovalFromAdvertType } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { deepKeysDiff } from '@jac-uk/jac-kit/helpers/object';
 import { mapState } from 'vuex';
 import _has from 'lodash/has.js';

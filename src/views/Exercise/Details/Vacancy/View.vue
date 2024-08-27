@@ -215,7 +215,7 @@
 </template>
 
 <script>
-import { isEditable } from '@/helpers/exerciseHelper';
+import { isEditable } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import CustomHTML from '@/components/CustomHTML.vue';

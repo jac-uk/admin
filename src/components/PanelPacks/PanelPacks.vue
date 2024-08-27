@@ -104,7 +104,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import SelectPanel from '@/components/ModalViews/SelectPanel.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
-import { availableStages } from '../../helpers/exerciseHelper';
+import { availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '../../helpers/constants';
 
 export default {

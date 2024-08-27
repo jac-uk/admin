@@ -311,7 +311,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion.vue';
 import Membership from '@/components/RepeatableFields/Membership.vue';
-import { isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
+import { isLegal, isNonLegal, isTribunal } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { shallowRef } from 'vue';
 import { DEFAULT_WORD_COUNT } from '@/helpers/constants';
 

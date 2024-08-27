@@ -436,7 +436,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { debounce } from 'lodash';
 

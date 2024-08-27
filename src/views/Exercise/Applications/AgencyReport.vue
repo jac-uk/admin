@@ -502,7 +502,7 @@
 
 <script>
 import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport.vue';
-import { isApplicationVersionGreaterThan } from '@/helpers/exerciseHelper';
+import { isApplicationVersionGreaterThan } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'AgencyReport',

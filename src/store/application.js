@@ -3,7 +3,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 // import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import { getStageWithdrawalStatus } from '../helpers/exerciseHelper';
+import { getStageWithdrawalStatus } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import clone from 'clone';
 
 const collectionName = 'applications';

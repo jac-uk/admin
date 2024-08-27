@@ -336,7 +336,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadFiles from '@/components/ModalViews/UploadFiles.vue';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload.vue';
-import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
+import { exerciseAdvertTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {

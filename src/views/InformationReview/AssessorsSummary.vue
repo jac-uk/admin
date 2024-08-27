@@ -312,7 +312,7 @@
   </div>
 </template>
 <script>
-import { hasLeadershipJudgeAssessment, hasIndependentAssessments, isApplicationPartAsked } from '@/helpers/exerciseHelper';
+import { hasLeadershipJudgeAssessment, hasIndependentAssessments, isApplicationPartAsked } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange.vue';
 import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails.vue';

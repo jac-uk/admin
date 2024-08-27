@@ -12,14 +12,14 @@
         :to="{name: isV1 ? 'exercise-details-preferences-edit-v1' : 'exercise-details-preferences-edit' }"
       >
         Update working preferences
-      </router-link>      
+      </router-link>
     </div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <LocationPreferences
         :exercise="exercise"
-      />    
+      />
 
       <JurisdictionPreferences
         :exercise="exercise"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { isEditable } from '@/helpers/exerciseHelper';
+import { isEditable } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import LocationPreferences from './View/LocationPreferences.vue';
 import JurisdictionPreferences from './View/JurisdictionPreferences.vue';

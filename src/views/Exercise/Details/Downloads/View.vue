@@ -256,7 +256,7 @@
 <script>
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import { mapState } from 'vuex';
-import { isEditable, hasIndependentAssessments } from '@/helpers/exerciseHelper';
+import { isEditable, hasIndependentAssessments } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {

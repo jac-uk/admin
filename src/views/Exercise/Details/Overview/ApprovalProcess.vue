@@ -83,7 +83,7 @@
 
 <script>
 import permissionMixin from '@/permissionMixin';
-import { isReadyForApproval, isApprovalRejected, isApproved, isArchived } from '@/helpers/exerciseHelper';
+import { isReadyForApproval, isApprovalRejected, isApproved, isArchived } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import ApproveReject from '@/views/Exercise/Details/Overview/ApproveReject.vue';
 import ApprovalCheckMessage from '@/views/Exercise/Details/Overview/ApprovalCheckMessage.vue';
 import WarningDetails from '@/components/Micro/WarningDetails.vue';

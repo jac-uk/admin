@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { isEditable } from '@/helpers/exerciseHelper';
+import { isEditable } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ASSESSMENT_METHOD } from '@/helpers/constants';
 

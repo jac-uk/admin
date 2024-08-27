@@ -16,7 +16,7 @@ import expired from './New/expired.vue';
 import qualifyingTest from './New/qualifyingTest.vue';
 import stageOutcome from './New/stageOutcome.vue';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
-import { getTimelineTasks } from '@/helpers/exerciseHelper';
+import { getTimelineTasks } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   components: {

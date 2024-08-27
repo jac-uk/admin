@@ -8,7 +8,7 @@
  *
  * @returns {string}
  */
-const  generalisePath = ({ path, params }) => {
+const generalisePath = ({ path, params }) => {
   let result = path;
   for (const [name, value] of Object.entries(params)) {
     result = result.replace(value, `:${name}`);

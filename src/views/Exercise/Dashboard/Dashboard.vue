@@ -136,7 +136,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { applicationCounts, availableStages } from '@/helpers/exerciseHelper';
+import { applicationCounts, availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
@@ -266,7 +266,7 @@ export default {
           tab.title = this.$filters.lookup(stage);
         }
         return tab;
-      });      
+      });
     },
     legend() {
       if (this.selectedDiversityReportType) {

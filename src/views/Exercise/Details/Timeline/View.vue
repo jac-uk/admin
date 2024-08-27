@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { isEditable } from '@/helpers/exerciseHelper';
+import { isEditable } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline.vue';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
-import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import permissionMixin from '@/permissionMixin';
 
 export default {

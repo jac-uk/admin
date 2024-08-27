@@ -119,7 +119,7 @@
 
 <script>
 
-import { isEditable, isProcessing, applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
+import { isEditable, isProcessing, applicationContentList, unselectedApplicationParts } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import EditCurrentStep from './EditCurrentStep.vue';
 import permissionMixin from '@/permissionMixin';

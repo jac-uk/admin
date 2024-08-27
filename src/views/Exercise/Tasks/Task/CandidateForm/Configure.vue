@@ -61,7 +61,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
-import { getTaskSteps, exerciseApplicationParts } from '@/helpers/exerciseHelper';
+import { getTaskSteps, exerciseApplicationParts } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { APPLICATION_FORM_PARTS } from '@/helpers/constants';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';

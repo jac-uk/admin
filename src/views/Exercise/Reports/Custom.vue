@@ -381,7 +381,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat

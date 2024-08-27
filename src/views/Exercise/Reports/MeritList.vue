@@ -130,10 +130,10 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
-import { TASK_TYPE, TASK_STATUS, getMeritListTaskTypes } from '@/helpers/exerciseHelper';
+import { TASK_TYPE, TASK_STATUS, getMeritListTaskTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
-import { MARKING_TYPE } from '@/helpers/taskHelper';
+import { MARKING_TYPE } from '@jac-uk/jac-kit/helpers/taskHelper.js';
 import { getTableData } from '@/helpers/tableHelper';
 
 const localLookup = {};

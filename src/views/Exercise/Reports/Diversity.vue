@@ -575,7 +575,7 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { availableStages } from '@/helpers/exerciseHelper';
+import { availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {

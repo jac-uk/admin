@@ -237,7 +237,7 @@ import PanelForm from './components/AddEdit.vue';
 import EditPanellists from './Panellists/Edit.vue';
 import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   components: {

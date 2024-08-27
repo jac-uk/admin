@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { isEditable, CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { isEditable, CAPABILITIES, SELECTION_CATEGORIES } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   computed: {

@@ -359,7 +359,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { isLegal, availableStages, getTaskTypes } from '@/helpers/exerciseHelper';
+import { isLegal, availableStages, getTaskTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@/helpers/constants';
 
 export default {

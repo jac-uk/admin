@@ -293,7 +293,7 @@ import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequ
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
-import { availableStages } from '@/helpers/exerciseHelper';
+import { availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'CharacterChecks',

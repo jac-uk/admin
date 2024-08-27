@@ -100,7 +100,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
+import { hasIndependentAssessments } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';

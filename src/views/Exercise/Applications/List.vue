@@ -123,7 +123,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
-import { isClosed } from '@/helpers/exerciseHelper';
+import { isClosed } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request.vue';
 import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';

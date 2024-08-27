@@ -693,7 +693,7 @@
 </template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
-import { isLegal } from '@/helpers/exerciseHelper';
+import { isLegal } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { mapGetters } from 'vuex';
 
 export default {

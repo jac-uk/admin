@@ -475,7 +475,7 @@
 
 <script>
 import { logEvent } from '@/helpers/logEvent';
-import { isEditable, isArchived } from '@/helpers/exerciseHelper';
+import { isEditable, isArchived } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType.vue';
@@ -485,7 +485,7 @@ import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
-import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
+import { hasIndependentAssessments } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'SummaryView',

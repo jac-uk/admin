@@ -935,7 +935,7 @@ import {
   hasRelevantMemberships,
   isNonLegal,
   isApplicationPartAsked
-} from '@/helpers/exerciseHelper';
+} from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import _has from 'lodash/has';

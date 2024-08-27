@@ -4,7 +4,7 @@ import { firestore, functions } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
-import { getExerciseSaveData } from '@/helpers/exerciseHelper';
+import { getExerciseSaveData } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { logEvent } from '@/helpers/logEvent';
 import { checkNested } from '@/helpersTMP/object';
 import { ADVERT_TYPES } from '@/helpers/constants';

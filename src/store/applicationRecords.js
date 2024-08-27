@@ -3,7 +3,7 @@ import { writeBatch, query, doc, collection, where, serverTimestamp } from '@fir
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { getStageWithdrawalStatus } from '../helpers/exerciseHelper';
+import { getStageWithdrawalStatus } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { lookup } from '@/filters';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 

@@ -248,7 +248,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { downloadBase64File } from '@/helpers/file';
-import { availableStatuses } from '@/helpers/exerciseHelper';
+import { availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   name: 'EligibilityIssuesV2',

@@ -145,7 +145,7 @@
 
 <script>
 import { logEvent } from '@/helpers/logEvent';
-import { isEditable, isArchived } from '@/helpers/exerciseHelper';
+import { isEditable, isArchived } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType.vue';

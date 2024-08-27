@@ -93,7 +93,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Draggable from '@/components/DragAndDrop/Draggable.vue';
 import Droppable from '@/components/DragAndDrop/Droppable.vue';
-import { applicationContentList, unselectedApplicationParts, getExerciseSaveData } from '@/helpers/exerciseHelper';
+import { applicationContentList, unselectedApplicationParts, getExerciseSaveData } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import clone from 'clone';
 import _set from 'lodash/set';
 export default {

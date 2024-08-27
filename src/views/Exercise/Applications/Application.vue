@@ -242,7 +242,7 @@
               :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
-            
+
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
@@ -349,7 +349,7 @@ import {
   isApplicationPartAsked,
   isCharacterChecksAsked,
   isJAC00187
-} from '@/helpers/exerciseHelper';
+} from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';

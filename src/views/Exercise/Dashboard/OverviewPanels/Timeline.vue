@@ -41,9 +41,11 @@
     </div>
   </div>
 </template>
+
 <script>
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
+
 export default {
   name: 'Timeline',
   data() {
