@@ -23,6 +23,7 @@ export {
   totalFailed,
   totalDidNotParticipate,
   downloadMeritList,
+  xlsxData,
   getDownloadTypes
 };
 
@@ -437,7 +438,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
     const row = [];
     row.push(item.ref);
     if (type === TASK_TYPE.QUALIFYING_TEST) {
-      if (type === DOWNLOAD_TYPES.full.value) {
+      if (type === DOWNLOAD_TYPES.full.value) { // TODO: will never go into this block
         row.push(item.fullName);
         row.push(item.email);
         row.push(item.scoreSheet.qualifyingTest.SJ.score);

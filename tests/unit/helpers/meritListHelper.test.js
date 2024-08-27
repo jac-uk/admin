@@ -1,7 +1,7 @@
 import {
   OUTCOME,
   OVERRIDE_REASON,
-  // DOWNLOAD_TYPES,
+  DOWNLOAD_TYPES,
   getOverrideReasons,
   isPass,
   isPassingScore,
@@ -15,12 +15,15 @@ import {
   totalApplications,
   totalPassed,
   totalFailed,
-  totalDidNotParticipate
-  // downloadMeritList,
+  totalDidNotParticipate,
+  downloadMeritList,
+  xlsxData
   // getDownloadTypes
 } from '@/views/Exercise/Tasks/Task/Finalised/meritListHelper';
 import { DIVERSITY_CHARACTERISTICS } from '@/helpers/diversityCharacteristics';
-import { describe } from 'vitest';
+import { describe, it, vi, beforeEach } from 'vitest';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import { TASK_TYPE } from '@/helpers/constants';
 
 describe('getOverrideReasons', () => {
   it('should return override reasons', () => {
@@ -900,4 +903,319 @@ describe('totalDidNotParticipate', () => {
     };
     expect(totalDidNotParticipate(task)).toBe(0);
   });
+});
+
+// Mock the downloadXLSX function
+vi.mock('@jac-uk/jac-kit/helpers/export', () => ({
+  downloadXLSX: vi.fn(),
+}));
+
+describe('downloadMeritList', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should returns false for an invalid download type', () => {
+    const result = downloadMeritList('Title', [], [], {}, {}, 'invalid-type', 'filename');
+    expect(result).toBe(false);
+    expect(downloadXLSX).not.toHaveBeenCalled();
+  });
+
+  it('should call downloadXLSX with correct parameters for full download type', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+    const task = { /* mock task object */ };
+    const diversityData = { /* mock diversity data */ };
+
+    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith(
+      expect.any(Array),
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.full.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+  });
+
+  it('should call downloadXLSX with correct parameters for emp download type', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+    const task = { /* mock task object */ };
+    const diversityData = { /* mock diversity data */ };
+
+    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith(
+      expect.any(Array),
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.emp.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+
+  });
+
+  it('should return true for valid download types', () => {
+    const result1 = downloadMeritList('Title', [], [], {}, {}, DOWNLOAD_TYPES.full.value, 'filename');
+    const result2 = downloadMeritList('Title', [], [], {}, {}, DOWNLOAD_TYPES.emp.value, 'filename');
+
+    expect(result1).toBe(true);
+    expect(result2).toBe(true);
+  });
+
+  const mockDiversityData = {
+    '001': {
+      d: [
+        DIVERSITY_CHARACTERISTICS.GENDER_FEMALE,
+        DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME,
+        DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED,
+      ],
+    },
+    '002': {
+      d: [
+        DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR,
+      ],
+    },
+  };
+
+  it('should generate correct headers for full download type', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+    const task = { /* mock task object */ };
+    const diversityData = { /* mock diversity data */ };
+
+    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith(
+      [
+        [
+          'Ref',
+          'Full name',
+          'Email',
+          'Score',
+          'Rank',
+          'Outcome',
+          'Female',
+          'Ethnic minority',
+          'Solicitor',
+          'Disabled',
+        ],
+      ],
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.full.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+
+  });
+
+  it('should generate correct headers for emp download type', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+    const task = { /* mock task object */ };
+    const diversityData = { /* mock diversity data */ };
+
+    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith([
+        [
+          'Ref',
+          'Score',
+          'Rank',
+          'Outcome',
+          'Female',
+          'Ethnic minority',
+          'Solicitor',
+          'Disabled',
+        ],
+      ],
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.emp.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+    const result = xlsxData([], [], {}, {}, DOWNLOAD_TYPES.emp.value);
+    expect(result[0]).toEqual([
+      'Ref',
+      'Score',
+      'Rank',
+      'Outcome',
+      'Female',
+      'Ethnic minority',
+      'Solicitor',
+      'Disabled',
+    ]);
+  });
+
+  it('should generate correct data for scoreData', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+    const mockTask = {
+      finalScores: [
+        { id: '1', ref: 'ref-001', score: 10, rank: 1, fullName: 'John Doe', email: 'john@example.com', pass: true },
+        { id: '2', ref: 'ref-002', score: 9, rank: 2, fullName: 'Jane Smith', email: 'jane@example.com', pass: false },
+      ],
+    };
+
+    downloadMeritList(title, [], [], mockTask, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith(
+      [
+        [
+          'Ref',
+          'Full name',
+          'Email',
+          'Score',
+          'Rank',
+          'Outcome',
+          'Female',
+          'Ethnic minority',
+          'Solicitor',
+          'Disabled',
+        ],
+        [
+          'ref-001',
+          'John Doe',
+          'john@example.com',
+          10,
+          1,
+          'pass',
+          true,
+          true,
+          false,
+          true,
+        ],
+        [
+          'ref-002',
+          'Jane Smith',
+          'jane@example.com',
+          9,
+          2,
+          'fail',
+          false,
+          false,
+          true,
+          false,
+        ],
+      ],
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.full.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+  });
+
+  it('should generate correct data for didNotTake', () => {
+    // TODO: test on downloadMeritList
+    const mockDidNotTake = [
+      { ref: 'ref-001', fullName: 'Alice Johnson', email: 'alice@example.com' },
+    ];
+
+    const result = xlsxData(mockDidNotTake, [], {}, mockDiversityData, DOWNLOAD_TYPES.full.value);
+
+    expect(result[1]).toEqual([
+      'ref-001',
+      'Alice Johnson',
+      'alice@example.com',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      'noTestSubmitted',
+      true,
+      true,
+      false,
+      true,
+    ]);
+  });
+
+  it('should generate correct data for failed', () => {
+    const mockFailed = [
+      { ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com' },
+    ];
+
+    const result = xlsxData([], mockFailed, {}, mockDiversityData, DOWNLOAD_TYPES.full.value);
+
+    expect(result[1]).toEqual([
+      'ref-002',
+      'Bob Williams',
+      'bob@example.com',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      'failedFirstTest',
+      false,
+      false,
+      true,
+      false,
+    ]);
+  });
+
+  it('should handles QUALIFYING_TEST type correctly', () => {
+    const mockTask = {
+      finalScores: [
+        {
+          id: '1',
+          ref: 'ref-001',
+          fullName: 'John Doe',
+          email: 'john@example.com',
+          scoreSheet: {
+            qualifyingTest: {
+              SJ: { score: 80, percent: 80, zScore: 1.5 },
+              CA: { score: 90, percent: 90, zScore: 2.0 },
+            },
+          },
+          zScore: 1.75,
+        },
+      ],
+    };
+
+    const result = xlsxData([], [], mockTask, mockDiversityData, DOWNLOAD_TYPES.full.value, TASK_TYPE.QUALIFYING_TEST);
+
+    expect(result[1]).toEqual([
+      'ref-001',
+      'John Doe',
+      'john@example.com',
+      80,
+      80,
+      90,
+      90,
+      1.5,
+      2.0,
+      1.75,
+    ]);
+  });
+});
+
+describe('xlsxData', () => {
+  const mockDiversityData = {
+    '001': {
+      d: [
+        DIVERSITY_CHARACTERISTICS.GENDER_FEMALE,
+        DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME,
+        DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED,
+      ],
+    },
+    '002': {
+      d: [
+        DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR,
+      ],
+    },
+  };
+
 });
