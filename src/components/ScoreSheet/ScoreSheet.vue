@@ -32,6 +32,7 @@
           {{ $filters.lookup(header.ref) }}
         </th>
         <th
+          v-if="showScore"
           scope="col"
           class="govuk-table__header"
         />
@@ -58,12 +59,15 @@
         :column-index="columnIndex"
         @updated="updateScoreSheet"
       />
-      <TableCell class="table-cell-value table-cell-score">
+      <TableCell 
+        v-if="showScore"
+        class="table-cell-value table-cell-score"
+      >
         {{ row.score }}
       </TableCell>
       <TableCell
-        v-if="moderation"
-        class="govuk-!-padding-0 v-top table-cell-score"
+        v-if="moderation && editable"
+        class="govuk-!-padding-0 v-top table-cell-score table-cell-moderation"
       >
         <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-left-7">
           <div class="govuk-checkboxes__item">
@@ -80,7 +84,13 @@
             />
           </div>
         </div>
-      </TableCell>      
+      </TableCell>
+      <TableCell
+        v-if="moderation && !editable"
+        class="govuk-!-padding-0 table-cell-value"
+      >
+        {{ row.scoreSheet.moderation === 'TRUE' ? 'Yes' : 'No' }}
+      </TableCell>
     </template>
   </Table>
 </template>
@@ -122,6 +132,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    showScore: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     scoreSheetHeaders() {
@@ -134,7 +149,9 @@ export default {
       let columns = [];
       if (this.columnsBefore.length) columns = columns.concat(this.columnsBefore);
       this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'table-cell-score-header' }));
-      columns.push({ title: 'Score', class: 'table-cell-value table-cell-score' });
+      if (this.showScore) {
+        columns.push({ title: 'Score', class: 'table-cell-value table-cell-score' });
+      }
       if (this.moderation) {
         columns.push({ title: 'Moderation?', class: 'text-center table-cell-score' });
       }
@@ -228,6 +245,9 @@ export default {
   }
   .table-cell-score {
     width: 50px;
+  }
+  .table-cell-moderation {
+    vertical-align: top;
   }
 
 }

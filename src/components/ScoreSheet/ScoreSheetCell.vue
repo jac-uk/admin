@@ -5,8 +5,8 @@
     :class="column.editable ? 'table-cell-score': 'table-cell-value'"
   >
     <template v-if="!column.editable">
-      <span v-if="column.parent">{{ row.scoreSheet[column.parent][column.ref] }}</span>
-      <span v-else>{{ row.scoreSheet[column.ref] }}</span>
+      <span v-if="column.parent">{{ lookupColumnValue(column, row.scoreSheet[column.parent][column.ref]) }}</span>
+      <span v-else>{{ lookupColumnValue(column, row.scoreSheet[column.ref]) }}</span>
     </template>
 
     <template v-else>
@@ -30,7 +30,10 @@
         <option 
           v-for="option in getOptions(column.type)"
           :key="option.value"
-          :value="option.value">{{ option.label }}</option>
+          :value="option.value"
+        >
+          {{ option.label }}
+        </option>
       </select>
     </template>  
   </TableCell>
@@ -38,7 +41,7 @@
 
 <script>
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { GRADES, MARKING_TYPE, markingTypeHasOptions, markingTypeGetOptions } from '@/helpers/taskHelper';
+import { MARKING_TYPE, markingTypeHasOptions, markingTypeGetOptions } from '@/helpers/taskHelper';
 
 export default {
   name: 'ScoreSheetCell',
@@ -89,6 +92,14 @@ export default {
     },
     getOptions(type) {
       return markingTypeGetOptions(type);
+    },
+    lookupColumnValue(column, value) {
+      if (this.hasOptions(column.type)) {
+        const options = this.getOptions(column.type);
+        const option = options.find(option => option.value === value);
+        if (option) return option.label;
+      }
+      return value;
     },
     onKeyDown(event, rowIndex, colIndex) {
       let newRow = rowIndex;
