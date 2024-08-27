@@ -48,6 +48,7 @@ import bugReports from '@/store/bugReports/collection';
 import bugReport from '@/store/bugReports/document';
 
 import releases from '@/store/releases';
+import candidateSettings from '@/store/candidateSettings';
 
 //const store = new Vuex.Store({
 const store = createStore({
@@ -94,6 +95,7 @@ const store = createStore({
     vacancy,
     bugReport,
     bugReports,
+    candidateSettings,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',

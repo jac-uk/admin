@@ -41,8 +41,7 @@ import permissionMixin from '@/permissionMixin';
 import dayjs from 'dayjs';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { doc, getDoc } from 'firebase/firestore';
-import { firestore } from '@/firebase';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'ReleasesList',
@@ -59,10 +58,13 @@ export default {
         { title: 'Author' },
         { title: 'Published At' },
       ],
-      fileUploadEnabled: false, // To store the file upload status
     };
   },
   computed: {
+    ...mapGetters({
+      fileUploadEnabled: 'candidateSettings/getUploadStatus',
+    }),
+
     tableData() {
       return this.$store.state.releases.records;
     },
@@ -71,8 +73,9 @@ export default {
     },
   },
   created() {
+    // Can make the calls synchronously below
     this.$store.dispatch('releases/getLatestReleases');
-    this.fetchFileUploadStatus();
+    this.$store.dispatch('candidateSettings/bind');
   },
   methods: {
     formatDate(dateStr) {
@@ -80,19 +83,6 @@ export default {
     },
     getTableData(params) {
       this.$store.dispatch('releases/getLatestReleases', params);
-    },
-    async fetchFileUploadStatus() {
-      try {
-        // Reference to the 'settings' collection
-        const settingsRef = doc(firestore, 'settings/candidateSettings');
-
-        // Fetch the feature flag
-        const docSnapshot = await getDoc(settingsRef);
-        this.fileUploadEnabled = docSnapshot.exists() ? docSnapshot.data().fileUpload.enabled : false;
-      } catch (error) {
-        console.error('Failed to fetch file upload status:', error);
-        this.fileUploadEnabled = false; // Default to false if there's an error
-      }
     },
   },
 };
