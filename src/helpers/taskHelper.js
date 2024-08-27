@@ -191,6 +191,7 @@ function markingScheme2ColumnHeaders(markingScheme) {
         colspan: item.children.length,
       });
     } else {
+      // TODO: confirm if different type need to add header as well
       columns += 1;
     }
   });
