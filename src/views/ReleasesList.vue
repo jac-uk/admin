@@ -70,7 +70,6 @@ export default {
   computed: {
     ...mapGetters({
       fileUploadEnabled: 'candidateSettings/getUploadStatus',
-    }),
       lastFetchedDT: 'releases/getLastFetchedDT',
     }),
     ...mapState('releases', [
