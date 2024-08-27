@@ -23,7 +23,6 @@ export {
   totalFailed,
   totalDidNotParticipate,
   downloadMeritList,
-  xlsxData,
   getDownloadTypes
 };
 
@@ -545,6 +544,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
 }
 
 function getDownloadTypes(task) {
+  // TODO: confirm if task affect the download types
   if (!task) return [];
   return Object.values(DOWNLOAD_TYPES);
 }
