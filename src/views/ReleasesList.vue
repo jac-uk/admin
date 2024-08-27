@@ -11,28 +11,35 @@
       Latest Releases
     </h2>
 
-    <Table
-      data-key="id"
-      :data="tableData"
-      :page-size="50"
-      :columns="tableColumns"
-      @change="getTableData"
-    >
-      <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
-          {{ row.title }}
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
-          {{ row.tag_name }}
-        </TableCell>
-        <TableCell :title="tableColumns[2].title">
-          {{ row.author }}
-        </TableCell>
-        <TableCell :title="tableColumns[3].title">
-          {{ row.published_at ? formatDate(row.published_at) : '' }}
-        </TableCell>
-      </template>
-    </Table>
+    <div v-if="availability">
+      <div>Last fetched: {{ lastFetchedDT }}</div>
+      <Table
+        data-key="id"
+        :data="tableData"
+        :page-size="50"
+        :columns="tableColumns"
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            {{ row.title }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.tag_name }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.author }}
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            {{ row.published_at ? formatDate(row.published_at) : '' }}
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+
+    <div v-else>
+      Unavailable
+    </div>
   </div>
 </template>
 
@@ -41,7 +48,7 @@ import permissionMixin from '@/permissionMixin';
 import dayjs from 'dayjs';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'ReleasesList',
@@ -64,7 +71,11 @@ export default {
     ...mapGetters({
       fileUploadEnabled: 'candidateSettings/getUploadStatus',
     }),
-
+      lastFetchedDT: 'releases/getLastFetchedDT',
+    }),
+    ...mapState('releases', [
+      'availability',
+    ]),
     tableData() {
       return this.$store.state.releases.records;
     },

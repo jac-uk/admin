@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-        {{ $filters.lookup(type) }}
-      </h1>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="text-right">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
         <ActionButton
           v-if="showEmailButton && hasPermissions([
             PERMISSIONS.applications.permissions.canReadApplications.value,
@@ -18,7 +18,6 @@
         >
           Send report notfication
         </ActionButton>
-
         <FullScreenButton />
       </div>
     </div>

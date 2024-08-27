@@ -1,8 +1,6 @@
 <template>
-  <div class="govuk-grid-row">
-    <div class="exercise-stages print-full-width">
-      <RouterView />
-    </div>
+  <div class="exercise-stages print-full-width">
+    <RouterView />
   </div>
 </template>
 

@@ -1,586 +1,588 @@
 <template>
-  <div class="govuk-grid-column-full">
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
-        <h2 class="govuk-heading-l">
-          Agency
-        </h2>
-      </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Agency
+          </h2>
+        </div>
 
-      <div
-        class="moj-page-header-actions__actions float-right"
-      >
-        <div class="moj-button-menu">
-          <div class="moj-button-menu__wrapper">
-            <button
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
-              :disabled="!hasReportData"
-              @click="exportData()"
-            >
-              Export data
-            </button>
-            <ActionButton
-              v-if="hasPermissions([
-                PERMISSIONS.applications.permissions.canReadApplications.value,
-                PERMISSIONS.exercises.permissions.canReadExercises.value
-              ])"
-              type="primary"
-              :action="refreshReport"
-            >
-              Refresh
-            </ActionButton>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
+                :disabled="!hasReportData"
+                @click="exportData()"
+              >
+                Export data
+              </button>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.exercises.permissions.canReadExercises.value
+                ])"
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="govuk-inset-text govuk-!-margin-bottom-7">
-        <p class="govuk-body">
-          More information is available in the Excel files.
-        </p>
-      </div>
-
-      <TabsList
-        v-model:active-tab="activeTab"
-        :tabs="tabs"
-      >
-        <div
-          class="govuk-grid-column-full"
-          style="overflow-x: auto;"
-        >
-          <h3 class="govuk-heading-m govuk-!-margin-top-4">
-            {{ activeTabDetails.header || activeTabDetails.title }}
-          </h3>
-
-          <template
-            v-if="activeTab === 'acro'"
-          >
-            <p
-              v-if="!report || !report.totalApplications"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Date of Birth
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Place of Birth
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                    style="min-width: 250px;"
-                  >
-                    National Insurance Number
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in report.rows"
-                  :key="candidate.userId"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ $filters.formatDate(candidate.dateOfBirth, 'long') }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.placeOfBirth }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ $filters.formatNIN(candidate.nationalInsuranceNumber) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
-
-          <template
-            v-if="activeTab === 'sra'"
-          >
-            <p
-              v-if="!sraRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Admission to the roll
-                  </th>
-                  <th
-                    v-for="(header,index) in toSraQualificationTableHeaders(sraRows)"
-                    :key="`qual_header_${index}`"
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    {{ header }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in sraRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ $filters.formatDate(candidate.sraDate, 'long') }}
-                  </td>
-                  <td
-                    v-for="(data, index) in toSraQualificationTableData(candidate.sraQualifications, sraRows)"
-                    :key="`qual_td_${index}`"
-                    class="govuk-table__cell"
-                  >
-                    {{ data }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
-
-          <template
-            v-if="activeTab === 'bsb'"
-          >
-            <p
-              v-if="!bsbRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Called to the Bar
-                  </th>
-                  <th
-                    v-for="(header,index) in toBsbQualificationTableHeaders(bsbRows)"
-                    :key="`qual_header_${index}`"
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    {{ header }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in bsbRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td
-                    v-if="candidate.bsbDate"
-                    class="govuk-table__cell"
-                  >
-                    {{ $filters.formatDate(candidate.bsbDate, 'long') }}
-                  </td>
-                  <td
-                    v-else
-                    class="govuk-table__cell"
-                  >
-                    None given
-                  </td>
-                  <td
-                    v-for="(data, index) in toBsbQualificationTableData(candidate.bsbQualifications, bsbRows)"
-                    :key="`qual_td_${index}`"
-                    class="govuk-table__cell"
-                  >
-                    {{ data }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
-
-          <template
-            v-if="activeTab === 'jcio'"
-          >
-            <p
-              v-if="!jcioRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Judicial Office
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Judicial posts
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in jcioRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.jcioOffice }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.jcioPosts }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
-
-          <template
-            v-if="activeTab === 'hmrc'"
-          >
-            <p
-              v-if="!hmrcRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Date of birth
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    VAT registration number(s)
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in hmrcRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.dateOfBirth }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.hmrcVATNumbers }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
-
-          <template
-            v-if="activeTab === 'other'"
-          >
-            <h3 class="govuk-heading-s govuk-!-margin-top-4">
-              General Medical Council
-            </h3>
-            <p
-              v-if="!gmcRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Date of membership
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Membership number
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in gmcRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.gmcDate }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.gmcNumber }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <h3 class="govuk-heading-s govuk-!-margin-top-4">
-              Royal Institution Chartered Surveyors
-            </h3>
-            <p
-              v-if="!riscRows.length"
-              class="govuk-body"
-            >
-              No candidates require this check.
-            </p>
-            <table
-              v-else
-              class="govuk-table"
-            >
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Reference number
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Date of membership
-                  </th>
-                  <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Membership number
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr
-                  v-for="candidate in riscRows"
-                  :key="candidate.id"
-                  class="govuk-table__row"
-                >
-                  <td class="govuk-table__cell">
-                    <RouterLink
-                      class="govuk-link"
-                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
-                      target="_blank"
-                    >
-                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
-                    </RouterLink>
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.fullName }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.riscDate }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.riscNumber }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </template>
+        <div class="govuk-inset-text govuk-!-margin-bottom-7">
+          <p class="govuk-body">
+            More information is available in the Excel files.
+          </p>
         </div>
-      </TabsList>
+
+        <TabsList
+          v-model:active-tab="activeTab"
+          :tabs="tabs"
+        >
+          <div
+            class="govuk-grid-column-full"
+            style="overflow-x: auto;"
+          >
+            <h3 class="govuk-heading-m govuk-!-margin-top-4">
+              {{ activeTabDetails.header || activeTabDetails.title }}
+            </h3>
+
+            <template
+              v-if="activeTab === 'acro'"
+            >
+              <p
+                v-if="!report || !report.totalApplications"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Date of Birth
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Place of Birth
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                      style="min-width: 250px;"
+                    >
+                      National Insurance Number
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in report.rows"
+                    :key="candidate.userId"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ $filters.formatDate(candidate.dateOfBirth, 'long') }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.placeOfBirth }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ $filters.formatNIN(candidate.nationalInsuranceNumber) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+
+            <template
+              v-if="activeTab === 'sra'"
+            >
+              <p
+                v-if="!sraRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Admission to the roll
+                    </th>
+                    <th
+                      v-for="(header,index) in toSraQualificationTableHeaders(sraRows)"
+                      :key="`qual_header_${index}`"
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      {{ header }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in sraRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ $filters.formatDate(candidate.sraDate, 'long') }}
+                    </td>
+                    <td
+                      v-for="(data, index) in toSraQualificationTableData(candidate.sraQualifications, sraRows)"
+                      :key="`qual_td_${index}`"
+                      class="govuk-table__cell"
+                    >
+                      {{ data }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+
+            <template
+              v-if="activeTab === 'bsb'"
+            >
+              <p
+                v-if="!bsbRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Called to the Bar
+                    </th>
+                    <th
+                      v-for="(header,index) in toBsbQualificationTableHeaders(bsbRows)"
+                      :key="`qual_header_${index}`"
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      {{ header }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in bsbRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td
+                      v-if="candidate.bsbDate"
+                      class="govuk-table__cell"
+                    >
+                      {{ $filters.formatDate(candidate.bsbDate, 'long') }}
+                    </td>
+                    <td
+                      v-else
+                      class="govuk-table__cell"
+                    >
+                      None given
+                    </td>
+                    <td
+                      v-for="(data, index) in toBsbQualificationTableData(candidate.bsbQualifications, bsbRows)"
+                      :key="`qual_td_${index}`"
+                      class="govuk-table__cell"
+                    >
+                      {{ data }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+
+            <template
+              v-if="activeTab === 'jcio'"
+            >
+              <p
+                v-if="!jcioRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Judicial Office
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Judicial posts
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in jcioRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.jcioOffice }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.jcioPosts }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+
+            <template
+              v-if="activeTab === 'hmrc'"
+            >
+              <p
+                v-if="!hmrcRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Date of birth
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      VAT registration number(s)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in hmrcRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.dateOfBirth }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.hmrcVATNumbers }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+
+            <template
+              v-if="activeTab === 'other'"
+            >
+              <h3 class="govuk-heading-s govuk-!-margin-top-4">
+                General Medical Council
+              </h3>
+              <p
+                v-if="!gmcRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Date of membership
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Membership number
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in gmcRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.gmcDate }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.gmcNumber }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3 class="govuk-heading-s govuk-!-margin-top-4">
+                Royal Institution Chartered Surveyors
+              </h3>
+              <p
+                v-if="!riscRows.length"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Reference number
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Date of membership
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Membership number
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in riscRows"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      <RouterLink
+                        class="govuk-link"
+                        :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                        target="_blank"
+                      >
+                        {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                      </RouterLink>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.riscDate }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.riscNumber }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+          </div>
+        </TabsList>
+      </div>
     </div>
   </div>
 </template>
