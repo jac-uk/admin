@@ -376,7 +376,7 @@ export default {
       if (data[ROLES.CHAIR]) {
         const chair = this.panellists.find(item => item.id === data[ROLES.CHAIR]);
         if (chair) {
-          saveData.editors = [chair.email]; // `editors` just has a single editor for now however is named in case we want to add more in the future
+          saveData.editors = [chair.jacEmail]; // `editors` just has a single editor for now however is named in case we want to add more in the future
         }
       }
       await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );

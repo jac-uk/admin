@@ -73,7 +73,7 @@
           <div class="govuk-checkboxes__item">
             <input
               :id="`moderation-${row.id}`"
-              :checked="row.scoreSheet.flagForModeration"
+              :checked="row.scoreSheet.moderation === 'Yes'"
               class="govuk-checkboxes__input"
               type="checkbox"
               @input="updateModeration(row, $event)"

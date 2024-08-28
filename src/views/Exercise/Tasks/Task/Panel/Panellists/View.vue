@@ -16,9 +16,9 @@
       >
         {{ assignedPanellists[role].fullName }}<br>
         <a
-          :href="`mailto:${assignedPanellists[role].email}`"
+          :href="`mailto:${assignedPanellists[role].jacEmail}`"
           class="govuk-link"
-        >{{ assignedPanellists[role].email }}</a><br>
+        >{{ assignedPanellists[role].jacEmail }}</a><br>
         {{ assignedPanellists[role].phone }}
       </dd>
       <dd

@@ -26,7 +26,7 @@
                   :value="panellist.id"
                 >
                   {{ panellist.fullName }}
-                  ({{ panellist.email }})
+                  ({{ panellist.jacEmail }})
                 </option>
               </Select>
             </div>
