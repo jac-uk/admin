@@ -76,7 +76,7 @@ const DOWNLOAD_TYPES = {
 function scoreType(task) {
   if (!task) return 'score';
   if (task.scoreType) return task.scoreType;
-  if (task.finalScores[0].hasOwnProperty('percent')) return 'percent';
+  if (task.finalScores && task.finalScores[0].hasOwnProperty('percent')) return 'percent';
   return 'score';
 }
 
@@ -237,8 +237,10 @@ function totalPassed(task, scoreType, scores) {
   if (!scores.length) return 0;
   if (!task) return 0;
   if (!task.passMark) return 0;
-  const scoreData = scores.find(scoreData => scoreData.score === task.passMark);
-  let total = scoreData.rank + scoreData.count - 1;
+  // TODO: confirm if the score counts are cumulative
+  let total = scores.filter((data) => data.score >= task.passMark)
+                    .map((data) => data.count)
+                    .reduce((a, b) => a + b, 0);
   if (task.overrides) {
     const numPasses = task.overrides.pass ? Object.keys(task.overrides.pass).length : 0;
     const numFails = task.overrides.fail ? Object.keys(task.overrides.fail).length : 0;
@@ -256,7 +258,8 @@ function totalFailed(task, scoreType, scores) {
 function totalDidNotParticipate(task) {
   if (!task) return 0;
   if (!task.passMark) return 0;
-  return totalApplications(task) - task.finalScores.length;
+  const totalDidNotParticipate = totalApplications(task) - task.finalScores.length;
+  return totalDidNotParticipate > 0 ? totalDidNotParticipate : 0;
 }
 
 function getOverrideReasons() {
@@ -277,6 +280,7 @@ function isPassingScore(task, score) {
   if (task && task.passMark && task.passMark <= score) {
     return true;
   }
+  return false;
 }
 
 function isPass(task, applicationId, score) {
@@ -307,7 +311,7 @@ function getNewOutcome(task, score) {
 }
 
 function getCurrentOutcome(task, score) {
-  if (isPass(task, score)) {
+  if (isPassingScore(task, score)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;
@@ -316,8 +320,8 @@ function getCurrentOutcome(task, score) {
 
 /**
  * function getOverride(task, applicationId)
- * @param {*} task 
- * @param {*} applicationId 
+ * @param {*} task
+ * @param {*} applicationId
  * @returns false or an `override` object of the form `{ id: string, outcome: enum('pass', 'fail'), reason: enum('emp-gender', 'emp-ethnicity', 'technical', 'personal') }`
  */
 function getOverride(task, applicationId) {
@@ -330,7 +334,7 @@ function getOverride(task, applicationId) {
         return {
           outcome: OUTCOME.PASS.value,
           id: applicationId,
-        };  
+        };
       } else {
         return false;
       }
@@ -350,7 +354,7 @@ function getOverride(task, applicationId) {
         return {
           outcome: OUTCOME.FAIL.value,
           id: applicationId,
-        };  
+        };
       } else {
         return false;
       }
@@ -433,23 +437,23 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
     const row = [];
     row.push(item.ref);
     if (type === TASK_TYPE.QUALIFYING_TEST) {
-      if (type === DOWNLOAD_TYPES.full.value) {
+      if (type === DOWNLOAD_TYPES.full.value) { // TODO: will never go into this block
         row.push(item.fullName);
         row.push(item.email);
         row.push(item.scoreSheet.qualifyingTest.SJ.score);
         row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-        row.push(item.scoreSheet.qualifyingTest.CA.score);      
+        row.push(item.scoreSheet.qualifyingTest.CA.score);
         row.push(item.scoreSheet.qualifyingTest.CA.percent);
         row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
         row.push(item.scoreSheet.qualifyingTest.CA.zScore);
       }
-      row.push(item.zScore);      
+      row.push(item.zScore);
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
       }
-      row.push(item.score);      
+      row.push(item.score);
     }
     row.push(item.rank); // TODO rank
     // row.push(''); // TODO notes
@@ -535,11 +539,12 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push();
     }
     rows.push(row);
-  });  
+  });
   return rows;
 }
 
 function getDownloadTypes(task) {
+  // TODO: confirm if task affect the download types
   if (!task) return [];
   return Object.values(DOWNLOAD_TYPES);
 }
