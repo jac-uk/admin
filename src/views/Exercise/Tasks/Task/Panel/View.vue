@@ -235,7 +235,7 @@ export default {
     tabs() {
       const tabs = [];
       tabs.push({ ref: 'panellists', title: 'Panellists' });
-      tabs.push({ ref: 'slots', title: 'Selection Days' });
+      // tabs.push({ ref: 'slots', title: 'Selection Days' });
       tabs.push({ ref: 'applications', title: 'Applications' });
       tabs.push({ ref: 'edit', title: 'Edit' });
       return tabs;
