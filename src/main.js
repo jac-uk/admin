@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import { generalisePath } from '@/helpers/path';
+import { generalisePath } from '@jac-uk/jac-kit/helpers/path';
 
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
@@ -11,7 +11,7 @@ import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
-import { searchMap } from '@/helpers/searchMap';
+import { searchMap } from '@jac-uk/jac-kit/helpers/searchMap';
 
 import * as Sentry from '@sentry/vue';
 import VueGtag from 'vue-gtag';

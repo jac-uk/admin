@@ -87,7 +87,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from './helper';
-import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@jac-uk/jac-kit/helpers/diversityCharacteristics';
 import { TASK_TYPE, getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { downloadMeritList, getDownloadTypes } from '@jac-uk/jac-kit/helpers/taskHelper.js';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';

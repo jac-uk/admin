@@ -1,6 +1,6 @@
 import { collection, doc, updateDoc, setDoc, getDoc, addDoc, serverTimestamp, runTransaction } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 // import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { getStageWithdrawalStatus } from '@jac-uk/jac-kit/helpers/exerciseHelper';

@@ -123,7 +123,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
 import { functions } from '@/firebase';
-import { TASK_TYPE } from '@/helpers/constants';
+import { TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
 

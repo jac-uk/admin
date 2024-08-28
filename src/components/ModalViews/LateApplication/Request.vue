@@ -57,7 +57,7 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
-import { checkNested } from '@/helpersTMP/object';
+import { checkNested } from '@jac-uk/jac-kit/helpers/object';
 import ExtendedError from '@/errors/extendedError';
 export default {
   name: 'LateApplicationRequest',

@@ -323,7 +323,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';

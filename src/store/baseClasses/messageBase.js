@@ -1,6 +1,6 @@
 import { firestore } from '@/firebase';
 import { doc, addDoc, updateDoc, deleteDoc ,collection, query, where, orderBy, limit as firestoreLimit, serverTimestamp } from '@firebase/firestore';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';

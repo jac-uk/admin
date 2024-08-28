@@ -144,12 +144,12 @@
 </template>
 
 <script>
-import { logEvent } from '@/helpers/logEvent';
+import { logEvent } from '@jac-uk/jac-kit/helpers/logEvent';
 import { isEditable, isArchived } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType.vue';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';

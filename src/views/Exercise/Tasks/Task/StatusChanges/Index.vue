@@ -149,7 +149,7 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import SetStatusForm from './SetStatus.vue';
 import StatusTag from './StatusTag.vue';
 import { functions } from '@/firebase';
-import { getTableData } from '@/helpers/tableHelper';
+import { getTableData } from '@jac-uk/jac-kit/helpers/tableHelper';
 
 export default {
   components: {

@@ -63,7 +63,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelfAssessmentSection from '@/components/RepeatableFields/SelfAssessmentSection.vue';
-import { ASSESSMENT_METHOD } from '@/helpers/constants';
+import { ASSESSMENT_METHOD } from '@jac-uk/jac-kit/helpers/constants';
 import { shallowRef } from 'vue';
 
 export default {

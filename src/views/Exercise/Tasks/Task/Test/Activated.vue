@@ -64,7 +64,7 @@ import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
-import { TASK_TYPE } from '@/helpers/constants';
+import { TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {

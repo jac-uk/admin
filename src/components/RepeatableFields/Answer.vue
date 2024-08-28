@@ -11,7 +11,7 @@
 
 <script>
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import { getRandomString } from '@/helpers/helpers';
+import { getRandomString } from '@jac-uk/jac-kit/helpers/helpers';
 
 export default {
   name: 'Answer',

@@ -177,7 +177,7 @@ import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 import { isApproved, isArchived, isPublished } from '@jac-uk/jac-kit/helpers/exerciseHelper';
-import { logEvent } from '@/helpers/logEvent';
+import { logEvent } from '@jac-uk/jac-kit/helpers/logEvent';
 import TabMenu from '@/components/Navigation/TabMenu1.vue';
 export default {
   name: 'App',

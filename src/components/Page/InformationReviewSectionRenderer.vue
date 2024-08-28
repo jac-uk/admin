@@ -412,7 +412,7 @@ import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
-import { WORKING_BASIS } from '@/helpers/constants';
+import { WORKING_BASIS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'InformationReviewSectionRenderer',

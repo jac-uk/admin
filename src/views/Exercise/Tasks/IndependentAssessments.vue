@@ -368,7 +368,7 @@ import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentA
 import { isArchived, applicationRecordCounts, availableStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
-import { ASSESSOR_TYPES } from '@/helpers/constants';
+import { ASSESSOR_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'IndependentAssessments',

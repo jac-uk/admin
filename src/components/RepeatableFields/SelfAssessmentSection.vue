@@ -29,7 +29,7 @@
 <script>
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import { SELF_ASSESSMENT_COMPETENCIES_QUESTIONS } from '@/helpers/constants';
+import { SELF_ASSESSMENT_COMPETENCIES_QUESTIONS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'SelfAssessmentSection',

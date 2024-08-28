@@ -1,13 +1,13 @@
 import { query, doc, collection, getDoc, getDocs, updateDoc, where, limit, runTransaction, serverTimestamp, arrayUnion, arrayRemove } from '@firebase/firestore';
 import { httpsCallable } from '@firebase/functions';
 import { firestore, functions } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { getExerciseSaveData } from '@jac-uk/jac-kit/helpers/exerciseHelper';
-import { logEvent } from '@/helpers/logEvent';
-import { checkNested } from '@/helpersTMP/object';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { logEvent } from '@jac-uk/jac-kit/helpers/logEvent';
+import { checkNested } from '@jac-uk/jac-kit/helpers/object';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 
 const collectionName = 'exercises';
 const collectionRef = collection(firestore, collectionName);

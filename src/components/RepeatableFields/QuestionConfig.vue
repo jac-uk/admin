@@ -252,7 +252,7 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.v
 import AnswerGroup from '@/components/RepeatableFields/AnswerGroup.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
 import { shallowRef } from 'vue';
-import { getRandomString } from '@/helpers/helpers';
+import { getRandomString } from '@jac-uk/jac-kit/helpers/helpers';
 
 export default {
   name: 'QuestionConfig',

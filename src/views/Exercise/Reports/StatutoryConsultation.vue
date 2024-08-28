@@ -95,7 +95,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
-import { APPLICATION_STATUS } from '@/helpers/constants';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'StatutoryConsultation',

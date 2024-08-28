@@ -6,7 +6,7 @@
   />
 </template>
 <script>
-import { getNextFromArrayWrap }  from '@/helpersTMP/array';
+import { getNextFromArrayWrap }  from '@jac-uk/jac-kit/helpers/array';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 

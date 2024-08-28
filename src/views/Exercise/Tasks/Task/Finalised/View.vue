@@ -237,7 +237,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import { PANEL_TYPES } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@jac-uk/jac-kit/helpers/exerciseHelper';
-import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@jac-uk/jac-kit/helpers/diversityCharacteristics';
 import _has from 'lodash/has';
 import _find from 'lodash/find';
 

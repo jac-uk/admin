@@ -339,7 +339,7 @@ import ResignationFromDWPSummary from '@/views/InformationReview/ResignationFrom
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import PageNotFound from '@/views/Errors/PageNotFound.vue';
 import { splitFullName } from '@jac-uk/jac-kit/helpers/splitFullName';
-import { logEvent } from '@/helpers/logEvent';
+import { logEvent } from '@jac-uk/jac-kit/helpers/logEvent';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
 import {
   isLegal,

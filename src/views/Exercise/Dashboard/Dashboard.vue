@@ -137,7 +137,7 @@ import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { applicationCounts, availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
 //import QualifyingTest from './ScoresDistribution/QualifyingTest';
@@ -156,7 +156,7 @@ import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'Dashboard',

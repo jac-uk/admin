@@ -198,7 +198,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
 import { cloneDeep } from 'lodash';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'CreateExercise',

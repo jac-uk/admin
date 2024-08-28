@@ -10,7 +10,7 @@
 
 <script>
 import { beforeRouteEnter, getExpectedRouteName } from './helper';
-import { TASK_TYPE } from '@/helpers/constants';
+import { TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
 import defaultView from './New/default.vue';
 import expired from './New/expired.vue';
 import qualifyingTest from './New/qualifyingTest.vue';

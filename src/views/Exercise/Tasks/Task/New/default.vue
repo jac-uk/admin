@@ -84,7 +84,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { btnNext } from '../helper';
-import { TASK_TYPE } from '@/helpers/constants';
+import { TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';

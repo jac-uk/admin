@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import { writeBatch, query, doc, collection, addDoc, setDoc, deleteDoc, getDoc, getDocs, updateDoc, where, limit, runTransaction, serverTimestamp, arrayUnion, arrayRemove } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import clone from 'clone';

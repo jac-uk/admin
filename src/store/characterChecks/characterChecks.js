@@ -1,8 +1,8 @@
 import { query, doc, writeBatch, collection, where, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 const collectionName = 'applicationRecords';
@@ -27,10 +27,10 @@ export default {
           EXERCISE_STAGE.SCC,
           EXERCISE_STAGE.RECOMMENDATION,
           // v1
-          EXERCISE_STAGE.SHORTLISTED, 
-          EXERCISE_STAGE.SELECTABLE, 
-          EXERCISE_STAGE.SELECTED, 
-          EXERCISE_STAGE.RECOMMENDED, 
+          EXERCISE_STAGE.SHORTLISTED,
+          EXERCISE_STAGE.SELECTABLE,
+          EXERCISE_STAGE.SELECTED,
+          EXERCISE_STAGE.RECOMMENDED,
           EXERCISE_STAGE.HANDOVER,
         ]));
       }

@@ -443,8 +443,8 @@ import Form from '@/components/Page/Form.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { generateApplications, randomArrayItem, randomNumber } from './dummyData';
-import { APPLICATION_STATUS } from '@/helpers/constants';
-import { getTableData } from '@/helpers/tableHelper';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { getTableData } from '@jac-uk/jac-kit/helpers/tableHelper';
 
 export default {
   components: {

@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import { writeBatch, query, doc, collection, where, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { getStageWithdrawalStatus } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { lookup } from '@/filters';

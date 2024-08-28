@@ -313,7 +313,7 @@ import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion
 import Membership from '@/components/RepeatableFields/Membership.vue';
 import { isLegal, isNonLegal, isTribunal } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { shallowRef } from 'vue';
-import { DEFAULT_WORD_COUNT } from '@/helpers/constants';
+import { DEFAULT_WORD_COUNT } from '@jac-uk/jac-kit/helpers/constants';
 
 const fixedFields = {
   memberships: [

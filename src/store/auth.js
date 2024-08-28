@@ -1,7 +1,7 @@
 import { doc, collection, updateDoc } from '@firebase/firestore';
 import { httpsCallable } from '@firebase/functions';
 import { auth, functions, firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 

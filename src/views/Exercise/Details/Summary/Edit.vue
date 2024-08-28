@@ -123,7 +123,7 @@ import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vu
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseAdvertTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';

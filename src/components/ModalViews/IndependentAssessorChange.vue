@@ -72,7 +72,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
-import { ASSESSOR_TYPES } from '@/helpers/constants';
+import { ASSESSOR_TYPES } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'IndependentAssessorChange',

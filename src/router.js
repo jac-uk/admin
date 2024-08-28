@@ -5,7 +5,7 @@ import {
 
 import store from '@/store';
 
-import { STATUS, EXERCISE_STAGE } from '@/helpers/constants';
+import { STATUS, EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 import EmptyRouterView from '@/components/EmptyRouterView.vue';
 

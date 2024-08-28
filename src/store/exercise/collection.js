@@ -1,9 +1,9 @@
 import { query, doc, collection, writeBatch, where, orderBy } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
-import { logEvent } from '@/helpers/logEvent';
+import { logEvent } from '@jac-uk/jac-kit/helpers/logEvent';
 
 export default {
   namespaced: true,

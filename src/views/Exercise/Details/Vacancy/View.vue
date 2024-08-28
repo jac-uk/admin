@@ -222,7 +222,7 @@ import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 //import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import { APPLICATION_STATUS } from '@/helpers/constants';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'VacancyView',

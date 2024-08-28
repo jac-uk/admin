@@ -327,7 +327,7 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
 import AssessmentSection from '@/components/RepeatableFields/AssessmentSection.vue';
-import { DEFAULT_WORD_COUNT } from '@/helpers/constants';
+import { DEFAULT_WORD_COUNT } from '@jac-uk/jac-kit/helpers/constants';
 export default {
   name: 'AssessmentsSummary',
   components: {
