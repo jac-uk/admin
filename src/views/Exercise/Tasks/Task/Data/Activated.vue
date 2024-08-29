@@ -179,7 +179,11 @@
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
+<<<<<<< Updated upstream
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@jac-uk/jac-kit/helpers/taskHelper.js';
+=======
+import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@jac-uk/jac-kit/helpers/taskHelper';
+>>>>>>> Stashed changes
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';

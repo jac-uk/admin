@@ -360,7 +360,11 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { isLegal, availableStages, getTaskTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
+<<<<<<< Updated upstream
 import { EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@/helpers/constants';
+=======
+import { EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
+>>>>>>> Stashed changes
 
 export default {
   name: 'Outreach',

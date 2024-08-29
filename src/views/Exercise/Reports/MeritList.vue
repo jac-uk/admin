@@ -133,7 +133,11 @@ import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import { TASK_TYPE, TASK_STATUS, getMeritListTaskTypes } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@jac-uk/jac-kit/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
+<<<<<<< Updated upstream
 import { MARKING_TYPE } from '@jac-uk/jac-kit/helpers/taskHelper.js';
+=======
+import { MARKING_TYPE } from '@jac-uk/jac-kit/helpers/taskHelper';
+>>>>>>> Stashed changes
 import { getTableData } from '@jac-uk/jac-kit/helpers/tableHelper';
 
 const localLookup = {};

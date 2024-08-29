@@ -576,7 +576,11 @@ import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@jac-uk/jac-kit/helpers/exerciseHelper';
+<<<<<<< Updated upstream
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+=======
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+>>>>>>> Stashed changes
 
 export default {
   name: 'Diversity',

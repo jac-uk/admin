@@ -170,7 +170,8 @@
 
 <script>
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';import { auth } from '@/firebase';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import { auth } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';

@@ -89,7 +89,11 @@ import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@jac-uk/jac-kit/helpers/diversityCharacteristics';
 import { TASK_TYPE, getTaskSteps } from '@jac-uk/jac-kit/helpers/exerciseHelper';
+<<<<<<< Updated upstream
 import { downloadMeritList, getDownloadTypes } from '@jac-uk/jac-kit/helpers/taskHelper.js';
+=======
+import { downloadMeritList, getDownloadTypes } from '@jac-uk/jac-kit/helpers/taskHelper';
+>>>>>>> Stashed changes
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import { functions } from '@/firebase';
