@@ -1,10 +1,6 @@
 import { doc, updateDoc } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-<<<<<<< Updated upstream
-import { firestoreAction } from '@jac-uk/jac-kit/helpers';
-=======
 import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
->>>>>>> Stashed changes
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 

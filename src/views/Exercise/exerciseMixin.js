@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
-import exerciseTimeline from '@jac-uk/jac-kit/helpers/exerciseHelper.js';
-import createTimeline from '@jac-uk/jac-kit/helpers/createTimeline';
-=======
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
->>>>>>> Stashed changes
 
 const ADVERT_TYPES = {
   LISTING: 'listing',

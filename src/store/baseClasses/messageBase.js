@@ -1,10 +1,6 @@
 import { firestore } from '@/firebase';
 import { doc, addDoc, updateDoc, deleteDoc ,collection, query, where, orderBy, limit as firestoreLimit, serverTimestamp } from '@firebase/firestore';
-<<<<<<< Updated upstream
-import { firestoreAction } from '@jac-uk/jac-kit/helpers';
-=======
 import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
->>>>>>> Stashed changes
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';

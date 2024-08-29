@@ -118,10 +118,9 @@ import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived, availableStages, availableReportLinks, getTaskTypes, TASK_STATUS } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { functions } from '@/firebase';
-import { ADVERT_TYPES, EXERCISE_STAGE } from '../helpers/constants';
 import { useExercise } from '@/composables/useExercise';
 import TabMenu from '@/components/Navigation/TabMenu2.vue';
-import { TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, TASK_TYPE } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@/filters';
 
 export default {

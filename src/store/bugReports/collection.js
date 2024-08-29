@@ -1,11 +1,7 @@
 // eslint-disable-next-line
 import { collection } from '@firebase/firestore';
 import { firestore } from '@/firebase';
-<<<<<<< Updated upstream
-import { firestoreAction } from '@jac-uk/jac-kit/helpers';
-=======
 import { firestoreAction } from '@jac-uk/jac-kit/helpers/vuexfireJAC';
->>>>>>> Stashed changes
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
