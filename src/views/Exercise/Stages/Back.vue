@@ -31,7 +31,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { DEFAULT } from '@jac-uk/jac-kit/helpers/constants';
-import { getPreviousStage } from '../../../helpers/exerciseHelper';
+import { getPreviousStage } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 import { lookup } from '../../../filters';
 
 export default {

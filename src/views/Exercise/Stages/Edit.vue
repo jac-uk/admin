@@ -73,7 +73,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import { availableStatuses, getNextStage, getStagePassingStatuses, getStageMoveBackStatuses } from '../../../helpers/exerciseHelper';
+import { availableStatuses, getNextStage, getStagePassingStatuses, getStageMoveBackStatuses } from '@jac-uk/jac-kit/helpers/exerciseHelper';
 
 export default {
   components: {

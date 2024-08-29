@@ -1,4 +1,5 @@
 import { Timestamp } from '@firebase/firestore';
+
 const toJACString = (data) => {
   return `JAC_ENV=${data.environment}&&JAC_TYPE=${data.type}&&JAC_TITLE=${data.title}&&JAC_CONTENT=${JSON.stringify(data.content)}`;
 };

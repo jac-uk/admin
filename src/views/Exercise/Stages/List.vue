@@ -107,8 +107,8 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
-import { availableStatuses, getPreviousStage, getStagePassingStatuses } from '../../../helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '../../../helpers/constants';
+import { availableStatuses, getPreviousStage, getStagePassingStatuses } from  '@jac-uk/jac-kit/helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import store from '@/store';
 
 export default {
