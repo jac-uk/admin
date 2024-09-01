@@ -31,6 +31,8 @@ export {
   TASK_STATUS,
   TASK_TYPE,
   STAGE_TASKS,
+  PROCESSING_STAGE,
+  TASK_STEPS,
   getNextProcessingStage,
   getProcessingEntryStage,
   getProcessingExitStage,
@@ -38,10 +40,12 @@ export {
   getTaskTypes,
   getTaskCurrentStep,
   getTaskSteps,
+  taskStatuses,
   getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
   emptyScoreSheet,
+  applicationCurrentStep,
   exerciseStates,
   exerciseAdvertTypes,
   applicationContentSteps,
@@ -57,6 +61,7 @@ export {
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
   hasQualifyingTests,
+  hasScenarioTest,
   hasRelevantMemberships,
   hasStatementOfSuitability,
   hasCoveringLetter,
@@ -640,7 +645,7 @@ function isProcessing(exercise) {
 }
 function isClosed(exercise) {
   if (!exercise) { return false; }
-  return isApproved && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
+  return isApproved(exercise) && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
 }
 function applicationCounts(exercise) {
   return exercise && exercise._applications ? exercise._applications : {};
