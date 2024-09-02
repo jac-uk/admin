@@ -5,8 +5,8 @@
       :load-failed="loadFailed"
     />
     <div v-else>
-      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
-        <div class="govuk-grid-column-full">
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-1 govuk-!-margin-bottom-1">
+        <div class="govuk-grid-column-full govuk-!-padding-bottom-0">
           <div>
             <h1
               class="govuk-heading-xl govuk-!-margin-bottom-0"
@@ -54,7 +54,7 @@
           </router-link>
           <div
             v-if="!isProduction"
-            class="govuk-!-margin-top-4"
+            class="govuk-!-margin-top-1"
           >
             <button
               v-if="isReadyForTesting && !isArchived"
