@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Vacancy information
         </h2>
@@ -454,7 +447,6 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue'
 import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 
@@ -469,7 +461,6 @@ export default {
     Currency,
     TextareaInput,
     RichTextInput,
-    BackLink,
     DetailPreview,
     ListingPreview,
   },

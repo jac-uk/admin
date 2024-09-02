@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Selection set-up
         </h2>
@@ -81,7 +74,6 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 const competenciesCapabilities = ['EJ', 'PBK', 'ACI', 'WCO', 'MWE'];
 const competenciesSelectionCategories = ['interview', 'situational', 'roleplay'];
@@ -95,7 +87,6 @@ export default {
     RadioItem,
     CheckboxGroup,
     CheckboxItem,
-    BackLink,
   },
   extends: Form,
   data(){

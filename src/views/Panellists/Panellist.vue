@@ -1,11 +1,5 @@
 <template>
   <div v-if="panellist">
-    <router-link
-      class="govuk-back-link govuk-!-margin-top-0 "
-      :to="{ name: 'panellists-list' }"
-    >
-      Back
-    </router-link>
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >

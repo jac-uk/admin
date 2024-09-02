@@ -1,13 +1,6 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div
-        v-if="!hasJourney"
-        class="text-right"
-      >
-        <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-      </div>
-
       <h2 class="govuk-heading-l">
         Downloads
       </h2>
@@ -102,7 +95,6 @@
 import { mapState } from 'vuex';
 import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload.vue';
@@ -112,7 +104,6 @@ import UploadFiles from '@/components/ModalViews/UploadFiles.vue';
 export default {
   name: 'DownloadsEdit',
   components: {
-    BackLink,
     ErrorSummary,
     RepeatableFields,
     Modal,

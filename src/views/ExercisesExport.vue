@@ -1,7 +1,6 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <BackLink />
       <h1
         class="govuk-heading-l"
       >
@@ -25,7 +24,6 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -34,7 +32,6 @@ import permissionMixin from '@/permissionMixin';
 export default {
   name: 'ExercisesExport',
   components: {
-    BackLink,
     ActionButton,
   },
   mixins: [permissionMixin],

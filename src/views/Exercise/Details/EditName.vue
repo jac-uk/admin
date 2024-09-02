@@ -2,10 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div class="text-right">
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Update exercise name
         </h2>
@@ -28,13 +24,11 @@
 <script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   name: 'EditName',
   components: {
     TextField,
-    BackLink,
   },
   extends: Form,
   data(){
