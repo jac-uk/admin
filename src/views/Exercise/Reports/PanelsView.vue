@@ -6,12 +6,6 @@
     <div id="panel-pack-div">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-          <router-link
-            class="govuk-back-link"
-            :to="{ name: `exercise-reports-${panel.type}` }"
-          >
-            Back
-          </router-link>
           <span class="govuk-caption-l">Panel</span>
           <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
             {{ panel.name }}

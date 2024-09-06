@@ -5,18 +5,8 @@
       :load-failed="loadFailed"
     />
     <div v-else>
-      <div class="govuk-grid-row print-none">
-        <div class="govuk-grid-column-one-quarter">
-          <router-link
-            class="govuk-back-link govuk-!-margin-0"
-            :to="goBack"
-          >
-            Back
-          </router-link>
-        </div>
-      </div>
-      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
-        <div class="govuk-grid-column-full">
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-1 govuk-!-margin-bottom-1">
+        <div class="govuk-grid-column-full govuk-!-padding-bottom-0">
           <div>
             <h1
               class="govuk-heading-xl govuk-!-margin-bottom-0"
@@ -64,7 +54,7 @@
           </router-link>
           <div
             v-if="!isProduction"
-            class="govuk-!-margin-top-4"
+            class="govuk-!-margin-top-1"
           >
             <button
               v-if="isReadyForTesting && !isArchived"
@@ -393,20 +383,6 @@ export default {
         subNavigation.push({ link: { name: 'exercise-reports-diversity' }, title: 'Reports', content: this.reportLinks });
       }
       return subNavigation;
-    },
-    goBack() {
-      if (this.$route.name === 'exercise-overview' || (this.isAdvertTypeExternal && this.$route.name === 'exercise-external')) {
-        return {
-          name: 'exercises',
-        };
-      } else {
-        return {
-          name: 'exercise-overview',
-          params: {
-            id: this.exercise ? this.exercise.id : this.$route.params.id,
-          },
-        };
-      }
     },
     isTested() {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';

@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Working preferences
         </h2>
@@ -127,13 +120,11 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
 import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { shallowRef } from 'vue';
 
 export default {
   components: {
     ErrorSummary,
-    BackLink,
     TextField,
     RepeatableFields,
     RadioGroup,

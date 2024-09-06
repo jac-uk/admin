@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l govuk-!-margin-bottom-2">
           Timeline
         </h2>
@@ -361,7 +354,6 @@ import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { shallowRef } from 'vue';
 
 export default {
@@ -370,7 +362,6 @@ export default {
     DateInput,
     TimeInput,
     RepeatableFields,
-    BackLink,
   },
   extends: Form,
   data(){
