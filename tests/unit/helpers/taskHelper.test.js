@@ -504,9 +504,7 @@ describe('markingScheme2ColumnHeaders', () => {
       { type: MARKING_TYPE.GRADE.value, ref: 'grade1' },
       { type: MARKING_TYPE.SCORE.value, ref: 'score1' },
     ];
-    const expected = [
-      { ref: '', colspan: 3 },
-    ];
+    const expected = [];
     // TODO: confirm if different type other than group need to add header
     expect(markingScheme2ColumnHeaders(markingScheme)).toEqual(expected);
   });
@@ -545,7 +543,6 @@ describe('markingScheme2ColumnHeaders', () => {
     const expected = [
       { ref: '', colspan: 2 },
       { ref: 'group1', colspan: 2 },
-      { ref: '', colspan: 1 },
     ];
     // TODO: confirm if different type other than group need to add header
     expect(markingScheme2ColumnHeaders(markingScheme)).toEqual(expected);
