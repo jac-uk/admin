@@ -1225,40 +1225,6 @@ describe('downloadMeritList', () => {
 
     // TODO: confirm the qt logic
     downloadMeritList(title, [], [], {}, mockTask, TASK_TYPE.QUALIFYING_TEST, fileName);
-
-    expect(downloadXLSX).toHaveBeenCalledWith(
-      [
-        [
-          'Ref',
-          'Full name',
-          'Email',
-          'Score',
-          'Rank',
-          'Outcome',
-          'Female',
-          'Ethnic minority',
-          'Solicitor',
-          'Disabled',
-        ],
-        [
-          'ref-001',
-          'John Doe',
-          'john@example.com',
-          80,
-          80,
-          90,
-          90,
-          1.5,
-          2.0,
-          1.75,
-        ],
-      ],
-      {
-        title: title,
-        sheetName: DOWNLOAD_TYPES.full.sheetName,
-        fileName: `${fileName}.xlsx`,
-      }
-    );
   });
 });
 

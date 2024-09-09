@@ -1246,7 +1246,7 @@ describe('isMoreInformationNeeded', () => {
         _currentStep: {
           step: 'passedTests',
           start: new Date(),
-          end: new Date(),
+          end: (new Date()).setDate((new Date()).getDate() + 1),
         },
       },
       _processingVersion: 2,
