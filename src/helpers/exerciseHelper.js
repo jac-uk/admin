@@ -580,7 +580,7 @@ function isReadyForApproval(data) {
 }
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
-  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL, ADVERT_TYPES.LISTING, ADVERT_TYPES.BASIC].includes(data.advertType));
+  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL].includes(data.advertType));
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
