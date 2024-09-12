@@ -407,7 +407,7 @@ export default {
       STATUS,
       type: 'showData',
       data: null,
-      statuses: [],
+      statuses: [STATUS.APPLIED],
       selectedStage: 'all',
       selectedStageStatus: null,
       isLoading: null,
