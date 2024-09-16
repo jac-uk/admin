@@ -1,6 +1,7 @@
 /*eslint func-style: ["error", "declaration"]*/
 
 import clone from 'clone';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics';
 
 export {
   MARKING_TYPE,
@@ -11,6 +12,8 @@ export {
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
+  scoreSheetRowsAddRank,
+  scoreSheetRowsAddDiversity,
   markingScheme2Columns,
   markingScheme2ColumnHeaders,
   markingTypeHasOptions,
@@ -147,6 +150,42 @@ function getScoreSheetItemTotal(item, scoreSheet) {
   return 0;
 }
 
+function scoreSheetRowsAddRank(scoreSheetData) {
+  scoreSheetData.sort((a, b) => b.score - a.score);
+  let currentScore = null;
+  let countAtCurrentScore = 0;
+  let currentRank = 1;
+  scoreSheetData.forEach(row => {
+    if (currentScore === null) {
+      currentScore = row.score;
+    }
+    if (row.score === currentScore) {
+      countAtCurrentScore += 1;
+    } else {
+      currentScore = row.score;
+      currentRank += countAtCurrentScore;
+      countAtCurrentScore = 1;
+    }
+    row.rank = currentRank;
+  });
+}
+
+function scoreSheetRowsAddDiversity(scoreSheetData, diversityData) {
+  scoreSheetData.forEach(row => {
+    const ref = row.referenceNumber.split('-')[1];
+    if (diversityData[ref]) {
+      row.diversity = {
+        female: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE),
+        bame: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME),
+        solicitor: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR),
+        disability: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED),
+      };
+    } else {
+      row.diversity = {};
+    }
+  });
+}
+
 function markingScheme2ScoreSheet(markingScheme) {
   /**
    * e.g.
@@ -195,9 +234,9 @@ function markingScheme2Columns(markingScheme, editable = false) {
   if (!markingScheme) return columns;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
-      item.children.forEach(child => columns.push({ parent: item.ref, ...child, editable: editable }));
+      item.children.forEach(child => columns.push({ parent: item.ref, ...child, title: child.ref, editable: editable }));
     } else {
-      columns.push({ ...item, editable: editable });
+      columns.push({ ...item, title: item.ref, editable: editable });
     }
   });
   return columns;  
