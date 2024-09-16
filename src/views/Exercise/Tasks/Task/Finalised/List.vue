@@ -64,7 +64,7 @@
           @click="toggleAll"
         ><span v-if="areAllScoresExpanded">Collapse all</span><span v-else>Expand all</span></a>
       </div>
-    </div>    
+    </div>  
     <Table
       data-key="score"
       :data="scores"
@@ -146,6 +146,7 @@
             v-for="item in getScoreDataForScore(row.score)"
             :key="item.id"
             class="govuk-table__row extra-row"
+            :class="{ 'highlight': selectedApplication && selectedApplication.ref === item.ref}"
           >
             <TableCell colspan="3">
               {{ item.fullName || item.ref }}
@@ -225,20 +226,17 @@
       <TitleBar>
         Find an application
       </TitleBar>
-      <div style="padding: 0 20px">
-        <TextField
-          id="lookahead"
+      <div style="padding: 0 20px 100px 20px">
+        <PredictiveSearch
+          id="find-a-candidate"
           label="Find an application"
-          hint="Type any part of reference number or candidate name"
-          type="text"
+          hint="Type any part of reference number"
+          :show-full-list-on-focus="false"
+          :data="scoreData"
+          :search-fields="['ref']"
+          required
+          @update:model-value="onApplicationFound"
         />
-        <div style="height: 20em">
-          - Tom Russell<br>
-          - Tomoko Linton<br>
-          - Robertom Jones<br>
-          - Antomnia Norwich<br>
-          - Jennifer Evertom<br>       
-        </div>
       </div>
     </Modal>    
   </div>
@@ -246,6 +244,7 @@
 
 <script>
 import { deleteField } from '@firebase/firestore';
+import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -258,6 +257,7 @@ import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
+    PredictiveSearch,
     TextField,
     Table,
     TableCell,
@@ -311,6 +311,7 @@ export default {
       tableColumns: tableColumns,
       expandedScores: [],
       selectedItem: null,
+      selectedApplication: null,
     };
   },
   computed: {
@@ -357,6 +358,7 @@ export default {
       const pos = this.expandedScores.indexOf(score);
       if (pos >= 0) {
         this.expandedScores.splice(pos, 1);
+        this.selectedApplication = null;
       } else {
         this.expandedScores.push(score);
       }
@@ -398,9 +400,17 @@ export default {
       }
     },
     btnFind() {
+      this.selectedApplication = null;
       this.$refs['findApplicationModal'].openModal();
     },
+    onApplicationFound(match) {
+      this.selectedApplication = this.scoreData.find(item => item.ref === match);
+      console.log('selectedApplication', this.selectedApplication);
+      if (!this.isScoreExpanded(this.selectedApplication.score)) this.toggleScore(this.selectedApplication.score);
+      this.$refs['findApplicationModal'].closeModal();
+    },
     btnExport() {
+      this.selectedApplication = null;
       this.$refs['exportModal'].openModal();
     },
     downloadMeritList(saveData) {
@@ -457,5 +467,9 @@ export default {
 .clickable {
   cursor: pointer;
   text-decoration: underline dotted;
+}
+
+.highlight {
+  background-color: rgba(86,148,202,0.2);
 }
 </style>
