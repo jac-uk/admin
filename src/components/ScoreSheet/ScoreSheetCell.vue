@@ -41,7 +41,7 @@
 
 <script>
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { MARKING_TYPE, markingTypeHasOptions, markingTypeGetOptions } from '@/helpers/taskHelper';
+import { MARKING_TYPE, markingTypeHasOptions, markingTypeGetOptions } from '@/helpers/scoreSheetHelper';
 
 export default {
   name: 'ScoreSheetCell',
@@ -128,7 +128,7 @@ export default {
         const element = document.getElementById(`row-${newRow}_col-${newCol}`);
         if (element) {
           element.focus();
-          if (element.select) element.select();
+          // if (element.select) element.select();
         }
       }
     },    
@@ -146,12 +146,14 @@ export default {
       text-align: center;
       border: 0;
       height: 46px;
+      background-color: transparent;
     }
     > .govuk-select {
       text-align: center;
       border: 0;
       height: 46px;
       min-width: 100%;
+      background-color: transparent;
     }
 
   }
