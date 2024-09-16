@@ -1,104 +1,180 @@
 <template>
-  <Table
-    ref="scoreSheet"
-    data-key="id"
-    :data="data"
-    :columns="tableColumns"
-    :page-size="500"
-    local-data
-    sticky
-    class="score-sheet"
-    @copy="copySheet"
-  >
-    <template
-      v-if="scoreSheetHeaders.length > 1"
-      #header
+  <div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <a
+          class="govuk-link govuk-!-margin-right-4"
+          @click="btnFind"
+        >Find an application</a>
+        <a
+          class="govuk-link govuk-!-margin-right-4"
+          @click="btnCopy"
+        >Copy</a>
+      </div>
+      <div class="govuk-grid-column-one-half text-right">
+        <a
+          class="govuk-link govuk-!-margin-right-4"
+          @click="btnToggle('showScore')"
+        ><span v-if="showScore">Hide</span><span v-else>Show</span> score & rank</a>
+        <a
+          class="govuk-link"
+          @click="btnToggle('showDiversity')"
+        ><span v-if="showDiversity">Hide</span><span v-else>Show</span> diversity</a>
+      </div>
+    </div>
+    <Table
+      ref="scoreSheet"
+      data-key="id"
+      :data="data"
+      :columns="tableColumns"
+      :page-size="500"
+      local-data
+      sticky
+      class="score-sheet"
+      @copy="copySheet"
+      @click="selectedApplication = null"
     >
-      <tr class="govuk-table__row sticky-top">
-        <th
-          v-for="column in columnsBefore"
-          :key="column"
-          scope="col"
-          class="govuk-table__header"
-          :class="column.class"
-        />
-        <th
-          v-for="header in scoreSheetHeaders"
-          :key="header.ref"
-          scope="col"
-          :colspan="header.colspan"
-          class="govuk-table__header text-center table-header-group"
-        >
-          {{ $filters.lookup(header.ref) }}
-        </th>
-        <th
-          v-if="showScore"
-          scope="col"
-          class="govuk-table__header"
-        />
-        <th
-          v-if="moderation"
-          scope="col"
-          class="govuk-table__header"
-        />
-      </tr>
-    </template>
+      <template
+        v-if="scoreSheetHeaders.length > 1"
+        #header
+      >
+        <tr class="govuk-table__row sticky-top">
+          <th
+            v-for="column in columnsBefore"
+            :key="column"
+            scope="col"
+            class="govuk-table__header"
+            :class="column.class"
+          />
+          <th
+            v-for="header in scoreSheetHeaders"
+            :key="header.ref"
+            scope="col"
+            :colspan="header.colspan"
+            class="govuk-table__header text-center table-header-group"
+          >
+            {{ $filters.lookup(header.ref) }}
+          </th>
+          <th
+            v-if="showScore"
+            scope="col"
+            class="govuk-table__header"
+            colspan="2"
+          />
+          <th
+            v-if="moderation"
+            scope="col"
+            class="govuk-table__header"
+          />
+          <th
+            v-if="showDiversity"
+            scope="col"
+            class="govuk-table__header"
+            colspan="4"
+          />
+        </tr>
+      </template>
 
-    <template #row="{row, index}">
-      <slot
-        name="columns-before"
-        :row="row"
-        :index="index"
-      />
-      <ScoreSheetCell
-        v-for="(column, columnIndex) in scoreSheetColumns"
-        :key="columnIndex"
-        :row="row"
-        :column="column"
-        :row-index="index"
-        :column-index="columnIndex"
-        @updated="updateScoreSheet"
-      />
-      <TableCell 
-        v-if="showScore"
-        class="table-cell-value table-cell-score"
-      >
-        {{ row.score }}
-      </TableCell>
-      <TableCell
-        v-if="moderation && editable"
-        class="govuk-!-padding-0 v-top table-cell-score table-cell-moderation"
-      >
-        <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-left-7">
-          <div class="govuk-checkboxes__item">
-            <input
-              :id="`moderation-${row.id}`"
-              :checked="row.scoreSheet.moderation === 'Yes'"
-              class="govuk-checkboxes__input"
-              type="checkbox"
-              @input="updateModeration(row, $event)"
-            >
-            <label
-              class="govuk-label govuk-checkboxes__label"
-              :for="`moderation-${row.id}`"
-            />
+      <template #row="{row, index}">
+        <slot
+          name="columns-before"
+          :row="{ ...row, highlight: row.referenceNumber === selectedApplication }"
+          :index="index"
+        />
+        <ScoreSheetCell
+          v-for="(column, columnIndex) in scoreSheetColumns"
+          :key="columnIndex"
+          :row="row"
+          :column="column"
+          :row-index="index"
+          :column-index="columnIndex"
+          :class="{ highlight: row.referenceNumber === selectedApplication }"
+          @click="selectedApplication = null"
+          @updated="updateScoreSheet"
+        />
+        <TableCell 
+          v-if="showScore"
+          class="table-cell-value table-cell-score"
+          :class="{ highlight: row.referenceNumber === selectedApplication }"
+        >
+          {{ row.score }}
+        </TableCell>
+        <TableCell 
+          v-if="showScore"
+          class="table-cell-value table-cell-score"
+          :class="{ highlight: row.referenceNumber === selectedApplication }"
+        >
+          {{ row.rank }}
+        </TableCell>
+        <TableCell
+          v-if="moderation && editable"
+          class="govuk-!-padding-0 v-top table-cell-score table-cell-moderation"
+        >
+          <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-left-7">
+            <div class="govuk-checkboxes__item">
+              <input
+                :id="`moderation-${row.id}`"
+                :checked="row.scoreSheet.moderation === 'Yes'"
+                class="govuk-checkboxes__input"
+                type="checkbox"
+                @input="updateModeration(row, $event)"
+              >
+              <label
+                class="govuk-label govuk-checkboxes__label"
+                :for="`moderation-${row.id}`"
+              />
+            </div>
           </div>
-        </div>
-      </TableCell>
-      <TableCell
-        v-if="moderation && !editable"
-        class="govuk-!-padding-0 table-cell-value"
-      >
-        {{ row.scoreSheet.moderation === 'TRUE' ? 'Yes' : 'No' }}
-      </TableCell>
-    </template>
-  </Table>
+        </TableCell>
+        <TableCell
+          v-if="moderation && !editable"
+          class="govuk-!-padding-0 table-cell-value"
+        >
+          {{ row.scoreSheet.moderation === 'Yes' ? 'Yes' : 'No' }}
+        </TableCell>
+        <template v-if="showDiversity">
+          <TableCell title="Female" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+            {{ $filters.toYesNo(row.diversity.female) }}
+          </TableCell>
+          <TableCell title="Ethnic minority" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+            {{ $filters.toYesNo(row.diversity.bame) }}
+          </TableCell>
+          <TableCell title="Solicitor" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+            {{ $filters.toYesNo(row.diversity.solicitor) }}
+          </TableCell>
+          <TableCell title="Disability" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+            {{ $filters.toYesNo(row.diversity.disability) }}
+          </TableCell>
+        </template>        
+      </template>
+    </Table>
+    <Modal ref="findApplicationModal">
+      <TitleBar @click="$refs['findApplicationModal'].closeModal()">
+        Find an application
+      </TitleBar>
+      <div style="padding: 0 20px 100px 20px">
+        <PredictiveSearch
+          id="find-a-candidate"
+          hint="Type any part of reference number"
+          v-model="selectedApplication"
+          :show-full-list-on-focus="false"
+          :data="data"
+          :search-fields="['referenceNumber']"
+          required
+          @update:model-value="onApplicationFound"
+        />
+      </div>
+    </Modal>
+  </div>
 </template>
 
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import { markingScheme2Columns, markingScheme2ColumnHeaders } from '@/helpers/taskHelper';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
+import { markingScheme2Columns, markingScheme2ColumnHeaders } from '@/helpers/scoreSheetHelper';
 import ScoreSheetCell from './ScoreSheetCell.vue';
 
 export default {
@@ -106,6 +182,9 @@ export default {
   components: {
     Table,
     TableCell,
+    Modal,
+    TitleBar,
+    PredictiveSearch,
     ScoreSheetCell,
   },
   props: {
@@ -132,12 +211,14 @@ export default {
       type: Boolean,
       default: false,
     },
-    showScore: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
   },
+  data() {
+    return {
+      showDiversity: false,
+      showScore: false,
+      selectedApplication: null,
+    };
+  },  
   computed: {
     scoreSheetHeaders() {
       return markingScheme2ColumnHeaders(this.markingScheme);
@@ -151,15 +232,89 @@ export default {
       this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'table-cell-score-header' }));
       if (this.showScore) {
         columns.push({ title: 'Score', class: 'table-cell-value table-cell-score' });
+        columns.push({ title: 'Rank', class: 'table-cell-value table-cell-score' });
       }
       if (this.moderation) {
         columns.push({ title: 'Moderation?', class: 'text-center table-cell-score' });
       }
+      if (this.showDiversity) {
+        columns.push({ title: 'Female', class: 'table-cell-value' });
+        columns.push({ title: 'Ethnic Minority', class: 'table-cell-value' });
+        columns.push({ title: 'Solicitor', class: 'table-cell-value' });
+        columns.push({ title: 'Disability', class: 'table-cell-value' });
+      }
       // columns.push({ title: 'Report', class: 'text-center' });      
       return columns;
     },
+    clipboardColumns() {
+      let columns = [];
+      if (this.columnsBefore.length) columns = columns.concat(this.columnsBefore);
+      // columns.push({ title: 'Reference', ref: 'referenceNumber', editable: false, matches: ['Reference', 'Reference Number', 'Reference number', 'Ref'] });
+      this.scoreSheetColumns.forEach(column => {
+        columns.push({ editable: true, ...column });
+      });
+      if (this.showScore) {
+        columns.push({ title: 'Score', ref: 'score' });
+        columns.push({ title: 'Rank', ref: 'rank' });
+      }
+      if (this.moderation) {
+        columns.push({ title: 'Moderation?', ref: 'moderate' });
+      }
+      if (this.showDiversity) {
+        columns.push({ title: 'Female', parent: 'diversity', ref: 'female' });
+        columns.push({ title: 'Ethnic Minority', parent: 'diversity', ref: 'bame' });
+        columns.push({ title: 'Solicitor', parent: 'diversity', ref: 'solicitor' });
+        columns.push({ title: 'Disability', parent: 'diversity', ref: 'disability' });
+      }      
+      return columns;
+    },    
   },
   methods: {
+    async btnCopy() {
+      const clipboardColumns = this.clipboardColumns;
+      const rows = [];
+      const headers = clipboardColumns.map(column => column.title);
+      rows.push(headers);
+      this.data.forEach(item => {
+        const row = [];
+        clipboardColumns.forEach(column => {
+          if (column.editable) {
+            if (item.scoreSheet) {
+              if (column.parent) {
+                row.push(item.scoreSheet[column.parent][column.ref]);
+              } else {
+                row.push(item.scoreSheet[column.ref]);
+              }
+            } else {
+              row.push('');
+            }
+          } else {
+            if (column.parent) {
+              row.push(item[column.parent][column.ref]);
+            } else {
+              row.push(item[column.ref]);
+            }
+          }
+        });
+        rows.push(row);        
+      });
+      let data = '';
+      rows.forEach(row => data += `${row.join('\t')}\n` );
+      if (navigator && navigator.clipboard) {
+        await navigator.clipboard.writeText(data);
+      }
+    },
+    btnFind() {
+      // this.selectedApplication = null;
+      this.$refs['findApplicationModal'].openModal();
+    },
+    onApplicationFound(match) {
+      // this.selectedApplication = match;
+      this.$refs['findApplicationModal'].closeModal();
+    },
+    btnToggle(ident) {
+      this[ident] = !this[ident];
+    },
     updateScoreSheet(row, column, newValue) {
       console.log('updateScoreSheet', row.id, column.parent, column.ref, newValue);
     },
@@ -248,6 +403,10 @@ export default {
   }
   .table-cell-moderation {
     vertical-align: top;
+  }
+
+  .highlight {
+    background-color: rgba(86,148,202,0.2) !important;
   }
 
 }
