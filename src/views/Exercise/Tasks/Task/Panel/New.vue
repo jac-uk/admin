@@ -28,6 +28,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    task() {
+      return this.$store.getters['tasks/getTask'](this.type);
+    },
     exerciseId() {
       return this.exercise.id;
     },
@@ -45,7 +48,7 @@ export default {
             dateTo: this.exercise.siftEndDate,
           };
         }
-      case 'selection':
+      case 'selectionDay':
         if (this.exercise.selectionDays && this.exercise.selectionDays.length) {
           return {
             dateFrom: this.exercise.selectionDays[0].selectionDayStart,
@@ -66,12 +69,12 @@ export default {
     async savePanel(formData) {
       const data = { ...formData };
       data.type = this.type;
-      data.exerciseId = this.exerciseId;  // TODO remove this as it is redundant
       data.exercise = {
         id: this.exerciseId,
         referenceNumber: this.exercise.referenceNumber,
         name: this.exercise.name,
       };
+      data.markingScheme = this.task.markingScheme,
       data.status = 'draft';
       await this.$store.dispatch('panel/create', data);
       this.$router.push({ name: 'exercise-task-loading' });
