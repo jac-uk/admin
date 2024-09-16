@@ -92,7 +92,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import AddMarkingSchemeItem from './AddMarkingSchemeItem.vue';
 import { functions } from '@/firebase';
-import { getMarkingType } from '@/helpers/taskHelper';
+import { getMarkingType } from '@/helpers/scoreSheetHelper';
 
 export default {
   components: {

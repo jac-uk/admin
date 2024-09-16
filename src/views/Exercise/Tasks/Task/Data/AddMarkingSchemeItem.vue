@@ -41,7 +41,7 @@ import Form from '@/components/Page/Form.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import { MARKING_TYPE } from '@/helpers/taskHelper';
+import { MARKING_TYPE } from '@/helpers/scoreSheetHelper';
 
 export default {
   name: 'SelectPanel',

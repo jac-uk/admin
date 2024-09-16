@@ -201,7 +201,7 @@
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADES, isScoreSheetComplete, getCompleteScoreSheet } from '@/helpers/taskHelper';
+import { getScoreSheetTotal, GRADES, isScoreSheetComplete, getCompleteScoreSheet } from '@/helpers/scoreSheetHelper';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
