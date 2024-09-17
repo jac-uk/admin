@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Website listing
         </h2>
@@ -124,7 +117,6 @@ import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
@@ -138,7 +130,6 @@ export default {
     RichTextInput,
     DateInput,
     Select,
-    BackLink,
     Checkbox,
     ListingPreview,
     DetailPreview,

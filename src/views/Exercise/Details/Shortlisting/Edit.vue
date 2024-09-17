@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Shortlisting methods
         </h2>
@@ -78,7 +71,6 @@ import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vu
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import OtherShortlistingMethod from '@/components/RepeatableFields/OtherShortlistingMethod.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   components: {
@@ -86,7 +78,6 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     RepeatableFields,
-    BackLink,
   },
   extends: Form,
   data(){

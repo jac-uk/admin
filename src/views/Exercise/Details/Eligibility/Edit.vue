@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Eligibility information
         </h2>
@@ -307,7 +300,6 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion.vue';
 import Membership from '@/components/RepeatableFields/Membership.vue';
@@ -360,7 +352,6 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     TextField,
-    BackLink,
     RepeatableFields,
   },
   extends: Form,

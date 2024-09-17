@@ -33,6 +33,9 @@
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="title"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -52,6 +55,9 @@
               type="route"
               field="firstName"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="first name"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -89,6 +95,9 @@
               type="route"
               field="lastName"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="last name"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -194,6 +203,9 @@
               type="email"
               field="email"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="email"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -230,6 +242,9 @@
               type="date"
               field="dateOfBirth"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="date of birth"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -265,6 +280,9 @@
               :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
               :is-asked="isAsked"
+              :is-required="true"
+              :display-label="false"
+              error-field-name="NI number"
               @change-field="changeUserDetails"
             />
           </dd>

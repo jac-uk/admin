@@ -216,6 +216,8 @@
         :id="`editable-field-${id}`"
         v-model="localField"
         type="email"
+        :required="isRequired"
+        :label="errorFieldName"
       />
 
       <TextField
@@ -223,18 +225,28 @@
         :id="`editable-field-${id}`"
         v-model="localField"
         type="tel"
+        :required="isRequired"
+        :display-label="displayLabel"
+        :label="errorFieldName"
       />
 
       <TextField
         v-if="isText || isRoute"
         :id="`editable-field-${id}`"
         v-model="localField"
+        :required="isRequired"
+        :display-label="displayLabel"
+        :label="errorFieldName"
       />
 
       <TextareaInput
         v-if="isTextarea"
         :id="`editable-field-${id}`"
         v-model="localField"
+        :required="isRequired"
+        :display-label="displayLabel"
+        :label="errorFieldName"
+        :word-limit="typeProps.wordLimit"
       />
 
       <DateInput
@@ -243,6 +255,9 @@
         v-model="localField"
         :type="(displayMonthYearOnly ? 'month' : 'date')"
         :value="localField"
+        :required="isRequired"
+        :display-label="displayLabel"
+        :label="errorFieldName"
       />
 
       <Select
@@ -365,9 +380,9 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
+import TextField from '@/components/Form/TextField.vue';
+import TextareaInput from '@/components/Form/TextareaInput.vue';
+import DateInput from '@/components/Form/DateInput.vue';
 import formatEmail from '@jac-uk/jac-kit/helpers/Form/formatEmail';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
@@ -445,6 +460,23 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    displayLabel: {
+      type: Boolean,
+      default: false,
+    },
+    errorFieldName: {
+      type: String,
+      default: '',
+    },
+    isRequired: {
+      type: Boolean,
+      default: false,
+    },
+    typeProps: {
+      type: Object,
+      required: false,
+      default: () => ({}),
     },
   },
   emits: ['changeField'],

@@ -97,7 +97,8 @@ export {
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
-  isJAC00187
+  isJAC00187,
+  isPublished
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -671,7 +672,7 @@ function isReadyForApproval(data) {
 }
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
-  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL, ADVERT_TYPES.LISTING].includes(data.advertType));
+  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL].includes(data.advertType));
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
@@ -695,6 +696,10 @@ function isArchived(data) {
     default:
       return false;
   }
+}
+function isPublished(data) {
+  if (!data) return false;
+  return data.published;
 }
 function isApproved(data) {
   if (!data) return false;
