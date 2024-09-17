@@ -6,9 +6,12 @@ import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversi
 export {
   SCORESHEET_TOOLS,
   MARKING_TYPE,
+  ADDITIONAL_COLUMNS,
   GRADES,
   GRADE_VALUES,
   getMarkingType,
+  getAdditionalColumns,
+  getAdditionalColumn,
   getCompleteScoreSheet,
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
@@ -87,6 +90,24 @@ const MARKING_TYPE = {
   },
 };
 
+const ADDITIONAL_COLUMNS = {
+  WELSH_ADMIN: {
+    value: 'welsh-admin',
+    label: 'Welsh Administration Questions',
+    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, excludeFromScore: true }
+  },
+  WELSH_LANGUAGE: {
+    value: 'welsh-language',
+    label: 'Welsh Language',
+    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, excludeFromScore: true }
+  },
+  ASC_MET: {
+    value: 'asc-met',
+    label: 'ASC Met',
+    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, excludeFromScore: true }
+  },
+};
+
 const GRADES = ['A', 'B', 'C', 'D'];
 const GRADE_VALUES = {
   'A': 4,
@@ -99,6 +120,16 @@ function getMarkingType(type) {
   const markingType = Object.values(MARKING_TYPE).find(item => item.value === type);
   if (markingType) return markingType;
   return { value: null, label: null };
+}
+
+function getAdditionalColumns() {
+  return Object.values(ADDITIONAL_COLUMNS);
+}
+
+function getAdditionalColumn(ref) {
+  const column = Object.values(ADDITIONAL_COLUMNS).find(item => item.value === ref);
+  if (column) return column;
+  return { value: null, label: null, config: null };
 }
 
 function markingTypeHasOptions(type) {

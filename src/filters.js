@@ -122,6 +122,12 @@ const lookup = (value) => {
     'L&J': 'Legal & Judicial Skills',
     'PQ': 'Personal Qualities',
 
+    // Custom marking scheme items (grade sheet columns)
+    'welsh-admin': 'Welsh Admin Questions',
+    'welsh-language': 'Welsh Language',
+    'asc-met': 'ASC Met',
+    'custom': 'Custom',
+
     // Set pass/fail
     'pass': 'Pass',
     'fail': 'Fail',
