@@ -570,7 +570,7 @@ export default {
       issueStatus: 'all',
       applicationRecords: [],
       unsubscribe: null,
-      tableColumns: [{ title: 'Candidate' }],
+      tableColumns: [{ title: '' }],
       total: null,
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
@@ -870,5 +870,8 @@ export default {
 
 .offence-category select {
   width: 100%;
+}
+.govuk-table__header, .govuk-table__cell {
+  border-bottom: 4px solid #b1b4b6 !important;
 }
 </style>
