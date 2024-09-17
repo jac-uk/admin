@@ -12,7 +12,6 @@
     </div>
 
     <ProgressBar :steps="taskSteps" />
-
     <p
       v-if="!hasTaskStarted"
       class="govuk-body govuk-!-margin-bottom-4"
@@ -29,100 +28,63 @@
       v-else-if="isModerationRequired"
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      All panels have provided scores. Please select any applications that require moderation before continuing.
+      All panels have provided grades. Please select any applications that require moderation before continuing.
     </p>
     <p
       v-else
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      All panels have provided scores.
+      All panels have provided grades.
     </p>
 
-    <div
+    <div 
       v-if="hasAllPanelsCompleted"
-      class="govuk-grid-row"
+      class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
     >
-      <div class="govuk-grid-column-two-thirds">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+      <p class="govuk-body govuk-!-margin-bottom-4">
+        Next step
+      </p>
+      <ActionButton
+        class="govuk-!-margin-bottom-1"
+        type="primary"
+        :action="btnFinalise"
+      >
+        Continue
+      </ActionButton>
+    </div>    
+
+    <div 
+      class="panel panel-button govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
+      @click="toggleStats"
+    >
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
           <p class="govuk-body govuk-!-margin-bottom-0">
-            Applications
-            <span class="govuk-caption-m"><span v-if="isModerationRequired">Requiring moderation / </span>Total</span>
+            Panels
+            <span class="govuk-caption-m">Completed / Total</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            <span v-if="isModerationRequired">{{ stats.totalApplicationsForModeration }} / </span>{{ stats.totalApplications }}
+            {{ stats.completedPanels }} / {{ stats.totalPanels }}
           </h2>
         </div>
-      </div>
 
-      <div class="govuk-grid-column-one-third">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-4">
-            Next step
+        <div class="govuk-grid-column-one-half">
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            Applications
+            <span class="govuk-caption-m">Completed / Total<span v-if="isModerationRequired"> / Requiring moderation</span></span>
           </p>
-          <ActionButton
-            class="govuk-!-margin-bottom-1"
-            type="primary"
-            :action="btnFinalise"
-          >
-            Continue
-          </ActionButton>
+          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
+            {{ stats.completedApplications }} / {{ stats.totalApplications }}<span v-if="isModerationRequired"> / {{ stats.totalApplicationsForModeration }}</span>
+          </h2>
         </div>
       </div>
     </div>
 
-    <TabsList
-      v-model:active-tab="activeTab"
-      :tabs="tabs"
-    />
-
     <!-- OVERVIEW -->
-    <div v-show="activeTab == 'overview'">
-      <div class="govuk-grid-row">
-        <div
-          class="govuk-grid-column-full"
-        >
-          <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">{{ $filters.lookup(type) }} dates</span>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ $filters.showAlternative($filters.formatDate(task.startDate), "Unknown") }} to
-              {{ $filters.showAlternative($filters.formatDate(task.endDate), "Unknown") }}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      <!-- START: PANELS -->
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-            <p class="govuk-body govuk-!-margin-bottom-0">
-              Panels
-              <span class="govuk-caption-m">Completed / Total</span>
-            </p>
-            <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-              {{ stats.completedPanels }} / {{ stats.totalPanels }}
-            </h2>
-          </div>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-            <p class="govuk-body govuk-!-margin-bottom-0">
-              Applications
-              <span class="govuk-caption-m">Completed / Total</span>
-            </p>
-            <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-              {{ stats.completedApplications }} / {{ stats.totalApplications }}
-            </h2>
-          </div>
-        </div>
-      </div>
-      <!-- END: PANELS -->
-
+    <div v-show="showStats">
       <!-- START: GRADES -->
       <div
-        v-if="hasAllPanelsCompleted && task.grades"
+        v-if="task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -203,7 +165,7 @@
 
       <!-- START: SCORES -->
       <div
-        v-if="hasAllPanelsCompleted && task.grades"
+        v-if="task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -246,31 +208,30 @@
     <!-- // END OVERVIEW -->
 
     <!-- SCORE SHEET -->
-    <div v-show="activeTab == 'scoreSheet'">
-      <ScoreSheet
-        ref="scoreSheet"
-        data-key="id"
-        :marking-scheme="task.markingScheme"
-        :data="scoreSheetData"
-        :columns-before="[{ title: 'Application', class: 'table-cell-application' }, { title: 'Panel', class: 'table-cell' }]"
-        :editable="canEditScoreSheet"
-        :moderation="isModerationRequired"
-      >
-        <template #columns-before="{row}">
-          <TableCell class="table-cell-application nowrap sticky-left">
-            {{ row.referenceNumber }}
-          </TableCell>
-          <TableCell class="table-cell-value nowrap">
-            <RouterLink
-              :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
-              class="govuk-link"
-            >
-              {{ row.panel.name }}
-            </RouterLink>
-          </TableCell>          
-        </template>
-      </ScoreSheet>
-    </div>
+    <ScoreSheet
+      ref="scoreSheet"
+      data-key="id"
+      :marking-scheme="task.markingScheme"
+      :data="scoreSheetData"
+      :columns-before="[{ title: 'Application', ref:'referenceNumber', class: 'table-cell-application' }, { title: 'Panel', parent: 'panel', ref: 'name', class: 'table-cell' }]"
+      :editable="canEditScoreSheet"
+      :moderation="isModerationRequired"
+      :tools="scoreSheetTools"
+    >
+      <template #columns-before="{row}">
+        <TableCell class="table-cell-application nowrap sticky-left" :class="{ 'highlight': row.highlight }">
+          {{ row.referenceNumber }}
+        </TableCell>
+        <TableCell class="table-cell-value nowrap" :class="{ 'highlight': row.highlight }">
+          <RouterLink
+            :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
+            class="govuk-link"
+          >
+            {{ row.panel.name }}
+          </RouterLink>
+        </TableCell>
+      </template>
+    </ScoreSheet>
     <!-- // END SCORE SHEET -->
   </div>
 </template>
@@ -286,7 +247,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
+import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity } from '@/helpers/scoreSheetHelper';
 import { functions } from '@/firebase';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
@@ -309,24 +270,22 @@ export default {
   },
   data() {
     return {
-      activeTab: 'overview',
+      showStats: false,
+      scoreSheetTools: [
+        SCORESHEET_TOOLS.FIND,
+        SCORESHEET_TOOLS.COPY,
+        SCORESHEET_TOOLS.PASTE,
+        SCORESHEET_TOOLS.SCORE,
+        SCORESHEET_TOOLS.DIVERSITY
+      ],
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    tabs() {
-      const data = [];
-      data.push({
-        ref: 'overview',
-        title: 'Overview',
-      });
-      data.push({
-        ref: 'scoreSheet',
-        title: 'Score sheet',
-      });
-      return data;
+    exerciseDiversity() {
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
     },
     isSift() {
       return this.type === PANEL_TYPES.SIFT;
@@ -361,11 +320,12 @@ export default {
         });
     },
     canEditScoreSheet() {
-      return true;
+      return false;
     },
     isModerationRequired() {
-      if (!this.task) return false;
-      return this.task.panelIds.length > 1;
+      return false;
+      // if (!this.task) return false;
+      // return this.task.panelIds.length > 1;
     },
     hasAllPanelsCompleted() {
       if (!this.stats) return false;
@@ -415,6 +375,9 @@ export default {
           rows.push(row);
         });
       });
+      if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
+      scoreSheetRowsAddRank(rows);
+      // TODO might want add custom sort here
       return rows;
     },
     stats() {
@@ -428,13 +391,11 @@ export default {
       data.totalApplicationsForModeration = 0;
       data.statuses = {};
       this.statuses.forEach(status => data.statuses[status] = 0);
-      if (this.capabilities && this.capabilities.indexOf('OVERALL')) {
-        data.overallGradesByPanel = {};
-        data.overallGrades = {};
-        this.grades.forEach(grade => data.overallGrades[grade] = 0);
-        data.overallScoreByPanel = {};
-        data.overallScore = { count: 0, total: 0, average: 0 };
-      }
+      data.overallGradesByPanel = {};
+      data.overallGrades = {};
+      this.grades.forEach(grade => data.overallGrades[grade] = 0);
+      data.overallScoreByPanel = {};
+      data.overallScore = { count: 0, total: 0, average: 0 };
       relevantPanels.forEach(panel => {
         data.totalApplications += panel.applicationIds.length;
         if (panel.status === PANEL_STATUS.SUBMITTED) {
@@ -447,7 +408,7 @@ export default {
             if (this.isSelection) {
               data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId].overall.OVERALL).filter(item => item === grade).length;
             } else {
-              data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId].OVERALL).filter(item => item === grade).length;
+              data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId][this.type].OVERALL ).filter(item => item === grade).length;
             }
             data.overallGradesByPanel[panel.id].count += data.overallGradesByPanel[panel.id][grade];
             data.overallGrades[grade] += data.overallGradesByPanel[panel.id][grade];
@@ -456,17 +417,19 @@ export default {
           });
           data.overallScore.count += data.overallScoreByPanel[panel.id].count;
           data.overallScore.total += data.overallScoreByPanel[panel.id].total;
-          data.overallScoreByPanel[panel.id].average = Number(data.overallScoreByPanel[panel.id].total / data.overallScoreByPanel[panel.id].count).toFixed(2) || 0;
+          if (data.overallScoreByPanel[panel.id] && data.overallScoreByPanel[panel.id].count) {
+            data.overallScoreByPanel[panel.id].average = Number(data.overallScoreByPanel[panel.id].total / data.overallScoreByPanel[panel.id].count).toFixed(2) || 0;
+          }
         }
-        data.totalApplicationsForModeration += panel.applicationIds.filter(applicationId => panel.scoreSheet[applicationId].flagForModeration).length;
+        data.totalApplicationsForModeration += panel.applicationIds.filter(applicationId => panel.scoreSheet[applicationId].moderation === 'Yes').length;
       });
-      if (data.overallScore) {
+      if (data.overallScore && data.overallScore.count) {
         data.overallScore.average = Number(data.overallScore.total / data.overallScore.count).toFixed(2) || 0;
       }
       return data;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch(
       'panels/bind',
       {
@@ -474,8 +437,12 @@ export default {
         type: this.type,
       }
     );
+    await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   methods: {
+    toggleStats() {
+      this.showStats = !this.showStats;
+    },
     btnNext,
     async btnFinalise() {
       await httpsCallable(functions, 'updateTask')({
@@ -487,3 +454,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.panel-button {
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.panel-button:hover {
+  border: 1px solid #b1b4b6;
+}
+</style>
