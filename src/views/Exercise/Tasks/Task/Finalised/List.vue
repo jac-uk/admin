@@ -42,7 +42,14 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
+        <a
+          class="govuk-link"
+          @click="btnFind"
+        >Find an application</a>
+        <a
+          class="govuk-link govuk-!-margin-left-4"
+          @click="btnExport"
+        >Download merit list</a>        
       </div>
       <!-- <div class="govuk-grid-column-one-half">
         <label class="govuk-label govuk-!-display-inline" for="search">
@@ -51,14 +58,7 @@
         <input class="search-input govuk-input govuk-input--width-10 govuk-!-margin-left-2" id="search" name="search" type="text">
       </div> -->
       <div class="govuk-grid-column-one-half text-right">
-        <a
-          class="govuk-link"
-          @click="btnFind"
-        >Find an application</a>
-        <a
-          class="govuk-link govuk-!-margin-left-4"
-          @click="btnExport"
-        >Download merit list</a>
+        <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
         <a 
           class="govuk-link govuk-!-margin-left-4"
           @click="toggleAll"
@@ -146,7 +146,7 @@
             v-for="item in getScoreDataForScore(row.score)"
             :key="item.id"
             class="govuk-table__row extra-row"
-            :class="{ 'highlight': selectedApplication && selectedApplication.ref === item.ref}"
+            :class="{ 'highlight': item.ref == selectedApplication}"
           >
             <TableCell colspan="3">
               {{ item.fullName || item.ref }}
@@ -223,20 +223,27 @@
       />
     </Modal>
     <Modal ref="findApplicationModal">
-      <TitleBar>
+      <TitleBar @click="$refs['findApplicationModal'].closeModal()">
         Find an application
       </TitleBar>
-      <div style="padding: 0 20px 100px 20px">
+      <div style="padding: 0 20px 0 20px; min-height: 300px">
         <PredictiveSearch
           id="find-a-candidate"
-          label="Find an application"
           hint="Type any part of reference number"
+          v-model="selectedApplication"
           :show-full-list-on-focus="false"
           :data="scoreData"
           :search-fields="['ref']"
           required
           @update:model-value="onApplicationFound"
         />
+        <button
+          class="govuk-button govuk-button--secondary"
+          type="button"
+          @click="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
+        >
+          Cancel
+        </button>
       </div>
     </Modal>    
   </div>
@@ -400,13 +407,12 @@ export default {
       }
     },
     btnFind() {
-      this.selectedApplication = null;
+      // this.selectedApplication = null;
       this.$refs['findApplicationModal'].openModal();
     },
-    onApplicationFound(match) {
-      this.selectedApplication = this.scoreData.find(item => item.ref === match);
-      console.log('selectedApplication', this.selectedApplication);
-      if (!this.isScoreExpanded(this.selectedApplication.score)) this.toggleScore(this.selectedApplication.score);
+    onApplicationFound() {
+      const score = this.scoreData.find(item => item.ref === this.selectedApplication).score;
+      if (!this.isScoreExpanded(score)) this.toggleScore(score);
       this.$refs['findApplicationModal'].closeModal();
     },
     btnExport() {

@@ -253,7 +253,7 @@ export default {
     selectionCategories() {
       if (!this.task) return [];
       if (!this.task.selectionCategories) return [];
-      return SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
+      return SELECTION_CATEGORIES.filter(cat => this.task.selectionCategories.indexOf(cat) >= 0); // Using SELECTION_CATEGORIES to ensure display order
     },
     grades() {
       return this.task && this.task.grades ? this.task.grades : GRADES;
