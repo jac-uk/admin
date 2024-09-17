@@ -2,7 +2,8 @@
   <div>
     <div 
       v-if="hasTools"
-      class="govuk-grid-row">
+      class="govuk-grid-row"
+    >
       <div class="govuk-grid-column-one-half">
         <a
           v-if="hasTool(SCORESHEET_TOOLS.FIND)"
@@ -139,16 +140,32 @@
           {{ row.scoreSheet.moderation === 'Yes' ? 'Yes' : 'No' }}
         </TableCell>
         <template v-if="showDiversity">
-          <TableCell title="Female" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+          <TableCell
+            title="Female"
+            class="table-cell-value"
+            :class="{ highlight: row.referenceNumber === selectedApplication }"
+          >
             {{ $filters.toYesNo(row.diversity.female) }}
           </TableCell>
-          <TableCell title="Ethnic minority" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+          <TableCell
+            title="Ethnic minority"
+            class="table-cell-value"
+            :class="{ highlight: row.referenceNumber === selectedApplication }"
+          >
             {{ $filters.toYesNo(row.diversity.bame) }}
           </TableCell>
-          <TableCell title="Solicitor" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+          <TableCell
+            title="Solicitor"
+            class="table-cell-value"
+            :class="{ highlight: row.referenceNumber === selectedApplication }"
+          >
             {{ $filters.toYesNo(row.diversity.solicitor) }}
           </TableCell>
-          <TableCell title="Disability" class="table-cell-value" :class="{ highlight: row.referenceNumber === selectedApplication }">
+          <TableCell
+            title="Disability"
+            class="table-cell-value"
+            :class="{ highlight: row.referenceNumber === selectedApplication }"
+          >
             {{ $filters.toYesNo(row.diversity.disability) }}
           </TableCell>
         </template>        
@@ -168,8 +185,8 @@
       <div style="padding: 0 20px 0 20px; min-height: 300px">
         <PredictiveSearch
           id="find-a-candidate"
-          hint="Type any part of reference number"
           v-model="selectedApplication"
+          hint="Type any part of reference number"
           :show-full-list-on-focus="false"
           :data="data"
           :search-fields="['referenceNumber']"
@@ -235,7 +252,7 @@ export default {
       required: false,
       type: Array,
       default: () => [],
-    }
+    },
   },
   data() {
     return {
@@ -341,7 +358,7 @@ export default {
       // this.selectedApplication = null;
       this.$refs['findApplicationModal'].openModal();
     },
-    onApplicationFound(match) {
+    onApplicationFound() {
       // this.selectedApplication = match;
       this.$refs['findApplicationModal'].closeModal();
     },

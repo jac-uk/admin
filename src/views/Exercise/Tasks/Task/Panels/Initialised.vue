@@ -311,7 +311,7 @@ export default {
     },
     selectedApplications() {
       if (!this.selectedItems.length) return null;
-      return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0)
+      return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0);
     },
   },
   methods: {
@@ -370,7 +370,7 @@ export default {
           panelId: data.panelId,
           type: this.type,
           applicationIds: this.selectedItems,
-          applicationRecords: this.selectedApplications
+          applicationRecords: this.selectedApplications,
         });
         // // update applicationRecords
         // const updates = this.selectedItems.map(applicationId => {

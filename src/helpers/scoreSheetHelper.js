@@ -29,7 +29,7 @@ const SCORESHEET_TOOLS = {
   COPY: 'copy',
   PASTE: 'paste',
   SCORE: 'score',
-  DIVERSITY: 'diversity'
+  DIVERSITY: 'diversity',
 };
 
 const MARKING_TYPE = {
@@ -94,17 +94,17 @@ const ADDITIONAL_COLUMNS = {
   WELSH_ADMIN: {
     value: 'welsh-admin',
     label: 'Welsh Administration Questions',
-    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, excludeFromScore: true }
+    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, excludeFromScore: true },
   },
   WELSH_LANGUAGE: {
     value: 'welsh-language',
     label: 'Welsh Language',
-    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, excludeFromScore: true }
+    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, excludeFromScore: true },
   },
   ASC_MET: {
     value: 'asc-met',
     label: 'ASC Met',
-    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, excludeFromScore: true }
+    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, excludeFromScore: true },
   },
 };
 

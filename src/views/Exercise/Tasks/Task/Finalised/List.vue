@@ -229,8 +229,8 @@
       <div style="padding: 0 20px 0 20px; min-height: 300px">
         <PredictiveSearch
           id="find-a-candidate"
-          hint="Type any part of reference number"
           v-model="selectedApplication"
+          hint="Type any part of reference number"
           :show-full-list-on-focus="false"
           :data="scoreData"
           :search-fields="['ref']"
@@ -252,7 +252,6 @@
 <script>
 import { deleteField } from '@firebase/firestore';
 import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
@@ -265,7 +264,6 @@ import { TASK_TYPE } from '@/helpers/exerciseHelper';
 export default {
   components: {
     PredictiveSearch,
-    TextField,
     Table,
     TableCell,
     Modal,

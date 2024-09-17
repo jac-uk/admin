@@ -219,10 +219,16 @@
       :tools="scoreSheetTools"
     >
       <template #columns-before="{row}">
-        <TableCell class="table-cell-application nowrap sticky-left" :class="{ 'highlight': row.highlight }">
+        <TableCell
+          class="table-cell-application nowrap sticky-left"
+          :class="{ 'highlight': row.highlight }"
+        >
           {{ row.referenceNumber }}
         </TableCell>
-        <TableCell class="table-cell-value nowrap" :class="{ 'highlight': row.highlight }">
+        <TableCell
+          class="table-cell-value nowrap"
+          :class="{ 'highlight': row.highlight }"
+        >
           <RouterLink
             :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
             class="govuk-link"
@@ -243,7 +249,6 @@ import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
@@ -255,7 +260,6 @@ export default {
   components: {
     Table,
     TableCell,
-    TabsList,
     ActionButton,
     FullScreenButton,
     ProgressBar,
@@ -276,7 +280,7 @@ export default {
         SCORESHEET_TOOLS.COPY,
         SCORESHEET_TOOLS.PASTE,
         SCORESHEET_TOOLS.SCORE,
-        SCORESHEET_TOOLS.DIVERSITY
+        SCORESHEET_TOOLS.DIVERSITY,
       ],
     };
   },

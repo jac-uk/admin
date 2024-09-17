@@ -10,6 +10,7 @@
     >
       <RadioItem
         v-for="item in additionalColumns"
+        :key="item.value"
         :value="item.value"
         :label="item.label"
       />

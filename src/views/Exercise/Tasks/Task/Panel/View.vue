@@ -65,7 +65,10 @@
       />
     </div>
 
-    <div v-if="panel.scoreSheet" v-show="activeTab == 'scoreSheet'">
+    <div
+      v-if="panel.scoreSheet"
+      v-show="activeTab == 'scoreSheet'"
+    >
       <ScoreSheet
         ref="scoreSheet"
         data-key="id"
@@ -77,7 +80,10 @@
         :tools="scoreSheetTools"
       >
         <template #columns-before="{row}">
-          <TableCell class="table-cell-application nowrap sticky-left" :class="{ 'highlight': row.highlight }">
+          <TableCell
+            class="table-cell-application nowrap sticky-left"
+            :class="{ 'highlight': row.highlight }"
+          >
             {{ row.referenceNumber }}
           </TableCell>
         </template>
@@ -228,7 +234,7 @@ export default {
         SCORESHEET_TOOLS.COPY,
         SCORESHEET_TOOLS.PASTE,
         SCORESHEET_TOOLS.SCORE,
-        SCORESHEET_TOOLS.DIVERSITY
+        SCORESHEET_TOOLS.DIVERSITY,
       ],
     };
     return data;

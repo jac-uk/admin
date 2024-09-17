@@ -1,7 +1,7 @@
 <template>
   <form
-    @submit.prevent="validateAndSave"
     autocomplete="off"
+    @submit.prevent="validateAndSave"
   >
     <ErrorSummary
       :errors="errors"
