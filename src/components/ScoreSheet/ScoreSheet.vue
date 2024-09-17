@@ -1,22 +1,28 @@
 <template>
   <div>
-    <div class="govuk-grid-row">
+    <div 
+      v-if="hasTools"
+      class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <a
+          v-if="hasTool(SCORESHEET_TOOLS.FIND)"
           class="govuk-link govuk-!-margin-right-4"
           @click="btnFind"
         >Find an application</a>
         <a
+          v-if="hasTool(SCORESHEET_TOOLS.COPY)"
           class="govuk-link govuk-!-margin-right-4"
           @click="btnCopy"
         >Copy</a>
       </div>
       <div class="govuk-grid-column-one-half text-right">
         <a
+          v-if="hasTool(SCORESHEET_TOOLS.SCORE)"
           class="govuk-link govuk-!-margin-right-4"
           @click="btnToggle('showScore')"
         ><span v-if="showScore">Hide</span><span v-else>Show</span> score & rank</a>
         <a
+          v-if="hasTool(SCORESHEET_TOOLS.DIVERSITY)"
           class="govuk-link"
           @click="btnToggle('showDiversity')"
         ><span v-if="showDiversity">Hide</span><span v-else>Show</span> diversity</a>
@@ -152,7 +158,14 @@
       <TitleBar @click="$refs['findApplicationModal'].closeModal()">
         Find an application
       </TitleBar>
-      <div style="padding: 0 20px 100px 20px">
+      <!-- <FindAnApplication
+        v-model="selectedApplication"
+        :data="data"
+        :search-fields="['referenceNumber']"
+        @update:model-value="onApplicationFound"
+        @cancel="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
+      /> -->
+      <div style="padding: 0 20px 0 20px; min-height: 300px">
         <PredictiveSearch
           id="find-a-candidate"
           hint="Type any part of reference number"
@@ -163,6 +176,13 @@
           required
           @update:model-value="onApplicationFound"
         />
+        <button
+          class="govuk-button govuk-button--secondary"
+          type="button"
+          @click="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
+        >
+          Cancel
+        </button>        
       </div>
     </Modal>
   </div>
@@ -172,9 +192,9 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import TitleBar from '@/components/Page/TitleBar.vue';
+import TitleBar from '../Page/TitleBar.vue';
 import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
-import { markingScheme2Columns, markingScheme2ColumnHeaders } from '@/helpers/scoreSheetHelper';
+import { SCORESHEET_TOOLS, markingScheme2Columns, markingScheme2ColumnHeaders } from '../../helpers/scoreSheetHelper';
 import ScoreSheetCell from './ScoreSheetCell.vue';
 
 export default {
@@ -211,15 +231,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    tools: {
+      required: false,
+      type: Array,
+      default: () => [],
+    }
   },
   data() {
     return {
       showDiversity: false,
       showScore: false,
       selectedApplication: null,
+      SCORESHEET_TOOLS: SCORESHEET_TOOLS,
     };
   },  
   computed: {
+    hasTools() {
+      return this.tools.length ? true : false;
+    },
     scoreSheetHeaders() {
       return markingScheme2ColumnHeaders(this.markingScheme);
     },
@@ -251,7 +280,7 @@ export default {
       if (this.columnsBefore.length) columns = columns.concat(this.columnsBefore);
       // columns.push({ title: 'Reference', ref: 'referenceNumber', editable: false, matches: ['Reference', 'Reference Number', 'Reference number', 'Ref'] });
       this.scoreSheetColumns.forEach(column => {
-        columns.push({ editable: true, ...column });
+        columns.push({ ...column, editable: true });
       });
       if (this.showScore) {
         columns.push({ title: 'Score', ref: 'score' });
@@ -270,6 +299,10 @@ export default {
     },    
   },
   methods: {
+    hasTool(ref) {
+      if (!this.hasTools) return false;
+      return this.tools.indexOf(ref) >= 0;
+    },
     async btnCopy() {
       const clipboardColumns = this.clipboardColumns;
       const rows = [];
@@ -343,6 +376,13 @@ export default {
   th, td {
     vertical-align: middle;
   }
+
+  tr > th:first-child {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index:1;
+  }  
 
   .table-cell-value {
     min-width: 50px;

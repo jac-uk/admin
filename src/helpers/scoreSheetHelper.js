@@ -4,6 +4,7 @@ import clone from 'clone';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics';
 
 export {
+  SCORESHEET_TOOLS,
   MARKING_TYPE,
   GRADES,
   GRADE_VALUES,
@@ -18,6 +19,14 @@ export {
   markingScheme2ColumnHeaders,
   markingTypeHasOptions,
   markingTypeGetOptions
+};
+
+const SCORESHEET_TOOLS = {
+  FIND: 'find',
+  COPY: 'copy',
+  PASTE: 'paste',
+  SCORE: 'score',
+  DIVERSITY: 'diversity'
 };
 
 const MARKING_TYPE = {
