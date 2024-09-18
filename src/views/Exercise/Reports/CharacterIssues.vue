@@ -856,7 +856,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .icon-expand {
   display: inline-block;
   margin-left: 14px;
