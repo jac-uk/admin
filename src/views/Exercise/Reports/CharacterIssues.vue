@@ -618,6 +618,9 @@ export default {
     candidateStatus: function () {
       this.$refs['issuesTable'].reload();
     },
+    issueStatus: function () {
+      this.$refs['issuesTable'].reload();
+    },
   },
   created() {
     this.unsubscribeCharacterIssuesReport = onSnapshot(
@@ -749,8 +752,10 @@ export default {
         firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
         localParams.orderBy = ['documentId'];
       }
-      const total = exerciseStage && candidateStatus ? this.applicationStatusCounts[exerciseStage][candidateStatus] : 0;
-      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, total);
+      if (this.issueStatus !== 'all') {
+        firestoreRef = query(firestoreRef, where('issues.characterIssuesStatus', '==', this.issueStatus));
+      }
+      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
 
