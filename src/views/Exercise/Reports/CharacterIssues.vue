@@ -178,10 +178,12 @@
         :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
-        <template #row="{ row }">
+        <template #row="{ row, index }">
           <TableCell
             v-if="issueStatus === 'all' || (row.issues.characterIssuesStatus || '') === (issueStatus || '')"
             :title="tableColumns[0].title"
+            style="padding: 20px;"
+            :style="index % 2 === 0 ? 'background-color: #f3f2f1' : ''"
           >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
@@ -876,8 +878,5 @@ export default {
 
 .offence-category select {
   width: 100%;
-}
-.govuk-table__header, .govuk-table__cell {
-  border-bottom: 4px solid #b1b4b6 !important;
 }
 </style>
