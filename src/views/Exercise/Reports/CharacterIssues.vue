@@ -749,10 +749,10 @@ export default {
         } else {
           firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION));
         }
-        localParams.orderBy = ['status', 'documentId'];
+        localParams.orderBy = ['candidate.fullName', 'status', 'documentId'];
       } else {
         firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
-        localParams.orderBy = ['documentId'];
+        localParams.orderBy = ['candidate.fullName', 'documentId'];
       }
       if (this.issueStatus !== 'all') {
         firestoreRef = query(firestoreRef, where('issues.characterIssuesStatus', '==', this.issueStatus));
