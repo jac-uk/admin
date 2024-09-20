@@ -863,7 +863,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .icon-expand {
   display: inline-block;
   margin-left: 14px;
