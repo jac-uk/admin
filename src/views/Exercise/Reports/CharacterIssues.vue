@@ -178,12 +178,12 @@
         :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
-        <template #row="{ row, index }">
+        <template #row="{ row, index: rowIndex }">
           <TableCell
             v-if="issueStatus === 'all' || (row.issues.characterIssuesStatus || '') === (issueStatus || '')"
             :title="tableColumns[0].title"
             style="padding: 20px;"
-            :style="index % 2 === 0 ? 'background-color: #f3f2f1' : ''"
+            :style="rowIndex % 2 === 0 ? 'background-color: #f3f2f1' : ''"
           >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
