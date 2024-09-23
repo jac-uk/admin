@@ -75,7 +75,6 @@ import {
   isJAC00187
 } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES, EXERCISE_STAGE, SHORTLISTING, APPLICATION_STATUS, TASK_TYPE, ASSESSMENT_METHOD } from '@/helpers/constants';
-import { describe, it } from 'vitest';
 
 describe('getNextProcessingStage', () => {
   it('should return the next processing stage when given a valid current stage', () => {

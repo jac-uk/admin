@@ -10,7 +10,6 @@ import {
   markingScheme2Columns,
   markingScheme2ColumnHeaders
 } from '@/helpers/taskHelper';
-import { describe } from 'vitest';
 
 describe('getMarkingType', () => {
   it('should return correct marking type object when valid type is provided', () => {

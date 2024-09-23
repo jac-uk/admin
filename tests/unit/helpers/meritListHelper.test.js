@@ -20,7 +20,6 @@ import {
   getDownloadTypes
 } from '@/views/Exercise/Tasks/Task/Finalised/meritListHelper';
 import { DIVERSITY_CHARACTERISTICS } from '@/helpers/diversityCharacteristics';
-import { describe, it, vi, beforeEach } from 'vitest';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { TASK_TYPE } from '@/helpers/constants';
 
