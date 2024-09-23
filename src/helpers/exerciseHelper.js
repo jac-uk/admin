@@ -594,28 +594,29 @@ function taskEntryStatus(exercise, type) {
   return status;
 }
 
-// merit list helpers
-function emptyScoreSheet({ type, selectedCapabilities }) {
-  let capabilities = CAPABILITIES;
-  if (selectedCapabilities) {
-    capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
-  }
-  // TODO ensure this is specific to exercise
-  const fullScoreSheet = {
-    sift: {
-      scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-    },
-    selection: {
-      scoreSheet: {
-        leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-      },
-    },
-  };
-  return type ? fullScoreSheet[type] : fullScoreSheet;
-}
+// // merit list helpers
+// function emptyScoreSheet({ type, selectedCapabilities }) {
+//   let capabilities = CAPABILITIES;
+//   if (selectedCapabilities) {
+//     capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
+//   }
+//   console.log(capabilities);
+//   // TODO ensure this is specific to exercise
+//   const fullScoreSheet = {
+//     sift: {
+//       scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+//     },
+//     selection: {
+//       scoreSheet: {
+//         leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+//         roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+//         interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+//         overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+//       },
+//     },
+//   };
+//   return type ? fullScoreSheet[type] : fullScoreSheet;
+// }
 
 // application helpers
 function applicationCurrentStep(exercise, application) {
@@ -676,14 +677,17 @@ function isReadyForApproval(data) {
   if (data === null) return false;
   return data.state === 'ready';
 }
+
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
   return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL].includes(data.advertType));
 }
+
 function isApprovalRejected(data) {
   if (data === null) return false;
   return ['draft', 'ready'].includes(data.state) && data._approval && data._approval.status === 'rejected';
 }
+
 function isEditable(data) {
   if (data === null) return false;
   switch (data.state) {
@@ -694,6 +698,7 @@ function isEditable(data) {
       return false;
   }
 }
+
 function isArchived(data) {
   if (!data) return false;
   switch (data.state) {
@@ -703,10 +708,12 @@ function isArchived(data) {
       return false;
   }
 }
+
 function isPublished(data) {
   if (!data) return false;
   return data.published;
 }
+
 function isApproved(data) {
   if (!data) return false;
   switch (data.state) {
