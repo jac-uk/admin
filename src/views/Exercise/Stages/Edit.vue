@@ -1,6 +1,5 @@
 <template>
   <form @submit.prevent="validateAndSave">
-    <BackLink />
     <h1 class="govuk-heading-l">
       Update {{ itemsToChange.length }} {{ $filters.pluralise('application', itemsToChange.length) }}
     </h1>
@@ -72,7 +71,6 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { availableStatuses, getNextStage, getStagePassingStatuses, getStageMoveBackStatuses } from '../../../helpers/exerciseHelper';
 
 export default {
@@ -81,7 +79,6 @@ export default {
     RadioGroup,
     RadioItem,
     Checkbox,
-    BackLink,
   },
   extends: Form,
   data() {

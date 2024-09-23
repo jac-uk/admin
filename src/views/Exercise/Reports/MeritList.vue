@@ -133,7 +133,7 @@ import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import { TASK_TYPE, TASK_STATUS, getMeritListTaskTypes } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
-import { MARKING_TYPE } from '@/helpers/taskHelper';
+import { MARKING_TYPE } from '@/helpers/scoreSheetHelper';
 import { getTableData } from '@/helpers/tableHelper';
 
 const localLookup = {};

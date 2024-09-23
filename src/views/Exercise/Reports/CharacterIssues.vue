@@ -178,10 +178,12 @@
         :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
-        <template #row="{ row }">
+        <template #row="{ row, index: rowIndex }">
           <TableCell
             v-if="issueStatus === 'all' || (row.issues.characterIssuesStatus || '') === (issueStatus || '')"
             :title="tableColumns[0].title"
+            style="padding: 20px;"
+            :style="rowIndex % 2 === 0 ? 'background-color: #f3f2f1' : ''"
           >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
@@ -538,7 +540,7 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
+import { EXERCISE_STAGE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadBase64File } from '@/helpers/file';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
@@ -570,7 +572,7 @@ export default {
       issueStatus: 'all',
       applicationRecords: [],
       unsubscribe: null,
-      tableColumns: [{ title: 'Candidate' }],
+      tableColumns: [{ title: '' }],
       total: null,
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
@@ -618,6 +620,9 @@ export default {
     candidateStatus: function () {
       this.$refs['issuesTable'].reload();
     },
+    issueStatus: function () {
+      this.$refs['issuesTable'].reload();
+    },
   },
   created() {
     this.unsubscribeCharacterIssuesReport = onSnapshot(
@@ -629,8 +634,8 @@ export default {
       });
   },
   mounted() {
-    this.exerciseStage = this.availableStages[0] || '';
-    this.candidateStatus = this.availableStatuses[0] || '';
+    this.exerciseStage = this.getInitExerciseStage();
+    this.candidateStatus = this.getInitExerciseStatus();
   },
   unmounted() {
     if (this.unsubscribeCharacterIssuesReport) {
@@ -641,6 +646,14 @@ export default {
     }
   },
   methods: {
+    getInitExerciseStage() {
+      const match = this.availableStages.find(stage => stage === EXERCISE_STAGE.SCC);
+      return match || this.availableStages[0];
+    },
+    getInitExerciseStatus() {
+      const match = this.availableStatuses.find(status => status === APPLICATION_STATUS.PASSED_RECOMMENDED);
+      return match || this.availableStatuses[0];
+    },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
@@ -736,10 +749,13 @@ export default {
         } else {
           firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION));
         }
-        localParams.orderBy = ['status', 'documentId'];
+        localParams.orderBy = ['candidate.fullName', 'status', 'documentId'];
       } else {
         firestoreRef = query(firestoreRef, where('status', '==', candidateStatus === 'blank' ? '' : candidateStatus));
-        localParams.orderBy = 'documentId';
+        localParams.orderBy = ['candidate.fullName', 'documentId'];
+      }
+      if (this.issueStatus !== 'all') {
+        firestoreRef = query(firestoreRef, where('issues.characterIssuesStatus', '==', this.issueStatus));
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
       firestoreRef = res.queryRef;

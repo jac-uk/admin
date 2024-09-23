@@ -273,6 +273,9 @@
               <td
                 v-for="(column, columnIndex) in columns"
                 :key="columnIndex"
+                :style="{
+                  'white-space': keys[column]?.nowrap ? 'nowrap' : ''
+                }"
                 class="govuk-table__cell"
               >
                 {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
@@ -383,6 +386,7 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue'
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { escapeValue } from '@/helpers/csv';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
@@ -403,7 +407,7 @@ export default {
       STATUS,
       type: 'showData',
       data: null,
-      statuses: [],
+      statuses: [STATUS.APPLIED],
       selectedStage: 'all',
       selectedStageStatus: null,
       isLoading: null,
@@ -556,21 +560,21 @@ export default {
         },
       ],
       keys: {
-        referenceNumber: { label: 'Candidate reference number', type: String },
+        referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
         applyingForWelshPost: { label: 'Applying for Welsh Post?', type: Boolean },
         canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
         canSpeakWelsh: { label: 'Can speak Welsh?', type: Boolean },
         employmentGaps: { label: 'Employment gaps', type: 'Array of objects' },
         firstAssessorType: { label: 'First Assessor Type', type: String },
-        firstAssessorEmail: { label: 'First Assessor Email', type: String },
-        firstAssessorTitle: { label: 'First Assessor Title', type: String },
-        firstAssessorFullName: { label: 'First Assessor Full Name', type: String },
-        firstAssessorPhone: { label: 'First Assessor Phone', type: String },
+        firstAssessorEmail: { label: 'First Assessor Email', type: String, nowrap: true },
+        firstAssessorTitle: { label: 'First Assessor Title', type: String, nowrap: true },
+        firstAssessorFullName: { label: 'First Assessor Full Name', type: String, nowrap: true },
+        firstAssessorPhone: { label: 'First Assessor Phone', type: String, nowrap: true },
         secondAssessorType: { label: 'Second Assessor Type', type: String },
-        secondAssessorEmail: { label: 'Second Assessor Email', type: String },
-        secondAssessorTitle: { label: 'Second Assessor Title', type: String },
-        secondAssessorFullName: { label: 'Second Assessor Full Name', type: String },
-        secondAssessorPhone: { label: 'Second Assessor Phone', type: String },
+        secondAssessorEmail: { label: 'Second Assessor Email', type: String, nowrap: true },
+        secondAssessorTitle: { label: 'Second Assessor Title', type: String, nowrap: true },
+        secondAssessorFullName: { label: 'Second Assessor Full Name', type: String, nowrap: true },
+        secondAssessorPhone: { label: 'Second Assessor Phone', type: String, nowrap: true },
         royalInstitutionCharteredSurveyorsDate: { label: 'Royal Institution Chartered Surveyors Date', type: Date },
         royalInstituteBritishArchitectsInformation: { label: 'Royal Institute of British Architects Information', type: String },
         otherProfessionalMemberships: { label: 'Other Professional Memberships', type: String },
@@ -602,22 +606,22 @@ export default {
         applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
         '_processing.status': { label: 'Status (admin)', type: String },
         '_processing.stage': { label: 'Stage', type: String },
-        'personalDetails.phone': { label: 'Phone', type: String },
-        'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String },
-        'personalDetails.email': { label: 'Email', type: String },
+        'personalDetails.phone': { label: 'Phone', type: String, nowrap: true },
+        'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String, nowrap: true },
+        'personalDetails.email': { label: 'Email', type: String, nowrap: true },
         'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
         'personalDetails.reasonableAdjustmentsDetails': { label: 'Reasonable adjustments details', type: String },
-        'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date },
-        'personalDetails.placeOfBirth': { label: 'Place of birth', type: String },
-        'personalDetails.title': { label: 'Title', type: String },
-        'personalDetails.citizenship': { label: 'Citizenship', type: String },
-        'personalDetails.firstName': { label: 'First Name', type: String },
-        'personalDetails.middleNames': { label: 'Middle name(s)', type: String },
-        'personalDetails.lastName': { label: 'Last Name', type: String },
-        'personalDetails.fullName': { label: 'Full Name', type: String },
+        'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date, nowrap: true },
+        'personalDetails.placeOfBirth': { label: 'Place of birth', type: String, nowrap: true },
+        'personalDetails.title': { label: 'Title', type: String, nowrap: true },
+        'personalDetails.citizenship': { label: 'Citizenship', type: String, nowrap: true },
+        'personalDetails.firstName': { label: 'First Name', type: String, nowrap: true },
+        'personalDetails.middleNames': { label: 'Middle name(s)', type: String, nowrap: true },
+        'personalDetails.lastName': { label: 'Last Name', type: String, nowrap: true },
+        'personalDetails.fullName': { label: 'Full Name', type: String, nowrap: true },
         'personalDetails.suffix': { label: 'Suffix', type: String },
         'personalDetails.previousNames': { label: 'Previous known name(s)', type: String },
-        'personalDetails.professionalName': { label: 'Professional name', type: String },
+        'personalDetails.professionalName': { label: 'Professional name', type: String, nowrap: true },
         'personalDetails.address.current': { label: 'Current Address', type: String },
         'personalDetails.address.currentMoreThan5Years': { label: 'Has lived at this address for more than 5 years', type: Boolean },
         'personalDetails.address.previous': { label: 'Previous Addresses', type: String },
@@ -814,8 +818,13 @@ export default {
       for (let i = 0; i < this.data.data.length; i++) {
         csv.push([...this.columns.map(col => this.data.data[i][col])]);
       }
-      const csvContent = `data:text/csv;charset=utf-8,${
-        csv.map(e => e.join(',')).join('\n')}`;
+
+      // Convert the 2D array to CSV, ensuring values are properly escaped
+      const mappedCSV = csv
+        .map(row => row.map(escapeValue).join(',')) // Escape each value and join them with commas
+        .join('\n'); // Join each row with a newline
+
+      const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);

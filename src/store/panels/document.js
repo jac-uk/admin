@@ -54,7 +54,7 @@ export default {
     delete: async (context, id) => {
       await deleteDoc(doc(collectionRef, id));
     },
-    addApplications: async (context, { panelId, type, applicationIds }) => {
+    addApplications: async (context, { panelId, type, applicationIds, applicationRecords }) => {
       const batch = writeBatch(firestore);
       applicationIds.forEach(applicationId => {
         const ref = doc(collection(firestore, 'applicationRecords'), applicationId);
@@ -63,10 +63,13 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
+      const applicationsData = {};
+      applicationRecords.forEach(applicationRecord => applicationsData[applicationRecord.id] = { referenceNumber: applicationRecord.application.referenceNumber });
       await context.dispatch('update', {
         id: panelId,
         data: {
           applicationIds: arrayUnion(...applicationIds),
+          applications: applicationsData,
         },
       });
     },

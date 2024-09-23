@@ -103,7 +103,8 @@ export {
   shortlistingStatuses,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
-  isJAC00187
+  isJAC00187,
+  isPublished
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -159,8 +160,81 @@ const APPLICATION_PARTS = [
   'commissionerConflicts',
 ];
 
-const CAPABILITIES = ['L&J', 'PQ', 'L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
-const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
+const SELECTION_CATEGORIES = {
+  LEADERSHIP: {
+    value: 'leadership',
+    label: 'Leadership',
+    description: 'Strategic Leadership Questions',
+  },
+  ROLEPLAY: {
+    value: 'roleplay',
+    label: 'Roleplay',
+    description: 'Role Play',
+  },
+  SITUATIONAL: {
+    value: 'situational',
+    label: 'Situational',
+    description: 'Situational Questions',
+  },
+  INTERVIEW: {
+    value: 'interview',
+    label: 'Interview',
+    description: 'Interview',
+  },
+  OVERALL: {
+    value: 'overall',
+    label: 'Overall',
+    description: 'Overall',
+  },
+};
+
+const CAPABILITIES = {
+  LJ: {
+    value: 'L&J',
+    label: 'L&J',
+    description: 'Legal & Judicial Skills',
+  },
+  PQ: {
+    value: 'PQ',
+    label: 'PQ',
+    description: 'Personal Qualities',
+  },
+  L: {
+    value: 'L',
+    label: 'L',
+    description: 'Leadership',
+  },
+  EJ: {
+    value: 'EJ',
+    label: 'EJ',
+    description: 'Exercising Judgement',
+  },
+  PBK: {
+    value: 'PBK',
+    label: 'PBK',
+    description: 'Possessing and Building Knowledge',
+  },
+  ACI: {
+    value: 'ACI',
+    label: 'ACI',
+    description: 'Assimilating and Clarifying Information',
+  },
+  WCO: {
+    value: 'WCO',
+    label: 'WCO',
+    description: 'Working and Communicating with Others',
+  },
+  MWE: {
+    value: 'MWE',
+    label: 'MWE',
+    description: 'Managing Work Efficiently',
+  },
+  OVERALL: {
+    value: 'OVERALL',
+    label: 'OVERALL',
+    description: 'Overall',
+  },
+};
 
 const PROCESSING_STAGE = {  // could be exercise_stage and existing exercise_stage -> application_stage
   SHORTLISTING: 'shortlisting',
@@ -222,7 +296,7 @@ TASK_STEPS[TASK_STATUS.DATA_ACTIVATED] = { title: 'Enter scores' };
 TASK_STEPS[TASK_STATUS.TEST_INITIALISED] = { title: 'Test preparation' };
 TASK_STEPS[TASK_STATUS.TEST_ACTIVATED] = { title: 'Test active' };
 TASK_STEPS[TASK_STATUS.PANELS_INITIALISED] = { title: 'Configure panels' };
-TASK_STEPS[TASK_STATUS.PANELS_ACTIVATED] = { title: 'Panel scores' };
+TASK_STEPS[TASK_STATUS.PANELS_ACTIVATED] = { title: 'Panel grades' };
 TASK_STEPS[TASK_STATUS.MODERATION_INITIALISED] = { title: 'Configure moderation' };
 TASK_STEPS[TASK_STATUS.MODERATION_ACTIVATED] = { title: 'Moderation scores' };
 TASK_STEPS[TASK_STATUS.STATUS_CHANGES] = { title: 'Update statuses' };
@@ -604,7 +678,7 @@ function isReadyForApproval(data) {
 }
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
-  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL, ADVERT_TYPES.LISTING].includes(data.advertType));
+  return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL].includes(data.advertType));
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
@@ -628,6 +702,10 @@ function isArchived(data) {
     default:
       return false;
   }
+}
+function isPublished(data) {
+  if (!data) return false;
+  return data.published;
 }
 function isApproved(data) {
   if (!data) return false;

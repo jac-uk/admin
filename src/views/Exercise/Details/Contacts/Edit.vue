@@ -2,13 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div
-          v-if="!hasJourney"
-          class="text-right"
-        >
-          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
-        </div>
-
         <h2 class="govuk-heading-l">
           Contacts
         </h2>
@@ -188,7 +181,6 @@ import LeadJudge from '@/components/RepeatableFields/LeadJudge.vue';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee.vue';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer.vue';
 import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   name: 'ContactsEdit',
@@ -198,7 +190,6 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     RepeatableFields,
-    BackLink,
   },
   extends: Form,
   data(){

@@ -73,6 +73,14 @@ export default {
         data.favouriteOf = arrayUnion(rootState.auth.currentUser.uid);
         data.createdBy = rootState.auth.currentUser.uid;
         data.createdAt = serverTimestamp();
+
+        const ignoreFields = ['_applicationRecords', '_applications', '_approval', 'testingState'];
+        for (const key in data) {
+          if (ignoreFields.includes(key)) {
+            delete data[key];
+          }
+        }
+
         transaction.set(exerciseRef, getExerciseSaveData(data, data));
         return exerciseRef.id;
       });

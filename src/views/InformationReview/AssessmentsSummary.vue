@@ -47,7 +47,12 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
+                class="govuk-!-padding-top-2"
                 :is-asked="isApplicationPartAsked('statementOfSuitability')"
+                :is-required="true"
+                :display-label="false"
+                :type-props="{ wordLimit: item.wordLimit || defaultWordCount }"
+                error-field-name="statutory eligibility requirement"
                 @change-field="changeAssessmentInfo"
               />
             </div>
@@ -322,6 +327,7 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
 import AssessmentSection from '@/components/RepeatableFields/AssessmentSection.vue';
+import { DEFAULT_WORD_COUNT } from '@/helpers/constants';
 export default {
   name: 'AssessmentsSummary',
   components: {
@@ -350,10 +356,12 @@ export default {
   },
   emits: ['updateApplication'],
   data() {
+    const defaultWordCount = DEFAULT_WORD_COUNT.ADDITIONAL_SELECTION_CRITERIA;
     return {
       assessorDetails: {},
       isLoadingFile: false,
       editUploadSelfAssessmentMode: false,
+      defaultWordCount: defaultWordCount,
     };
   },
   computed: {

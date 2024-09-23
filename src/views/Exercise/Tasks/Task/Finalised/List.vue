@@ -42,7 +42,14 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
+        <a
+          class="govuk-link"
+          @click="btnFind"
+        >Find an application</a>
+        <a
+          class="govuk-link govuk-!-margin-left-4"
+          @click="btnExport"
+        >Download merit list</a>        
       </div>
       <!-- <div class="govuk-grid-column-one-half">
         <label class="govuk-label govuk-!-display-inline" for="search">
@@ -51,20 +58,13 @@
         <input class="search-input govuk-input govuk-input--width-10 govuk-!-margin-left-2" id="search" name="search" type="text">
       </div> -->
       <div class="govuk-grid-column-one-half text-right">
-        <a
-          class="govuk-link"
-          @click="btnFind"
-        >Find an application</a>
-        <a
-          class="govuk-link govuk-!-margin-left-4"
-          @click="btnExport"
-        >Download merit list</a>
+        <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
         <a 
           class="govuk-link govuk-!-margin-left-4"
           @click="toggleAll"
         ><span v-if="areAllScoresExpanded">Collapse all</span><span v-else>Expand all</span></a>
       </div>
-    </div>    
+    </div>  
     <Table
       data-key="score"
       :data="scores"
@@ -146,6 +146,7 @@
             v-for="item in getScoreDataForScore(row.score)"
             :key="item.id"
             class="govuk-table__row extra-row"
+            :class="{ 'highlight': item.ref == selectedApplication}"
           >
             <TableCell colspan="3">
               {{ item.fullName || item.ref }}
@@ -222,23 +223,27 @@
       />
     </Modal>
     <Modal ref="findApplicationModal">
-      <TitleBar>
+      <TitleBar @click="$refs['findApplicationModal'].closeModal()">
         Find an application
       </TitleBar>
-      <div style="padding: 0 20px">
-        <TextField
-          id="lookahead"
-          label="Find an application"
-          hint="Type any part of reference number or candidate name"
-          type="text"
+      <div style="padding: 0 20px 0 20px; min-height: 300px">
+        <PredictiveSearch
+          id="find-a-candidate"
+          v-model="selectedApplication"
+          hint="Type any part of reference number"
+          :show-full-list-on-focus="false"
+          :data="scoreData"
+          :search-fields="['ref']"
+          required
+          @update:model-value="onApplicationFound"
         />
-        <div style="height: 20em">
-          - Tom Russell<br>
-          - Tomoko Linton<br>
-          - Robertom Jones<br>
-          - Antomnia Norwich<br>
-          - Jennifer Evertom<br>       
-        </div>
+        <button
+          class="govuk-button govuk-button--secondary"
+          type="button"
+          @click="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
+        >
+          Cancel
+        </button>
       </div>
     </Modal>    
   </div>
@@ -246,7 +251,7 @@
 
 <script>
 import { deleteField } from '@firebase/firestore';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
@@ -258,7 +263,7 @@ import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
-    TextField,
+    PredictiveSearch,
     Table,
     TableCell,
     Modal,
@@ -311,6 +316,7 @@ export default {
       tableColumns: tableColumns,
       expandedScores: [],
       selectedItem: null,
+      selectedApplication: null,
     };
   },
   computed: {
@@ -357,6 +363,7 @@ export default {
       const pos = this.expandedScores.indexOf(score);
       if (pos >= 0) {
         this.expandedScores.splice(pos, 1);
+        this.selectedApplication = null;
       } else {
         this.expandedScores.push(score);
       }
@@ -398,9 +405,16 @@ export default {
       }
     },
     btnFind() {
+      // this.selectedApplication = null;
       this.$refs['findApplicationModal'].openModal();
     },
+    onApplicationFound() {
+      const score = this.scoreData.find(item => item.ref === this.selectedApplication).score;
+      if (!this.isScoreExpanded(score)) this.toggleScore(score);
+      this.$refs['findApplicationModal'].closeModal();
+    },
     btnExport() {
+      this.selectedApplication = null;
       this.$refs['exportModal'].openModal();
     },
     downloadMeritList(saveData) {
@@ -457,5 +471,9 @@ export default {
 .clickable {
   cursor: pointer;
   text-decoration: underline dotted;
+}
+
+.highlight {
+  background-color: rgba(86,148,202,0.2);
 }
 </style>

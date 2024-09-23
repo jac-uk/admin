@@ -266,7 +266,16 @@ export default {
       return steps;
     },
     totalApplications() {
-      return totalApplications(this.task);
+      let total = 0;
+      if (!this.task) return total;
+      if (!this.panels) {
+        return totalApplications(this.task);
+      }
+      this.panels.forEach(panel => {
+        if (panel.applicationIds) total += panel.applicationIds.length;
+      });
+      if (this.hasApplicationsWithoutPanels) total += this.applicationsWithoutPanels.length;
+      return total;
     },
     tabs() {
       const data = [];
@@ -299,6 +308,10 @@ export default {
     },
     hasPanelsWithoutPanellists() {
       return this.panelsWithoutPanellists.length > 0;
+    },
+    selectedApplications() {
+      if (!this.selectedItems.length) return null;
+      return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0);
     },
   },
   methods: {
@@ -357,14 +370,15 @@ export default {
           panelId: data.panelId,
           type: this.type,
           applicationIds: this.selectedItems,
+          applicationRecords: this.selectedApplications,
         });
-        // update applicationRecords
-        const updates = this.selectedItems.map(applicationId => {
-          const update = {};
-          update[`${this.type}.panelId`] = data.panelId;
-          return { id: applicationId, data: update };
-        });
-        await this.$store.dispatch('candidateApplications/update', updates);
+        // // update applicationRecords
+        // const updates = this.selectedItems.map(applicationId => {
+        //   const update = {};
+        //   update[`${this.type}.panelId`] = data.panelId;
+        //   return { id: applicationId, data: update };
+        // });
+        // await this.$store.dispatch('candidateApplications/update', updates);
         this.selectedItems = [];
       }
       this.$refs['setPanelModal'].closeModal();

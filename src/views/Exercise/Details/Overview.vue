@@ -97,7 +97,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-top-6">
       <button
-        v-if="canUpdateExercises && isDraft"
+        v-if="canUpdateExercises && isDraft && isReadyForApprovalFromAdvertType"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="openApprovalModal"

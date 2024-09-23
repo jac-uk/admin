@@ -1,52 +1,73 @@
 <template>
   <Form
-    @save="save"
+    @save="preSave"
     @cancel="cancel"
   >
-    <TextField
-      id="ref"
-      v-model="formData.ref"
-      type="text"
-      label="Title"
-      required
-    />
-
-    <Select
-      id="type"
-      v-model="formData.type"
-      label="Please select a type"
-      required
-      @change="onChangeType"
+    <RadioGroup
+      id="item-type"
+      v-model="itemType"
+      label="Please choose which data you'd like to collect"
     >
-      <option
-        v-for="type in types"
-        :key="type.value"
-        :value="type.value"
+      <RadioItem
+        v-for="item in additionalColumns"
+        :key="item.value"
+        :value="item.value"
+        :label="item.label"
+      />
+      <RadioItem
+        value="custom"
+        label="Custom"
       >
-        {{ type.label }}
-      </option>
-    </Select>
+        <TextField
+          id="ref"
+          v-model="formData.ref"
+          type="text"
+          label="Title"
+          required
+        />
 
-    <Checkbox
-      id="exclude-from-score"
-      v-model="formData.excludeFromScore"
-    >
-      Exclude from score?
-    </Checkbox>
+        <Select
+          id="type"
+          v-model="formData.type"
+          label="Please select a type"
+          required
+          @change="onChangeType"
+        >
+          <option
+            v-for="type in types"
+            :key="type.value"
+            :value="type.value"
+          >
+            {{ type.label }}
+          </option>
+        </Select>
+
+        <Checkbox
+          id="exclude-from-score"
+          v-model="formData.excludeFromScore"
+        >
+          Exclude from score?
+        </Checkbox>        
+      </RadioItem>
+    </RadioGroup>
   </Form>
 </template>
 
 <script>
 import Form from '@/components/Page/Form.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import { MARKING_TYPE } from '@/helpers/taskHelper';
+import { MARKING_TYPE, getAdditionalColumns, getAdditionalColumn } from '@/helpers/scoreSheetHelper';
 
 export default {
   name: 'SelectPanel',
   components: {
     Form,
+    RadioGroup,
+    RadioItem,
     Select,
     TextField,
     Checkbox,
@@ -54,6 +75,7 @@ export default {
   extends: Form,
   data() {
     return {
+      MARKING_TYPE: MARKING_TYPE,
       types: [
         MARKING_TYPE.GRADE,
         MARKING_TYPE.YES_NO,
@@ -61,6 +83,8 @@ export default {
         MARKING_TYPE.LEVEL,
         MARKING_TYPE.NUMBER,
       ],
+      additionalColumns: getAdditionalColumns(),
+      itemType: null,
     };
   },
   methods: {
@@ -71,6 +95,12 @@ export default {
           this.formData.excludeFromScore = type.excludeFromScore;
         }        
       }
+    },
+    preSave() {
+      if (this.itemType && this.itemType != 'custom') {
+        this.formData = getAdditionalColumn(this.itemType).config;
+      }
+      this.save();
     },
   },
 };

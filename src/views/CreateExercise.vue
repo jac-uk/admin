@@ -2,8 +2,6 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
-        <BackLink />
-
         <div
           v-if="hasClipboardData"
           class="govuk-notification-banner"
@@ -194,7 +192,6 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
 import { cloneDeep } from 'lodash';
@@ -209,7 +206,6 @@ export default {
     RadioItem,
     CheckboxGroup,
     CheckboxItem,
-    BackLink,
     Modal,
     OverrideExercise,
   },

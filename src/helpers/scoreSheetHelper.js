@@ -1,21 +1,36 @@
 /*eslint func-style: ["error", "declaration"]*/
 
 import clone from 'clone';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics';
 
 export {
+  SCORESHEET_TOOLS,
   MARKING_TYPE,
+  ADDITIONAL_COLUMNS,
   GRADES,
   GRADE_VALUES,
   getMarkingType,
+  getAdditionalColumns,
+  getAdditionalColumn,
   getCompleteScoreSheet,
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
   isScoreSheetComplete,
+  scoreSheetRowsAddRank,
+  scoreSheetRowsAddDiversity,
   markingScheme2Columns,
   markingScheme2ColumnHeaders,
   markingTypeHasOptions,
   markingTypeGetOptions,
   getScoreSheetItemTotal
+};
+
+const SCORESHEET_TOOLS = {
+  FIND: 'find',
+  COPY: 'copy',
+  PASTE: 'paste',
+  SCORE: 'score',
+  DIVERSITY: 'diversity',
 };
 
 const MARKING_TYPE = {
@@ -76,6 +91,24 @@ const MARKING_TYPE = {
   },
 };
 
+const ADDITIONAL_COLUMNS = {
+  WELSH_ADMIN: {
+    value: 'welsh-admin',
+    label: 'Welsh Administration Questions',
+    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, excludeFromScore: true },
+  },
+  WELSH_LANGUAGE: {
+    value: 'welsh-language',
+    label: 'Welsh Language',
+    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, excludeFromScore: true },
+  },
+  ASC_MET: {
+    value: 'asc-met',
+    label: 'ASC Met',
+    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, excludeFromScore: true },
+  },
+};
+
 const GRADES = ['A', 'B', 'C', 'D'];
 const GRADE_VALUES = {
   'A': 4,
@@ -88,6 +121,16 @@ function getMarkingType(type) {
   const markingType = Object.values(MARKING_TYPE).find(item => item.value === type);
   if (markingType) return markingType;
   return { value: null, label: null };
+}
+
+function getAdditionalColumns() {
+  return Object.values(ADDITIONAL_COLUMNS);
+}
+
+function getAdditionalColumn(ref) {
+  const column = Object.values(ADDITIONAL_COLUMNS).find(item => item.value === ref);
+  if (column) return column;
+  return { value: null, label: null, config: null };
 }
 
 function markingTypeHasOptions(type) {
@@ -149,6 +192,42 @@ function getScoreSheetItemTotal(item, scoreSheet) {
   return 0;
 }
 
+function scoreSheetRowsAddRank(scoreSheetData) {
+  scoreSheetData.sort((a, b) => b.score - a.score);
+  let currentScore = null;
+  let countAtCurrentScore = 0;
+  let currentRank = 1;
+  scoreSheetData.forEach(row => {
+    if (currentScore === null) {
+      currentScore = row.score;
+    }
+    if (row.score === currentScore) {
+      countAtCurrentScore += 1;
+    } else {
+      currentScore = row.score;
+      currentRank += countAtCurrentScore;
+      countAtCurrentScore = 1;
+    }
+    row.rank = currentRank;
+  });
+}
+
+function scoreSheetRowsAddDiversity(scoreSheetData, diversityData) {
+  scoreSheetData.forEach(row => {
+    const ref = row.referenceNumber.split('-')[1];
+    if (diversityData[ref]) {
+      row.diversity = {
+        female: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE),
+        bame: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME),
+        solicitor: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR),
+        disability: hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED),
+      };
+    } else {
+      row.diversity = {};
+    }
+  });
+}
+
 function markingScheme2ScoreSheet(markingScheme) {
   /**
    * e.g.
@@ -197,9 +276,9 @@ function markingScheme2Columns(markingScheme, editable = false) {
   if (!markingScheme) return columns;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
-      item.children.forEach(child => columns.push({ parent: item.ref, ...child, editable: editable }));
+      item.children.forEach(child => columns.push({ parent: item.ref, ...child, title: child.ref, editable: editable }));
     } else {
-      columns.push({ ...item, editable: editable });
+      columns.push({ ...item, title: item.ref, editable: editable });
     }
   });
   return columns;

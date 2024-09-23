@@ -6,12 +6,6 @@
     <div id="panel-pack-div">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-          <router-link
-            class="govuk-back-link govuk-!-margin-top-0"
-            :to="{ name: 'exercise-task-panelsInitialised' }"
-          >
-            Back
-          </router-link>
           <span class="govuk-caption-l">Panel</span>
           <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
             {{ panel.name }}
@@ -29,7 +23,7 @@
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
               {{ panel.status }}
@@ -41,7 +35,7 @@
         </div>
 
         <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
             <span class="govuk-caption-m">{{ $filters.lookup(type) }} Dates</span>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
@@ -53,7 +47,7 @@
         </div>
 
         <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
             <div class="govuk-caption-m">
               Applications
             </div>
@@ -71,18 +65,25 @@
       />
     </div>
 
-    <div v-show="panel.scoreSheet && activeTab == 'scoreSheet'">
+    <div
+      v-if="panel.scoreSheet"
+      v-show="activeTab == 'scoreSheet'"
+    >
       <ScoreSheet
         ref="scoreSheet"
         data-key="id"
         :marking-scheme="panel.markingScheme"
         :data="scoreSheetData"
-        :columns-before="[{ title: 'Application', class: 'table-cell-application' }]"
+        :columns-before="[{ title: 'Application', ref: 'referenceNumber', class: 'table-cell-application' }]"
         :editable="canEditScoreSheet"
         :moderation="isModerationRequired"
+        :tools="scoreSheetTools"
       >
         <template #columns-before="{row}">
-          <TableCell class="table-cell-application nowrap sticky-left">
+          <TableCell
+            class="table-cell-application nowrap sticky-left"
+            :class="{ 'highlight': row.highlight }"
+          >
             {{ row.referenceNumber }}
           </TableCell>
         </template>
@@ -193,7 +194,7 @@ import PanelForm from './components/AddEdit.vue';
 import EditPanellists from './Panellists/Edit.vue';
 import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
-import { getScoreSheetTotal } from '@/helpers/taskHelper';
+import { SCORESHEET_TOOLS, getScoreSheetTotal, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity } from '@/helpers/scoreSheetHelper';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
 export default {
@@ -228,10 +229,23 @@ export default {
         ROLES.INDEPENDENT,
         ROLES.OTHER,
       ],
+      scoreSheetTools: [
+        SCORESHEET_TOOLS.FIND,
+        SCORESHEET_TOOLS.COPY,
+        SCORESHEET_TOOLS.PASTE,
+        SCORESHEET_TOOLS.SCORE,
+        SCORESHEET_TOOLS.DIVERSITY,
+      ],
     };
     return data;
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    exerciseDiversity() {
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
+    },
     tabs() {
       const tabs = [];
       tabs.push({ ref: 'panellists', title: 'Panellists' });
@@ -255,21 +269,21 @@ export default {
         };
         rows.push(row);
       });
+      if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
+      scoreSheetRowsAddRank(rows);
       return rows;
-    },
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     canEditScoreSheet() {
-      return true;
+      return false;
     },
     isModerationRequired() {
-      if (!this.task) return false;
-      if (!this.task.panelIds) return false;
-      return this.task.panelIds.length > 1;
+      return false;
+      // if (!this.task) return false;
+      // if (!this.task.panelIds) return false;
+      // return this.task.panelIds.length > 1;
     },
     grades() {
       return this.task ? this.task.grades : [];
@@ -329,7 +343,7 @@ export default {
     await this.$store.dispatch('panel/bind', this.panelId);
     if (this.panel && this.panel.panellistIds) {
       this.$store.dispatch('panel/bindPanellists', { ids: this.panel.panellistIds });
-    }
+    }    
     if (
       this.panel &&
       this.panel.scoreSheet
@@ -340,6 +354,7 @@ export default {
       });
       this.activeTab = 'scoreSheet';
     }
+    await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   unmounted() {
     this.$store.dispatch('panel/unbind');
@@ -354,6 +369,7 @@ export default {
         name: this.exercise.name,
         referenceNumber: this.exercise.referenceNumber,
       };
+      saveData.markingScheme = this.task.markingScheme,
       await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );
       this.activeTab = 'applications';
     },
@@ -387,7 +403,7 @@ export default {
         this.$store.dispatch(
           'panel/bindApplications',
           {
-            exerciseId: this.panel.exerciseId,
+            exerciseId: this.panel.exercise.id,
             panelId: this.panelId,
             type: this.panel.type,
             ...params,

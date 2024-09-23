@@ -21,9 +21,9 @@
           <ul class="govuk-list">
             <li
               v-for="capability in capabilities"
-              :key="capability"
+              :key="capability.value"
             >
-              {{ $filters.lookup(capability) }}
+              {{ capability.description }}
             </li>
           </ul>
         </dd>
@@ -38,7 +38,7 @@
               v-for="item in selectionCategories"
               :key="item"
             >
-              {{ $filters.lookup(item) }}
+              {{ item.description }}
             </li>
           </ul>
         </dd>
@@ -61,12 +61,12 @@ export default {
     capabilities() {
       if (!this.exercise) return [];
       if (!this.exercise.capabilities) return [];
-      return CAPABILITIES.filter(cap => this.exercise.capabilities.indexOf(cap) >= 0);
+      return Object.values(CAPABILITIES).filter(capability => this.exercise.capabilities.indexOf(capability.value) >= 0);
     },
     selectionCategories() {
       if (!this.exercise) return [];
       if (!this.exercise.selectionCategories) return [];
-      return SELECTION_CATEGORIES.filter(item => this.exercise.selectionCategories.indexOf(item) >= 0);
+      return Object.values(SELECTION_CATEGORIES).filter(item => this.exercise.selectionCategories.indexOf(item.value) >= 0);
     },
   },
 };
