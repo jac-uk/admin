@@ -330,8 +330,8 @@ export default {
 <style lang="scss" scoped>
 
 .govuk-fieldset {
-  @include govuk-responsive-padding(6);
   border: 2px solid $govuk-border-colour;
+  @include govuk-responsive-padding(6);
 }
 
 .jac-add-another__remove-button {
