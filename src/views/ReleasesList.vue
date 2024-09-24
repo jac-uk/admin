@@ -1,5 +1,12 @@
 <template>
   <div>
+    <!-- New section for file upload status -->
+    <div>
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+        Virus Scanner functionality: {{ fileUploadStatus }}
+      </h2>
+    </div>
+
     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
       Latest Releases
     </h2>
@@ -62,19 +69,23 @@ export default {
   },
   computed: {
     ...mapGetters({
+      fileUploadEnabled: 'candidateSettings/getUploadStatus',
       lastFetchedDT: 'releases/getLastFetchedDT',
     }),
     ...mapState('releases', [
       'availability',
     ]),
-
     tableData() {
       return this.$store.state.releases.records;
+    },
+    fileUploadStatus() {
+      return this.fileUploadEnabled ? 'Online' : 'Offline';
     },
   },
   created() {
     // Can make the calls synchronously below
     this.$store.dispatch('releases/getLatestReleases');
+    this.$store.dispatch('candidateSettings/bind');
   },
   methods: {
     formatDate(dateStr) {
