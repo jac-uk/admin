@@ -371,9 +371,16 @@ export default {
           link: { name: 'users' },
         });
       }
+
       tabs.push({
         title: this.userName,
         content: [
+          {
+            title: 'User guidance',
+            link: () => {
+              window.open('https://justiceuk.sharepoint.com/sites/DigitalTeam193/SitePages/How-to-Videos.aspx', '_blank');
+            },
+          },
           { title: 'Sign out', link: () => { this.signOut(); } },
         ],
       });
