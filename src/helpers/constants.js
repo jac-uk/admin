@@ -187,6 +187,7 @@ const GUIDANCE_REFERENCE = {
   PROFESSIONAL_CONDUCT: 'professionalConduct',
   FURTHER_DISCLOSURES: 'furtherDisclosures',
 };
+// for exercises launched after 15/10/2024
 const GUIDANCE_REFERENCE_V2 = {
   CRIMINAL_OFFENCES: 'criminalOffences',
   MOTERING_OFFENCES: 'moteringOffences',
