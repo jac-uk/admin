@@ -283,6 +283,13 @@ export default {
       // Used to facilitate different fields after 01-04-2023
       return state.record.applicationOpenDate > new Date('2023-04-01');
     },
+    applicationOpenDatePost15102024: (state, getters, rootState, rootGetters) => {
+      const { isDevelop } = rootGetters;
+      if (isDevelop && ['JAC00010'].includes(state.record.referenceNumber)) {
+        return true;
+      }
+      return state.record.applicationOpenDate > new Date('2024-10-15');
+    },
     hasInitialApprovalDate(state) {
       return checkNested(state.record, '_approval', 'initialApprovalDate');
     },
