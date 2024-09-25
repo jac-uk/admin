@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="autocompleteContainer"
     class="govuk-form-group"
     :class="{'govuk-form-group--error': hasError}"
   >
@@ -24,6 +25,7 @@
     <div class="autocomplete-container">
       <input
         :id="id"
+        ref="autocompleteRef"
         v-model="searchTerm"
         class="govuk-input"
         :class="{'govuk-input--error': hasError}"
@@ -33,12 +35,14 @@
         autocomplete="off"
         @input="filterResults"
         @focus="onFocus"
+        @keydown.esc="onEsc"
         @keydown.down="onArrowDown"
         @keydown.up="onArrowUp"
         @keydown.enter.prevent="onEnter"
+        @blur="onBlur"
       >
       <ul
-        v-if="filteredResults.length"
+        v-if="filteredResults.length && listVisible"
         id="autocomplete-list"
         class="govuk-list govuk-list--unstyled autocomplete-list"
       >
@@ -59,8 +63,6 @@
 </template>
 
 <script>
-// import FormField from '.FormField.vue';
-// import FormFieldError from './FormFieldError.vue';
 import FormField from '@jac-uk/jac-kit/draftComponents/Form/FormField.vue';
 import FormFieldError from '@jac-uk/jac-kit/draftComponents/Form/FormFieldError.vue';
 
@@ -97,6 +99,7 @@ export default {
       searchTerm: this.modelValue,
       filteredResults: [],
       highlightedIndex: -1,
+      listVisible: false,
     };
   },
   computed: {
@@ -104,15 +107,27 @@ export default {
       return !!this.errorMessage;
     },
   },
+  watch: {
+    modelValue(newValue) {
+      this.searchTerm = newValue;
+    },
+  },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+  },
   methods: {
     filterResults() {
       if (!this.searchTerm && this.showFullListOnFocus) {
-        this.filteredResults = this.data.slice(0, 50); // Show full list, limited to 50
+        this.filteredResults = this.data.slice(0, 50);
+        this.listVisible = true;
         return;
       }
 
       if (!this.searchTerm) {
-        this.filteredResults = [];
+        this.listVisible = false;
         return;
       }
 
@@ -121,10 +136,13 @@ export default {
         return this.searchFields.some(field =>
           item[field].toLowerCase().includes(searchTerm)
         );
-      }).slice(0, 50); // Limit to 50 results
+      }).slice(0, 50);
+      this.listVisible = true;
     },
     onFocus() {
-      if (this.showFullListOnFocus && !this.searchTerm) {
+      if (!this.searchTerm && this.showFullListOnFocus) {
+        this.filterResults();
+      } else if (this.searchTerm && !this.listVisible) {
         this.filterResults();
       }
     },
@@ -138,6 +156,11 @@ export default {
         this.highlightedIndex -= 1;
       }
     },
+    onEsc() {
+      this.listVisible = false;
+      this.highlightedIndex = -1;
+      this.$refs.autocompleteRef.blur();
+    },
     onEnter() {
       if (this.highlightedIndex >= 0 && this.filteredResults[this.highlightedIndex]) {
         this.onSelect(this.filteredResults[this.highlightedIndex]);
@@ -145,15 +168,19 @@ export default {
     },
     onSelect(result) {
       const selectedValue = result[this.searchFields[0]];
-
       this.searchTerm = selectedValue;
-
-      // Emit the selected value as an update to the parent component
       this.$emit('update:modelValue', selectedValue);
-
-      // Clear the filtered results and reset the highlighted index
-      this.filteredResults = [];
       this.highlightedIndex = -1;
+      this.listVisible = false;
+    },
+    onBlur() {
+      this.listVisible = false;
+    },
+    handleClickOutside(event) {
+      const autocompleteContainer = this.$refs.autocompleteContainer;
+      if (autocompleteContainer && !autocompleteContainer.contains(event.target)) {
+        this.listVisible = false;
+      }
     },
     formatResult(result) {
       return this.searchFields.map((field, index) => {
