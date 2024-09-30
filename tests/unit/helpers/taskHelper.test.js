@@ -9,7 +9,7 @@ import {
   isScoreSheetComplete,
   markingScheme2Columns,
   markingScheme2ColumnHeaders
-} from '@/helpers/taskHelper';
+} from '@/helpers/scoreSheetHelper';
 
 describe('getMarkingType', () => {
   it('should return correct marking type object when valid type is provided', () => {
@@ -423,8 +423,8 @@ describe('markingScheme2Columns', () => {
       { type: MARKING_TYPE.GRADE.value, ref: 'grade1', label: 'Grade 1' },
     ];
     const expected = [
-      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', label: 'Number 1', editable: false },
-      { type: MARKING_TYPE.GRADE.value, ref: 'grade1', label: 'Grade 1', editable: false },
+      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', title: 'num1', label: 'Number 1', editable: false },
+      { type: MARKING_TYPE.GRADE.value, ref: 'grade1', title: 'grade1', label: 'Grade 1', editable: false },
     ];
     expect(markingScheme2Columns(markingScheme)).toEqual(expected);
   });
@@ -442,8 +442,8 @@ describe('markingScheme2Columns', () => {
       },
     ];
     const expected = [
-      { parent: 'group1', type: MARKING_TYPE.NUMBER.value, ref: 'child1', label: 'Child 1', editable: false },
-      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child2', label: 'Child 2', editable: false },
+      { parent: 'group1', type: MARKING_TYPE.NUMBER.value, ref: 'child1', title: 'child1', label: 'Child 1', editable: false },
+      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child2',  title: 'child2', label: 'Child 2', editable: false },
     ];
     expect(markingScheme2Columns(markingScheme)).toEqual(expected);
   });
@@ -463,10 +463,10 @@ describe('markingScheme2Columns', () => {
       { type: MARKING_TYPE.SCORE.value, ref: 'score1', label: 'Score 1' },
     ];
     const expected = [
-      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', label: 'Number 1', editable: false },
-      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child1', label: 'Child 1', editable: false },
-      { parent: 'group1', type: MARKING_TYPE.YES_NO.value, ref: 'child2', label: 'Child 2', editable: false },
-      { type: MARKING_TYPE.SCORE.value, ref: 'score1', label: 'Score 1', editable: false },
+      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', title: 'num1', label: 'Number 1', editable: false },
+      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child1', title: 'child1', label: 'Child 1', editable: false },
+      { parent: 'group1', type: MARKING_TYPE.YES_NO.value, ref: 'child2', title: 'child2', label: 'Child 2', editable: false },
+      { type: MARKING_TYPE.SCORE.value, ref: 'score1', label: 'Score 1', title: 'score1', editable: false },
     ];
     expect(markingScheme2Columns(markingScheme)).toEqual(expected);
   });
@@ -484,8 +484,8 @@ describe('markingScheme2Columns', () => {
       },
     ];
     const expected = [
-      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', label: 'Number 1', editable: true },
-      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child1', label: 'Child 1', editable: true },
+      { type: MARKING_TYPE.NUMBER.value, ref: 'num1', label: 'Number 1',  title: 'num1', editable: true },
+      { parent: 'group1', type: MARKING_TYPE.GRADE.value, ref: 'child1',  title: 'child1', label: 'Child 1', editable: true },
     ];
     expect(markingScheme2Columns(markingScheme, true)).toEqual(expected);
   });
