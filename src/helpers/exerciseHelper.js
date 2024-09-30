@@ -31,6 +31,8 @@ export {
   TASK_STATUS,
   TASK_TYPE,
   STAGE_TASKS,
+  PROCESSING_STAGE,
+  TASK_STEPS,
   getNextProcessingStage,
   getProcessingEntryStage,
   getProcessingExitStage,
@@ -38,10 +40,11 @@ export {
   getTaskTypes,
   getTaskCurrentStep,
   getTaskSteps,
+  taskStatuses,
   getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
-  emptyScoreSheet,
+  applicationCurrentStep,
   exerciseStates,
   exerciseAdvertTypes,
   applicationContentSteps,
@@ -57,6 +60,7 @@ export {
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
   hasQualifyingTests,
+  hasScenarioTest,
   hasRelevantMemberships,
   hasStatementOfSuitability,
   hasCoveringLetter,
@@ -95,6 +99,7 @@ export {
   getStagePassingStatuses,
   getStageMoveBackStatuses,
   getStageWithdrawalStatus,
+  shortlistingStatuses,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
   isJAC00187,
@@ -512,7 +517,7 @@ function taskStatuses(taskType) { // also on DP
         TASK_STATUS.DATA_INITIALISED,
         // TASK_STATUS.DATA_ACTIVATED,
         TASK_STATUS.PANELS_INITIALISED,
-        TASK_STATUS.PANELS_ACTIVATED,        
+        TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.FINALISED,
         TASK_STATUS.COMPLETED,
       ];
@@ -584,32 +589,11 @@ function taskEntryStatus(exercise, type) {
     default:
       status = `${prevTaskType}Passed`;
     }
-  }  
+  }
   return status;
 }
 
-// merit list helpers
-function emptyScoreSheet({ type, selectedCapabilities }) {
-  let capabilities = CAPABILITIES;
-  if (selectedCapabilities) {
-    capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
-  }
-  // TODO ensure this is specific to exercise
-  const fullScoreSheet = {
-    sift: {
-      scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-    },
-    selection: {
-      scoreSheet: {
-        leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-      },
-    },
-  };
-  return type ? fullScoreSheet[type] : fullScoreSheet;
-}
+// // merit list helpers
 
 // application helpers
 function applicationCurrentStep(exercise, application) {
@@ -670,14 +654,17 @@ function isReadyForApproval(data) {
   if (data === null) return false;
   return data.state === 'ready';
 }
+
 function isReadyForApprovalFromAdvertType(data) {
   if (data === null) return false;
   return (!data.advertType || [ADVERT_TYPES.FULL, ADVERT_TYPES.EXTERNAL].includes(data.advertType));
 }
+
 function isApprovalRejected(data) {
   if (data === null) return false;
   return ['draft', 'ready'].includes(data.state) && data._approval && data._approval.status === 'rejected';
 }
+
 function isEditable(data) {
   if (data === null) return false;
   switch (data.state) {
@@ -688,6 +675,7 @@ function isEditable(data) {
       return false;
   }
 }
+
 function isArchived(data) {
   if (!data) return false;
   switch (data.state) {
@@ -697,10 +685,12 @@ function isArchived(data) {
       return false;
   }
 }
+
 function isPublished(data) {
   if (!data) return false;
   return data.published;
 }
+
 function isApproved(data) {
   if (!data) return false;
   switch (data.state) {
@@ -717,7 +707,7 @@ function isProcessing(exercise) {
 }
 function isClosed(exercise) {
   if (!exercise) { return false; }
-  return isApproved && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
+  return isApproved(exercise) && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
 }
 function applicationCounts(exercise) {
   return exercise && exercise._applications ? exercise._applications : {};
