@@ -242,7 +242,7 @@
               :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
-            
+
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
@@ -438,7 +438,9 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.applicationVersion >= 2) {
+      if (this.characterInformationVersion === 3) {
+        return this.application.characterInformationV3 || {};
+      } else if (this.applicationVersion >= 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
@@ -454,6 +456,10 @@ export default {
       return this.exercise._applicationVersion || 1;
     },
     characterInformationVersion() {
+      // All exercises launching on or after 15/10/24 use the V3 Character questions
+      if (this.exercise.applicationOpenDate > new Date('2023-10-15')) {
+        return 3;
+      }
       return this.applicationVersion >= 2 ? 2 : 1;
     },
     applications() {

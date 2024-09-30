@@ -35,6 +35,7 @@ export default {
 
   methods: {
     changeCharacterFlag(obj) {
+      console.log('changeCharacterFlag', obj);
       this.$emit('changeInfo', obj);
     },
     emptyObject(items){
