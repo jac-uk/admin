@@ -44,7 +44,6 @@ export {
   getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
-  emptyScoreSheet,
   applicationCurrentStep,
   exerciseStates,
   exerciseAdvertTypes,
@@ -595,28 +594,6 @@ function taskEntryStatus(exercise, type) {
 }
 
 // // merit list helpers
-// function emptyScoreSheet({ type, selectedCapabilities }) {
-//   let capabilities = CAPABILITIES;
-//   if (selectedCapabilities) {
-//     capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
-//   }
-//   console.log(capabilities);
-//   // TODO ensure this is specific to exercise
-//   const fullScoreSheet = {
-//     sift: {
-//       scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-//     },
-//     selection: {
-//       scoreSheet: {
-//         leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-//         roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-//         interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-//         overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-//       },
-//     },
-//   };
-//   return type ? fullScoreSheet[type] : fullScoreSheet;
-// }
 
 // application helpers
 function applicationCurrentStep(exercise, application) {

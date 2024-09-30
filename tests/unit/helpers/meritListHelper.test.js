@@ -22,6 +22,7 @@ import {
 import { DIVERSITY_CHARACTERISTICS } from '@/helpers/diversityCharacteristics';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { TASK_TYPE } from '@/helpers/constants';
+import { vi } from 'vitest';
 
 describe('getOverrideReasons', () => {
   it('should return override reasons', () => {
