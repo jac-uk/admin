@@ -112,7 +112,10 @@ export default {
     },
     changeCharacterInfo(obj) {
       let myCharacterInfo;
-      if (this.isVersion2) {
+      if (this.isVersion3) {
+        myCharacterInfo = { ...this.characterInformation, ...obj };
+        this.$emit('updateApplication', { characterInformationV3: myCharacterInfo });
+      } else if (this.isVersion2) {
         myCharacterInfo = { ...this.characterInformation, ...obj };
         this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
       } else {
