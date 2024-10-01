@@ -18,6 +18,19 @@
         <hr>
       </div>
       <dl
+        v-else-if="isVersion3"
+        class="govuk-summary-list"
+      >
+        <div>
+          <CharacterInformationSummaryV3
+            :form-data="characterInformation || {}"
+            :edit="editable"
+            :is-asked="isAsked"
+            @change-info="changeCharacterInfo"
+          />
+        </div>
+      </dl>
+      <dl
         v-else-if="isVersion2"
         class="govuk-summary-list"
       >
@@ -47,12 +60,14 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
 import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
+import CharacterInformationSummaryV3 from '@/views/InformationReview/CharacterInformationSummaryV3.vue';
 
 export default {
   name: 'CharacterInformationSummary',
   components: {
     CharacterInformationSummaryV1,
     CharacterInformationSummaryV2,
+    CharacterInformationSummaryV3,
   },
   props: {
     characterInformation: {
@@ -79,6 +94,9 @@ export default {
   computed: {
     isVersion2() {
       return this.version === 2;
+    },
+    isVersion3() {
+      return this.version === 3;
     },
     applicationId() {
       return this.$route.params.applicationId;
