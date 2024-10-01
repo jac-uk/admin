@@ -444,7 +444,7 @@
 
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  Guidance reference
+                  Guidance reference {{ applicationOpenDatePost15102024 ? '2024' : '2020' }}
                 </h4>
                 <CheckboxGroup
                   id="guidance-reference"
