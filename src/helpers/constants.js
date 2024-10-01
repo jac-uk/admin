@@ -189,14 +189,14 @@ const GUIDANCE_REFERENCE = {
 };
 // for exercises launched after 15/10/2024
 const GUIDANCE_REFERENCE_V2 = {
-  CRIMINAL_OFFENCES: 'criminalOffences',
-  MOTERING_OFFENCES: 'moteringOffences',
-  FIXED_PENALTY_NOTICES: 'fixedPenaltyNotices',
-  FINANCIAL_INSOLVENCY_DEBT: 'financialInsolvencyDebt',
-  FINANCIAL_VAT_TAX: 'financialVatTax',
-  PROFESSIONAL_CONDUCT: 'professionalConduct',
-  CIVIL_PROCEEDINGS: 'civilProceedings',
-  FURTHER_DISCLOSURES: 'furtherDisclosures',
+  CRIMINAL_OFFENCES: 'criminalOffencesV2',
+  MOTERING_OFFENCES: 'moteringOffencesV2',
+  FIXED_PENALTY_NOTICES: 'fixedPenaltyNoticesV2',
+  FINANCIAL_INSOLVENCY_DEBT: 'financialInsolvencyDebtV2',
+  FINANCIAL_VAT_TAX: 'financialVatTaxV2',
+  PROFESSIONAL_CONDUCT: 'professionalConductV2',
+  CIVIL_PROCEEDINGS: 'civilProceedingsV2',
+  FURTHER_DISCLOSURES: 'furtherDisclosuresV2',
 };
 
 const TASK_QT_MAP = {};
