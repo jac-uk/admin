@@ -285,6 +285,7 @@ export default {
     },
     applicationOpenDatePost15102024: (state, getters, rootState, rootGetters) => {
       const { isDevelop } = rootGetters;
+      // hard-coded exercises for testing
       if (isDevelop && ['JAC00010'].includes(state.record.referenceNumber)) {
         return true;
       }
