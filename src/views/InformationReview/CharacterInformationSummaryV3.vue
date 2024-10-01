@@ -131,7 +131,7 @@
             <hr>
             <InformationReviewSectionRenderer
               :data="formData.drivingDisqualificationDetails"
-              :data-default="emptyObject(['details', 'startDate', 'endDate' ,'title'])"
+              :data-default="emptyObject(['details', 'date' ,'title'])"
               :edit="edit"
               field="drivingDisqualificationDetails"
               :is-asked="isAsked"
