@@ -131,7 +131,7 @@
             <hr>
             <InformationReviewSectionRenderer
               :data="formData.drivingDisqualificationDetails"
-              :data-default="emptyObject(['details', 'date', 'title'])"
+              :data-default="emptyObject(['details', 'startDate', 'endDate' ,'title'])"
               :edit="edit"
               field="drivingDisqualificationDetails"
               :is-asked="isAsked"
@@ -359,26 +359,26 @@
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
-          TODO: Has HMRC enquiries into tax affairs
+          Has HMRC enquiries into tax affairs
         </dt>
         <dd
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
-            :data="formData.hmrcTaxEnquiries"
+            :data="formData.hmrcTax"
             :edit="edit"
             :options="[true, false]"
             type="selection"
-            field="hmrcTaxEnquiries"
+            field="hmrcTax"
             :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
-          <div v-if="formData.hmrcTaxEnquiries">
+          <div v-if="formData.hmrcTax">
             <hr>
             <InformationReviewSectionRenderer
-              :data="formData.hmrcTaxEnquiries"
+              :data="formData.hmrcTaxDetails"
               :data-default="emptyObject(['details', 'date', 'title'])"
-              field="hmrcTaxEnquiries"
+              field="hmrcTaxDetails"
               :edit="edit"
               :is-asked="isAsked"
               @change-field="changeInfo"
@@ -453,6 +453,10 @@
               :edit="edit"
               field="subjectOfAllegationOrClaimOfNegligenceDetails"
               :is-asked="isAsked"
+              :customised-lookup="{
+                investigations: 'Claim Ongoing',
+                investigationConclusionDate: 'Claim Conclusion Date'
+              }"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -641,28 +645,28 @@
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
-          TODO:A subject of civil proceedings
+          A subject of civil proceedings
           <br>(Not including proceedings that were dismissed or withdrawn without a settlement)
         </dt>
         <dd
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
-            :data="formData.subjectOfCivilProceeding"
+            :data="formData.civilProceedings"
             :edit="edit"
             :options="[true, false]"
             type="selection"
-            field="subjectOfCivilProceeding"
+            field="civilProceedings"
             :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
-          <div v-if="formData.subjectOfCivilProceeding">
+          <div v-if="formData.civilProceedings">
             <hr>
             <InformationReviewSectionRenderer
-              :data="formData.subjectOfCivilProceeding"
+              :data="formData.civilProceedingsDetails"
               :data-default="emptyObject(['details','date'])"
               :edit="edit"
-              field="subjectOfCivilProceeding"
+              field="civilProceedingsDetails"
               :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
@@ -728,7 +732,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import CharacterSummary from '@/views/InformationReview/CharacterSummary.vue';
 
 export default {
-  name: 'CharacterInformationSummaryV2',
+  name: 'CharacterInformationSummaryV3',
   components: {
     InformationReviewRenderer,
     InformationReviewSectionRenderer,

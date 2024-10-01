@@ -46,6 +46,12 @@ export default {
       if (items.some(item => item === 'date')) {
         obj.date = new Date();
       }
+      if (items.some(item => item === 'startDate')) {
+        obj.startDate = new Date();
+      }
+      if (items.some(item => item === 'endDate')) {
+        obj.endDate = new Date();
+      }
       if (items.some(item => item === 'investigations')) {
         obj.investigations = '';
       }
