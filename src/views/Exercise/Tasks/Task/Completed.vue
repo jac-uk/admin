@@ -16,7 +16,7 @@
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
           :action="notifyCandidates"
         >
-          Send report notfication
+          Send report notification
         </ActionButton>
         <FullScreenButton />
       </div>
