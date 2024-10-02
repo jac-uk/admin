@@ -444,7 +444,7 @@
 
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  Guidance reference
+                  Guidance reference {{ applicationOpenDatePost15102024 ? '2024' : '2020' }}
                 </h4>
                 <CheckboxGroup
                   id="guidance-reference"
@@ -532,6 +532,7 @@
 import { httpsCallable } from '@firebase/functions';
 import { query, collection, doc, onSnapshot, where, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
+import { mapGetters } from 'vuex';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -540,7 +541,7 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { EXERCISE_STAGE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
+import { EXERCISE_STAGE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, GUIDANCE_REFERENCE_V2, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadBase64File } from '@/helpers/file';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
@@ -577,11 +578,16 @@ export default {
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
-      guidanceReference: GUIDANCE_REFERENCE,
       editMode: false,
     };
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost15102024: 'exerciseDocument/applicationOpenDatePost15102024',
+    }),
+    guidanceReference() {
+      return this.applicationOpenDatePost15102024 ? GUIDANCE_REFERENCE_V2 : GUIDANCE_REFERENCE;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
