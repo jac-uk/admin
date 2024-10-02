@@ -7,9 +7,11 @@
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
           <span class="govuk-!-font-weight-bold">Has been declared bankrupt</span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.bankruptcyDetails"
-            :display-month-year-only="false"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="false"
+            field="bankruptcyDetails"
             :is-asked="'bankruptcyDetails' in characterInformation"
           />
         </dd>
@@ -25,9 +27,11 @@
           <span class="govuk-!-font-weight-bold">
             {{ version === 3 ? 'Has entered into an Individual Voluntary Agreement (IVA) or other similar arrangement' : 'Has entered into an Individual Voluntary Agreement (IVA)' }}
           </span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.ivaDetails"
-            :display-month-year-only="false"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="false"
+            field="ivaDetails"
             :is-asked="'ivaDetails' in characterInformation"
           />
         </dd>
@@ -43,9 +47,11 @@
           <span class="govuk-!-font-weight-bold">
             {{ version === 3 ? 'Has filed late tax returns and/or made late tax payments' : 'Has filed late tax returns' }}
           </span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.lateTaxReturnDetails"
-            :display-month-year-only="false"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="false"
+            field="lateTaxReturnDetails"
             :is-asked="'lateTaxReturnDetails' in characterInformation"
           />
         </dd>
@@ -61,9 +67,11 @@
           <span class="govuk-!-font-weight-bold">
             {{ version === 3 ? 'Has filed late VAT returns and/or made late VAT payments' : 'Has filed late VAT returns' }}
           </span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.lateVatReturnDetails"
-            :display-month-year-only="false"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="false"
+            field="lateVatReturnDetails"
             :is-asked="'lateVatReturnDetails' in characterInformation"
           />
         </dd>
@@ -77,9 +85,11 @@
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
           <span class="govuk-!-font-weight-bold">Has ever been fined by HMRC</span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.hmrcFineDetails"
-            :display-month-year-only="false"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="false"
+            field="hmrcFineDetails"
             :is-asked="'hmrcFineDetails' in characterInformation"
           />
         </dd>
@@ -93,8 +103,11 @@
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
           <span class="govuk-!-font-weight-bold">Is aware of any open HMRC enquiries into their tax affairs</span>
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.hmrcTaxDetails"
+            :data-default="emptyObject(['details'])"
+            :edit="false"
+            field="hmrcTaxDetails"
             :is-asked="'hmrcTaxDetails' in characterInformation"
           />
         </dd>
@@ -104,12 +117,12 @@
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
 
 export default {
   name: 'FinancialMattersAgencyReport',
   components: {
-    InformationReviewRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     characterInformation: {
@@ -121,6 +134,21 @@ export default {
       type: Number,
       required: false,
       default: 2,
+    },
+  },
+  methods: {
+    emptyObject(items){
+      const obj = {};
+      if (items.some(item => item === 'title')) {
+        obj.title = '';
+      }
+      if (items.some(item => item === 'date')) {
+        obj.date = new Date();
+      }
+      if (items.some(item => item === 'details')) {
+        obj.details = '';
+      }
+      return obj;
     },
   },
 };
