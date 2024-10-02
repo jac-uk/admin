@@ -22,7 +22,9 @@
     >
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
-          <span class="govuk-!-font-weight-bold">Has entered into an Individual Voluntary Agreement (IVA)</span>
+          <span class="govuk-!-font-weight-bold">
+            {{ version === 3 ? 'Has entered into an Individual Voluntary Agreement (IVA) or other similar arrangement' : 'Has entered into an Individual Voluntary Agreement (IVA)' }}
+          </span>
           <InformationReviewRenderer
             :data="characterInformation.ivaDetails"
             :display-month-year-only="false"
@@ -38,7 +40,9 @@
     >
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
-          <span class="govuk-!-font-weight-bold">Has filed late tax returns</span>
+          <span class="govuk-!-font-weight-bold">
+            {{ version === 3 ? 'Has filed late tax returns and/or made late tax payments' : 'Has filed late tax returns' }}
+          </span>
           <InformationReviewRenderer
             :data="characterInformation.lateTaxReturnDetails"
             :display-month-year-only="false"
@@ -54,7 +58,9 @@
     >
       <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">
-          <span class="govuk-!-font-weight-bold">Has filed late VAT returns</span>
+          <span class="govuk-!-font-weight-bold">
+            {{ version === 3 ? 'Has filed late VAT returns and/or made late VAT payments' : 'Has filed late VAT returns' }}
+          </span>
           <InformationReviewRenderer
             :data="characterInformation.lateVatReturnDetails"
             :display-month-year-only="false"
@@ -79,6 +85,21 @@
         </dd>
       </div>
     </dl>
+
+    <dl
+      v-if="version === 3 && characterInformation.hmrcTaxDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
+      <div class="govuk-summary-list__row">
+        <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Is aware of any open HMRC enquiries into their tax affairs</span>
+          <InformationReviewRenderer
+            :data="characterInformation.hmrcTaxDetails"
+            :is-asked="'hmrcTaxDetails' in characterInformation"
+          />
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 
@@ -95,6 +116,11 @@ export default {
       type: Object,
       required: true,
       default: new Object({}),
+    },
+    version: {
+      type: Number,
+      required: false,
+      default: 2,
     },
   },
 };

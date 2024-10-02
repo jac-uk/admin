@@ -348,6 +348,7 @@
         </dt>
         <FinancialMattersAgencyReport
           :character-information="characterInformation"
+          :version="applicationOpenDatePost15102024 ? 3 : 2"
         />
       </div>
     </dl>
