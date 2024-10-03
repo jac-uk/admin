@@ -97,6 +97,7 @@
       ref="applicationReminderModal"
     >
       <ModalInner
+        message="Please confirm you would like to send reminders to all draft candidates? Reminders can take up to 10 minutes to appear on Notify; allow time before clicking again, otherwise you will send multiple emails to candidates."
         @close="closeApplicationReminderModal"
         @confirmed="sendApplicationReminders"
       />
