@@ -1,7 +1,7 @@
 /*eslint func-style: ["error", "declaration"]*/
 
 import clone from 'clone';
-import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics.js';
 
 export {
   SCORESHEET_TOOLS,
@@ -37,17 +37,17 @@ const MARKING_TYPE = {
   GROUP: {
     value: 'group',
     label: 'Group',
-    excludeFromScore: true,
+    includeInScore: false,
   },
   SCORE: {
     value: 'score',
     label: 'Score',
-    excludeFromScore: true,
+    includeInScore: true,
   },
   NUMBER: {
     value: 'number',
     label: 'Number',
-    excludeFromScore: false,
+    includeInScore: false,
   },
   GRADE: {
     value: 'grade',
@@ -58,7 +58,7 @@ const MARKING_TYPE = {
       { value: 'C', label: 'C', score: 2 },
       { value: 'D', label: 'D', score: 1 },
     ],
-    excludeFromScore: false,
+    includeInScore: true,
   },
   YES_NO: {
     value: 'yesNo',
@@ -67,7 +67,7 @@ const MARKING_TYPE = {
       { value: 'TRUE', label: 'Yes' },
       { value: 'FALSE', label: 'No' },
     ],
-    excludeFromScore: true,
+    includeInScore: false,
   },
   PASS_FAIL: {
     value: 'passFail',
@@ -76,7 +76,7 @@ const MARKING_TYPE = {
       { value: 'TRUE', label: 'Pass' },
       { value: 'FALSE', label: 'Fail' },
     ],
-    excludeFromScore: true,
+    includeInScore: false,
   },
   LEVEL: {
     value: 'level',
@@ -87,7 +87,7 @@ const MARKING_TYPE = {
       { value: 'Medium', label: 'Medium' },
       { value: 'High', label: 'High' },
     ],
-    excludeFromScore: true,
+    includeInScore: false,
   },
 };
 
@@ -95,17 +95,17 @@ const ADDITIONAL_COLUMNS = {
   WELSH_ADMIN: {
     value: 'welsh-admin',
     label: 'Welsh Administration Questions',
-    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, excludeFromScore: true },
+    config: { ref: 'welsh-admin', type: MARKING_TYPE.LEVEL.value, includeInScore: false },
   },
   WELSH_LANGUAGE: {
     value: 'welsh-language',
     label: 'Welsh Language',
-    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, excludeFromScore: true },
+    config: { ref: 'welsh-language', type: MARKING_TYPE.PASS_FAIL.value, includeInScore: false },
   },
   ASC_MET: {
     value: 'asc-met',
     label: 'ASC Met',
-    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, excludeFromScore: true },
+    config: { ref: 'asc-met', type: MARKING_TYPE.YES_NO.value, includeInScore: false },
   },
 };
 
@@ -169,7 +169,7 @@ function getScoreSheetTotal(markingScheme, scoreSheet) {
 }
 
 function getScoreSheetItemTotal(item, scoreSheet) {
-  if (!item.excludeFromScore) {
+  if (item.includeInScore) {
     switch (item.type) {
     case MARKING_TYPE.GRADE.value:
       if (scoreSheet[item.ref] && GRADE_VALUES[scoreSheet[item.ref]]) {
@@ -178,7 +178,6 @@ function getScoreSheetItemTotal(item, scoreSheet) {
       break;
     case MARKING_TYPE.SCORE.value:
       if (scoreSheet[item.ref]) {
-        console.log('scoreSheet[item.ref].score', scoreSheet[item.ref].score);
         return parseFloat(scoreSheet[item.ref].score);
       }
       break;
@@ -274,14 +273,18 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
 function markingScheme2Columns(markingScheme, editable = false) {
   const columns = [];
   if (!markingScheme) return columns;
+  let numGroups = markingScheme.filter(item => item.type === 'group').length;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
-      item.children.forEach(child => columns.push({ parent: item.ref, ...child, title: child.ref, editable: editable }));
+      item.children.forEach(child => {
+        const title = (numGroups > 1) ? `${item.ref}.${child.ref}` : child.ref;
+        columns.push({ parent: item.ref, ...child, title: title, editable: editable });
+      });
     } else {
       columns.push({ ...item, title: item.ref, editable: editable });
     }
   });
-  return columns;
+  return columns;  
 }
 
 function markingScheme2ColumnHeaders(markingScheme) {

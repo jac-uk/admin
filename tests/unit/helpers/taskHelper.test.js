@@ -77,20 +77,20 @@ describe('getScoreSheetTotal', () => {
 
   it('should calculate total correctly for number type', () => {
     const markingScheme = [
-      { ref: 'num1', type: MARKING_TYPE.NUMBER.value },
-      { ref: 'num2', type: MARKING_TYPE.NUMBER.value },
+      { ref: 'num1', type: MARKING_TYPE.NUMBER.value, includeInScore: MARKING_TYPE.NUMBER.includeInScore },
+      { ref: 'num2', type: MARKING_TYPE.NUMBER.value, includeInScore: MARKING_TYPE.NUMBER.includeInScore },
     ];
     const scoreSheet = {
       num1: '5',
       num2: '3',
     };
-    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(8);
+    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(0);
   });
 
   it('should calculate total correctly for grade type', () => {
     const markingScheme = [
-      { ref: 'grade1', type: MARKING_TYPE.GRADE.value },
-      { ref: 'grade2', type: MARKING_TYPE.GRADE.value },
+      { ref: 'grade1', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore },
+      { ref: 'grade2', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore },
     ];
     const scoreSheet = {
       grade1: 'A',
@@ -101,8 +101,8 @@ describe('getScoreSheetTotal', () => {
 
   it('should calculate total correctly for score type', () => {
     const markingScheme = [
-      { ref: 'score1', type: MARKING_TYPE.SCORE.value },
-      { ref: 'score2', type: MARKING_TYPE.SCORE.value },
+      { ref: 'score1', type: MARKING_TYPE.SCORE.value, includeInScore: MARKING_TYPE.SCORE.includeInScore },
+      { ref: 'score2', type: MARKING_TYPE.SCORE.value, includeInScore: MARKING_TYPE.SCORE.includeInScore },
     ];
     const scoreSheet = {
       score1: { score: '4.5' },
@@ -111,16 +111,16 @@ describe('getScoreSheetTotal', () => {
     expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(7.7);
   });
 
-  it('should ignore items with excludeFromScore set to true', () => {
+  it('should only score items with includeInScore set to true', () => {
     const markingScheme = [
       { ref: 'num1', type: MARKING_TYPE.NUMBER.value },
-      { ref: 'num2', type: MARKING_TYPE.NUMBER.value, excludeFromScore: true },
+      { ref: 'num2', type: MARKING_TYPE.NUMBER.value, includeInScore: true },
     ];
     const scoreSheet = {
       num1: '5',
       num2: '3',
     };
-    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(5);
+    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(3);
   });
 
   it('should handle group type correctly', () => {
@@ -129,28 +129,28 @@ describe('getScoreSheetTotal', () => {
         type: MARKING_TYPE.GROUP.value,
         ref: 'group1',
         children: [
-          { ref: 'child1', type: MARKING_TYPE.NUMBER.value },
-          { ref: 'child2', type: MARKING_TYPE.NUMBER.value },
+          { ref: 'child1', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore },
+          { ref: 'child2', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore },
         ],
       },
-      { ref: 'num1', type: MARKING_TYPE.NUMBER.value },
+      { ref: 'num1', type: MARKING_TYPE.NUMBER.value, includeInScore: MARKING_TYPE.NUMBER.includeInScore },
     ];
     const scoreSheet = {
       group1: {
-        child1: '2',
-        child2: '3',
+        child1: 'A',  // 4
+        child2: 'B',  // 3
       },
       num1: '4',
     };
-    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(9);
+    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(7);
   });
 
   it('should handle mixed types correctly', () => {
     const markingScheme = [
-      { ref: 'num1', type: MARKING_TYPE.NUMBER.value },
-      { ref: 'grade1', type: MARKING_TYPE.GRADE.value },
-      { ref: 'score1', type: MARKING_TYPE.SCORE.value },
-      { ref: 'yesNo1', type: MARKING_TYPE.YES_NO.value },
+      { ref: 'num1', type: MARKING_TYPE.NUMBER.value, includeInScore: MARKING_TYPE.NUMBER.includeInScore },
+      { ref: 'grade1', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore },
+      { ref: 'score1', type: MARKING_TYPE.SCORE.value, includeInScore: MARKING_TYPE.SCORE.includeInScore },
+      { ref: 'yesNo1', type: MARKING_TYPE.YES_NO.value, includeInScore: MARKING_TYPE.YES_NO.includeInScore },
     ];
     const scoreSheet = {
       num1: '5',
@@ -158,49 +158,61 @@ describe('getScoreSheetTotal', () => {
       score1: { score: '2.5' },
       yesNo1: 'Yes',
     };
-    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(10.5); // 5 + 3 + 2.5 + 0
+    expect(getScoreSheetTotal(markingScheme, scoreSheet)).toBe(5.5); // 0 + 3 + 2.5 + 0
   });
 });
 
 describe('getScoreSheetItemTotal', () => {
-  it('should return 0 when item is excluded from score', () => {
-    const item = { ref: 'test', type: MARKING_TYPE.NUMBER.value, excludeFromScore: true };
+  it('should return 0 when item is not included in score', () => {
+    const item = { ref: 'test', type: MARKING_TYPE.NUMBER.value };
+    const scoreSheet = { test: '5' };
+    expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
+  });
+
+  it('should return value when item is included in score', () => {
+    const item = { ref: 'test', type: MARKING_TYPE.NUMBER.value, includeInScore: true };
+    const scoreSheet = { test: '5' };
+    expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(5);
+  });
+
+  it('should return 0 when item has includeInScore set to false', () => {
+    const item = { ref: 'test', type: MARKING_TYPE.NUMBER.value, includeInScore: false };
     const scoreSheet = { test: '5' };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
   });
 
   it('should calculate grade type correctly', () => {
-    const item = { ref: 'grade', type: MARKING_TYPE.GRADE.value };
+    const item = { ref: 'grade', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore };
     const scoreSheet = { grade: 'A' };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(GRADE_VALUES['A']);
   });
 
   it('should return 0 for invalid grade', () => {
-    const item = { ref: 'grade', type: MARKING_TYPE.GRADE.value };
+    const item = { ref: 'grade', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore };
     const scoreSheet = { grade: 'X' };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
   });
 
   it('should calculate score type correctly', () => {
-    const item = { ref: 'score', type: MARKING_TYPE.SCORE.value };
+    const item = { ref: 'score', type: MARKING_TYPE.SCORE.value, includeInScore: MARKING_TYPE.SCORE.includeInScore };
     const scoreSheet = { score: { score: '4.5' } };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(4.5);
   });
 
   it('should calculate number type correctly', () => {
-    const item = { ref: 'number', type: MARKING_TYPE.NUMBER.value };
+    const item = { ref: 'number', type: MARKING_TYPE.NUMBER.value, includeInScore: MARKING_TYPE.NUMBER.includeInScore };
     const scoreSheet = { number: '3.7' };
-    expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(3.7);
+    expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
   });
 
   it('should return 0 for unsupported types', () => {
-    const item = { ref: 'yesNo', type: MARKING_TYPE.YES_NO.value };
+    const item = { ref: 'yesNo', type: MARKING_TYPE.YES_NO.value, includeInScore: MARKING_TYPE.YES_NO.includeInScore };
     const scoreSheet = { yesNo: 'Yes' };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
   });
 
   it('should return 0 when scoreSheet does not contain the item ref', () => {
-    const item = { ref: 'missing', type: MARKING_TYPE.NUMBER.value };
+    const item = { ref: 'missing', type: MARKING_TYPE.GRADE.value, includeInScore: MARKING_TYPE.GRADE.includeInScore };
     const scoreSheet = { other: '5' };
     expect(getScoreSheetItemTotal(item, scoreSheet)).toBe(0);
   });

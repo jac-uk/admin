@@ -1,5 +1,11 @@
 <template>
   <div>
+    <router-link
+      class="govuk-back-link govuk-!-margin-top-0"
+      :to="{ name: 'exercise-task-panelsInitialised' }"
+    >
+      Back
+    </router-link>          
     <h1 class="govuk-heading-l">
       New panel for {{ $filters.lookup(type) }}
     </h1>

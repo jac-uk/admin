@@ -162,12 +162,12 @@ export default {
       this.currentGroup = group;
       this.$refs.modalAddMarkingSchemeItem.openModal();
     },
-    async btnSave({ type, ref, excludeFromScore }) {
+    async btnSave({ type, ref, includeInScore }) {
       this.$refs.modalAddMarkingSchemeItem.closeModal();
       const newItem = {};
       newItem.type = type;
       newItem.ref = ref;
-      if (excludeFromScore) newItem.excludeFromScore = excludeFromScore;
+      if (includeInScore) newItem.includeInScore = includeInScore;
       this.currentGroup.children.push(newItem);
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { markingScheme: this.markingScheme } } );
     },

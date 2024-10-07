@@ -23,6 +23,7 @@
           v-model="formData.ref"
           type="text"
           label="Title"
+          :max-length="40"
           required
         />
 
@@ -43,11 +44,12 @@
         </Select>
 
         <Checkbox
-          id="exclude-from-score"
-          v-model="formData.excludeFromScore"
+          v-if="showIncludeInScore"
+          id="include-in-score"
+          v-model="formData.includeInScore"
         >
-          Exclude from score?
-        </Checkbox>        
+          Include in overall score?
+        </Checkbox>
       </RadioItem>
     </RadioGroup>
   </Form>
@@ -85,6 +87,7 @@ export default {
       ],
       additionalColumns: getAdditionalColumns(),
       itemType: null,
+      showIncludeInScore: false,
     };
   },
   methods: {
@@ -92,7 +95,12 @@ export default {
       if (this.formData.type) {
         const type = this.types.find(item => item.value === this.formData.type);
         if (type) {
-          this.formData.excludeFromScore = type.excludeFromScore;
+          if (type.includeInScore) {
+            this.showIncludeInScore = true;
+          } else {
+            this.showIncludeInScore = false;
+          }
+          this.formData.includeInScore = false;
         }        
       }
     },
