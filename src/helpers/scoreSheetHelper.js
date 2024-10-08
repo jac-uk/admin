@@ -273,7 +273,7 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
 function markingScheme2Columns(markingScheme, editable = false) {
   const columns = [];
   if (!markingScheme) return columns;
-  let numGroups = markingScheme.filter(item => item.type === 'group').length;
+  const numGroups = markingScheme.filter(item => item.type === 'group').length;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
       item.children.forEach(child => {
