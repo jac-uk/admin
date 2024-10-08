@@ -49,7 +49,7 @@
         <a
           class="govuk-link govuk-!-margin-left-4"
           @click="btnExport"
-        >Download merit list</a>        
+        >Download merit list</a>
       </div>
       <!-- <div class="govuk-grid-column-one-half">
         <label class="govuk-label govuk-!-display-inline" for="search">
@@ -59,12 +59,12 @@
       </div> -->
       <div class="govuk-grid-column-one-half text-right">
         <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
-        <a 
+        <a
           class="govuk-link govuk-!-margin-left-4"
           @click="toggleAll"
         ><span v-if="areAllScoresExpanded">Collapse all</span><span v-else>Expand all</span></a>
       </div>
-    </div>  
+    </div>
     <Table
       data-key="score"
       :data="scores"
@@ -101,7 +101,7 @@
           </TableCell>
           <TableCell :title="tableColumns[6].title">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)), 2) }}%
-          </TableCell>        
+          </TableCell>
         </template>
         <TableCell :title="showDiversity ? tableColumns[7].title : tableColumns[3].title">
           <template v-if="!isScoreExpanded(row.score)">
@@ -126,7 +126,7 @@
           title="Expand/collapse"
           class="expand-collapse"
         >
-          <div 
+          <div
             class="govuk-!-padding-left-2 govuk-!-padding-right-2 clickable"
             @click="toggleScore(row.score)"
           >
@@ -183,7 +183,7 @@
               title="Expand collapse all rows"
               class="expand-collapse"
             >
-              <div 
+              <div
                 class="govuk-!-padding-left-2 govuk-!-padding-right-2 clickable"
                 @click="toggleScore(row.score)"
               >
@@ -245,7 +245,7 @@
           Cancel
         </button>
       </div>
-    </Modal>    
+    </Modal>
   </div>
 </template>
 
@@ -384,7 +384,7 @@ export default {
     },
     openChangeOutcomeModal(item) {
       if (this.editable) {
-        this.selectedItem = item; 
+        this.selectedItem = item;
         this.$refs['changeOutcomeModal'].openModal();
       }
     },
@@ -440,7 +440,7 @@ export default {
       }
       downloadMeritList(title, didNotTake, failed, this.task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
-    },    
+    },
   },
 };
 </script>

@@ -11,7 +11,7 @@
             :to="{ name: 'exercise-task-panelsInitialised' }"
           >
             Back
-          </router-link>          
+          </router-link>
           <span class="govuk-caption-l">Panel</span>
           <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
             {{ panel.name }}
@@ -93,7 +93,7 @@
             {{ row.referenceNumber }}
           </TableCell>
         </template>
-      </ScoreSheet>      
+      </ScoreSheet>
     </div>
 
     <!-- APPLICATIONS LIST -->
@@ -349,7 +349,7 @@ export default {
     await this.$store.dispatch('panel/bind', this.panelId);
     if (this.panel && this.panel.panellistIds) {
       this.$store.dispatch('panel/bindPanellists', { ids: this.panel.panellistIds });
-    }    
+    }
     if (
       this.panel &&
       this.panel.scoreSheet

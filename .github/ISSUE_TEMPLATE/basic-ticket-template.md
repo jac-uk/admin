@@ -15,7 +15,7 @@ assignees: ''
 
 - [ ] Feature
 
-## Acceptance Criteria 
+## Acceptance Criteria
 
 ## Definition of Done
 - [ ] User stories/acceptance criteria met

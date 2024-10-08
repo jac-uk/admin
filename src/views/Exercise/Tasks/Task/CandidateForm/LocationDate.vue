@@ -56,7 +56,7 @@ export default {
   .location > label {
     font-size: 19px;
     margin-bottom: 5px !important;
-    font-weight: normal;  
+    font-weight: normal;
   }
 }
 </style>

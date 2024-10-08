@@ -17,7 +17,7 @@
         :key="type.value"
         :value="type.value"
         :label="type.name"
-      />  
+      />
     </RadioGroup>
   </Form>
 </template>

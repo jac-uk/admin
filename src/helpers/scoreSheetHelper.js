@@ -284,7 +284,7 @@ function markingScheme2Columns(markingScheme, editable = false) {
       columns.push({ ...item, title: item.ref, editable: editable });
     }
   });
-  return columns;  
+  return columns;
 }
 
 function markingScheme2ColumnHeaders(markingScheme) {

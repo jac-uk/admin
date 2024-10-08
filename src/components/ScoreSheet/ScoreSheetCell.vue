@@ -20,14 +20,14 @@
         autocomplete="off"
         @keydown="onKeyDown($event, rowIndex, columnIndex)"
       >
-      <select 
+      <select
         v-else-if="hasOptions(column.type)"
         :id="`row-${rowIndex}_col-${columnIndex}`"
         v-model="localValue"
-        class="govuk-select" 
+        class="govuk-select"
         @keydown="onKeyDown($event, rowIndex, columnIndex)"
       >
-        <option 
+        <option
           v-for="option in getOptions(column.type)"
           :key="option.value"
           :value="option.value"
@@ -35,7 +35,7 @@
           {{ option.label }}
         </option>
       </select>
-    </template>  
+    </template>
   </TableCell>
 </template>
 
@@ -131,7 +131,7 @@ export default {
           // if (element.select) element.select();
         }
       }
-    },    
+    },
   },
 };
 </script>

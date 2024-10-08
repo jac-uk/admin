@@ -20,7 +20,7 @@
       <li>If necessary, rename the column containing application references to <strong>Reference number</strong></li>
       <li>
         Rename the score columns as follows:
-        <span 
+        <span
           v-for="(col, index) in scoreSheetColumns"
           :key="col"
         ><strong>{{ col.title }}</strong><span v-if="index < scoreSheetColumns.length - 1">, </span></span>
@@ -29,7 +29,7 @@
       <li>Return to this page and click ‘Paste from clipboard’</li>
       <li>The application totals will update automatically and you will see the scores populate below</li>
       <li>If you are happy with the number of applications updated, click continue to move to the next step</li>
-    </ol>    
+    </ol>
 
     <div class="govuk-button-group govuk-!-margin-bottom-6">
       <button
@@ -81,7 +81,7 @@
       </a>
     </div>
 
-    <!-- 
+    <!--
     <Table
       v-if="completeRows.length"
       ref="scoreSheet"
@@ -482,7 +482,7 @@ export default {
               scoreSheet[application.id] = data;  // use app ID for scoresheet entries
             }
           });
-          const saveData = {}; 
+          const saveData = {};
           Object.entries(scoreSheet).forEach(([key, value]) => saveData[`scoreSheet.${key}`] = value);  // here we are updating individual values (rather than replacing the whole `scoreSheet` map)
           await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: saveData });
         }

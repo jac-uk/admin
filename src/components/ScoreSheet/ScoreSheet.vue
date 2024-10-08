@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div 
+    <div
       v-if="hasTools"
       class="govuk-grid-row"
     >
@@ -99,14 +99,14 @@
           @click="selectedApplication = null"
           @updated="updateScoreSheet"
         />
-        <TableCell 
+        <TableCell
           v-if="showScore"
           class="table-cell-value table-cell-score"
           :class="{ highlight: row.referenceNumber === selectedApplication }"
         >
           {{ row.score }}
         </TableCell>
-        <TableCell 
+        <TableCell
           v-if="showScore"
           class="table-cell-value table-cell-score"
           :class="{ highlight: row.referenceNumber === selectedApplication }"
@@ -168,7 +168,7 @@
           >
             {{ $filters.toYesNo(row.diversity.disability) }}
           </TableCell>
-        </template>        
+        </template>
       </template>
     </Table>
     <Modal ref="findApplicationModal">
@@ -199,7 +199,7 @@
           @click="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
         >
           Cancel
-        </button>        
+        </button>
       </div>
     </Modal>
   </div>
@@ -261,7 +261,7 @@ export default {
       selectedApplication: null,
       SCORESHEET_TOOLS: SCORESHEET_TOOLS,
     };
-  },  
+  },
   computed: {
     hasTools() {
       return this.tools.length ? true : false;
@@ -289,7 +289,7 @@ export default {
         columns.push({ title: 'Solicitor', class: 'table-cell-value' });
         columns.push({ title: 'Disability', class: 'table-cell-value' });
       }
-      // columns.push({ title: 'Report', class: 'text-center' });      
+      // columns.push({ title: 'Report', class: 'text-center' });
       return columns;
     },
     clipboardColumns() {
@@ -311,9 +311,9 @@ export default {
         columns.push({ title: 'Ethnic Minority', parent: 'diversity', ref: 'bame' });
         columns.push({ title: 'Solicitor', parent: 'diversity', ref: 'solicitor' });
         columns.push({ title: 'Disability', parent: 'diversity', ref: 'disability' });
-      }      
+      }
       return columns;
-    },    
+    },
   },
   methods: {
     hasTool(ref) {
@@ -346,7 +346,7 @@ export default {
             }
           }
         });
-        rows.push(row);        
+        rows.push(row);
       });
       let data = '';
       rows.forEach(row => data += `${row.join('\t')}\n` );
@@ -373,7 +373,7 @@ export default {
       // const saveData = {};
       // saveData[`scoreSheet.${applicationId}.flagForModeration`] = event.target.checked;
       // await this.$store.dispatch('panel/update', { id: panelId, data: saveData } );
-    },    
+    },
     copySheet(event) {
       console.log('copySheet', event);
     },
@@ -389,7 +389,7 @@ export default {
 .score-sheet {
   table {
     border: 1px solid govuk-colour("mid-grey") !important;
-  }  
+  }
   th, td {
     vertical-align: middle;
   }
@@ -399,7 +399,7 @@ export default {
     left: 0;
     background-color: white;
     z-index:1;
-  }  
+  }
 
   .table-cell-value {
     min-width: 50px;

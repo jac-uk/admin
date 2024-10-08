@@ -5,7 +5,7 @@
       :to="{ name: 'exercise-task-panelsInitialised' }"
     >
       Back
-    </router-link>          
+    </router-link>
     <h1 class="govuk-heading-l">
       New panel for {{ $filters.lookup(type) }}
     </h1>

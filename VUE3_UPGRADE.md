@@ -10,7 +10,7 @@ In order to make changes to the jac-kit being used by this project it's helpful 
 + Then change all references to the jac-kit in this project, eg:
     import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
-    becomes: 
+    becomes:
 
     import Modal from '@/jac-kit/components/Modal/Modal';
 + Remember that when the vue3 changes you've made to the local jac-kit have been made you'll need to copy them across to a branch in the actual jac-kit project and revert the changes above
@@ -33,7 +33,7 @@ router.currentRoute.value.name
 
 + Discarded invalid param(s), see: https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22
 
-Passing params when none are defined on the route causes the app to break. There are multiple ways of fixing this, as per the link above, but one way is as follows. Given the link below which passes a param called 'referrer' which isn't defined on the route: 
+Passing params when none are defined on the route causes the app to break. There are multiple ways of fixing this, as per the link above, but one way is as follows. Given the link below which passes a param called 'referrer' which isn't defined on the route:
 ```
 <router-link
   class="govuk-link"

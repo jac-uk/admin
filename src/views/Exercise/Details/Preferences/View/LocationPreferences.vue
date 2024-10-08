@@ -13,7 +13,7 @@
       :question="exercise.locationQuestion"
       :type="exercise.locationQuestionType"
       :answers="exercise.locationQuestionAnswers"
-    />  
+    />
     <template v-else-if="exercise.locationPreferences">
       <QuestionConfigView
         v-for="(item, index) in exercise.locationPreferences"

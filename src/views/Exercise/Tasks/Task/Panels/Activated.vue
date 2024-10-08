@@ -37,7 +37,7 @@
       All panels have provided grades.
     </p>
 
-    <div 
+    <div
       v-if="hasAllPanelsCompleted"
       class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
     >
@@ -51,9 +51,9 @@
       >
         Continue
       </ActionButton>
-    </div>    
+    </div>
 
-    <div 
+    <div
       class="panel panel-button govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
       @click="toggleStats"
     >

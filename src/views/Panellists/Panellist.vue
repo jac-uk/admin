@@ -5,7 +5,7 @@
       :to="{ name: 'panellists-list' }"
     >
       Back
-    </router-link>    
+    </router-link>
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >

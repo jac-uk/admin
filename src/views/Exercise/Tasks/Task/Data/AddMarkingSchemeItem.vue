@@ -101,7 +101,7 @@ export default {
             this.showIncludeInScore = false;
           }
           this.formData.includeInScore = false;
-        }        
+        }
       }
     },
     preSave() {
