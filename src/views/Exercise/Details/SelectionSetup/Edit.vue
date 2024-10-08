@@ -37,9 +37,9 @@
           >
             <CheckboxItem
               v-for="capability in capabilities"
-              :key="capability"
-              :value="capability"
-              :label="$filters.lookup(capability)"
+              :key="capability.value"
+              :value="capability.value"
+              :label="capability.description"
             />
           </CheckboxGroup>
 
@@ -52,9 +52,9 @@
           >
             <CheckboxItem
               v-for="item in selectionCategories"
-              :key="item"
-              :value="item"
-              :label="$filters.lookup(item)"
+              :key="item.value"
+              :value="item.value"
+              :label="item.description"
             />
           </CheckboxGroup>
         </template>
@@ -74,11 +74,31 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import { CAPABILITIES, SELECTION_CATEGORIES } from '../../../../helpers/exerciseHelper';
 
-const competenciesCapabilities = ['EJ', 'PBK', 'ACI', 'WCO', 'MWE'];
-const competenciesSelectionCategories = ['interview', 'situational', 'roleplay'];
-const skillsAbilitiesCapabilities = ['L&J', 'PQ', 'L'];
-const skillsAbilitiesSelectionCategories = ['interview', 'situational', 'leadership', 'roleplay'];
+const competenciesCapabilities = [
+  CAPABILITIES.EJ,
+  CAPABILITIES.PBK,
+  CAPABILITIES.ACI,
+  CAPABILITIES.WCO,
+  CAPABILITIES.MWE,
+];
+const competenciesSelectionCategories = [
+  SELECTION_CATEGORIES.INTERVIEW,
+  SELECTION_CATEGORIES.SITUATIONAL,
+  SELECTION_CATEGORIES.ROLEPLAY,
+];
+const skillsAbilitiesCapabilities = [
+  CAPABILITIES.LJ,
+  CAPABILITIES.PQ,
+  CAPABILITIES.L,
+];
+const skillsAbilitiesSelectionCategories = [
+  SELECTION_CATEGORIES.INTERVIEW,
+  SELECTION_CATEGORIES.SITUATIONAL,
+  SELECTION_CATEGORIES.LEADERSHIP,
+  SELECTION_CATEGORIES.ROLEPLAY,
+];
 
 export default {
   components: {
@@ -130,11 +150,11 @@ export default {
     'formData.assessmentFramework': function (newValue) {
       // set default capabilities and selection categories based on the assessment framework
       if (newValue === 'competencies') {
-        this.formData.capabilities = competenciesCapabilities;
-        this.formData.selectionCategories = competenciesSelectionCategories;
+        this.formData.capabilities = competenciesCapabilities.map(item => item.value);
+        this.formData.selectionCategories = competenciesSelectionCategories.map(item => item.value);
       } else if (newValue === 'skills-abilities') {
-        this.formData.capabilities = skillsAbilitiesCapabilities;
-        this.formData.selectionCategories = skillsAbilitiesSelectionCategories;
+        this.formData.capabilities = skillsAbilitiesCapabilities.map(item => item.value);
+        this.formData.selectionCategories = skillsAbilitiesSelectionCategories.map(item => item.value);
       }
     },
   },

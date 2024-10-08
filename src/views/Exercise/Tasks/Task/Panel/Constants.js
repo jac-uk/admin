@@ -7,8 +7,8 @@ const ROLES = {
 
 const PANEL_TYPES = {
   SIFT: 'sift',
-  SELECTION: 'selection',
-  SCENARIO: 'scenario',
+  SELECTION: 'selectionDay',
+  SCENARIO: 'scenarioTest',
 };
 
 const PANEL_STATUS = {

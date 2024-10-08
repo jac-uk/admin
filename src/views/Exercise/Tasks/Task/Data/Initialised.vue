@@ -36,7 +36,7 @@
             {{ $filters.lookup(row.ref) }}
           </TableCell>
           <TableCell>
-            {{ $filters.lookup(row.type) }}
+            {{ getMarkingType(row.type).label }}
           </TableCell>
           <TableCell>
             <ActionButton
@@ -92,6 +92,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import AddMarkingSchemeItem from './AddMarkingSchemeItem.vue';
 import { functions } from '@/firebase';
+import { getMarkingType } from '@/helpers/scoreSheetHelper';
 
 export default {
   components: {
@@ -141,6 +142,9 @@ export default {
     },
   },
   methods: {
+    getMarkingType(type) {
+      return getMarkingType(type);
+    },
     btnNext,
     async btnContinue() {
       await httpsCallable(functions, 'updateTask')({
@@ -158,15 +162,14 @@ export default {
       this.currentGroup = group;
       this.$refs.modalAddMarkingSchemeItem.openModal();
     },
-    async btnSave({ type, title, ref, excludeFromScore }) {
+    async btnSave({ type, ref, includeInScore }) {
+      this.$refs.modalAddMarkingSchemeItem.closeModal();
       const newItem = {};
       newItem.type = type;
-      newItem.title = title;
       newItem.ref = ref;
-      if (excludeFromScore) newItem.excludeFromScore = excludeFromScore;
+      if (includeInScore) newItem.includeInScore = includeInScore;
       this.currentGroup.children.push(newItem);
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { markingScheme: this.markingScheme } } );
-      this.$refs.modalAddMarkingSchemeItem.closeModal();
     },
     btnCancelAdd() {
       this.$refs.modalAddMarkingSchemeItem.closeModal();

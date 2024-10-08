@@ -296,7 +296,7 @@ export default {
       ],
       formData: {},
     };
-    const panelData = this.$store.getters['panels/getPanel'](this.$route.params.panelId);
+    const panelData = this.$store.getters['xpanels/getPanel'](this.$route.params.panelId);
     if (panelData) {
       data.formData = {
         name: panelData.name,
@@ -311,7 +311,7 @@ export default {
       return this.$route.params.panelId;
     },
     panel(){
-      return this.$store.getters['panels/getPanel'](this.panelId);
+      return this.$store.getters['xpanels/getPanel'](this.panelId);
     },
     isSift() {
       return this.panel.type === 'sift';
@@ -329,7 +329,7 @@ export default {
       return '';
     },
     candidatesList() {
-      return this.$store.state.panels.panelApplications;
+      return this.$store.state.xpanels.panelApplications;
     },
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
@@ -380,7 +380,7 @@ export default {
   methods: {
     async save(isValid) {
       if (isValid) {
-        await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: this.formData });
+        await this.$store.dispatch('xpanels/updatePanel', { id: this.panelId, data: this.formData });
         this.activeTab = 'members';
       }
     },
@@ -406,7 +406,7 @@ export default {
     getTableDataCandidates(params) {
       if (this.panel) {
         this.$store.dispatch(
-          'panels/bindPanelApplications',
+          'xpanels/bindPanelApplications',
           {
             exerciseId: this.panel.exerciseId,
             panelId: this.panelId,
@@ -417,11 +417,11 @@ export default {
       }
     },
     async removeFromPanel() {
-      await this.$store.dispatch('panels/removePanelApplications', { panelType: this.panel.type, applicationIds: this.selectedItems });
+      await this.$store.dispatch('xpanels/removePanelApplications', { panelType: this.panel.type, applicationIds: this.selectedItems });
     },
     async deletePanel(){
       const redirectTo = `exercise-reports-${this.panel.type}`;
-      await this.$store.dispatch('panels/deletePanel', this.panelId );
+      await this.$store.dispatch('xpanels/deletePanel', this.panelId );
       this.$router.push({ name: redirectTo });
     },
     async exportToGoogleDrive() {
@@ -429,7 +429,7 @@ export default {
         status: 'approved',
         'statusLog.approved': serverTimestamp(),
       };
-      await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: data });
+      await this.$store.dispatch('xpanels/updatePanel', { id: this.panelId, data: data });
       return true;
     },
   },

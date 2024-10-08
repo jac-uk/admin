@@ -12,7 +12,7 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = query(collectionRef, where('exerciseId', '==', params.exerciseId));
+      let firestoreRef = query(collectionRef, where('exercise.id', '==', params.exerciseId));
       if (params.type) {
         firestoreRef = query(firestoreRef, where('type', '==', params.type));
       }

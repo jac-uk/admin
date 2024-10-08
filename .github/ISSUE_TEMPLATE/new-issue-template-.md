@@ -11,7 +11,7 @@ assignees: ''
 What is the origin and context of this piece of work?
 
 ## User Story
-As **user**, I would like **functionality** so that **benefit**. 
+As **user**, I would like **functionality** so that **benefit**.
 Users are: Candidate, Admin, Assessor, QT participant, Panellist, Digital team.
 
 ## Benefit(s) to user (if not already clear from User story)
@@ -22,8 +22,8 @@ Include a link to a Miro board/image if appropriate.
 
 - [ ] Feature
 
-## Acceptance Criteria 
-Specify the requirements of the primary user(s) for the change, update, or new feature - use the format: 
+## Acceptance Criteria
+Specify the requirements of the primary user(s) for the change, update, or new feature - use the format:
 It's done when...
 
 ## Definition of Done

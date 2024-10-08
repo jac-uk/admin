@@ -121,7 +121,7 @@ export default {
           // @TODO statuses
           created: serverTimestamp(),
         };
-        await this.$store.dispatch('panels/create', data);
+        await this.$store.dispatch('xpanels/create', data);
         this.$router.push({
           name: `exercise-reports-${this.type}`,
         });

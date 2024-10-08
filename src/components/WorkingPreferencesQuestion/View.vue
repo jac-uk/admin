@@ -21,7 +21,7 @@
         </li>
       </ul>
     </dd>
-  </div>    
+  </div>
 </template>
 
 <script>

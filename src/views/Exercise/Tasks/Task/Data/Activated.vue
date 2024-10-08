@@ -13,11 +13,35 @@
 
     <ProgressBar :steps="taskSteps" />
 
-    <p class="govuk-body govuk-!-margin-bottom-4">
-      Please enter scores for all candidates.
+    <p class="govuk-body">
+      Upload scores to the platform by taking the following steps:
     </p>
+    <ol class="govuk-list govuk-list--number">
+      <li>If necessary, rename the column containing application references to <strong>Reference number</strong></li>
+      <li>
+        Rename the score columns as follows:
+        <span
+          v-for="(col, index) in scoreSheetColumns"
+          :key="col"
+        ><strong>{{ col.title }}</strong><span v-if="index < scoreSheetColumns.length - 1">, </span></span>
+      </li>
+      <li>Select all and copy all</li>
+      <li>Return to this page and click ‘Paste from clipboard’</li>
+      <li>The application totals will update automatically and you will see the scores populate below</li>
+      <li>If you are happy with the number of applications updated, click continue to move to the next step</li>
+    </ol>
+
+    <div class="govuk-button-group govuk-!-margin-bottom-6">
+      <button
+        class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+        @click="pasteFromClipboard"
+      >
+        Paste from clipboard
+      </button>
+    </div>
 
     <div
+      v-if="completeRows.length"
       class="govuk-grid-row"
     >
       <div class="govuk-grid-column-two-thirds">
@@ -48,121 +72,119 @@
       </div>
     </div>
 
-    <div>
-      <div class="govuk-button-group govuk-!-margin-bottom-6">
-        <button
-          class="govuk-button govuk-button-s govuk-button--secondary govuk-!-margin-bottom-0"
-          @click="copyToClipboard"
-        >
-          Copy to clipboard
-        </button>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-          @click="pasteFromClipboard"
-        >
-          Paste from clipboard
-        </button>
-      </div>
-      <Table
-        ref="scoreSheet"
-        data-key="id"
-        :data="tableData"
-        :columns="tableColumns"
-        :page-size="500"
-        local-data
-        sticky
+    <div class="govuk-!-margin-bottom-6">
+      <a
+        class="govuk-link"
+        @click="copyToClipboard"
       >
-        <template
-          v-if="scoreSheetHeaders.length"
-          #header
-        >
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header table-cell-application"
-            />
-            <th
-              v-for="header in scoreSheetHeaders"
-              :key="header.ref"
-              scope="col"
-              :colspan="header.colspan"
-              class="govuk-table__header text-center"
-            >
-              {{ $filters.lookup(header.ref) }}
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header table-cell-value"
-            />
-          </tr>
-        </template>
-
-        <template #row="{row, index}">
-          <TableCell class="table-cell-application vertical-align-middle">
-            {{ row.fullName }}
-          </TableCell>
-
-          <TableCell
-            v-for="(column, columnIndex) in scoreSheetColumns"
-            :key="`${task.type}_${index}_${columnIndex}`"
-            class="text-center table-cell-score"
-            :title="column.ref"
-          >
-            <input
-              v-if="column.type == 'number'"
-              :id="`row-${index}_col-${columnIndex}`"
-              v-model="scoreSheet[row.id][column.parent][column.ref]"
-              type="number"
-              class="govuk-input govuk-input--width-1"
-              spellcheck="false"
-              autocomplete="off"
-              @keydown="onKeyDown($event, index, columnIndex)"
-              @input="onCellValueChange(row, column)"
-            >
-            <input
-              v-if="column.type == 'select'"
-              :id="`row-${index}_col-${columnIndex}`"
-              v-model="scoreSheet[row.id][column.parent][column.ref]"
-              type="text"
-              maxlength="1"
-              class="govuk-input govuk-input--width-1"
-              spellcheck="false"
-              autocomplete="grade"
-              @keydown="onKeyDown($event, index, columnIndex)"
-              @input="onCellValueChange(row, column)"
-            >
-            <input
-              v-if="column.type == 'grade' && !column.parent"
-              :id="`row-${index}_col-${columnIndex}`"
-              v-model="scoreSheet[row.id][column.ref]"
-              type="text"
-              maxlength="1"
-              class="govuk-input govuk-input--width-1"
-              spellcheck="false"
-              autocomplete="grade"
-              @keydown="onKeyDown($event, index, columnIndex)"
-              @input="onCellValueChange(row, column)"
-            >
-            <input
-              v-if="column.type == 'grade' && column.parent"
-              :id="`row-${index}_col-${columnIndex}`"
-              v-model="scoreSheet[row.id][column.parent][column.ref]"
-              type="text"
-              maxlength="1"
-              class="govuk-input govuk-input--width-1"
-              spellcheck="false"
-              autocomplete="grade"
-              @keydown="onKeyDown($event, index, columnIndex)"
-              @input="onCellValueChange(row, column)"
-            >
-          </TableCell>
-
-          <TableCell class="text-center table-cell-score vertical-align-middle">
-            {{ row.score }}
-          </TableCell>
-        </template>
-      </Table>
+        Copy scoresheet to clipboard
+      </a>
     </div>
+
+    <!--
+    <Table
+      v-if="completeRows.length"
+      ref="scoreSheet"
+      data-key="id"
+      :data="tableData"
+      :columns="tableColumns"
+      :page-size="1000"
+      local-data
+      sticky
+      class="score-sheet"
+    >
+      <template
+        v-if="scoreSheetHeaders.length"
+        #header
+      >
+        <tr class="govuk-table__row sticky-row">
+          <th
+            scope="col"
+            class="govuk-table__header table-cell-application"
+          />
+          <th
+            v-for="header in scoreSheetHeaders"
+            :key="header.ref"
+            scope="col"
+            :colspan="header.colspan"
+            class="govuk-table__header text-center"
+          >
+            {{ $filters.lookup(header.ref) }}
+          </th>
+          <th
+            scope="col"
+            class="govuk-table__header table-cell-value"
+          />
+        </tr>
+      </template>
+
+      <template #row="{row, index}">
+        <TableCell class="table-cell-application vertical-align-middle">
+          {{ row.referenceNumber }}
+        </TableCell>
+
+        <TableCell
+          v-for="(column, columnIndex) in scoreSheetColumns"
+          :key="`${task.type}_${index}_${columnIndex}`"
+          class="text-center table-cell-score"
+          :title="column.ref"
+        >
+          <span v-if="!scoreSheet[row.id]">Can't find scoresheet entry row for {{ row.id }}. Scoresheet = {{ row.scoreSheet }}</span>
+          <input
+            v-else-if="column.type == 'number'"
+            :id="`row-${index}_col-${columnIndex}`"
+            v-model="scoreSheet[row.id][column.parent][column.ref]"
+            type="number"
+            class="govuk-input"
+            spellcheck="false"
+            autocomplete="off"
+            @keydown="onKeyDown($event, index, columnIndex)"
+            @input="onCellValueChange(row, column)"
+          >
+          <input
+            v-else-if="column.type == 'select'"
+            :id="`row-${index}_col-${columnIndex}`"
+            v-model="scoreSheet[row.id][column.parent][column.ref]"
+            type="text"
+            maxlength="1"
+            class="govuk-input"
+            spellcheck="false"
+            autocomplete="grade"
+            @keydown="onKeyDown($event, index, columnIndex)"
+            @input="onCellValueChange(row, column)"
+          >
+          <input
+            v-else-if="column.type == 'grade' && !column.parent"
+            :id="`row-${index}_col-${columnIndex}`"
+            v-model="scoreSheet[row.id][column.ref]"
+            type="text"
+            maxlength="1"
+            class="govuk-input"
+            spellcheck="false"
+            autocomplete="grade"
+            @keydown="onKeyDown($event, index, columnIndex)"
+            @input="onCellValueChange(row, column)"
+          >
+          <input
+            v-else-if="column.type == 'grade' && column.parent"
+            :id="`row-${index}_col-${columnIndex}`"
+            v-model="scoreSheet[row.id][column.parent][column.ref]"
+            type="text"
+            maxlength="1"
+            class="govuk-input"
+            spellcheck="false"
+            autocomplete="grade"
+            @keydown="onKeyDown($event, index, columnIndex)"
+            @input="onCellValueChange(row, column)"
+          >
+        </TableCell>
+
+        <TableCell class="text-center table-cell-score vertical-align-middle">
+          {{ row.score }}
+        </TableCell>
+      </template>
+    </Table> -->
+
     <Modal ref="modalCheckDataComplete">
       <ModalInner
         title="Are you sure you wish to continue?"
@@ -179,10 +201,8 @@
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
+import { getScoreSheetTotal, GRADES, isScoreSheetComplete, getCompleteScoreSheet } from '@/helpers/scoreSheetHelper';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
-import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
@@ -191,8 +211,6 @@ import clone from 'clone';
 
 export default {
   components: {
-    Table,
-    TableCell,
     FullScreenButton,
     Modal,
     ModalInner,
@@ -208,7 +226,7 @@ export default {
   data() {
     const task = this.$store.getters['tasks/getTask'](this.type);
     return {
-      scoreSheet: task.scoreSheet,
+      scoreSheet: getCompleteScoreSheet(task),
     };
   },
   computed: {
@@ -235,7 +253,7 @@ export default {
     selectionCategories() {
       if (!this.task) return [];
       if (!this.task.selectionCategories) return [];
-      return SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
+      return SELECTION_CATEGORIES.filter(cat => this.task.selectionCategories.indexOf(cat) >= 0); // Using SELECTION_CATEGORIES to ensure display order
     },
     grades() {
       return this.task && this.task.grades ? this.task.grades : GRADES;
@@ -270,29 +288,25 @@ export default {
       if (!this.task.markingScheme) return columns;
       this.task.markingScheme.forEach(item => {
         if (item.type === 'group') {
-          item.children.forEach(child => columns.push({ ...child, parent: item.ref }));
+          item.children.forEach(child => columns.push({ ...child, parent: item.ref, title: `${item.ref}. ${child.ref}. Score`, matches: [`${item.ref}.${child.ref}`, `${item.ref}.${child.ref}.`, `${item.ref}. ${child.ref}.`, `${item.ref} ${child.ref}`, `${item.ref}.${child.ref} Score`, `${item.ref}.${child.ref}. Score`, `${item.ref}. ${child.ref}. Score`, `${item.ref} ${child.ref} Score`] }));
         } else {
-          columns.push(item);
+          columns.push({ ...item, title: `${item.ref}. Score`, matches: [item.ref, `${item.ref}. Score`, `${item.ref} Score`] });
         }
       });
       return columns;
     },
     tableColumns() {
       const columns = [];
-      columns.push({ title: 'Candidate', class: 'table-cell-application' });
+      columns.push({ title: 'Reference', class: 'table-cell-application' });
       this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'text-center table-cell-score' }));
-      columns.push({ title: 'Score', class: 'text-center table-cell-score' });
+      columns.push({ title: 'Total score', class: 'text-center table-cell-score' });
       return columns;
     },
     clipboardColumns() {
       const columns = [];
-      columns.push({ title: 'ID', ref: 'id', editable: false });
-      columns.push({ title: 'Ref', ref: 'ref', editable: false });
-      columns.push({ title: 'Name', ref: 'fullName', editable: false });
+      columns.push({ title: 'Reference', ref: 'ref', editable: false, matches: ['Reference', 'Reference Number', 'Reference number', 'Ref'] });
       this.scoreSheetColumns.forEach(column => {
-        let title = column.ref;
-        if (column.parent) title = `${column.parent}.${column.ref}`;
-        columns.push({ title: title, editable: true, ...column });
+        columns.push({ editable: true, ...column });
       });
       return columns;
     },
@@ -303,7 +317,7 @@ export default {
           id: application.id,
           fullName: application.fullName,
           referenceNumber: application.ref,
-          scoreSheet: this.scoreSheet[application.id],
+          scoreSheet: this.scoreSheet[application.id], // ? this.scoreSheet[application.id] : clone(this.task.emptyScoreSheet),
           score: getScoreSheetTotal(this.task.markingScheme, this.scoreSheet[application.id]),
           isComplete: isScoreSheetComplete(this.task.markingScheme, this.scoreSheet[application.id]),
         };
@@ -323,7 +337,7 @@ export default {
   },
   watch: {
     task() {
-      this.scoreSheet = this.task.scoreSheet;
+      this.scoreSheet = getCompleteScoreSheet(this.task);
     },
   },
   methods: {
@@ -395,10 +409,14 @@ export default {
         const row = [];
         this.clipboardColumns.forEach(column => {
           if (column.editable) {
-            if (column.parent) {
-              row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
+            if (this.task.scoreSheet && this.task.scoreSheet[application.id]) {
+              if (column.parent) {
+                row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
+              } else {
+                row.push(this.task.scoreSheet[application.id][column.ref]);
+              }
             } else {
-              row.push(this.task.scoreSheet[application.id][column.ref]);
+              row.push('');
             }
           } else {
             row.push(application[column.ref]);
@@ -421,22 +439,24 @@ export default {
 
           // check headers are all present
           const pastedHeaders = rows[0].split('\t');
-          const missingColumns = this.clipboardColumns.filter(column => pastedHeaders.indexOf(column.title) < 0);
+          const missingColumns = this.clipboardColumns.filter(column => {
+            const columnIndex = pastedHeaders.findIndex(item => column.matches.indexOf(item) >= 0);
+            return columnIndex < 0;
+          });
           if (missingColumns.length > 0) { console.log('missing columns'); return false; }
 
+          // get Ref column index
+          const refIndex = pastedHeaders.findIndex(item => this.clipboardColumns[0].matches.indexOf(item) >= 0);
+          if (refIndex < 0) { console.log('Ref not found in headers'); return false; }
+
           // get data
-          const identIndex = 0;
           rows.forEach((row, rowIndex) => {
             if (row && rowIndex > 0) {
               const cols = row.split('\t');
-              const id = cols[identIndex];
-              pastedDataMap[id] = cols;
+              const ref = cols[refIndex];
+              pastedDataMap[ref] = cols;
             }
           });
-
-          // check we have data for all applications
-          const missingApplications = this.task.applications.filter(application => !pastedDataMap[application.id]);
-          if (missingApplications.length > 0) { console.log('missingApplications', missingApplications.length); return false; }
 
           // update scoresheet
           const scoreSheet = {};
@@ -444,23 +464,27 @@ export default {
           this.clipboardColumns.forEach(column => {
             if (column.editable) {
               editableColumns.push({
-                index: pastedHeaders.indexOf(column.title),
+                index: pastedHeaders.findIndex(item => column.matches.indexOf(item) >= 0),
                 ...column,
               });
             }
           });
           this.task.applications.forEach(application => {
-            const data = clone(this.task.emptyScoreSheet);
-            editableColumns.forEach(column => {
-              if (column.parent) {
-                data[column.parent][column.ref] = pastedDataMap[application.id][column.index];
-              } else {
-                data[column.ref] = pastedDataMap[application.id][column.index];
-              }
-            });
-            scoreSheet[application.id] = data;
+            if (pastedDataMap[application.ref]) {
+              const data = clone(this.task.emptyScoreSheet);
+              editableColumns.forEach(column => {
+                if (column.parent) {
+                  data[column.parent][column.ref] = pastedDataMap[application.ref][column.index];
+                } else {
+                  data[column.ref] = pastedDataMap[application.ref][column.index];
+                }
+              });
+              scoreSheet[application.id] = data;  // use app ID for scoresheet entries
+            }
           });
-          await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: { scoreSheet: scoreSheet } });
+          const saveData = {};
+          Object.entries(scoreSheet).forEach(([key, value]) => saveData[`scoreSheet.${key}`] = value);  // here we are updating individual values (rather than replacing the whole `scoreSheet` map)
+          await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: saveData });
         }
       }
     },
@@ -469,20 +493,7 @@ export default {
 </script>
 
 <style lang="scss">
-.govuk-input--width-1 {
-  width: 4ex !important;
-  text-align: center;
-}
-.govuk-input--width-2 {
-  max-width: 6ex;
-  text-align: right;
-}
 .vertical-align-middle {
   vertical-align: middle !important;
-}
-.table-cell-value {
-  min-width: 50px;
-  padding: 0 10px !important;
-  text-align: center;
 }
 </style>

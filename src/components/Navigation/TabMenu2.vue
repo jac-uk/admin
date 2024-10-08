@@ -61,7 +61,7 @@
       </li>
     </ul>
     <FullWidthMenu
-      v-show="selectedTabIndex && showSubmenu"
+      v-show="selectedTabIndex >= 0 && showSubmenu"
       :max-items-per-column="3"
       :full-width-menu="true"
       :items="submenu"

@@ -1,119 +1,90 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
 
+    <ProgressBar :steps="taskSteps" />
     <p
       v-if="!hasTaskStarted"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} scoring will start on {{ $filters.formatDate(task.startDate) }}
     </p>
     <p
       v-else-if="!hasAllPanelsCompleted"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} scoring has started and panels are providing scores.
     </p>
     <p
       v-else-if="isModerationRequired"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
-      All panels have provided scores. Please select any applications that require moderation before continuing.
+      All panels have provided grades. Please select any applications that require moderation before continuing.
     </p>
     <p
       v-else
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
-      All panels have provided scores.
+      All panels have provided grades.
     </p>
 
     <div
       v-if="hasAllPanelsCompleted"
-      class="govuk-grid-row"
+      class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
     >
-      <div class="govuk-grid-column-two-thirds">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+      <p class="govuk-body govuk-!-margin-bottom-4">
+        Next step
+      </p>
+      <ActionButton
+        class="govuk-!-margin-bottom-1"
+        type="primary"
+        :action="btnFinalise"
+      >
+        Continue
+      </ActionButton>
+    </div>
+
+    <div
+      class="panel panel-button govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
+      @click="toggleStats"
+    >
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
           <p class="govuk-body govuk-!-margin-bottom-0">
-            Applications
-            <span class="govuk-caption-m"><span v-if="isModerationRequired">Requiring moderation / </span>Total</span>
+            Panels
+            <span class="govuk-caption-m">Completed / Total</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            <span v-if="isModerationRequired">{{ stats.totalApplicationsForModeration }} / </span>{{ stats.totalApplications }}
+            {{ stats.completedPanels }} / {{ stats.totalPanels }}
           </h2>
         </div>
-      </div>
 
-      <div class="govuk-grid-column-one-third">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-4">
-            Next step
+        <div class="govuk-grid-column-one-half">
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            Applications
+            <span class="govuk-caption-m">Completed / Total<span v-if="isModerationRequired"> / Requiring moderation</span></span>
           </p>
-          <ActionButton
-            class="govuk-!-margin-bottom-1"
-            type="primary"
-            :action="btnFinalise"
-          >
-            Continue
-          </ActionButton>
+          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
+            {{ stats.completedApplications }} / {{ stats.totalApplications }}<span v-if="isModerationRequired"> / {{ stats.totalApplicationsForModeration }}</span>
+          </h2>
         </div>
       </div>
     </div>
 
-    <TabsList
-      v-model:active-tab="activeTab"
-      :tabs="tabs"
-    />
-
     <!-- OVERVIEW -->
-    <div v-show="activeTab == 'overview'">
-      <div class="govuk-grid-row">
-        <div
-          class="govuk-grid-column-full"
-        >
-          <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">{{ $filters.lookup(type) }} dates</span>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ $filters.showAlternative($filters.formatDate(task.startDate), "Unknown") }} to
-              {{ $filters.showAlternative($filters.formatDate(task.endDate), "Unknown") }}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      <!-- START: PANELS -->
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-            <p class="govuk-body govuk-!-margin-bottom-0">
-              Panels
-              <span class="govuk-caption-m">Completed / Total</span>
-            </p>
-            <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-              {{ stats.completedPanels }} / {{ stats.totalPanels }}
-            </h2>
-          </div>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-            <p class="govuk-body govuk-!-margin-bottom-0">
-              Applications
-              <span class="govuk-caption-m">Completed / Total</span>
-            </p>
-            <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-              {{ stats.completedApplications }} / {{ stats.totalApplications }}
-            </h2>
-          </div>
-        </div>
-      </div>
-      <!-- END: PANELS -->
-
+    <div v-show="showStats">
       <!-- START: GRADES -->
       <div
-        v-if="hasAllPanelsCompleted && task.grades"
+        v-if="task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -194,7 +165,7 @@
 
       <!-- START: SCORES -->
       <div
-        v-if="hasAllPanelsCompleted && task.grades"
+        v-if="task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -237,107 +208,36 @@
     <!-- // END OVERVIEW -->
 
     <!-- SCORE SHEET -->
-    <div v-show="activeTab == 'scoreSheet'">
-      <Table
-        ref="scoreSheet"
-        data-key="id"
-        :data="tableData"
-        :columns="tableColumns"
-        :page-size="500"
-        local-data
-        class="merit-list"
-      >
-        <template
-          v-if="scoreSheetHeaders.length"
-          #header
+    <ScoreSheet
+      ref="scoreSheet"
+      data-key="id"
+      :marking-scheme="task.markingScheme"
+      :data="scoreSheetData"
+      :columns-before="[{ title: 'Application', ref:'referenceNumber', class: 'table-cell-application' }, { title: 'Panel', parent: 'panel', ref: 'name', class: 'table-cell' }]"
+      :editable="canEditScoreSheet"
+      :moderation="isModerationRequired"
+      :tools="scoreSheetTools"
+    >
+      <template #columns-before="{row}">
+        <TableCell
+          class="table-cell-application nowrap sticky-left"
+          :class="{ 'highlight': row.highlight }"
         >
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header table-cell-application"
-            />
-            <th
-              scope="col"
-              class="govuk-table__header table-cell"
-            />
-            <th
-              v-for="header in scoreSheetHeaders"
-              :key="header.ref"
-              scope="col"
-              :colspan="header.colspan"
-              class="govuk-table__header text-center"
-            >
-              {{ $filters.lookup(header.ref) }}
-            </th>
-            <th
-              v-if="isModerationRequired"
-              scope="col"
-              class="govuk-table__header table-cell"
-            />
-          </tr>
-        </template>
-        <template #row="{row}">
-          <TableCell class="table-cell-application">
-            {{ row.referenceNumber }}
-          </TableCell>
-          <TableCell class="table-cell">
-            <RouterLink
-              :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
-              class="govuk-link"
-            >
-              {{ row.panel.name }}
-            </RouterLink>
-          </TableCell>
-
-          <template
-            v-for="(item, index) in task.markingScheme"
+          {{ row.referenceNumber }}
+        </TableCell>
+        <TableCell
+          class="table-cell-value nowrap"
+          :class="{ 'highlight': row.highlight }"
+        >
+          <RouterLink
+            :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.panel.id } }"
+            class="govuk-link"
           >
-            <template v-if="item.type === 'group'">
-              <TableCell
-                v-for="(child, childIndex) in item.children"
-                :key="`${type}_${index}_${childIndex}`"
-                class="text-center table-cell-score"
-              >
-                {{ row.scoreSheet[item.ref][child.ref] }}
-              </TableCell>
-            </template>
-            <template v-else>
-              <TableCell
-                :key="`${type}_${index}`"
-                class="text-center table-cell-score"
-              >
-                {{ row.scoreSheet[item.ref] }}
-              </TableCell>
-            </template>
-          </template>
-
-          <TableCell class="table-cell table-cell-score">
-            {{ row.score }}
-          </TableCell>
-
-          <TableCell
-            v-if="isModerationRequired"
-            class="govuk-!-padding-0 v-top"
-          >
-            <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-left-7">
-              <div class="govuk-checkboxes__item">
-                <input
-                  :id="`moderation-${row.id}`"
-                  :checked="row.scoreSheet.flagForModeration"
-                  class="govuk-checkboxes__input"
-                  type="checkbox"
-                  @input="updateModeration(row.panel.id, row.id, $event)"
-                >
-                <label
-                  class="govuk-label govuk-checkboxes__label"
-                  :for="`moderation-${row.id}`"
-                />
-              </div>
-            </div>
-          </TableCell>
-        </template>
-      </Table>
-    </div>
+            {{ row.panel.name }}
+          </RouterLink>
+        </TableCell>
+      </template>
+    </ScoreSheet>
     <!-- // END SCORE SHEET -->
   </div>
 </template>
@@ -345,21 +245,25 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses } from '@/helpers/exerciseHelper';
-import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
+import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity } from '@/helpers/scoreSheetHelper';
 import { functions } from '@/firebase';
+import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
 export default {
   components: {
     Table,
     TableCell,
-    TabsList,
     ActionButton,
+    FullScreenButton,
+    ProgressBar,
+    ScoreSheet,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -370,24 +274,22 @@ export default {
   },
   data() {
     return {
-      activeTab: 'overview',
+      showStats: false,
+      scoreSheetTools: [
+        SCORESHEET_TOOLS.FIND,
+        SCORESHEET_TOOLS.COPY,
+        SCORESHEET_TOOLS.PASTE,
+        SCORESHEET_TOOLS.SCORE,
+        SCORESHEET_TOOLS.DIVERSITY,
+      ],
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    tabs() {
-      const data = [];
-      data.push({
-        ref: 'overview',
-        title: 'Overview',
-      });
-      data.push({
-        ref: 'scoreSheet',
-        title: 'Score sheet',
-      });
-      return data;
+    exerciseDiversity() {
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
     },
     isSift() {
       return this.type === PANEL_TYPES.SIFT;
@@ -400,6 +302,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     hasTaskStarted() {
       if (!this.task) return false;
@@ -417,9 +323,13 @@ export default {
           else return -1;
         });
     },
+    canEditScoreSheet() {
+      return false;
+    },
     isModerationRequired() {
-      if (!this.panels) return false;
-      return this.panels.length > 1;
+      return false;
+      // if (!this.task) return false;
+      // return this.task.panelIds.length > 1;
     },
     hasAllPanelsCompleted() {
       if (!this.stats) return false;
@@ -446,56 +356,7 @@ export default {
       if (!this.panels) return [];
       return this.panels.map(panel => { return { title: panel.name }; });
     },
-    scoreSheetHeaders() {
-      const headers = [];
-      if (!this.task) return headers;
-      if (!this.task.markingScheme) return headers;
-      let columns = 0;
-      this.task.markingScheme.forEach(item => {
-        if (item.type === 'group') {
-          if (columns > 0) {
-            headers.push({
-              ref: '',
-              colspan: columns,
-            });
-            columns = 0;
-          }
-          headers.push({
-            ref: item.ref,
-            colspan: item.children.length,
-          });
-        } else {
-          columns += 1;
-        }
-      });
-      return headers;
-    },
-    scoreSheetColumns() {
-      const columns = [];
-      if (!this.task) return columns;
-      if (!this.task.markingScheme) return columns;
-      this.task.markingScheme.forEach(item => {
-        if (item.type === 'group') {
-          item.children.forEach(child => columns.push(child));
-        } else {
-          columns.push(item);
-        }
-      });
-      return columns;
-    },
-    tableColumns() {
-      const columns = [];
-      columns.push({ title: 'Application', class: 'table-cell-application' });
-      columns.push({ title: 'Panel', class: 'table-cell' });
-      this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'text-center table-cell-score' }));
-      columns.push({ title: 'Score', class: 'table-cell table-cell-score' });
-      if (this.isModerationRequired) {
-        columns.push({ title: 'Moderation?', class: 'text-center' });
-      }
-      // columns.push({ title: 'Report', class: 'text-center' });
-      return columns;
-    },
-    tableData() {
+    scoreSheetData() {
       const rows = [];
       this.panels.forEach(panel => {
         if (!panel.applicationIds) return;
@@ -511,12 +372,16 @@ export default {
             referenceNumber: panel.applications[applicationId].referenceNumber,
             scoreSheet: panel.scoreSheet[applicationId],
             score: getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId]),
+            isCompleted: panel.status === PANEL_STATUS.SUBMITTED,
             report: panel.reports ? panel.reports[applicationId] : null,
             outcome: panel.outcome,
           };
           rows.push(row);
         });
       });
+      if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
+      scoreSheetRowsAddRank(rows);
+      // TODO might want add custom sort here
       return rows;
     },
     stats() {
@@ -530,13 +395,11 @@ export default {
       data.totalApplicationsForModeration = 0;
       data.statuses = {};
       this.statuses.forEach(status => data.statuses[status] = 0);
-      if (this.capabilities && this.capabilities.indexOf('OVERALL')) {
-        data.overallGradesByPanel = {};
-        data.overallGrades = {};
-        this.grades.forEach(grade => data.overallGrades[grade] = 0);
-        data.overallScoreByPanel = {};
-        data.overallScore = { count: 0, total: 0, average: 0 };
-      }
+      data.overallGradesByPanel = {};
+      data.overallGrades = {};
+      this.grades.forEach(grade => data.overallGrades[grade] = 0);
+      data.overallScoreByPanel = {};
+      data.overallScore = { count: 0, total: 0, average: 0 };
       relevantPanels.forEach(panel => {
         data.totalApplications += panel.applicationIds.length;
         if (panel.status === PANEL_STATUS.SUBMITTED) {
@@ -549,7 +412,7 @@ export default {
             if (this.isSelection) {
               data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId].overall.OVERALL).filter(item => item === grade).length;
             } else {
-              data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId].OVERALL).filter(item => item === grade).length;
+              data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId][this.type].OVERALL ).filter(item => item === grade).length;
             }
             data.overallGradesByPanel[panel.id].count += data.overallGradesByPanel[panel.id][grade];
             data.overallGrades[grade] += data.overallGradesByPanel[panel.id][grade];
@@ -558,17 +421,19 @@ export default {
           });
           data.overallScore.count += data.overallScoreByPanel[panel.id].count;
           data.overallScore.total += data.overallScoreByPanel[panel.id].total;
-          data.overallScoreByPanel[panel.id].average = Number(data.overallScoreByPanel[panel.id].total / data.overallScoreByPanel[panel.id].count).toFixed(2) || 0;
+          if (data.overallScoreByPanel[panel.id] && data.overallScoreByPanel[panel.id].count) {
+            data.overallScoreByPanel[panel.id].average = Number(data.overallScoreByPanel[panel.id].total / data.overallScoreByPanel[panel.id].count).toFixed(2) || 0;
+          }
         }
-        data.totalApplicationsForModeration += panel.applicationIds.filter(applicationId => panel.scoreSheet[applicationId].flagForModeration).length;
+        data.totalApplicationsForModeration += panel.applicationIds.filter(applicationId => panel.scoreSheet[applicationId].moderation === 'Yes').length;
       });
-      if (data.overallScore) {
+      if (data.overallScore && data.overallScore.count) {
         data.overallScore.average = Number(data.overallScore.total / data.overallScore.count).toFixed(2) || 0;
       }
       return data;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch(
       'panels/bind',
       {
@@ -576,8 +441,12 @@ export default {
         type: this.type,
       }
     );
+    await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   methods: {
+    toggleStats() {
+      this.showStats = !this.showStats;
+    },
     btnNext,
     async btnFinalise() {
       await httpsCallable(functions, 'updateTask')({
@@ -586,11 +455,16 @@ export default {
       });
       this.btnNext();
     },
-    async updateModeration(panelId, applicationId, event) {
-      const saveData = {};
-      saveData[`scoreSheet.${applicationId}.flagForModeration`] = event.target.checked;
-      await this.$store.dispatch('panel/update', { id: panelId, data: saveData } );
-    },
   },
 };
 </script>
+
+<style>
+.panel-button {
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.panel-button:hover {
+  border: 1px solid #b1b4b6;
+}
+</style>

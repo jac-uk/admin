@@ -4,7 +4,7 @@
 - @jac-uk/jac-kit 4.x: Helper functions and vue components with firebase modular APIs.
 
 ## Firebase SDK v10 Modular APIs reference
-- https://firebase.google.com/docs/reference/js 
+- https://firebase.google.com/docs/reference/js
 
 ## Initialization of firebase and related services changes (src/firebase.js)
 - Old APIs (firebase sdk v8)

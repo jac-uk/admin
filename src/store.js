@@ -24,8 +24,8 @@ import candidateApplications from '@/store/candidateApplications';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
-import panels from '@/store/panels';
-// import panels from '@/store/panels/collection';
+import xpanels from '@/store/xpanels';
+import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
@@ -80,10 +80,11 @@ const store = createStore({
     messageBase: new messageBase().getModule(),
     notes,
     notifications,
+    xpanels,
     panel,
+    panels,
     panellist,
     panellists,
-    panels,
     releases,
     roles,
     services,
@@ -124,6 +125,9 @@ const store = createStore({
     },
     isProduction: (state, getters) => {
       return getters.appEnvironment === 'PRODUCTION';
+    },
+    isLocal: (state, getters) => {
+      return getters.appEnvironment === 'LOCAL';
     },
     isDevelop: (state, getters) => {
       return getters.appEnvironment === 'DEVELOP';

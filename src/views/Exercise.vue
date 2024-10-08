@@ -80,7 +80,7 @@
             style="font-size: 1.1875rem"
           >{{ exercise.referenceNumber }}</span>
           <TabMenu
-            v-if="!isAdvertTypeExternal && !hasJourney && tabs.length > 1"
+            v-if="!isAdvertTypeExternal && !hasJourney && tabs.length"
             :tabs="tabs"
           />
         </div>

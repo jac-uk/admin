@@ -1,23 +1,33 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />
+
     <p
       v-if="hasApplicationsWithoutPanels"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       Please create panels and allocate applications to those panels.
     </p>
     <p
       v-else-if="hasPanelsWithoutPanellists"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       Please ensure all panels have panellists.
     </p>
     <p
       v-else
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       You may now activate this {{ $filters.lookup(type) }}.
     </p>
@@ -102,7 +112,7 @@
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
       <button
-        class="govuk-button govuk-!-margin-bottom-0"
+        class="govuk-button govuk-!-margin-bottom-4"
         @click="createNewPanel"
       >
         Create new panel
@@ -142,7 +152,7 @@
         :columns="tableColumnsApplications"
         multi-select
         :page-size="50"
-        :search="['candidate.fullName']"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableDataApplications"
       >
         <template #actions>
@@ -195,6 +205,9 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
+import { getTaskSteps } from '@/helpers/exerciseHelper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -203,6 +216,7 @@ import TitleBar from '@/components/Page/TitleBar.vue';
 import SelectPanel from '../Panel/components/SelectPanel.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
+import { totalApplications } from '../Finalised/meritListHelper';
 
 export default {
   components: {
@@ -213,6 +227,8 @@ export default {
     TitleBar,
     SelectPanel,
     ActionButton,
+    FullScreenButton,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -245,8 +261,21 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
+    },
     totalApplications() {
-      return this.task ? this.task._stats.totalApplications : 0;
+      let total = 0;
+      if (!this.task) return total;
+      if (!this.panels) {
+        return totalApplications(this.task);
+      }
+      this.panels.forEach(panel => {
+        if (panel.applicationIds) total += panel.applicationIds.length;
+      });
+      if (this.hasApplicationsWithoutPanels) total += this.applicationsWithoutPanels.length;
+      return total;
     },
     tabs() {
       const data = [];
@@ -265,6 +294,9 @@ export default {
     panels() {
       return this.$store.state.panels.records;
     },
+    panelIds() {
+      return this.panels.map(panel => panel.id);
+    },
     applicationsWithoutPanels() {
       return this.$store.state.panels.applicationsWithoutPanels;
     },
@@ -277,15 +309,21 @@ export default {
     hasPanelsWithoutPanellists() {
       return this.panelsWithoutPanellists.length > 0;
     },
+    selectedApplications() {
+      if (!this.selectedItems.length) return null;
+      return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0);
+    },
   },
   methods: {
     btnNext,
     async btnActivate() {
-      await httpsCallable(functions, 'updateTask')({
+      const response = await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });
-      this.btnNext();
+      if (response && response.data && response.data.success) {
+        this.btnNext();
+      }
     },
     getTableData(params) {
       this.$store.dispatch(
@@ -332,14 +370,15 @@ export default {
           panelId: data.panelId,
           type: this.type,
           applicationIds: this.selectedItems,
+          applicationRecords: this.selectedApplications,
         });
-        // update applicationRecords
-        const updates = this.selectedItems.map(applicationId => {
-          const update = {};
-          update[`${this.type}.panelId`] = data.panelId;
-          return { id: applicationId, data: update };
-        });
-        await this.$store.dispatch('candidateApplications/update', updates);
+        // // update applicationRecords
+        // const updates = this.selectedItems.map(applicationId => {
+        //   const update = {};
+        //   update[`${this.type}.panelId`] = data.panelId;
+        //   return { id: applicationId, data: update };
+        // });
+        // await this.$store.dispatch('candidateApplications/update', updates);
         this.selectedItems = [];
       }
       this.$refs['setPanelModal'].closeModal();

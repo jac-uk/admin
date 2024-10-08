@@ -122,6 +122,12 @@ const lookup = (value) => {
     'L&J': 'Legal & Judicial Skills',
     'PQ': 'Personal Qualities',
 
+    // Custom marking scheme items (grade sheet columns)
+    'welsh-admin': 'Welsh Admin Questions',
+    'welsh-language': 'Welsh Language',
+    'asc-met': 'ASC Met',
+    'custom': 'Custom',
+
     // Set pass/fail
     'pass': 'Pass',
     'fail': 'Fail',
@@ -232,7 +238,6 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Sift Failed';
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Sift Passed';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrew';
-
   lookup[APPLICATION_STATUS.OTHER_PASSED] = 'Other Passed';
   lookup[APPLICATION_STATUS.OTHER_FAILED] = 'Other Failed';
 

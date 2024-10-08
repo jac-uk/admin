@@ -1,12 +1,12 @@
 <template>
-  <div 
+  <div
     class="progress-bar"
     :class="{
-      'progress-bar--started': isStarted, 
-      'progress-bar--completed': isCompleted 
+      'progress-bar--started': isStarted,
+      'progress-bar--completed': isCompleted
     }"
   >
-    <div 
+    <div
       v-for="step in steps"
       :key="step.id"
       class="progress-bar-step"
@@ -15,20 +15,20 @@
         'progress-bar-step--current': step.id == currentStep.id
       }"
     >
-      <svg 
+      <svg
         v-if="step.completed"
-        class="progress-bar-step-icon" 
+        class="progress-bar-step-icon"
         viewBox="0 0 99.295 86.056"
       >
         <polygon
-          fill="currentColor" 
+          fill="currentColor"
           points="36.371 86.056 0 54.594 9.793 43.287 34.554 64.728 87.76 0 99.295 9.49 36.371 86.056"
         />
       </svg>
       <div class="progress-bar-step-label govuk-caption-m">
         {{ step.title }}
       </div>
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -93,7 +93,7 @@ export default {
       height: 3px;
       margin-top: 10.5px;
       background-color: govuk-colour("mid-grey");
-    }    
+    }
     &::after {
       content: "";
       position: absolute;
@@ -133,7 +133,7 @@ export default {
       &::after {
         display: none;
       }
-      > .progress-bar-step-icon { 
+      > .progress-bar-step-icon {
         display: inline;
       }
       > .progress-bar-step-label {
@@ -149,7 +149,7 @@ export default {
     &:hover {
       > .progress-bar-step-label {
         display: block;
-      }      
+      }
     }
     &:first-child {
       > .progress-bar-step-icon {

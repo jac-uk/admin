@@ -266,7 +266,7 @@ export default {
           tab.title = this.$filters.lookup(stage);
         }
         return tab;
-      });      
+      });
     },
     legend() {
       if (this.selectedDiversityReportType) {

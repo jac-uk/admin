@@ -26,19 +26,19 @@
                   :value="panellist.id"
                 >
                   {{ panellist.fullName }}
-                  ({{ panellist.email }})
+                  ({{ panellist.jacEmail }})
                 </option>
               </Select>
             </div>
             <div class="govuk-grid-column-one-third">
-              <button
+              <!-- <button
                 class="govuk-button govuk-button--secondary"
                 data-module="govuk-button"
                 type="button"
                 @click.prevent="addNewPanellist(role)"
               >
                 Add new panellist
-              </button>
+              </button> -->
             </div>
           </div>
         </dd>

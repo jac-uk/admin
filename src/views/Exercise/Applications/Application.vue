@@ -242,7 +242,7 @@
               :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
-            
+
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"

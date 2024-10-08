@@ -165,25 +165,25 @@ export default {
     },
     panelsList() {
       // eslint-disable-next-line no-console
-      // console.log('panelsList', this.$store.state.panels.records);
-      return this.$store.state.panels.records;
+      // console.log('panelsList', this.$store.state.xpanels.records);
+      return this.$store.state.xpanels.records;
     },
     candidatesList() {
       return this.$store.state.applicationRecords.records;
     },
     isSift() {
       const routeFullPath = this.$route.fullPath ;
-      const route = this.$store.getters['panels/isSift'](routeFullPath);
+      const route = this.$store.getters['xpanels/isSift'](routeFullPath);
       return route;
     },
     isSelectionDay() {
       const routeFullPath = this.$route.fullPath ;
-      const route = this.$store.getters['panels/isSelectionDay'](routeFullPath);
+      const route = this.$store.getters['xpanels/isSelectionDay'](routeFullPath);
       return route;
     },
     isScenario() {
       const routeFullPath = this.$route.fullPath ;
-      const route = this.$store.getters['panels/isScenario'](routeFullPath);
+      const route = this.$store.getters['xpanels/isScenario'](routeFullPath);
       return route;
     },
     isButtonDisabled() {
@@ -194,7 +194,7 @@ export default {
   methods: {
     getTableData(params) {
       this.$store.dispatch(
-        'panels/bind',
+        'xpanels/bind',
         {
           exerciseId: this.exerciseId,
           type: this.type,

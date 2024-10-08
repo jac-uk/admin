@@ -14,7 +14,7 @@
       :question="exercise.jurisdictionQuestion"
       :type="exercise.jurisdictionQuestionType"
       :answers="exercise.jurisdictionQuestionAnswers"
-    />  
+    />
     <template v-else-if="exercise.jurisdictionPreferences">
       <QuestionConfigView
         v-for="(item, index) in exercise.jurisdictionPreferences"
