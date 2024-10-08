@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { Timeline } from 'vis-timeline/standalone';
 import { DataSet } from 'vis-data';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';

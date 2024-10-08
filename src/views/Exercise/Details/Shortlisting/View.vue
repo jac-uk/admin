@@ -12,7 +12,7 @@
     <h2 class="govuk-heading-l">
       Shortlisting methods
     </h2>
-    <table class="govuk-table">
+    <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Shortlisting methods
@@ -28,7 +28,7 @@
           </ul>
         </dd>
       </div>
-    </table>
+    </dl>
   </div>
 </template>
 

@@ -28,10 +28,12 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
+        // api: 'modern-compiler',
         additionalData: `
           @import "@/styles/_shared.scss";
         `,
         quietDeps: true,
+        silenceDeprecations: ['legacy-js-api'],
       },
     },
   },

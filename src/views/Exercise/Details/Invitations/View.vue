@@ -28,7 +28,7 @@
           >
             {{ invite.candidate.email }}
           </td>
-          <div v-if="!isEditable">
+          <template v-if="!isEditable">
             <td
               scope="col"
               class="govuk-table__header govuk-table__header--numeric"
@@ -46,7 +46,7 @@
             >
               {{ $filters.formatDate(invite.statusLog[invite.status]) }}
             </td>
-          </div>
+          </template>
         </tr>
       </tbody>
     </table>

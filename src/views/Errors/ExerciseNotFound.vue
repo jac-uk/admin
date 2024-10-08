@@ -9,13 +9,13 @@
       </p>
       <p class="govuk-body">
         You could check:
-        <ul>
-          <li>
-            you've copied and pasted the entire link address
-          </li>
-          <li>there are no obvious misspellings</li>
-        </ul>
       </p>
+      <ul class="govuk-list">
+        <li>
+          you've copied and pasted the entire link address
+        </li>
+        <li>there are no obvious misspellings</li>
+      </ul>
       <p class="govuk-body">
         If your link still does not work, try searching for the exercise by name.
       </p>
