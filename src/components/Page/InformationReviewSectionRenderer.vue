@@ -35,7 +35,7 @@
               v-if="key != 'taskDetails' && key != 'judicialFunctions' && key != 'details' && key != 'startDate' || (edit && key == 'startDate' && showDateRange)"
               class="govuk-summary-list__key widerColumn"
             >
-              {{ $filters.lookup(key) }}
+              {{ lookup(key) }}
             </dt>
             <dt
               v-else-if="key == 'details'"
@@ -456,6 +456,11 @@ export default {
       required: false,
       default: true,
     },
+    customisedLookup: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   emits: ['changeField', 'changeTaskDetails', 'changeJudicialFunctions', 'addField', 'removeField'],
   data() {
@@ -522,6 +527,12 @@ export default {
     openModal(index) {
       this.currentIndex = index;
       this.$refs.removeModal.openModal();
+    },
+    lookup(key) {
+      if (this.customisedLookup && this.customisedLookup[key]) {
+        return this.customisedLookup[key];
+      }
+      return this.$filters.lookup(key);
     },
   },
 };
