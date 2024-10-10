@@ -1065,7 +1065,7 @@ const routes = [
             component: ExerciseReportsAgency,
             meta: {
               requiresAuth: true,
-              title: 'Agency | Exercise Reports',
+              title: 'Agency Character Checks | Exercise Reports',
             },
           },
           {
