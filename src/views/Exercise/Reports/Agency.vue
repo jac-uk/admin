@@ -4,7 +4,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
-            Agency
+            Agency Character Checks
           </h2>
         </div>
 

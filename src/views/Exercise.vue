@@ -263,7 +263,7 @@ export default {
           }
           links.push(
             {
-              title: 'Character Checks',
+              title: 'Character Checks Consent',
               link: {
                 path: `${path}/character-checks`,
               },
@@ -305,7 +305,7 @@ export default {
       case 'selection':
         links.push(
           {
-            title: 'Character Checks',
+            title: 'Character Checks Consent',
             link: {
               path: `${path}/character-checks`,
             },
