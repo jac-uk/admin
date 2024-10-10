@@ -750,7 +750,7 @@ const routes = [
             name: 'exercise-tasks-character-checks',
             meta: {
               requiresAuth: true,
-              title: 'Character Checks | Exercise Tasks',
+              title: 'Character Checks Consent | Exercise Tasks',
             },
           },
           {
