@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, GUIDANCE_REFERENCE_V2, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -298,6 +298,7 @@ const lookup = (value) => {
   lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
 
   // character issues guide reference
+  // V1
   lookup[GUIDANCE_REFERENCE.CRIMINAL_OFFENCES] = 'Criminal offences: paras 21-24';
   lookup[GUIDANCE_REFERENCE.MOTERING_OFFENCES] = 'Motoring offences: paras 25-30';
   lookup[GUIDANCE_REFERENCE.FIXED_PENALTY_NOTICES] = 'Fixed penalty notices: paras 31-34';
@@ -305,6 +306,15 @@ const lookup = (value) => {
   lookup[GUIDANCE_REFERENCE.FINANCIAL_VAT_TAX] = 'Financial VAT and Tax: paras 39-43';
   lookup[GUIDANCE_REFERENCE.PROFESSIONAL_CONDUCT] = 'Professional conduct: paras 44-57';
   lookup[GUIDANCE_REFERENCE.FURTHER_DISCLOSURES] = 'Further disclosures: paras 58-65';
+  // V2
+  lookup[GUIDANCE_REFERENCE_V2.CRIMINAL_OFFENCES] = 'Criminal offences: paras 15-17';
+  lookup[GUIDANCE_REFERENCE_V2.MOTERING_OFFENCES] = 'Motoring offences: paras 18-23';
+  lookup[GUIDANCE_REFERENCE_V2.FIXED_PENALTY_NOTICES] = 'Fixed penalty notices: paras 24-26';
+  lookup[GUIDANCE_REFERENCE_V2.FINANCIAL_INSOLVENCY_DEBT] = 'Financial insolvency and debt: paras 28-32';
+  lookup[GUIDANCE_REFERENCE_V2.FINANCIAL_VAT_TAX] = 'Financial VAT and Tax: paras 33-38';
+  lookup[GUIDANCE_REFERENCE_V2.PROFESSIONAL_CONDUCT] = 'Professional conduct: paras 39-51';
+  lookup[GUIDANCE_REFERENCE_V2.CIVIL_PROCEEDINGS] = 'Civil proceedings: paras 52-53';
+  lookup[GUIDANCE_REFERENCE_V2.FURTHER_DISCLOSURES] = 'Further disclosures: paras 56-60';
 
   // assessment methods
   lookup[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES] = 'Self Assessment with competencies';
