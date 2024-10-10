@@ -340,14 +340,15 @@
       </div>
 
       <div
-        v-if="isApplicationVersionGreaterThan1 && application.characterInformationV2 && hasFinancialIssues"
+        v-if="isApplicationVersionGreaterThan1 && characterInformation && hasFinancialIssues"
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
           Issues declared by the candidate
         </dt>
         <FinancialMattersAgencyReport
-          :character-information="application.characterInformationV2"
+          :character-information="characterInformation"
+          :version="applicationOpenDatePost15102024 ? 3 : 2"
         />
       </div>
     </dl>
@@ -501,6 +502,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport.vue';
 import { isApplicationVersionGreaterThan } from '@/helpers/exerciseHelper';
 
@@ -510,6 +512,12 @@ export default {
     FinancialMattersAgencyReport,
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost15102024: 'exerciseDocument/applicationOpenDatePost15102024',
+    }),
+    characterInformation() {
+      return this.applicationOpenDatePost15102024 ? this.application.characterInformationV3 : this.application.characterInformationV2;
+    },
     application() {
       return this.$store.state.application.record;
     },
@@ -530,12 +538,12 @@ export default {
       return bsb ? bsb : {};
     },
     hasFinancialIssues() {
-      return !!(this.application.characterInformationV2 &&
-        (this.application.characterInformationV2.bankruptcies
-          || this.application.characterInformationV2.ivas
-          || this.application.characterInformationV2.lateTaxReturns
-          || this.application.characterInformationV2.lateVatReturns
-          || this.application.characterInformationV2.hmrcFines));
+      return !!(this.characterInformation &&
+        (this.characterInformation.bankruptcies
+          || this.characterInformation.ivas
+          || this.characterInformation.lateTaxReturns
+          || this.characterInformation.lateVatReturns
+          || this.characterInformation.hmrcFines));
     },
   },
 };
