@@ -608,7 +608,7 @@ export default {
     },
     tabs() {
       // exclude shortlisted tab
-      const stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION].includes(stage));
+      const stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION, EXERCISE_STAGE.SCC].includes(stage));
       const tabs = stages.map((stage) => {
         const tab = {};
         tab.ref = stage;
@@ -620,9 +620,6 @@ export default {
           break;
         case EXERCISE_STAGE.SELECTION:
           tab.title = 'Shortlisted';
-          break;
-        case EXERCISE_STAGE.SCC:
-          tab.title = 'Passed SD';
           break;
         case EXERCISE_STAGE.RECOMMENDATION:
           tab.title = 'Recommended to JO';
@@ -638,8 +635,7 @@ export default {
       });
 
       // add additional tabs based on shortlisting methods
-      const additionalTabs = this.additionalTabs.map(ref => ({ ref, title: this.$filters.lookup(ref) }));
-      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
+      return [tabs[0], ...this.additionalTabs, ...tabs.slice(1)];
     },
     additionalTabs() {
       const shortlistingMethods = this.exercise.shortlistingMethods;
@@ -647,17 +643,24 @@ export default {
       // qt
       if (shortlistingMethods.some(method => ['situational-judgement-qualifying-test', 'critical-analysis-qualifying-test'].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
-        tabs.push(ref);
+        tabs.push({ ref, title: this.$filters.lookup(ref) });
       }
       // scenario test
       if (shortlistingMethods.includes('scenario-test-qualifying-test')) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
-        tabs.push(ref);
+        tabs.push({ ref, title: this.$filters.lookup(ref) });
       }
       // sift
       if (shortlistingMethods.some(method => ['name-blind-paper-sift', 'paper-sift'].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
-        tabs.push(ref);
+        tabs.push({ ref, title: this.$filters.lookup(ref) });
+      }
+
+      // passed SD
+      if (this.isProcessingVersion2) {
+        tabs.push({ ref: APPLICATION_STATUS.SELECTION_DAY_PASSED, title: 'Passed SD' });
+      } else {
+        tabs.push({ ref: APPLICATION_STATUS.PASSED_SELECTION, title: 'Passed SD' });
       }
 
       return tabs;
