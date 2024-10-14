@@ -1383,7 +1383,7 @@ function availableReportLinks(exercise) {
       name: 'reasonable-adjustments',
     },
     {
-      title: 'Agency',
+      title: 'Agency Character Checks',
       name: 'agency',
     },
     {
