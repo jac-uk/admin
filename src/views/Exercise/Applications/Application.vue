@@ -457,7 +457,7 @@ export default {
     },
     characterInformationVersion() {
       // All exercises launching on or after 15/10/24 use the V3 Character questions
-      if (this.exercise.applicationOpenDate > new Date('2023-10-15')) {
+      if (this.exercise.applicationOpenDate > new Date('2024-10-15')) {
         return 3;
       }
       return this.applicationVersion >= 2 ? 2 : 1;
