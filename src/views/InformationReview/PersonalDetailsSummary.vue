@@ -219,10 +219,30 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :edit="editable"
+              :edit="false"
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               type="tel"
               field="phone"
+              error-field-name="phone"
+              :is-asked="isAsked"
+              @change-field="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Mobile number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :data="hasPersonalDetails ? personalDetails.mobile : ''"
+              type="mobile"
+              field="mobile"
+              error-field-name="mobile"
               :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
