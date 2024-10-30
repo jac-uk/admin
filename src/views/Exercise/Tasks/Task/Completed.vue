@@ -103,7 +103,14 @@ export default {
   methods: {
     notifyCandidates() {
       // Dont do this async as we just want to fire and forget
-      functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
+      console.log(
+        { exerciseId: this.exerciseId, type: this.type }
+      );
+
+      functions.httpsCallable('sendPublishedFeedbackReportNotifications')(
+        this.exerciseId,
+        this.type
+      );
       return true;
     },
   },
