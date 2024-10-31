@@ -132,7 +132,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
@@ -215,7 +215,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
@@ -298,7 +298,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
@@ -375,7 +375,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
@@ -488,7 +488,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
@@ -552,7 +552,7 @@
                   scope="col"
                   class="govuk-table__header govuk-table__header--numeric"
                 >
-                  % Change from previous stage
+                  % Change from previous
                 </th>
               </tr>
             </thead>
@@ -617,7 +617,7 @@
                   scope="col"
                   class="govuk-table__header govuk-table__header--numeric"
                 >
-                  % Change from previous stage
+                  % Change from previous
                 </th>
               </tr>
             </thead>
@@ -681,7 +681,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                % Change from previous stage
+                % Change from previous
               </th>
             </tr>
           </thead>
