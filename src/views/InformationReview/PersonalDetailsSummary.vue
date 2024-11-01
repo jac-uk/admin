@@ -244,7 +244,7 @@
               field="mobile"
               error-field-name="mobile"
               :is-asked="isAsked"
-              @change-field="changeUserDetails"
+              @change-field="changeMobile"
             />
           </dd>
         </div>
@@ -680,6 +680,10 @@ export default {
           VATNumbers: this.personalDetails.VATNumbers.filter((_, i) => i !== index),
         });
       }
+    },
+    changeMobile(obj) {
+      obj.mobileVerifiedAt = null;
+      this.changeUserDetails(obj);
     },
     changeUserDetails(obj) {
       if (obj.firstName || obj.lastName) {
