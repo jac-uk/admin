@@ -40,6 +40,7 @@ import { beforeRouteEnter } from './helper';
 import { getTaskSteps } from '@/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -103,7 +104,7 @@ export default {
   methods: {
     notifyCandidates() {
       // Dont do this async as we just want to fire and forget
-      functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
+      httpsCallable(functions, 'sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
       return true;
     },
   },
