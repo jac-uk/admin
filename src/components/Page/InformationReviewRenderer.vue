@@ -81,6 +81,25 @@
       </div>
 
       <div
+        v-else-if="isMobile"
+      >
+        <EditableField
+          :id="field"
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+          type="mobile"
+          :extension="extension"
+          :is-asked="isAsked"
+          :is-required="isRequired"
+          :display-label="displayLabel"
+          :error-field-name="errorFieldName"
+          @change-field="changeField"
+        />
+      </div>
+
+      <div
         v-else-if="isMultiSelection"
       >
         <EditableField
@@ -314,6 +333,9 @@ export default {
     },
     isPhone() {
       return this.$props.type === 'tel';
+    },
+    isMobile() {
+      return this.type === 'mobile';
     },
     isSelection() {
       return this.$props.type === 'selection';
