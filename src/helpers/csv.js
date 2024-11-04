@@ -8,9 +8,11 @@
  * @returns
  */
 const escapeValue = (value) => {
+
   // Convert the value to a string and wrap in quotes if it contains commas or quotes
   const stringValue = String(value);
-  if (stringValue.includes(',') || stringValue.includes('"')) {
+  if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes(':') || stringValue.includes(';') || stringValue.includes('\n')) {
+    console.log(value);
     // Escape internal double quotes and wrap the value in quotes
     return `"${stringValue.replace(/"/g, '""')}"`;
   }
