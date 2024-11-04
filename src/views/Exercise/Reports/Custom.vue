@@ -815,6 +815,7 @@ export default {
     downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
       const csv = [[...header]];
+
       for (let i = 0; i < this.data.data.length; i++) {
         csv.push([...this.columns.map(col => this.data.data[i][col])]);
       }
