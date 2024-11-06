@@ -47,7 +47,7 @@
               </button>
               <button
                 class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-                :disabled="isLoading || !data"
+                :disabled="isLoading || !data || columns.length === 0"
                 @click="downloadReport"
               >
                 Download Report
