@@ -149,10 +149,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].gender.male) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th
@@ -166,7 +164,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].gender.female) }}
               </td>
@@ -185,9 +183,7 @@
               <td
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].gender.declaration) }}
-              </td>
+              />
             </tr>
           </tbody>
         </table>
@@ -232,7 +228,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].ethnicity.bame) }}
               </td>
@@ -249,10 +245,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].ethnicity.white) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
@@ -268,9 +262,7 @@
               <td
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].ethnicity.declaration) }}
-              </td>
+              />
             </tr>
           </tbody>
         </table>
@@ -312,7 +304,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].disability.yes) }}
               </td>
@@ -326,10 +318,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].disability.no) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
@@ -345,9 +335,7 @@
               <td
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].disability.total) }}
-              </td>
+              />
             </tr>
           </tbody>
         </table>
@@ -392,10 +380,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].professionalBackground.barrister) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
@@ -406,7 +392,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].professionalBackground.cilex) }}
               </td>
@@ -420,7 +406,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].professionalBackground.solicitor) }}
               </td>
@@ -435,10 +421,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].professionalBackground.other) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
 
             <tr class="govuk-table__row">
@@ -455,9 +439,7 @@
               <td
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].professionalBackground.declaration) }}
-              </td>
+              />
             </tr>
           </tbody>
         </table>
@@ -502,7 +484,7 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
                 {{ showChange(diversity[activeTab].attendedUKStateSchool.attendedUKStateSchool) }}
               </td>
@@ -521,9 +503,7 @@
               <td
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].attendedUKStateSchool.declaration) }}
-              </td>
+              />
             </tr>
           </tbody>
         </table>
@@ -566,10 +546,8 @@
                 </td>
                 <td
                   v-if="isNotApplied"
-                  class="govuk-table__cell govuk-table__cell--numeric"
-                >
-                  {{ showChange(diversity[activeTab].firstGenerationUniversity.firstGenerationUniversity) }}
-                </td>
+                  class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+                />
               </tr>
               <tr class="govuk-table__row">
                 <th class="govuk-table__header">
@@ -585,9 +563,7 @@
                 <td
                   v-if="isNotApplied"
                   class="govuk-table__cell govuk-table__cell--numeric"
-                >
-                  {{ showChange(diversity[activeTab].firstGenerationUniversity.declaration) }}
-                </td>
+                />
               </tr>
             </tbody>
           </table>
@@ -631,7 +607,7 @@
                 </td>
                 <td
                   v-if="isNotApplied"
-                  class="govuk-table__cell govuk-table__cell--numeric"
+                  class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
                 >
                   {{ showChange(diversity[activeTab].parentsNotAttendedUniversity.parentsNotAttendedUniversity) }}
                 </td>
@@ -650,9 +626,7 @@
                 <td
                   v-if="isNotApplied"
                   class="govuk-table__cell govuk-table__cell--numeric"
-                >
-                  {{ showChange(diversity[activeTab].parentsNotAttendedUniversity.declaration) }}
-                </td>
+                />
               </tr>
             </tbody>
           </table>
@@ -701,10 +675,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].emp.applied) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th
@@ -718,10 +690,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].emp.ethnicity) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <tr class="govuk-table__row">
               <th
@@ -735,10 +705,8 @@
               </td>
               <td
                 v-if="isNotApplied"
-                class="govuk-table__cell govuk-table__cell--numeric"
-              >
-                {{ showChange(diversity[activeTab].emp.gender) }}
-              </td>
+                class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
+              />
             </tr>
             <!-- <tr class="govuk-table__row">
               <th class="govuk-table__header">
@@ -771,6 +739,7 @@ import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { cloneDeep } from 'lodash';
 
 export default {
   name: 'Diversity',
@@ -782,7 +751,7 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      diversity: null,
+      rawDiversity: null,
       unsubscribe: null,
       activeTab: '',
     };
@@ -873,6 +842,27 @@ export default {
     isNotApplied() {
       return this.activeTab !== 'applied';
     },
+    diversity() {
+      const diversity = cloneDeep(this.rawDiversity);
+      if (this.rawDiversity) {
+        for (let i = 1; i < this.tabs.length; i++) {
+          const tab = this.tabs[i];
+          const prevTab = this.tabs[i - 1];
+          const report = diversity[tab.ref];
+          const prevReport = diversity[prevTab.ref];
+          if (!report) break;
+
+          Object.keys(report).forEach((key) => {
+            Object.keys(report[key]).forEach((subKey) => {
+              if (!['total'].includes(subKey)) {
+                report[key][subKey].change = report[key][subKey].percent - prevReport[key][subKey].percent;
+              }
+            });
+          });
+        }
+      }
+      return diversity;
+    },
   },
   watch: {
     tabs: {
@@ -893,7 +883,7 @@ export default {
       doc(firestore, `exercises/${this.exercise.id}/reports/diversity`),
       (snap) => {
         if (snap.exists) {
-          this.diversity = vuexfireSerialize(snap);
+          this.rawDiversity = vuexfireSerialize(snap);
         }
       });
   },
@@ -904,6 +894,9 @@ export default {
   },
   methods: {
     showChange(value) {
+      if (value.change > 0) {
+        return `+${this.$filters.formatNumber(value.change, 2)}%`;
+      }
       return `${this.$filters.formatNumber(value.change || 0, 2)}%`;
     },
     async refreshReport() {
