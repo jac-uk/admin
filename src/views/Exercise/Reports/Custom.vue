@@ -325,8 +325,6 @@ import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
@@ -342,8 +340,6 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
-    CheckboxGroup,
-    CheckboxItem,
   },
   mixins: [permissionMixin],
   data() {
@@ -633,6 +629,12 @@ export default {
     selectedStageStatus: {
       handler: function() {
         this.getApplicationRecords();
+      },
+      deep: true,
+    },
+    columns: {
+      handler: function() {
+        this.data = null;
       },
       deep: true,
     },
