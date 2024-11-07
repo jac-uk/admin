@@ -108,11 +108,11 @@
         <div
           v-for="tab in summaryTabs"
           :key="tab.ref"
+          class="govuk-!-margin-top-8"
         >
-          <h4 class="govuk-heading">
+          <p class="govuk-hint">
             {{ tab.title }}
-          </h4>
-
+          </p>
           <table class="govuk-table table-with-border">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
