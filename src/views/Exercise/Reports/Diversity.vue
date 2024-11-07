@@ -104,9 +104,208 @@
         {{ activeTabTitle }}
       </h3>
 
-      <p v-if="activeTab == 'summary'">
-        Summary report coming soon
-      </p>
+      <div v-if="activeTab == 'summary'">
+        <div
+          v-for="tab in summaryTabs"
+          :key="tab.ref"
+        >
+          <h4 class="govuk-heading">
+            {{ tab.title }}
+          </h4>
+
+          <table class="govuk-table table-with-border">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Gender
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  % Change from previous
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Female
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].gender.female) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Ethnicity
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  % Change from previous
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th
+                  scope="row"
+                  class="govuk-table__header"
+                >
+                  Ethnic minorities
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].ethnicity.bame) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Disability
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  % Change from previous
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Yes
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].disability.yes) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Professional background
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  % Change from previous
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  CILEx
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].professionalBackground.cilex) }}
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Solicitor
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].professionalBackground.solicitor) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table
+            v-if="'attendedUKStateSchool' in diversity[tab.ref]"
+            class="govuk-table"
+          >
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Social mobility
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  % Change from previous
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Attended UK state school
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                  {{ showChange(diversity[tab.ref].attendedUKStateSchool.attendedUKStateSchool) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <template v-else-if="applicationOpenDatePost01042023 && 'parentsNotAttendedUniversity' in diversity[tab.ref]">
+            <table class="govuk-table">
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Social mobility
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header govuk-table__header--numeric"
+                  >
+                    % Change from previous
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                  <th class="govuk-table__header">
+                    Parents did not attend University
+                  </th>
+                  <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
+                    {{ showChange(diversity[tab.ref].parentsNotAttendedUniversity.parentsNotAttendedUniversity) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
 
       <div v-else-if="diversity[activeTab]">
         <table class="govuk-table table-with-border">
@@ -827,6 +1026,9 @@ export default {
       }
 
       return tabs;
+    },
+    summaryTabs() {
+      return this.tabs.filter((_, index) => index > 0 && index < this.tabs.length - 1);
     },
     showTabs() {
       return this.diversity && this.availableStages?.length && this.diversity?.[this.availableStages[0]];  // check if report data is available
