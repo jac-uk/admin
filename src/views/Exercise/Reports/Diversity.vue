@@ -938,7 +938,6 @@ import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
-import { cloneDeep } from 'lodash';
 
 export default {
   name: 'Diversity',
@@ -950,7 +949,7 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      rawDiversity: null,
+      diversity: null,
       unsubscribe: null,
       activeTab: '',
     };
@@ -1031,7 +1030,7 @@ export default {
       return this.tabs.filter((_, index) => index > 0 && index < this.tabs.length - 1);
     },
     showTabs() {
-      return this.diversity && this.availableStages?.length && this.diversity?.[this.availableStages[0]];  // check if report data is available
+      return this.diversity && this.tabs?.length && this.diversity?.[this.tabs[0].ref];  // check if report data is available
     },
     activeTabTitle() {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
@@ -1043,27 +1042,6 @@ export default {
     },
     isNotApplied() {
       return this.activeTab !== 'applied';
-    },
-    diversity() {
-      const diversity = cloneDeep(this.rawDiversity);
-      if (this.rawDiversity) {
-        for (let i = 1; i < this.tabs.length; i++) {
-          const tab = this.tabs[i];
-          const prevTab = this.tabs[i - 1];
-          const report = diversity[tab.ref];
-          const prevReport = diversity[prevTab.ref];
-          if (!report) break;
-
-          Object.keys(report).forEach((key) => {
-            Object.keys(report[key]).forEach((subKey) => {
-              if (!['total'].includes(subKey)) {
-                report[key][subKey].change = report[key][subKey].percent - prevReport[key][subKey].percent;
-              }
-            });
-          });
-        }
-      }
-      return diversity;
     },
   },
   watch: {
@@ -1085,7 +1063,7 @@ export default {
       doc(firestore, `exercises/${this.exercise.id}/reports/diversity`),
       (snap) => {
         if (snap.exists) {
-          this.rawDiversity = vuexfireSerialize(snap);
+          this.diversity = vuexfireSerialize(snap);
         }
       });
   },
