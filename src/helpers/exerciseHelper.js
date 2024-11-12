@@ -1539,7 +1539,7 @@ function isJAC00187(env, referenceNumber) {
 function canApplyFullApplicationSubmitted(exercise) {
   if (!exercise) return false;
 
-  const selectionProcess = exercise._applicationContent.selection || {};
+  const selectionProcess = exercise?._applicationContent?.selection || {};
   const isStagedExercise = Object.values(selectionProcess).includes(true);
   const applyFullApplicationSubmitted = isStagedExercise && exercise.applicationOpenDate >= new Date(2024, 7, 18);
 
