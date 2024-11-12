@@ -19,7 +19,7 @@
                 :key="option"
                 :value="option"
               >
-                {{ $filters.lookup(option) }}
+                {{ $filters.lookup(option) }} assessor
               </option>
             </Select>
             <TextField

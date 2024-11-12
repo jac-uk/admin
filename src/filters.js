@@ -278,9 +278,14 @@ const lookup = (value) => {
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DECLINED] = 'Declined';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DELETED] = 'Deleted';
 
-  lookup[ASSESSOR_TYPES.PROFESSIONAL] = 'Professional assessor';
-  lookup[ASSESSOR_TYPES.JUDICIAL] = 'Judicial assessor';
-  lookup[ASSESSOR_TYPES.PERSONAL] = 'Personal assessor';
+  // Note that when using the assessor lookups below you need to hardcode the word 'assessor' into the template
+  // as 'professional' is used in other places so cannot be used here to map to 'Profeesional assessor'
+  // lookup[ASSESSOR_TYPES.PROFESSIONAL] = 'Professional assessor';
+  // lookup[ASSESSOR_TYPES.JUDICIAL] = 'Judicial assessor';
+  // lookup[ASSESSOR_TYPES.PERSONAL] = 'Personal assessor';
+  lookup[ASSESSOR_TYPES.PROFESSIONAL] = 'Professional';
+  lookup[ASSESSOR_TYPES.JUDICIAL] = 'Judicial';
+  lookup[ASSESSOR_TYPES.PERSONAL] = 'Personal';
 
   // character issues offence category
   lookup[OFFENCE_CATEGORY.SINGLE_MOTORING_OFFENCE] = 'Single motoring offence';
