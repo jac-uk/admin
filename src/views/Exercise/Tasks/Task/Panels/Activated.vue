@@ -378,7 +378,7 @@ export default {
             isCompleted: panel.status === PANEL_STATUS.SUBMITTED,
             report: panel.reports ? panel.reports[applicationId] : null,
             outcome: panel.outcome,
-            changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {}
+            changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
           };
           row.score = getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId], row.changes);
           rows.push(row);
@@ -460,14 +460,14 @@ export default {
       });
       this.btnNext();
     },
-    async onScoreSheetUpdated({id, ref, parent, newValue}) {
+    async onScoreSheetUpdated({ id, ref, parent, newValue }) {
       const panel = this.panels.find(item => item.applicationIds.indexOf(id) >= 0);
       const originalValue = parent ? panel.scoreSheet[id][parent][ref] : panel.scoreSheet[id][ref];
       const valueToSave = newValue === originalValue ? deleteField() : newValue;
       const saveData = {};
       if (parent) saveData[`changes.${id}.${parent}.${ref}`] = valueToSave;
       else saveData[`changes.${id}.${ref}`] = valueToSave;
-      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData});
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData });
       return true;
     },
 

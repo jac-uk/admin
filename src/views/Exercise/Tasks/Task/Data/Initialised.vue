@@ -194,9 +194,9 @@ export default {
     btnCancelAdd() {
       this.$refs.modalAddMarkingSchemeItem.closeModal();
     },
-    async onChangeIncludeInScore(group, rowIndex) {
+    async onChangeIncludeInScore() {
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { markingScheme: this.markingScheme } } );
-    }
+    },
   },
 };
 </script>

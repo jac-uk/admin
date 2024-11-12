@@ -16,7 +16,7 @@
           @click="btnCopy"
         >Copy</a>
         <a
-          v-if="hasTool(SCORESHEET_TOOLS.EDIT) && this.editable"
+          v-if="hasTool(SCORESHEET_TOOLS.EDIT) && editable"
           class="govuk-link govuk-!-margin-right-4"
           @click="btnToggle('editMode')"
         ><span v-if="editMode">View</span><span v-else>Edit</span></a>
@@ -259,6 +259,7 @@ export default {
       default: () => [],
     },
   },
+  emits: ['updated'],
   data() {
     return {
       showDiversity: false,
@@ -393,7 +394,7 @@ export default {
         id: row.id,
         parent: column.parent,
         ref: column.ref,
-        newValue: newValue
+        newValue: newValue,
       });
     },
     updateModeration(row, event) {

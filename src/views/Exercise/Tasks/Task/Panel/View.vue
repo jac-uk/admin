@@ -273,7 +273,7 @@ export default {
           fullName: getApplicationData(this.task, applicationId).fullName,
           scoreSheet: this.panel.scoreSheet[applicationId],
           // report: this.panel.reports ? this.panel.reports[applicationId] : null,
-          changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {}
+          changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
         };
         row.score = getScoreSheetTotal(this.task.markingScheme, this.panel.scoreSheet[applicationId], row.changes),
         rows.push(row);
@@ -437,14 +437,14 @@ export default {
       await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
       return true;
     },
-    async onScoreSheetUpdated({id, ref, parent, newValue}) {
+    async onScoreSheetUpdated({ id, ref, parent, newValue }) {
       const panel = this.panel;
       const originalValue = parent ? panel.scoreSheet[id][parent][ref] : panel.scoreSheet[id][ref];
       const valueToSave = newValue === originalValue ? deleteField() : newValue;
       const saveData = {};
       if (parent) saveData[`changes.${id}.${parent}.${ref}`] = valueToSave;
       else saveData[`changes.${id}.${ref}`] = valueToSave;
-      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData});
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData });
       return true;
     },
   },

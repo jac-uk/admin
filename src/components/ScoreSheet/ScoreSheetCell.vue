@@ -33,7 +33,9 @@
           :key="option.value"
           :value="option.value"
         >
-          <template v-if="lookupColumnValue(row, column) && lookupColumnValue(row, column) != option.label">{{ lookupColumnValue(row, column) }} &rarr; </template>{{ option.label }}
+          <template v-if="lookupColumnValue(row, column) && lookupColumnValue(row, column) != option.label">
+            {{ lookupColumnValue(row, column) }} &rarr;
+          </template>{{ option.label }}
         </option>
       </select>
     </template>
@@ -103,7 +105,7 @@ export default {
       return markingTypeGetOptions(type);
     },
     lookupColumnValue(row, column) {
-      let value, changedValue;
+      let value;
       if (column.parent) {
         value = row.scoreSheet[column.parent][column.ref];
       } else {
