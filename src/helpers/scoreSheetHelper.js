@@ -22,13 +22,15 @@ export {
   markingScheme2ColumnHeaders,
   markingTypeHasOptions,
   markingTypeGetOptions,
-  getScoreSheetItemTotal
+  getScoreSheetItemTotal,
+  getApplicationData
 };
 
 const SCORESHEET_TOOLS = {
   FIND: 'find',
   COPY: 'copy',
   PASTE: 'paste',
+  EDIT: 'edit',
   SCORE: 'score',
   DIVERSITY: 'diversity',
 };
@@ -86,6 +88,18 @@ const MARKING_TYPE = {
       { value: 'Basic', label: 'Basic' },
       { value: 'Medium', label: 'Medium' },
       { value: 'High', label: 'High' },
+    ],
+    includeInScore: false,
+  },
+  REASON_FOR_CHANGE: {
+    value: 'reasonForChange',
+    label: 'Reason for change',
+    options: [
+      { value: '', label: '' },
+      { value: 'moderation', label: 'Moderation' },
+      { value: 'human-error', label: 'Human error' },
+      { value: 'scc-change', label: 'Changed by SCC' },
+      { value: 'other', label: 'Other' },
     ],
     includeInScore: false,
   },
@@ -152,27 +166,31 @@ function getCompleteScoreSheet(task) {
   return populatedScoreSheet;
 }
 
-function getScoreSheetTotal(markingScheme, scoreSheet) {
+function getScoreSheetTotal(markingScheme, scoreSheet, changes) {
   let score = 0;
   if (!markingScheme) return score;
   if (!scoreSheet) return score;
   markingScheme.forEach(item => {
     if (item.type === MARKING_TYPE.GROUP.value) {
       item.children.forEach(child => {
-        score += getScoreSheetItemTotal(child, scoreSheet[item.ref]);
+        const change = changes && changes[item.ref] && changes[item.ref][child.ref];
+        score += getScoreSheetItemTotal(child, scoreSheet[item.ref], change);
       });
     } else {
-      score += getScoreSheetItemTotal(item, scoreSheet);
+      const change = changes && changes[item.ref];
+      score += getScoreSheetItemTotal(item, scoreSheet, change);
     }
   });
   return score;
 }
 
-function getScoreSheetItemTotal(item, scoreSheet) {
+function getScoreSheetItemTotal(item, scoreSheet, change) {
+  // console.log('getScoreSheetItemTotal', item, scoreSheet, change);
   if (item.includeInScore) {
     switch (item.type) {
     case MARKING_TYPE.GRADE.value:
       if (scoreSheet[item.ref] && GRADE_VALUES[scoreSheet[item.ref]]) {
+        if (change) return GRADE_VALUES[change];  // only returns change if we have an original grade
         return GRADE_VALUES[scoreSheet[item.ref]];
       }
       break;
@@ -310,4 +328,13 @@ function markingScheme2ColumnHeaders(markingScheme) {
     }
   });
   return headers;
+}
+
+function getApplicationData(task, applicationId) {
+  if (!task) return {};
+  if (!applicationId) return {};
+  if (!task.applications) return {};
+  const application = task.applications.find(application => application.id === applicationId);
+  if (!application) return {};
+  return application;
 }

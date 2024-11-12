@@ -22,10 +22,12 @@
       :key="group.ref"
     >
       <Table
+        class="marking-scheme"
         data-key="ref"
         :data="group.children"
         :columns="[
           { title: $filters.lookup(group.ref) },
+          { title: '' },
           { title: '' },
           { title: '' },
         ]"
@@ -37,6 +39,24 @@
           </TableCell>
           <TableCell>
             {{ getMarkingType(row.type).label }}
+          </TableCell>
+          <TableCell>
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input
+                  :id="`include-in-score-${index}`"
+                  v-model="row.includeInScore"
+                  class="govuk-checkboxes__input"
+                  type="checkbox"
+                  @click.stop
+                  @change="onChangeIncludeInScore(group, index)"
+                >
+                <label
+                  class="govuk-label govuk-checkboxes__label"
+                  :for="`include-in-score-${index}`"
+                >Include in score</label>
+              </div>
+            </div>
           </TableCell>
           <TableCell>
             <ActionButton
@@ -174,6 +194,15 @@ export default {
     btnCancelAdd() {
       this.$refs.modalAddMarkingSchemeItem.closeModal();
     },
+    async onChangeIncludeInScore(group, rowIndex) {
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { markingScheme: this.markingScheme } } );
+    }
   },
 };
 </script>
+
+<style>
+.marking-scheme td {
+  vertical-align: middle;
+}
+</style>

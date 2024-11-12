@@ -16,13 +16,13 @@
       v-if="!hasTaskStarted"
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      {{ $filters.lookup(type) }} scoring will start on {{ $filters.formatDate(task.startDate) }}
+      {{ $filters.lookup(type) }} grading will start on {{ $filters.formatDate(task.startDate) }}
     </p>
     <p
       v-else-if="!hasAllPanelsCompleted"
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      {{ $filters.lookup(type) }} scoring has started and panels are providing scores.
+      {{ $filters.lookup(type) }} grading has started and panels are providing grades.
     </p>
     <p
       v-else-if="isModerationRequired"
@@ -217,13 +217,14 @@
       :editable="canEditScoreSheet"
       :moderation="isModerationRequired"
       :tools="scoreSheetTools"
+      @updated="onScoreSheetUpdated"
     >
       <template #columns-before="{row}">
         <TableCell
           class="table-cell-application nowrap sticky-left"
           :class="{ 'highlight': row.highlight }"
         >
-          {{ row.referenceNumber }}
+          {{ row.fullName || row.referenceNumber }}
         </TableCell>
         <TableCell
           class="table-cell-value nowrap"
@@ -243,6 +244,7 @@
 </template>
 
 <script>
+import { deleteField } from '@firebase/firestore';
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
@@ -252,7 +254,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
-import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity } from '@/helpers/scoreSheetHelper';
+import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity, getApplicationData } from '@/helpers/scoreSheetHelper';
 import { functions } from '@/firebase';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
@@ -279,6 +281,7 @@ export default {
         SCORESHEET_TOOLS.FIND,
         SCORESHEET_TOOLS.COPY,
         SCORESHEET_TOOLS.PASTE,
+        // SCORESHEET_TOOLS.EDIT,
         SCORESHEET_TOOLS.SCORE,
         SCORESHEET_TOOLS.DIVERSITY,
       ],
@@ -324,7 +327,7 @@ export default {
         });
     },
     canEditScoreSheet() {
-      return false;
+      return true;
     },
     isModerationRequired() {
       return false;
@@ -370,12 +373,14 @@ export default {
             },
             id: applicationId,
             referenceNumber: panel.applications[applicationId].referenceNumber,
+            fullName: getApplicationData(this.task, applicationId).fullName,
             scoreSheet: panel.scoreSheet[applicationId],
-            score: getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId]),
             isCompleted: panel.status === PANEL_STATUS.SUBMITTED,
             report: panel.reports ? panel.reports[applicationId] : null,
             outcome: panel.outcome,
+            changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {}
           };
+          row.score = getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId], row.changes);
           rows.push(row);
         });
       });
@@ -455,6 +460,17 @@ export default {
       });
       this.btnNext();
     },
+    async onScoreSheetUpdated({id, ref, parent, newValue}) {
+      const panel = this.panels.find(item => item.applicationIds.indexOf(id) >= 0);
+      const originalValue = parent ? panel.scoreSheet[id][parent][ref] : panel.scoreSheet[id][ref];
+      const valueToSave = newValue === originalValue ? deleteField() : newValue;
+      const saveData = {};
+      if (parent) saveData[`changes.${id}.${parent}.${ref}`] = valueToSave;
+      else saveData[`changes.${id}.${ref}`] = valueToSave;
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData});
+      return true;
+    },
+
   },
 };
 </script>

@@ -15,6 +15,11 @@
           class="govuk-link govuk-!-margin-right-4"
           @click="btnCopy"
         >Copy</a>
+        <a
+          v-if="hasTool(SCORESHEET_TOOLS.EDIT) && this.editable"
+          class="govuk-link govuk-!-margin-right-4"
+          @click="btnToggle('editMode')"
+        ><span v-if="editMode">View</span><span v-else>Edit</span></a>
       </div>
       <div class="govuk-grid-column-one-half text-right">
         <a
@@ -211,7 +216,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '../Page/TitleBar.vue';
 import PredictiveSearch from '@jac-uk/jac-kit/draftComponents/Form/PredictiveSearch.vue';
-import { SCORESHEET_TOOLS, markingScheme2Columns, markingScheme2ColumnHeaders } from '../../helpers/scoreSheetHelper';
+import { SCORESHEET_TOOLS, MARKING_TYPE, markingScheme2Columns, markingScheme2ColumnHeaders } from '../../helpers/scoreSheetHelper';
 import ScoreSheetCell from './ScoreSheetCell.vue';
 
 export default {
@@ -258,6 +263,7 @@ export default {
     return {
       showDiversity: false,
       showScore: false,
+      editMode: false,
       selectedApplication: null,
       SCORESHEET_TOOLS: SCORESHEET_TOOLS,
     };
@@ -269,8 +275,25 @@ export default {
     scoreSheetHeaders() {
       return markingScheme2ColumnHeaders(this.markingScheme);
     },
+    isEditable() {
+      if (this.editable) {
+        if (this.hasTool(SCORESHEET_TOOLS.EDIT)) {
+          return this.editMode;
+        } else {
+          return true;
+        }
+      }
+      return false;
+    },
     scoreSheetColumns() {
-      return markingScheme2Columns(this.markingScheme, this.editable);
+      const columns = markingScheme2Columns(this.markingScheme, this.isEditable);
+      columns.push({
+        title: 'Reason for change',
+        ref: 'Reason for change',
+        type: MARKING_TYPE.REASON_FOR_CHANGE.value,
+        editable: this.isEditable,
+      });
+      return columns;
     },
     tableColumns() {
       let columns = [];
@@ -366,7 +389,12 @@ export default {
       this[ident] = !this[ident];
     },
     updateScoreSheet(row, column, newValue) {
-      console.log('updateScoreSheet', row.id, column.parent, column.ref, newValue);
+      this.$emit('updated', {
+        id: row.id,
+        parent: column.parent,
+        ref: column.ref,
+        newValue: newValue
+      });
     },
     updateModeration(row, event) {
       console.log('updateModeration', row, event);
@@ -386,6 +414,9 @@ export default {
 </script>
 
 <style lang="scss">
+.govuk-link {
+  cursor: pointer;
+}
 .score-sheet {
   table {
     border: 1px solid govuk-colour("mid-grey") !important;

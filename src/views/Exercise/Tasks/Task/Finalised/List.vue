@@ -80,14 +80,7 @@
           {{ row.count }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          <RouterLink
-            v-if="editable"
-            :to="{ name: 'exercise-task-finalised-score', params: { id: exercise.id, type: type, score: row.score } }"
-            class="govuk-link"
-          >
-            {{ $filters.formatNumber(row.score, 2) }}
-          </RouterLink>
-          <span v-else>{{ $filters.formatNumber(row.score, 2) }}</span>
+          {{ $filters.formatNumber(row.score, 2) }}
         </TableCell>
         <template v-if="showDiversity">
           <TableCell :title="tableColumns[3].title">

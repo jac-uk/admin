@@ -228,6 +228,11 @@ const CAPABILITIES = {
     label: 'MWE',
     description: 'Managing Work Efficiently',
   },
+  WE: {
+    value: 'WE',
+    label: 'WE',
+    description: 'Working Effectively',
+  },
   OVERALL: {
     value: 'OVERALL',
     label: 'OVERALL',
@@ -1355,7 +1360,7 @@ function availableStatuses(exercise, stage) {
   }
 }
 
-function availableReportLinks(exercise) {
+function availableReportLinks(exercise) {   // TODO this code is a bit specific to Admin UI so not sure it should be in this helper
   const path = `/exercise/${exercise.id}/reports`;
   const links = [
     {
@@ -1404,35 +1409,38 @@ function availableReportLinks(exercise) {
     },
   ];
 
-  if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
-    if (
-      (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
-      || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
-    ) {
+  if (exercise._processingVersion < 3) {
+    if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+      if (
+        (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
+        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+      ) {
+        links.push(
+          {
+            title: 'Sift',
+            path: `${path}/sift`,
+          }
+        );
+      }
+    }
+    if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
       links.push(
         {
-          title: 'Sift',
-          path: `${path}/sift`,
+          title: 'Scenario Responses',
+          path: `${path}/scenario`,
+        }
+      );
+    }
+    if (exercise.selectionDays) {
+      links.push(
+        {
+          title: 'Selection day',
+          path: `${path}/selection`,
         }
       );
     }
   }
-  if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
-    links.push(
-      {
-        title: 'Scenario Responses',
-        path: `${path}/scenario`,
-      }
-    );
-  }
-  if (exercise.selectionDays) {
-    links.push(
-      {
-        title: 'Selection day',
-        path: `${path}/selection`,
-      }
-    );
-  }
+
   if (exercise?._applicationContent?.registration?.commissionerConflicts) {
     links.push(
       {
