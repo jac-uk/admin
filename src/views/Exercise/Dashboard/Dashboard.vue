@@ -136,7 +136,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { applicationCounts, availableStages } from '@/helpers/exerciseHelper';
+import { applicationCounts, applicationRecordCounts, availableStages } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
@@ -216,6 +216,9 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
+    },
     diversityReportType() {
       const types = [
         'gender',
@@ -245,22 +248,24 @@ export default {
       });
     },
     labels() {
+      console.log('this.applicationCounts', this.applicationCounts);
+
       return this.availableStages.map((stage) => {
         const tab = {};
         tab.key = stage;
         switch (stage) {
         case EXERCISE_STAGE.SHORTLISTING:
         case EXERCISE_STAGE.REVIEW:
-          tab.title = 'Applied';
+          tab.title = `Applied (${this.applicationCounts.applied || 0})`;
           break;
         case EXERCISE_STAGE.SELECTION:
-          tab.title = 'Shortlisted';
+          tab.title = `Shortlisted (${this.applicationRecordCounts[EXERCISE_STAGE.SELECTION] || 0})`;
           break;
         case EXERCISE_STAGE.SCC:
-          tab.title = 'Passed SD';
+          tab.title = `Passed SD (${this.applicationRecordCounts[EXERCISE_STAGE.SCC] || 0})`;
           break;
         case EXERCISE_STAGE.RECOMMENDATION:
-          tab.title = 'Recommended to JO';
+          tab.title = `Recommended to JO (${this.applicationRecordCounts[EXERCISE_STAGE.RECOMMENDATION] || 0})`;
           break;
         default:
           tab.title = this.$filters.lookup(stage);

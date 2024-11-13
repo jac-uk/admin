@@ -710,7 +710,12 @@ function isClosed(exercise) {
   return isApproved(exercise) && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
 }
 function applicationCounts(exercise) {
-  return exercise && exercise._applications ? exercise._applications : {};
+  const applicationCounts = exercise && exercise._applications ? { ...exercise._applications } : {};
+  // include withdrawn applications in applied count
+  if (applicationCounts && applicationCounts.applied) {
+    applicationCounts.applied = applicationCounts.applied + (applicationCounts.withdrawn || 0);
+  }
+  return applicationCounts;
 }
 function applicationRecordCounts(exercise) {
   return isProcessing(exercise) ? exercise._applicationRecords : {};
