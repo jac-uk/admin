@@ -319,6 +319,7 @@ export default {
       return this.$store.state.panel.applications;
     },
     totalRequiredApplications() {
+      if (!this.panel.applicationIds) return 0;
       if (this.panel.applicationIdsOptional && this.panel.applicationIdsOptional.length) {
         return this.panel.applicationIds.length - this.panel.applicationIdsOptional.length;
       }
