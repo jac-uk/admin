@@ -248,8 +248,6 @@ export default {
       });
     },
     labels() {
-      console.log('this.applicationCounts', this.applicationCounts);
-
       return this.availableStages.map((stage) => {
         const tab = {};
         tab.key = stage;
