@@ -1188,9 +1188,24 @@ export default {
       });
       data.push(['Disability comparison statistics']);
 
+      const styles = {
+        cell: {
+          'B1': {
+            horizontalAlignment: 'center',
+          },
+          'B2': {
+            horizontalAlignment: 'center',
+          },
+          [`${this.getAlphabet(4 + states.length)}2`]: {
+            horizontalAlignment: 'center',
+          },
+        },
+      };
+
       return {
         data,
         merges,
+        styles,
       };
     },
     exportData(stage) {
@@ -1198,7 +1213,7 @@ export default {
       if (stage) {
         title = `${title} - ${stage}`;
       }
-      const { data, merges } = this.gatherReportData(stage);
+      const { data, merges, styles } = this.gatherReportData(stage);
       downloadXLSX(
         data,
         {
@@ -1206,7 +1221,8 @@ export default {
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
           merges,
-        }
+        },
+        styles
       );
     },
     getAlphabet(number) {
