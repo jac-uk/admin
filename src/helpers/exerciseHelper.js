@@ -1212,7 +1212,10 @@ function getStageMoveBackStatuses(exercise, stage) {
     switch (stage) {
     case EXERCISE_STAGE.RECOMMENDATION:
       return [APPLICATION_STATUS.RECONSIDER];
+    case EXERCISE_STAGE.SELECTION:
+      return [APPLICATION_STATUS.FULL_APPLICATION_NOT_SUBMITTED];
     }
+
   }
   return [];
 }
@@ -1244,9 +1247,13 @@ function availableStatuses(exercise, stage) {
       statuses = [
         APPLICATION_STATUS.SELECTION_DAY_PASSED,
         APPLICATION_STATUS.SELECTION_DAY_FAILED,
+        APPLICATION_STATUS.FULL_APPLICATION_NOT_SUBMITTED,
         APPLICATION_STATUS.PASSED_RECOMMENDED,
         APPLICATION_STATUS.WITHDRAWN,
       ];
+      if (canApplyFullApplicationSubmitted(exercise)) {
+        statuses.push(APPLICATION_STATUS.FULL_APPLICATION_SUBMITTED);
+      }
       return statuses;
     case EXERCISE_STAGE.SCC:
       statuses = [
@@ -1290,6 +1297,9 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.RECONSIDER,
         APPLICATION_STATUS.WITHDRAWN,
       ];
+      if (canApplyFullApplicationSubmitted(exercise)) {
+        statuses.push(APPLICATION_STATUS.FULL_APPLICATION_SUBMITTED);
+      }
       return statuses;
     }
   } else {
@@ -1524,4 +1534,14 @@ function isJAC00187(env, referenceNumber) {
   return (env === 'DEVELOP' && referenceNumber === 'JAC00696') ||
     (env === 'STAGING' && referenceNumber === 'JAC00695') ||
     (env === 'PRODUCTION' && referenceNumber === 'JAC00187');
+}
+
+function canApplyFullApplicationSubmitted(exercise) {
+  if (!exercise) return false;
+
+  const selectionProcess = exercise?._applicationContent?.[EXERCISE_STAGE.SELECTION] || {};
+  const isStagedExercise = Object.values(selectionProcess).includes(true);
+  const applyFullApplicationSubmitted = isStagedExercise && exercise.applicationOpenDate >= new Date(2024, 7, 18);
+
+  return applyFullApplicationSubmitted;
 }
