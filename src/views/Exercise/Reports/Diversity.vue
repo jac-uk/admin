@@ -139,7 +139,7 @@
                   Female
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].gender.female) }}
+                  {{ showChange(diversity[tab.ref].gender.female.change) }}
                 </td>
               </tr>
             </tbody>
@@ -171,7 +171,7 @@
                   Ethnic minorities
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].ethnicity.bame) }}
+                  {{ showChange(diversity[tab.ref].ethnicity.bame.change) }}
                 </td>
               </tr>
             </tbody>
@@ -200,7 +200,7 @@
                   Yes
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].disability.yes) }}
+                  {{ showChange(diversity[tab.ref].disability.yes.change) }}
                 </td>
               </tr>
             </tbody>
@@ -229,7 +229,7 @@
                   CILEx
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].professionalBackground.cilex) }}
+                  {{ showChange(diversity[tab.ref].professionalBackground.cilex.change) }}
                 </td>
               </tr>
               <tr class="govuk-table__row">
@@ -237,7 +237,7 @@
                   Solicitor
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].professionalBackground.solicitor) }}
+                  {{ showChange(diversity[tab.ref].professionalBackground.solicitor.change) }}
                 </td>
               </tr>
             </tbody>
@@ -269,7 +269,7 @@
                   Attended UK state school
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                  {{ showChange(diversity[tab.ref].attendedUKStateSchool.attendedUKStateSchool) }}
+                  {{ showChange(diversity[tab.ref].attendedUKStateSchool.attendedUKStateSchool.change) }}
                 </td>
               </tr>
             </tbody>
@@ -298,7 +298,7 @@
                     Parents did not attend University
                   </th>
                   <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-                    {{ showChange(diversity[tab.ref].parentsNotAttendedUniversity.parentsNotAttendedUniversity) }}
+                    {{ showChange(diversity[tab.ref].parentsNotAttendedUniversity.parentsNotAttendedUniversity.change) }}
                   </td>
                 </tr>
               </tbody>
@@ -365,7 +365,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].gender.female) }}
+                {{ showChange(diversity[activeTab].gender.female.change) }}
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -429,7 +429,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].ethnicity.bame) }}
+                {{ showChange(diversity[activeTab].ethnicity.bame.change) }}
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -505,7 +505,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].disability.yes) }}
+                {{ showChange(diversity[activeTab].disability.yes.change) }}
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -593,7 +593,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].professionalBackground.cilex) }}
+                {{ showChange(diversity[activeTab].professionalBackground.cilex.change) }}
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -607,7 +607,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].professionalBackground.solicitor) }}
+                {{ showChange(diversity[activeTab].professionalBackground.solicitor.change) }}
               </td>
             </tr>
 
@@ -685,7 +685,7 @@
                 v-if="isNotApplied"
                 class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
               >
-                {{ showChange(diversity[activeTab].attendedUKStateSchool.attendedUKStateSchool) }}
+                {{ showChange(diversity[activeTab].attendedUKStateSchool.attendedUKStateSchool.change) }}
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -808,7 +808,7 @@
                   v-if="isNotApplied"
                   class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"
                 >
-                  {{ showChange(diversity[activeTab].parentsNotAttendedUniversity.parentsNotAttendedUniversity) }}
+                  {{ showChange(diversity[activeTab].parentsNotAttendedUniversity.parentsNotAttendedUniversity.change) }}
                 </td>
               </tr>
               <tr class="govuk-table__row">
@@ -938,6 +938,7 @@ import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import _ from 'lodash';
 
 export default {
   name: 'Diversity',
@@ -1074,10 +1075,10 @@ export default {
   },
   methods: {
     showChange(value) {
-      if (value.change > 0) {
-        return `+${this.$filters.formatNumber(value.change, 2)}%`;
+      if (value > 0) {
+        return `+${this.$filters.formatNumber(value, 2)}%`;
       }
-      return `${this.$filters.formatNumber(value.change || 0, 2)}%`;
+      return `${this.$filters.formatNumber(value || 0, 2)}%`;
     },
     async refreshReport() {
       try {
@@ -1086,50 +1087,133 @@ export default {
         return;
       }
     },
-    gatherReportData(stage) {
+    gatherReportData() {
       const data = [];
-      let stageItems = this.tabs.slice(0, -1); // exclude summary tab
-      if (stage) {
-        stageItems = this.tabs.filter(tab => tab.ref === stage);
-      }
-      data.push(['Statistic'].concat(stageItems.map(item => item.title)));
-      Object.keys(this.diversity.applied).forEach((report) => {
-        Object.keys(this.diversity.applied[report]).forEach((stat) => {
-          const columns = [];
-          if (stat === 'bame') {
-            columns.push(`${report}:ethnic minorities`);
-          } else {
-            columns.push(`${report}:${stat}`);
+      const merges = [];
+
+      const states = this.tabs.filter((tab) => tab.ref !== 'summary');
+      data.push([
+        'Exercise:',
+        'Progression of Target Groups, percentage calculated by declared information',
+        ...this.generateEmptyCells(2 * states.length + 1),
+      ]);
+      merges.push(`B1:${this.getAlphabet(2 * states.length + 3)}1`);
+      data.push([
+        this.exercise.name,
+        'Characteristic by stage',
+        ...this.generateEmptyCells(states.length + 1),
+        'Difference between stages',
+        ...this.generateEmptyCells(states.length - 1),
+      ]);
+      merges.push(`B2:${this.getAlphabet(2 + states.length)}2`, `${this.getAlphabet(4 + states.length)}2:${this.getAlphabet(3 + 2 * states.length)}2`);
+      data.push([
+        'Characteristic',
+        `Assigned Commissioner: ${this.exercise.assignedCommissioner.map(a => a.name).join(', ')}`,
+        ...states.map((state) => `Post-${state.title}`),
+        'Eligible Pool',
+        ...states.reduce((acc, cur, index) => {
+          if (index) {
+            acc.push(`From post-${states[index - 1].title} to post-${cur.title}`);
           }
-          stageItems.forEach((item) => {
-            const stage = item.ref;
-            if (stat === 'total') {
-              columns.push(this.diversity[stage][report][stat]);
-            } else {
-              columns.push(this.diversity[stage][report][stat].total);
+          return acc;
+        }, []),
+        `Overall: from post-${states[0].title} to post-${states[states.length - 1].title}`,
+      ]);
+      data.push([
+        'All candidates',
+        this.exercise.name,
+        ...states.map((state) => this.diversity[state.ref].totalApplications),
+        ...this.generateEmptyCells(states.length + 1, 'n/a'),
+      ]);
+      data.push([
+        ...this.generateEmptyCells(states.length + 2),
+        ...this.generateEmptyCells(states.length + 1, 'n/a'),
+      ]);
+      merges.push('A4:A5');
+
+      const fields = [
+        {
+          name: 'Gender: Female',
+          key: 'gender.female',
+        },
+        {
+          name: 'Ethnicity: Ethnic minority',
+          key: 'ethnicity.bame',
+        },
+        {
+          name: 'Disability: Disabled',
+          key: 'disability.yes',
+        },
+        {
+          name: 'Profession: CILEX',
+          key: 'professionalBackground.cilex',
+        },
+        {
+          name: 'Profession: Solicitors',
+          key: 'professionalBackground.solicitor',
+        },
+        {
+          name: 'Social Mobility: Attended UK state school',
+          key: 'attendedUKStateSchool.attendedUKStateSchool',
+        },
+        {
+          name: 'Social Mobility: Parents did not attend University',
+          key: 'parentsNotAttendedUniversity.parentsNotAttendedUniversity',
+        },
+      ];
+
+      let rowIndex = 6;
+      fields.forEach((field) => {
+        data.push([
+          field.name,
+          this.exercise.name,
+          ...states.map((state) => `${this.$filters.formatNumber(_.get(this.diversity[state.ref], `${field.key}.percent`) || 0, 2)}% (${_.get(this.diversity[state.ref], `${field.key}.total`)})`),
+          ...this.generateEmptyCells(1),
+          ...states.reduce((acc, cur, index) => {
+            if (index) {
+              acc.push(`${this.showChange(_.get(this.diversity[cur.ref], `${field.key}.change`))}`);
+              if (index === states.length - 1) {
+                acc.push(`${this.showChange(_.get(this.diversity[cur.ref], `${field.key}.overallChange`))}`);
+              }
             }
-          });
-          data.push(columns);
-        });
+            return acc;
+          }, []),
+        ]);
+        data.push([
+          ...this.generateEmptyCells(states.length + 2),
+          ...this.generateEmptyCells(states.length + 1, 'n/a'),
+        ]);
+        merges.push(`A${rowIndex}:A${rowIndex + 1}`);
+        rowIndex += 2;
       });
-      return data;
+      data.push(['Disability comparison statistics']);
+
+      return {
+        data,
+        merges,
+      };
     },
     exportData(stage) {
       let title = 'Diversity Report';
       if (stage) {
         title = `${title} - ${stage}`;
       }
-
-      const data = this.gatherReportData(stage);
-
+      const { data, merges } = this.gatherReportData(stage);
       downloadXLSX(
         data,
         {
           title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          merges,
         }
       );
+    },
+    getAlphabet(number) {
+      return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[number - 1];
+    },
+    generateEmptyCells(number, content = '') {
+      return new Array(number).fill(content);
     },
   },
 };
