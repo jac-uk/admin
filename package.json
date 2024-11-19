@@ -26,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "4.1.41",
+    "@jac-uk/jac-kit": "4.1.43",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.61.1",
     "@sentry/vue": "^7.61.1",
@@ -54,7 +54,8 @@
     "vue-json-pretty": "^2.2.3",
     "vue-router": "^4.1.6",
     "vuedraggable": "^4.1.0",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
