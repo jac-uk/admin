@@ -498,6 +498,12 @@ export default {
             'secondAssessorPhone',
           ],
         },
+        {
+          name: 'Resignation from the Department for Work and Pensions (DWP)',
+          keys: [
+            'resignationFromDWP.workingAtDWP',
+          ],
+        },
       ],
       keys: {
         referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
@@ -595,6 +601,7 @@ export default {
         'equalityAndDiversitySurvey.attendedOutreachEvents': { label: 'Attended outreach events', type: String },
         'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme': { label: 'Participated In judicial workshadowing Scheme', type: String },
         'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
+        'resignationFromDWP.workingAtDWP': { label: 'Currently work at the Department for Work and Pensions (DWP)?', type: Boolean },
       },
     };
   },
