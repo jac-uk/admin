@@ -491,13 +491,13 @@ export default {
       }
     },
     parseColumnValue(columnType, value) {
-      switch(columnType) {
+      switch (columnType) {
       case 'number':
         return parseInt(value);
       default:
         return value;
       }
-    }
+    },
   },
 };
 </script>
