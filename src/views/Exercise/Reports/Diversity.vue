@@ -1162,8 +1162,38 @@ export default {
         },
       ];
 
+      const styles = {
+        row: {
+          '1': {
+            fill: 'ffffff',
+          },
+          '2': {
+            bold: true,
+          },
+          '3': {
+            bold: true,
+          },
+        },
+        cell: {
+          'B1': {
+            horizontalAlignment: 'center',
+          },
+          'B2': {
+            horizontalAlignment: 'center',
+          },
+          'A4': {
+            verticalAlignment: 'top',
+          },
+          [`${this.getAlphabet(4 + states.length)}2`]: {
+            horizontalAlignment: 'center',
+          },
+        },
+      };
       let rowIndex = 6;
       fields.forEach((field) => {
+        data.push([
+          ...this.generateEmptyCells(2 * states.length + 3),
+        ]);
         data.push([
           field.name,
           this.exercise.name,
@@ -1183,24 +1213,20 @@ export default {
           ...this.generateEmptyCells(states.length + 2),
           ...this.generateEmptyCells(states.length + 1, 'n/a'),
         ]);
-        merges.push(`A${rowIndex}:A${rowIndex + 1}`);
-        rowIndex += 2;
+        merges.push(`A${rowIndex + 1}:A${rowIndex + 2}`);
+        styles.cell[`A${rowIndex + 1}`] = {
+          verticalAlignment: 'top',
+        };
+        rowIndex += 3;
       });
-      data.push(['Disability comparison statistics']);
-
-      const styles = {
-        cell: {
-          'B1': {
-            horizontalAlignment: 'center',
-          },
-          'B2': {
-            horizontalAlignment: 'center',
-          },
-          [`${this.getAlphabet(4 + states.length)}2`]: {
-            horizontalAlignment: 'center',
-          },
-        },
-      };
+      data.push([
+        ...this.generateEmptyCells(2 * states.length + 3),
+      ]);
+      data.push([
+        'Disability comparison statistics',
+        ...this.generateEmptyCells(2 * states.length + 2),
+      ]);
+      merges.push(`B${rowIndex + 1}:${this.getAlphabet(2 * states.length + 3)}${rowIndex + 1}`);
 
       return {
         data,
