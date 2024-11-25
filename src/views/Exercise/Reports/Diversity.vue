@@ -1108,7 +1108,7 @@ export default {
       merges.push(`B2:${this.getAlphabet(2 + states.length)}2`, `${this.getAlphabet(4 + states.length)}2:${this.getAlphabet(3 + 2 * states.length)}2`);
       data.push([
         'Characteristic',
-        `Assigned Commissioner: ${this.exercise.assignedCommissioner.map(a => a.name).join(', ')}`,
+        `Assigned Commissioner: ${this.getAssignedCommissionerNames()}`,
         ...states.map((state) => `Post-${state.title}`),
         'Eligible Pool',
         ...states.reduce((acc, cur, index) => {
@@ -1250,6 +1250,17 @@ export default {
         },
         styles
       );
+    },
+    getAssignedCommissionerNames() {
+      const res = [];
+      const commissioners = this.$store.getters['services/getCommissioners']();
+      this.exercise.assignedCommissioner.forEach((commissioner) => {
+        const assignedCommissioner = commissioners.find((c) => c.email === commissioner.name);
+        if (assignedCommissioner) {
+          res.push(assignedCommissioner.name);
+        }
+      });
+      return res.join(', ');
     },
     getAlphabet(number) {
       return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[number - 1];
