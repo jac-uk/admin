@@ -6,7 +6,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-third">
         <span class="govuk-body-s govuk-!-margin-bottom-0">
-          Applied
+          Applied (includes withdrawals)
         </span>
         <router-link
           :to="{ path: `/exercise/${exerciseId}/applications/applied`}"
