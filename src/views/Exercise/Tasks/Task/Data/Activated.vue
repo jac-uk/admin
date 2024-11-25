@@ -476,9 +476,9 @@ export default {
               const data = clone(this.task.emptyScoreSheet);
               editableColumns.forEach(column => {
                 if (column.parent) {
-                  data[column.parent][column.ref] = pastedDataMap[application.ref][column.index];
+                  data[column.parent][column.ref] = this.parseColumnValue(column.type, pastedDataMap[application.ref][column.index]);
                 } else {
-                  data[column.ref] = pastedDataMap[application.ref][column.index];
+                  data[column.ref] = this.parseColumnValue(column.type, pastedDataMap[application.ref][column.index]);
                 }
               });
               scoreSheet[application.id] = data;  // use app ID for scoresheet entries
@@ -490,6 +490,14 @@ export default {
         }
       }
     },
+    parseColumnValue(columnType, value) {
+      switch(columnType) {
+      case 'number':
+        return parseInt(value);
+      default:
+        return value;
+      }
+    }
   },
 };
 </script>
