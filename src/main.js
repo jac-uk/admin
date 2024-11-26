@@ -15,8 +15,10 @@ import { searchMap } from '@/helpers/searchMap';
 
 import * as Sentry from '@sentry/vue';
 import VueGtag from 'vue-gtag';
+import FloatingVue from 'floating-vue';
 
 import './styles/main.scss';
+import 'floating-vue/dist/style.css';
 
 import mitt from 'mitt';
 const emitter = mitt();
@@ -53,7 +55,8 @@ auth.onAuthStateChanged(async (user) => {
     vueInstance = createApp(App)
       .use(router)
       .use(store)
-      .use(VueDOMPurifyHTML);
+      .use(VueDOMPurifyHTML)
+      .use(FloatingVue);
 
     // Bind global filters before mounting
     vueInstance.config.globalProperties.$filters = allFilters;
