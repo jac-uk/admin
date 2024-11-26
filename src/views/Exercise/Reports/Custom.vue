@@ -770,14 +770,21 @@ export default {
     downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
       const csv = [[...header]];
+
       for (let i = 0; i < this.data.data.length; i++) {
         csv.push([...this.columns.map(col => this.data.data[i][col])]);
       }
 
       // Convert the 2D array to CSV, ensuring values are properly escaped
+      const escapeValue = value => {
+        if (value == null) return ''; // Handle null or undefined
+        const escaped = String(value).replace(/"/g, '""'); // Escape double quotes
+        return `"${escaped}"`; // Enclose in double quotes
+      };
+
       const mappedCSV = csv
-        .map(row => row.map(escapeValue).join(',')) // Escape each value and join them with commas
-        .join('\n'); // Join each row with a newline
+        .map(row => row.map(escapeValue).join(',')) // Escape each value and join with commas
+        .join('\n'); // Join rows with a newline
 
       const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
       const encodedUri = encodeURI(csvContent);
@@ -787,6 +794,7 @@ export default {
       document.body.appendChild(link);
       link.click();
     },
+
     getDraggableKey(item) {
       // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
       // value to item-key
