@@ -1162,30 +1162,207 @@ export default {
         },
       ];
 
+      const primaryBackground = {
+        fill: {
+          theme: 4,
+          tint: 0.4,
+        },
+      };
+      const secondaryBackground = {
+        fill: {
+          theme: 4,
+          tint: 0.6,
+        },
+      };
+      const yellowBackground = {
+        fill: 'FFFF00',
+      };
       const styles = {
         row: {
-          '1': {
-            fill: 'ffffff',
-          },
-          '2': {
+          1: {
             bold: true,
           },
-          '3': {
+          2: {
+            bold: true,
+          },
+          3: {
             bold: true,
           },
         },
+        column: {
+          'A': {
+            bold: true,
+            verticalAlignment: 'top',
+          },
+        },
         cell: {
+          'A3': {
+            ...primaryBackground,
+          },
           'B1': {
             horizontalAlignment: 'center',
+            ...primaryBackground,
           },
           'B2': {
             horizontalAlignment: 'center',
+            ...primaryBackground,
           },
-          'A4': {
-            verticalAlignment: 'top',
+          'B3': {
+            horizontalAlignment: 'center',
+            ...yellowBackground,
           },
           [`${this.getAlphabet(4 + states.length)}2`]: {
             horizontalAlignment: 'center',
+            ...primaryBackground,
+          },
+        },
+        range: {
+          [`A1:${this.getAlphabet(2 * states.length + 3)}1`]: {
+            border: true,
+          },
+          [`A2:${this.getAlphabet(2 * states.length + 3)}2`]: {
+            border: true,
+          },
+          [`A3:${this.getAlphabet(2 * states.length + 3)}3`]: {
+            border: true,
+          },
+          [`A4:${this.getAlphabet(2 * states.length + 3)}4`]: {
+            border: true,
+          },
+          [`A5:${this.getAlphabet(2 * states.length + 3)}5`]: {
+            border: true,
+          },
+          [`A7:${this.getAlphabet(2 * states.length + 3)}7`]: {
+            border: true,
+          },
+          [`A8:${this.getAlphabet(2 * states.length + 3)}8`]: {
+            border: true,
+          },
+          [`A10:${this.getAlphabet(2 * states.length + 3)}10`]: {
+            border: true,
+          },
+          [`A11:${this.getAlphabet(2 * states.length + 3)}11`]: {
+            border: true,
+          },
+          [`A13:${this.getAlphabet(2 * states.length + 3)}13`]: {
+            border: true,
+          },
+          [`A14:${this.getAlphabet(2 * states.length + 3)}14`]: {
+            border: true,
+          },
+          [`A16:${this.getAlphabet(2 * states.length + 3)}16`]: {
+            border: true,
+          },
+          [`A17:${this.getAlphabet(2 * states.length + 3)}17`]: {
+            border: true,
+          },
+          [`A19:${this.getAlphabet(2 * states.length + 3)}19`]: {
+            border: true,
+          },
+          [`A20:${this.getAlphabet(2 * states.length + 3)}20`]: {
+            border: true,
+          },
+          [`A22:${this.getAlphabet(2 * states.length + 3)}22`]: {
+            border: true,
+          },
+          [`A23:${this.getAlphabet(2 * states.length + 3)}23`]: {
+            border: true,
+          },
+          [`A25:${this.getAlphabet(2 * states.length + 3)}25`]: {
+            border: true,
+          },
+          [`A26:${this.getAlphabet(2 * states.length + 3)}26`]: {
+            border: true,
+          },
+          [`A28:${this.getAlphabet(2 * states.length + 3)}28`]: {
+            border: true,
+          },
+          'A4:A5': {
+            ...secondaryBackground,
+          },
+          'A7:A8': {
+            ...secondaryBackground,
+          },
+          'A10:A11': {
+            ...secondaryBackground,
+          },
+          'A13:A14': {
+            ...secondaryBackground,
+          },
+          'A16:A17': {
+            ...secondaryBackground,
+          },
+          'A19:A20': {
+            ...secondaryBackground,
+          },
+          'A22:A23': {
+            ...secondaryBackground,
+          },
+          'A25:A26': {
+            ...secondaryBackground,
+          },
+          'A28:A28': {
+            ...secondaryBackground,
+          },
+          [`C3:${this.getAlphabet(states.length + 2)}3`]: {
+            ...primaryBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}3:${this.getAlphabet(2 * states.length + 3)}3`]: {
+            ...primaryBackground,
+          },
+          [`C3:${this.getAlphabet(2 * states.length + 3)}28`]: {
+            horizontalAlignment: 'center',
+          },
+          [`B4:${this.getAlphabet(states.length + 2)}4`]: {
+            ...yellowBackground,
+          },
+          [`B7:${this.getAlphabet(states.length + 2)}7`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}7:${this.getAlphabet(2 * states.length + 3)}7`]: {
+            ...yellowBackground,
+          },
+          [`B7:${this.getAlphabet(states.length + 2)}7`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}7:${this.getAlphabet(2 * states.length + 3)}7`]: {
+            ...yellowBackground,
+          },
+          [`B10:${this.getAlphabet(states.length + 2)}10`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}10:${this.getAlphabet(2 * states.length + 3)}10`]: {
+            ...yellowBackground,
+          },
+          [`B13:${this.getAlphabet(states.length + 2)}13`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}13:${this.getAlphabet(2 * states.length + 3)}13`]: {
+            ...yellowBackground,
+          },
+          [`B16:${this.getAlphabet(states.length + 2)}16`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}16:${this.getAlphabet(2 * states.length + 3)}16`]: {
+            ...yellowBackground,
+          },
+          [`B19:${this.getAlphabet(states.length + 2)}19`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}19:${this.getAlphabet(2 * states.length + 3)}19`]: {
+            ...yellowBackground,
+          },
+          [`B22:${this.getAlphabet(states.length + 2)}22`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}22:${this.getAlphabet(2 * states.length + 3)}22`]: {
+            ...yellowBackground,
+          },
+          [`B25:${this.getAlphabet(states.length + 2)}25`]: {
+            ...yellowBackground,
+          },
+          [`${this.getAlphabet(states.length + 4)}25:${this.getAlphabet(2 * states.length + 3)}25`]: {
+            ...yellowBackground,
           },
         },
       };
@@ -1230,8 +1407,9 @@ export default {
 
       return {
         data,
-        merges,
         styles,
+        freezePanes: [],
+        merges,
       };
     },
     exportData(stage) {
@@ -1239,16 +1417,17 @@ export default {
       if (stage) {
         title = `${title} - ${stage}`;
       }
-      const { data, merges, styles } = this.gatherReportData(stage);
+      const { data, styles, freezePanes, merges } = this.gatherReportData(stage);
       downloadXLSX(
         data,
         {
           title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          styles,
+          freezePanes,
           merges,
-        },
-        styles
+        }
       );
     },
     getAssignedCommissionerNames() {
