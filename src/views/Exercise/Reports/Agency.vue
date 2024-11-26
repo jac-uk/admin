@@ -609,33 +609,12 @@ export default {
     return {
       report: null,
       tabs: [
-        {
-          ref: 'acro',
-          title: 'ACRO',
-        },
-        {
-          ref: 'sra',
-          title: 'SRA',
-          header: 'Solicitors Regulation Authority',
-        },
-        {
-          ref: 'bsb',
-          title: 'BSB',
-          header: 'Bar Standards Board',
-        },
-        {
-          ref: 'jcio',
-          title: 'JCIO',
-          header: 'Judicial Conduct Investigations Office',
-        },
-        {
-          ref: 'hmrc',
-          title: 'HMRC',
-        },
-        {
-          ref: 'other',
-          title: 'Other',
-        },
+        { ref: 'acro', title: 'ACRO' },
+        { ref: 'sra', title: 'SRA', header: 'Solicitors Regulation Authority' },
+        { ref: 'bsb', title: 'BSB', header: 'Bar Standards Board' },
+        { ref: 'jcio', title: 'JCIO', header: 'Judicial Conduct Investigations Office' },
+        { ref: 'hmrc', title: 'HMRC' },
+        { ref: 'other', title: 'Other' },
       ],
       activeTab: 'acro',
     };
@@ -645,39 +624,55 @@ export default {
       exercise: state => state.exerciseDocument.record,
     }),
     activeTabDetails() {
-      const activeTab = this.tabs.find((tab) => tab.ref === this.activeTab );
-      return activeTab;
+      return this.tabs.find(tab => tab.ref === this.activeTab) || {};
     },
-    sraRows() {
-      return this.report ? this.report.rows.filter((e) => e.sraQualifications.length > 0) : [];
-    },
-    bsbRows() {
-      return this.report ? this.report.rows.filter((e) => e.bsbQualifications.length > 0) : [];
-    },
-    jcioRows() {
-      return this.report ? this.report.rows.filter((e) => e.jcioOffice === 'Yes') : [];
-    },
-    hmrcRows() {
-      return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
-    },
-    gmcRows() {
-      return this.report ? this.report.rows.filter((e) => e.gmcDate) : [];
-    },
-    riscRows() {
-      return this.report ? this.report.rows.filter((e) => e.riscDate) : [];
+    filteredRows() {
+      if (!this.report) return {};
+      console.log(this.report.rows.filter(row => row.bsbQualifications?.length || row.bsbDate || row.bsbNumber));
+      return {
+        sra: this.report.rows.filter(row => row.sraQualifications?.length),
+        bsb: this.report.rows.filter(row => row.bsbQualifications?.length || row.bsbDate || row.bsbNumber),
+        jcio: this.report.rows.filter(row => row.jcioOffice === 'Yes'),
+        hmrc: this.report.rows.filter(row => row.hmrcVATNumbers),
+        gmc: this.report.rows.filter((e) => e.gmcDate),
+        risc: this.report.rows.filter((e) => e.riscDate),
+      };
     },
     hasReportData() {
       return this.report && this.report.headers;
     },
+    sraRows(){
+      return this.filteredRows.sra;
+    },
+    bsbRows(){
+      return this.filteredRows.bsb;
+    },
+    acroRows(){
+      return this.filteredRows.acro;
+    },
+    jcioRows(){
+      return this.filteredRows.jcio;
+    },
+    hmrcRows(){
+      return this.filteredRows.jcio;
+    },
+    gmcRows(){
+      return this.filteredRows.gmc;
+    },
+    riscRows(){
+      return this.filteredRows.risc;
+    },
   },
   created() {
     this.unsubscribe = onSnapshot(
-      doc(firestore,`exercises/${this.exercise.id}/reports/agency`),
-      (snap) => {
+      doc(firestore, `exercises/${this.exercise.id}/reports/agency`),
+      snap => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
-      });
+      },
+      error => console.error('Failed to subscribe to report:', error)
+    );
   },
   unmounted() {
     if (this.unsubscribe) {
@@ -688,239 +683,104 @@ export default {
     async refreshReport() {
       try {
         await httpsCallable(functions, 'generateAgencyReport')({ exerciseId: this.exercise.id });
-        return true;
       } catch (error) {
-        return;
+        console.error('Failed to refresh report:', error);
       }
     },
-    gatherReportData() {
+    gatherReportData(headers, rows) {
       const reportData = [];
-
-      // get headers
-      reportData.push(this.report.headers.map(header => header.title));
-
-      // get rows
-      this.report.rows.forEach((row) => {
-        reportData.push(this.report.headers.map(header => row[header.ref]));
+      // Add headers
+      reportData.push(headers.map(header => header.title));
+      // Add rows
+      rows.forEach(row => {
+        reportData.push(headers.map(header => row[header.ref] || '')); // Direct access without accessorFn
       });
-
       return reportData;
     },
+    gatherQualificationHeaders(type, maxLength) {
+      const headers = [];
+      for (let i = 1; i <= maxLength; i++) {
+        headers.push(
+          { title: `Qualification ${i}`, ref: `${type}Type${i}` },
+          { title: `Region ${i}`, ref: `${type}Region${i}` },
+          { title: `${type.toUpperCase()} Number ${i}`, ref: `${type}RegistrationNumber${i}` }
+        );
+      }
+      return headers;
+    },
+    exportData() {
+      const dataGenerators = {
+        acro: this.gatherACROReportData,
+        hmrc: this.gatherHMRCReportData,
+        bsb: this.gatherBSBReportData,
+        sra: this.gatherSRAReportData,
+        jcio: this.gatherJCIOReportData,
+        default: this.gatherFullReportData,
+      };
+
+      const dataTag = this.activeTab.toUpperCase();
+      const title = 'Agency Report';
+      const data = (dataGenerators[this.activeTab] || dataGenerators.default)();
+
+      downloadXLSX(data, {
+        title: `${this.exercise.referenceNumber} ${title} - ${dataTag}`,
+        sheetName: `${title} - ${dataTag} Report`,
+        fileName: `${this.exercise.referenceNumber} - ${title} - ${dataTag}.xlsx`,
+      });
+    },
     gatherACROReportData() {
-      const reportData = [];
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: '*Agency Reference', ref: '' },
         { title: '*Reason for Request', ref: '' },
         { title: 'If Other please specify', ref: '' },
-        { title: 'Current or proposed role/profession of the subject within the agency', ref: '' },
+        { title: 'Current or proposed role/profession', ref: '' },
         { title: 'Supervised or Unsupervised access', ref: '' },
         { title: 'Is this check for a company', ref: '' },
-        { title: 'Title', ref: 'title' },
         { title: '*Surname or Company Name', ref: 'lastName' },
-        { title: 'Previous Surname (include maiden names and any other names changed by deed poll)', ref: '' },
         { title: '*Forename', ref: 'firstName' },
-        { title: 'Middle Name', ref: 'middleNames' },
-        { title: 'Previous known name(s)', ref: 'previousNames' },
-        { title: 'Any Other Names used:', ref: 'otherNames' },
         { title: '*Date of birth (DD/MM/YYYY)', ref: 'dateOfBirth' },
-        { title: 'Place of Birth (Town)', ref: '' },
         { title: 'Place of Birth (County)', ref: 'placeOfBirth' },
-        { title: 'Nationality (if more than one, please state all)', ref: '' },
         { title: 'Gender', ref: 'gender' },
         { title: 'Present Address', ref: 'currentAddress' },
-        { title: 'Postcode', ref: 'postcode' },
-        { title: 'Previous Address', ref: 'previousAddresses' },
-        { title: 'Occupation', ref: '' },
-        { title: 'National Insurance Number', ref: 'nationalInsuranceNumber' },
-        { title: 'Passport Number', ref: '' },
-        { title: 'Drivers Licence Number', ref: '' },
-        { title: 'Has the applicant ever been arrested / convicted of an offence?', ref: '' },
-        { title: 'If answered yes above to if the subject has ever been arrested/convicted, please provide details of the dates and offences etc.', ref: '' },
-        { title: 'Trace/No Trace', ref: '' },
-        { title: 'Further Information Required', ref: '' },
-        { title: 'ACRO URN', ref: '' },
       ];
-      // get headers
-      reportData.push(headers.map(header => header.title));
-
-      // get rows
-      this.report.rows.forEach((row) => {
-        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
-      });
-
-      return reportData;
+      return this.gatherReportData(headers, this.report.rows);
     },
     gatherHMRCReportData() {
-      const reportData = [];
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
-        { title: 'Our Ref', ref: '' },
         { title: 'NI NO', ref: 'nationalInsuranceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
-        { title: 'D.O.B', ref: 'dateOfBirth' },
         { title: 'VAT Reg', ref: 'hmrcVATNumbers' },
-        { title: 'Issues declared by candidate', ref: '' },
-        { title: 'Outstanding Income Tax Returns', ref: '' },
-        { title: 'Income Tax Debt', ref: '' },
-        { title: 'Ongoing Income Tax Enquiries', ref: '' },
-        { title: 'Outstanding VAT Debt', ref: '' },
-        { title: 'Ongoing VAT Enquiry', ref: '' },
-        { title: 'CENTAUR Information', ref: '' },
       ];
-      // get headers
-      reportData.push(headers.map(header => header.title));
-
-      // get rows
-      this.report.rows.forEach((row) => {
-        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
-      });
-
-      return reportData;
+      return this.gatherReportData(headers, this.filteredRows.hmrc);
     },
     gatherBSBReportData() {
-      const reportData = [];
+      const maxBsbLength = Math.max(...this.filteredRows.bsb.map(row => row.bsbQualifications?.length || 0));
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
+        ...this.gatherQualificationHeaders('bsb', maxBsbLength),
       ];
-      headers.push(...this.toBsbQualificationReportHeaders(this.bsbRows));
-
-      // get headers
-      reportData.push(headers.map(header => header.title));
-
-      // get rows
-      this.bsbRows.forEach((row) => {
-        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
-      });
-
-      return reportData;
+      return this.gatherReportData(headers, this.filteredRows.bsb);
     },
     gatherSRAReportData() {
-      const reportData = [];
+      const maxSraLength = Math.max(...this.filteredRows.sra.map(row => row.sraQualifications?.length || 0));
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
+        ...this.gatherQualificationHeaders('sra', maxSraLength),
       ];
-      headers.push(...this.toSraQualificationReportHeaders(this.sraRows));
-
-      // get headers
-      reportData.push(headers.map(header => header.title));
-
-      // get rows
-      this.sraRows.forEach((row) => {
-        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
-      });
-
-      return reportData;
+      return this.gatherReportData(headers, this.filteredRows.sra);
     },
     gatherJCIOReportData() {
-      const reportData = [];
-
-      // get headers
-      reportData.push(this.report.headers.map(header => header.title));
-
-      // get rows
-      this.jcioRows.forEach((row) => {
-        reportData.push(this.report.headers.map(header => row[header.ref]));
-      });
-
-      return reportData;
+      return this.gatherReportData(this.report.headers, this.filteredRows.jcio);
     },
-    exportData() {
-      const title = 'Agency Report';
-      let data = null;
-      const dataTag = this.activeTab.toUpperCase();
-
-      if (this.activeTab === 'acro') {
-        data = this.gatherACROReportData();
-      } else if (this.activeTab === 'hmrc') {
-        data = this.gatherHMRCReportData();
-      } else if (this.activeTab === 'bsb') {
-        data = this.gatherBSBReportData();
-      } else if (this.activeTab === 'sra') {
-        data = this.gatherSRAReportData();
-      } else if (this.activeTab === 'jcio') {
-        data = this.gatherJCIOReportData();
-      } else {
-        data = this.gatherReportData();
-      }
-
-      downloadXLSX(
-        data,
-        {
-          title: `${this.exercise.referenceNumber} ${title} - ${dataTag}`,
-          sheetName: `${title} - ${dataTag} report`,
-          fileName: `${this.exercise.referenceNumber} - ${title} - ${dataTag}.xlsx`,
-        }
-      );
-    },
-    getMaxSraQualificationLength(rows) {
-      return this.report ? Math.max(...rows.map(e => e?.sraQualifications?.length || 0)) : 0;
-    },
-    getMaxBsbQualificationLength(rows) {
-      return this.report ? Math.max(...rows.map(e => e?.bsbQualifications?.length || 0)) : 0;
-    },
-    toSraQualificationTableHeaders(rows) {
-      const headers = [];
-      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
-        headers.push(`Qualification ${i}`);
-        headers.push(`Region ${i}`);
-        headers.push(`SRA Number ${i}`);
-      }
-      return headers;
-    },
-    toBsbQualificationTableHeaders(rows) {
-      const headers = [];
-      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
-        headers.push(`Qualification ${i}`);
-        headers.push(`Region ${i}`);
-        headers.push(`Registration Number ${i}`);
-      }
-      return headers;
-    },
-    toSraQualificationTableData(sraQualifications, rows) {
-      const qualifications = sraQualifications || [];
-      const tableDataColumns = [];
-      for (let i = 0; i < this.getMaxSraQualificationLength(rows); i++) {
-        tableDataColumns.push(qualifications[i]?.type || '');
-        tableDataColumns.push(qualifications[i]?.location || '');
-        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
-      }
-
-      return tableDataColumns;
-    },
-    toBsbQualificationTableData(bsbQualifications, rows) {
-      const qualifications = bsbQualifications || [];
-      const tableDataColumns = [];
-      for (let i = 0; i < this.getMaxBsbQualificationLength(rows); i++) {
-        tableDataColumns.push(qualifications[i]?.type || '');
-        tableDataColumns.push(qualifications[i]?.location || '');
-        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
-      }
-
-      return tableDataColumns;
-    },
-    toSraQualificationReportHeaders(rows) {
-      const headers = [];
-      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
-        headers.push({ title: `Qualification ${i}`, ref: `sraType${i}` });
-        headers.push({ title: `Region ${i}`, ref: `sraRegion${i}` });
-        headers.push({ title: `SRA Number ${i}`, ref: `sraRegistrationNumber${i}` });
-      }
-      return headers;
-    },
-    toBsbQualificationReportHeaders(rows) {
-      const headers = [];
-      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
-        headers.push({ title: `Qualification ${i}`, ref: `bsbType${i}` });
-        headers.push({ title: `Region ${i}`, ref: `bsbRegion${i}` });
-        headers.push({ title: `Registration Number ${i}`, ref: `bsbRegistrationNumber${i}` });
-      }
-      return headers;
+    gatherFullReportData() {
+      return this.gatherReportData(this.report.headers, this.report.rows);
     },
   },
 };
