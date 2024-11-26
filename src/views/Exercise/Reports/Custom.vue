@@ -328,7 +328,6 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import { escapeValue } from '@/helpers/csv';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
