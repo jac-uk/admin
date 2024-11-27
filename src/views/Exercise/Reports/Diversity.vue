@@ -1090,8 +1090,8 @@ export default {
     gatherReportData() {
       const data = [];
       const merges = [];
-
       const states = this.tabs.filter((tab) => tab.ref !== 'summary');
+
       data.push([
         'Exercise:',
         'Progression of Target Groups, percentage calculated by declared information',
