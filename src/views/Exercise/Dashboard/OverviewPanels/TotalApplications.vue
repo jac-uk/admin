@@ -60,7 +60,7 @@
 </template>
 <script>
 import { applicationCounts } from '@/helpers/exerciseHelper';
-import Tooltip from '@/components/Tooltip.vue';
+import Tooltip from '@jac-uk/jac-kit/draftComponents/Tooltip.vue';
 export default {
   name: 'TotalApplications',
   components: {
