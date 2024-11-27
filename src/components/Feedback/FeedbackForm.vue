@@ -262,6 +262,12 @@ export default {
     this.formData.url = window.location.href;
     this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
+    this.formData.slackMessages = {
+      onCreate: {
+        retries: 0,
+        sentAt: null,
+      },
+    };
   },
   methods: {
     closeModal() {
