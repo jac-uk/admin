@@ -1174,9 +1174,6 @@ export default {
           tint: 0.6,
         },
       };
-      const yellowBackground = {
-        fill: 'FFFF00',
-      };
       const styles = {
         row: {
           1: {
@@ -1209,7 +1206,6 @@ export default {
           },
           'B3': {
             horizontalAlignment: 'center',
-            ...yellowBackground,
           },
           [`${this.getAlphabet(4 + states.length)}2`]: {
             horizontalAlignment: 'center',
@@ -1312,57 +1308,6 @@ export default {
           },
           [`C3:${this.getAlphabet(2 * states.length + 3)}28`]: {
             horizontalAlignment: 'center',
-          },
-          [`B4:${this.getAlphabet(states.length + 2)}4`]: {
-            ...yellowBackground,
-          },
-          [`B7:${this.getAlphabet(states.length + 2)}7`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}7:${this.getAlphabet(2 * states.length + 3)}7`]: {
-            ...yellowBackground,
-          },
-          [`B7:${this.getAlphabet(states.length + 2)}7`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}7:${this.getAlphabet(2 * states.length + 3)}7`]: {
-            ...yellowBackground,
-          },
-          [`B10:${this.getAlphabet(states.length + 2)}10`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}10:${this.getAlphabet(2 * states.length + 3)}10`]: {
-            ...yellowBackground,
-          },
-          [`B13:${this.getAlphabet(states.length + 2)}13`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}13:${this.getAlphabet(2 * states.length + 3)}13`]: {
-            ...yellowBackground,
-          },
-          [`B16:${this.getAlphabet(states.length + 2)}16`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}16:${this.getAlphabet(2 * states.length + 3)}16`]: {
-            ...yellowBackground,
-          },
-          [`B19:${this.getAlphabet(states.length + 2)}19`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}19:${this.getAlphabet(2 * states.length + 3)}19`]: {
-            ...yellowBackground,
-          },
-          [`B22:${this.getAlphabet(states.length + 2)}22`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}22:${this.getAlphabet(2 * states.length + 3)}22`]: {
-            ...yellowBackground,
-          },
-          [`B25:${this.getAlphabet(states.length + 2)}25`]: {
-            ...yellowBackground,
-          },
-          [`${this.getAlphabet(states.length + 4)}25:${this.getAlphabet(2 * states.length + 3)}25`]: {
-            ...yellowBackground,
           },
         },
       };
