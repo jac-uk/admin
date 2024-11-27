@@ -1099,7 +1099,7 @@ export default {
       ]);
       merges.push(`B1:${this.getAlphabet(2 * states.length + 3)}1`);
       data.push([
-        this.exercise.name,
+        `${this.exercise.referenceNumber} ${this.exercise.name}`,
         'Characteristic by stage',
         ...this.generateEmptyCells(states.length + 1),
         'Difference between stages',
@@ -1121,7 +1121,7 @@ export default {
       ]);
       data.push([
         'All candidates',
-        this.exercise.name,
+        `${this.exercise.referenceNumber} ${this.exercise.name}`,
         ...states.map((state) => this.diversity[state.ref].totalApplications),
         ...this.generateEmptyCells(states.length + 1, 'n/a'),
       ]);
@@ -1318,7 +1318,7 @@ export default {
         ]);
         data.push([
           field.name,
-          this.exercise.name,
+          `${this.exercise.referenceNumber} ${this.exercise.name}`,
           ...states.map((state) => `${this.$filters.formatNumber(_.get(this.diversity[state.ref], `${field.key}.percent`) || 0, 2)}% (${_.get(this.diversity[state.ref], `${field.key}.total`)})`),
           ...this.generateEmptyCells(1),
           ...states.reduce((acc, cur, index) => {
