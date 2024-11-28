@@ -175,7 +175,6 @@ export default {
       this.equalityAndDiversity = this.$store.state.candidates.equalityAndDiversitySurvey;
       this.candidateRecord = this.$store.state.candidates.record;
     });
-    console.log(this.$store.state.candidates);
   },
   unmounted() {
     this.$store.dispatch('candidates/unbindDoc');
