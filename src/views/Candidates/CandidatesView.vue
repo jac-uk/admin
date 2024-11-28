@@ -55,7 +55,7 @@
         />
       </dl>
       <EqualityAndDiversity
-        :data="equalityAndDiversity || {}"
+        :data="equalityAndDiversity"
       />
     </div>
 
@@ -172,9 +172,10 @@ export default {
       this.loading = false;
       this.personalDetails = this.$store.state.candidates.personalDetails;
       this.characterInformation = this.$store.state.candidates.characterInformation;
-      this.equalityAndDiversity = this.$store.state.candidates.equalityAndDiversity;
+      this.equalityAndDiversity = this.$store.state.candidates.equalityAndDiversitySurvey;
       this.candidateRecord = this.$store.state.candidates.record;
     });
+    console.log(this.$store.state.candidates);
   },
   unmounted() {
     this.$store.dispatch('candidates/unbindDoc');
