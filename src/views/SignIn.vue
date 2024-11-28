@@ -82,6 +82,12 @@ export default {
       const provider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, provider);
+        const credential = result.credential;
+        console.log('result', result);
+        console.log('_tokenResponse', result._tokenResponse);
+        console.log('credential', credential);
+        console.log('credential', credential.accessToken);
+        console.log('credential', credential.user);
         this.checkIfNewUser(result.user);
       } catch (err) {
         this.$store.dispatch('auth/setAuthError', err.message);
@@ -91,6 +97,12 @@ export default {
       const provider = new OAuthProvider('microsoft.com');
       try {
         const result = await signInWithPopup(auth, provider);
+        const credential = result.credential;
+        console.log('result', result);
+        console.log('_tokenResponse', result._tokenResponse);
+        console.log('credential', credential);
+        console.log('credential', credential.accessToken);
+        console.log('credential', credential.user);
         this.checkIfNewUser(result.user);
       } catch (err) {
         this.$store.dispatch('auth/setAuthError', err.message);
