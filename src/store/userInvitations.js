@@ -36,7 +36,7 @@ export default {
       if (!email) return null;
 
       try {
-        let firestoreRef = query(collectionRef, where('email', '==', email));
+        let firestoreRef = query(collectionRef, where('email', '==', email.toLowerCase()));
         if (status) {
           firestoreRef = query(firestoreRef, where('status', '==', status));
         }
