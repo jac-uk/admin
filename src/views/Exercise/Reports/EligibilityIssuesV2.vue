@@ -368,16 +368,12 @@ export default {
     },
     async exportData() {
       try {
-        const title = 'Eligibility Annex';
-        const xlsxData = await this.gatherReportData();
-
-        downloadXLSX(
-          xlsxData,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
+        const result = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex', status: this.filterStatus === 'all' ? null : this.filterStatus });
+        if (!result.data) return;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_Eligibility Annex Report.docx`
         );
         return true;
       } catch (error) {
