@@ -240,7 +240,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
-import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+// import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
