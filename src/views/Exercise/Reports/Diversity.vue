@@ -1397,6 +1397,9 @@ export default {
 </script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.govuk-table__header {
+  width: 30%;
+}
 .govuk-table__header, .govuk-table__cell {
     vertical-align: middle;
 }
