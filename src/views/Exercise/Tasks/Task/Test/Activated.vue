@@ -103,7 +103,7 @@ export default {
       if (this.$store.getters.isProduction) {
         url = 'https://qt.judicialappointments.digital';
       } else if (this.$store.getters.isLocal) {
-        url = 'http://localhost:8084';
+        url = 'http://localhost:8086';
       } else {
         url = 'https://qt-develop.judicialappointments.digital';
       }
