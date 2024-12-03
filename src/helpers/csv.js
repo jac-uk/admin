@@ -1,22 +1,28 @@
 /**
- * This function is used when converting arrays into csv strings
- * It does the following:
- * - Converts the value to a string using String(value)
- * - If the value contains a comma (,), double quotes ("), or other special characters, it wraps the value in double quotes
- * - If the value already contains double quotes, those quotes are escaped by replacing each " with ""
- * @param {*} value
- * @returns
+ * This function is used when converting arrays into CSV strings.
+ * It ensures safe handling of special characters to prevent CSV injection.
+ *
+ * @param {*} value - The value to be escaped.
+ * @returns {string} - The escaped value suitable for CSV format.
  */
 const escapeValue = (value) => {
-  // Convert the value to a string and wrap in quotes if it contains commas or quotes
-  const stringValue = String(value);
-  if (stringValue.includes(',') || stringValue.includes('"')) {
+  // Convert the value to a string
+  let stringValue = String(value);
+
+  // Prevent Excel from interpreting values starting with "=" as formulas
+  if (stringValue.startsWith('=')) {
+    stringValue = `'${stringValue}`;
+  }
+
+  // Check for special characters that need to be escaped
+  const specialCharsPattern = /[,;"\n:@+-]/;
+  if (specialCharsPattern.test(stringValue)) {
     // Escape internal double quotes and wrap the value in quotes
     return `"${stringValue.replace(/"/g, '""')}"`;
   }
+
+  // Return the value as is if no special characters are found
   return stringValue;
 };
 
-export {
-  escapeValue
-};
+export { escapeValue };
