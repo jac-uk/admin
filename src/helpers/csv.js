@@ -15,7 +15,7 @@ const escapeValue = (value) => {
   }
 
   // Check for special characters that need to be escaped
-  const specialCharsPattern = /[,;"\n:@+\-]/;
+  const specialCharsPattern = /[,;"\n:@+-]/;
   if (specialCharsPattern.test(stringValue)) {
     // Escape internal double quotes and wrap the value in quotes
     return `"${stringValue.replace(/"/g, '""')}"`;
