@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="candidateRecord && !loading">
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
@@ -80,6 +80,11 @@
       <UpdateLoginEmail :candidate-id="getUserId" />
     </div>
   </div>
+  <div
+    v-else-if="loading"
+  >
+    <LoadingMessage />
+  </div>
 </template>
 
 <script>
@@ -91,6 +96,7 @@ import CharacterInformationSummary from '@/views/InformationReview/CharacterInfo
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity.vue';
 import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail.vue';
 import permissionMixin from '@/permissionMixin';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 
 export default {
   name: 'CandidatesView',
@@ -102,6 +108,7 @@ export default {
     PersonalDetailsSummary,
     CharacterInformationSummary,
     EqualityAndDiversity,
+    LoadingMessage,
   },
   mixins: [permissionMixin],
   data() {
@@ -109,6 +116,11 @@ export default {
       editMode: false,
       activeTab: 'details',
       candidateId: '',
+      candidateRecord: null,
+      personalDetails: null,
+      characterInformation: null,
+      equalityAndDiversity: null,
+      loading: true,
     };
   },
   computed: {
@@ -136,23 +148,8 @@ export default {
         });
       return tabs;
     },
-    candidateRecord() {
-      return this.$store.state.candidates.record;
-    },
-    personalDetails() {
-      const localDocs = this.$store.state.candidates.personalDetails;
-      return localDocs || {};
-    },
-    characterInformation() {
-      const localDocs = this.$store.state.candidates.characterInformation;
-      return localDocs || {};
-    },
     characterInformationVersion() {
       return this.characterInformation._versionNumber ? this.characterInformation._versionNumber : 1;
-    },
-    equalityAndDiversity() {
-      const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
-      return localDocs || {};
     },
     myFullName() {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecord.fullName;
@@ -165,21 +162,34 @@ export default {
     },
   },
   async created() {
-    this.candidateId = this.getUserId;
-    this.$store.dispatch('candidates/bindDoc', this.candidateId);
-    this.$store.dispatch('candidates/bindDocs', this.candidateId);
+    this.candidateId = this.getUserId || this.$route.params.id;
+    await Promise.all([
+      this.$store.commit('candidates/resetRecord'),
+      this.$store.dispatch('candidates/unbindDoc'),
+      this.$store.dispatch('candidates/bindDoc', this.candidateId),
+      this.$store.dispatch('candidates/bindDocs', this.candidateId),
+    ]).then(() => {
+      this.loading = false;
+      this.personalDetails = this.$store.state.candidates.personalDetails;
+      this.characterInformation = this.$store.state.candidates.characterInformation;
+      this.equalityAndDiversity = this.$store.state.candidates.equalityAndDiversitySurvey;
+      this.candidateRecord = this.$store.state.candidates.record;
+    });
   },
   unmounted() {
     this.$store.dispatch('candidates/unbindDoc');
     this.$store.dispatch('candidates/unbindDocs');
+    this.$store.commit('candidates/resetRecord');
   },
   methods: {
     makeFullName(obj) {
-      if (obj.firstName && this.personalDetails.lastName) {
-        obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
-      }
-      if (obj.lastName && this.personalDetails.firstName) {
-        obj.fullName = `${this.personalDetails.firstName} ${obj.lastName}`;
+      if (obj) {
+        if (obj.firstName && this.personalDetails.lastName) {
+          obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
+        }
+        if (obj.lastName && this.personalDetails.firstName) {
+          obj.fullName = `${this.personalDetails.firstName} ${obj.lastName}`;
+        }
       }
       return obj;
     },

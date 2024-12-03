@@ -83,6 +83,7 @@
             hint="The email must be a JAC email address."
             type="email"
             autocomplete="off"
+            :to-lower-case="true"
             required
           />
           <p
