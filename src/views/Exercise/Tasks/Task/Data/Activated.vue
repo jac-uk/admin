@@ -438,7 +438,8 @@ export default {
           const pastedDataMap = {};
 
           // check headers are all present
-          const pastedHeaders = rows[0].split('\t');
+          let pastedHeaders = rows[0].split('\t');
+          pastedHeaders = pastedHeaders.map(item => item.replace(/\s+/g, ' ').trim());
           const missingColumns = this.clipboardColumns.filter(column => {
             const columnIndex = pastedHeaders.findIndex(item => column.matches.indexOf(item) >= 0);
             return columnIndex < 0;
@@ -452,7 +453,8 @@ export default {
           // get data
           rows.forEach((row, rowIndex) => {
             if (row && rowIndex > 0) {
-              const cols = row.split('\t');
+              let cols = row.split('\t');
+              cols = cols.map(item => item.replace(/\r/g, ' ').trim());
               const ref = cols[refIndex];
               pastedDataMap[ref] = cols;
             }
@@ -474,9 +476,9 @@ export default {
               const data = clone(this.task.emptyScoreSheet);
               editableColumns.forEach(column => {
                 if (column.parent) {
-                  data[column.parent][column.ref] = pastedDataMap[application.ref][column.index];
+                  data[column.parent][column.ref] = this.parseColumnValue(column.type, pastedDataMap[application.ref][column.index]);
                 } else {
-                  data[column.ref] = pastedDataMap[application.ref][column.index];
+                  data[column.ref] = this.parseColumnValue(column.type, pastedDataMap[application.ref][column.index]);
                 }
               });
               scoreSheet[application.id] = data;  // use app ID for scoresheet entries
@@ -486,6 +488,14 @@ export default {
           Object.entries(scoreSheet).forEach(([key, value]) => saveData[`scoreSheet.${key}`] = value);  // here we are updating individual values (rather than replacing the whole `scoreSheet` map)
           await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: saveData });
         }
+      }
+    },
+    parseColumnValue(columnType, value) {
+      switch (columnType) {
+      case 'number':
+        return parseInt(value);
+      default:
+        return value;
       }
     },
   },
