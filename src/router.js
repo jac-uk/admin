@@ -207,6 +207,12 @@ const routes = [
       requiresAuth: true,
       title: 'Notifications',
     },
+    beforeEnter: (to, from, next) => {
+      if (hasPermissions([PERMISSIONS.users.permissions.canReadNotifications.value])) {
+        next();
+      }
+      next({ name: 'page-not-found' });
+    },
   },
   {
     path: '/exercises/programme-view',
