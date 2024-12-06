@@ -5,7 +5,7 @@ import PERMISSIONS from '@/permissions';
  * @param {Array} permissions
  * @returns {Boolean}
  */
-const hasPermissions = async (permissions) => {
+const hasPermissions = (permissions) => {
   return store.getters['auth/hasPermissions'](permissions);
 };
 
@@ -13,7 +13,7 @@ const hasPermissions = async (permissions) => {
  * Return a list of all permissions with false values
  * @returns {Object} e.g. { canReadUsers: false, canCreateUsers: false, ... }
  */
-const getRawPermissions = async () => {
+const getRawPermissions = () => {
   const rawPermissions = {};
   for (const group of Object.keys(PERMISSIONS)) {
     for (const p of Object.keys(PERMISSIONS[group].permissions)) {
