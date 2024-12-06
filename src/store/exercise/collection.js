@@ -52,6 +52,10 @@ export default {
     unbindDraft: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('draftRecords');
     }),
+    getAll: firestoreAction(({ bindFirestoreRef }) => {
+      const firestoreRef = query(collection(firestore, 'exercises'));
+      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+    }),
     showFavourites: ({ commit }) => {
       commit('updateFavourites', true);
       commit('updateArchived', false);

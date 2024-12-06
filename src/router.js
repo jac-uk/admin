@@ -90,6 +90,9 @@ import ExerciseReportsCommissionerConflicts from '@/views/Exercise/Reports/Commi
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList.vue';
 
+// Multiple Exercise Custom Report
+import MultipleExerciseCustomReport from '@/views/Exercise/Reports/MultipleExerciseCustomReport.vue';
+
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks.vue';
 import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index.vue';
@@ -1277,6 +1280,15 @@ const routes = [
         return next({ name: 'exercises' });
       }
       return next();
+    },
+  },
+  {
+    path: '/MultipleExerciseCustomReport',
+    component: MultipleExerciseCustomReport,
+    name: 'multiple-exercise-custom-report',
+    meta: {
+      requiresAuth: true,
+      title: 'Multiple Exercises Custom Report',
     },
   },
 ];
