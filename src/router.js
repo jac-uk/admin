@@ -4,6 +4,8 @@ import {
 } from 'vue-router';
 
 import store from '@/store';
+import PERMISSIONS from '@/permissions';
+import { hasPermissions } from '@/services/permissionService';
 
 import { STATUS, EXERCISE_STAGE } from '@/helpers/constants';
 
@@ -190,6 +192,13 @@ const routes = [
       requiresAuth: true,
       title: 'Users',
     },
+    beforeEnter: (to, from, next) => {
+      if (hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])) {
+        return next();
+      }
+      console.log();
+      return next({ name: 'page-not-found' });
+    },
   },
   {
     path: '/notifications',
@@ -198,6 +207,12 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Notifications',
+    },
+    beforeEnter: (to, from, next) => {
+      if (hasPermissions([PERMISSIONS.users.permissions.canReadNotifications.value])) {
+        next();
+      }
+      next({ name: 'page-not-found' });
     },
   },
   {
