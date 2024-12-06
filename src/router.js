@@ -193,10 +193,15 @@ const routes = [
       title: 'Users',
     },
     beforeEnter: (to, from, next) => {
+
+      console.log('hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value]):');
+      console.log(hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value]));
+
       if (hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])) {
-        next();
+        return next();
       }
-      next({ name: 'page-not-found' });
+      console.log();
+      return next({ name: 'page-not-found' });
     },
   },
   {
