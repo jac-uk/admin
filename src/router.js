@@ -193,10 +193,6 @@ const routes = [
       title: 'Users',
     },
     beforeEnter: (to, from, next) => {
-
-      console.log('hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value]):');
-      console.log(hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value]));
-
       if (hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])) {
         return next();
       }
