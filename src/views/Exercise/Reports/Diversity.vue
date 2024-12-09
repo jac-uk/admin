@@ -975,9 +975,12 @@ export default {
         const tab = {};
         tab.ref = stage;
         switch (stage) {
-        case EXERCISE_STAGE.SHORTLISTING:
         case EXERCISE_STAGE.REVIEW:
           tab.ref = EXERCISE_STAGE.APPLIED;
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SHORTLISTING:
+          tab.ref = EXERCISE_STAGE.SHORTLISTING;
           tab.title = 'Applied';
           break;
         case EXERCISE_STAGE.SELECTION:
