@@ -22,6 +22,7 @@ export {
   totalPassed,
   totalFailed,
   totalDidNotParticipate,
+  hasParticipation,
   downloadMeritList,
   getDownloadTypes
 };
@@ -253,6 +254,19 @@ function totalFailed(task, scoreType, scores) {
   if (!task) return 0;
   if (!task.passMark) return 0;
   return task.finalScores.length - totalPassed(task, scoreType, scores);
+}
+
+function hasParticipation(task) {
+  if (!task) return false;
+  switch (task.type) {
+  case TASK_TYPE.CRITICAL_ANALYSIS:
+  case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+  case TASK_TYPE.QUALIFYING_TEST:
+  case TASK_TYPE.SCENARIO:
+    return true;
+  default:
+    return false;
+  }
 }
 
 function totalDidNotParticipate(task) {
