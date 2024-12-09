@@ -232,7 +232,7 @@ export default {
       isEditingPanellists: false,
       roles: [
         ROLES.CHAIR,
-        ROLES.JUDICIAL,
+        // ROLES.JUDICIAL,
         ROLES.INDEPENDENT,
         ROLES.OTHER,
       ],
