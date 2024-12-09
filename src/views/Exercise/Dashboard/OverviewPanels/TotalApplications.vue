@@ -4,10 +4,21 @@
       Applications <span class="float-right govuk-body-s tiny-text">Last Updated: {{ $filters.formatDate(applicationCounts._lastUpdated, 'datetime') }}</span>
     </span>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-third">
-        <span class="govuk-body-s govuk-!-margin-bottom-0">
+      <div class="govuk-grid-column-one-third tooltip-anchor">
+        <span class="govuk-body-s govuk-!-margin-bottom-0 ">
           Applied
         </span>
+
+        <div class="tooltip-wrapper">
+          <Tooltip>
+            <template #content>
+              <div>
+                Includes withdrawals.
+              </div>
+            </template>
+          </Tooltip>
+        </div>
+
         <router-link
           :to="{ path: `/exercise/${exerciseId}/applications/applied`}"
           class="govuk-link govuk-link--no-underline govuk-link-active-colour"
@@ -49,8 +60,12 @@
 </template>
 <script>
 import { applicationCounts } from '@/helpers/exerciseHelper';
+import Tooltip from '@jac-uk/jac-kit/draftComponents/Tooltip.vue';
 export default {
   name: 'TotalApplications',
+  components: {
+    Tooltip,
+  },
   computed: {
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
@@ -78,5 +93,14 @@ export default {
   margin-bottom: 0;
   padding-top: 2px;
   color: $govuk-secondary-text-colour;
+}
+
+.tooltip-wrapper {
+  position: absolute;
+  top: 0px;
+  left:70px;
+}
+.tooltip-anchor {
+  position: relative;
 }
 </style>

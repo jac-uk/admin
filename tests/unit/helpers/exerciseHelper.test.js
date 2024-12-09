@@ -1540,7 +1540,7 @@ describe('availableReportLinks', () => {
       };
       const path = `/exercise/${exercise.id}/reports`;
       const expectedLinks = [
-        { title: 'Agency', name: 'agency' },
+        { title: 'Agency Character Checks', name: 'agency' },
         { title: 'Character Annex', name: 'character-issues' },
         { title: 'Commissioner conflicts', path: `${path}/commissioner-conflicts` },
         { title: 'Custom', name: 'custom' },
@@ -1562,7 +1562,7 @@ describe('availableReportLinks', () => {
         shortlistingMethods: [],
       };
       const expectedLinks = [
-        { title: 'Agency', name: 'agency' },
+        { title: 'Agency Character Checks', name: 'agency' },
         { title: 'Character Annex', name: 'character-issues' },
         { title: 'Custom', name: 'custom' },
         { title: 'Deployment', name: 'deployment' },

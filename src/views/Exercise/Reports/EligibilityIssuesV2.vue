@@ -240,7 +240,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
-import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+// import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
@@ -368,16 +368,12 @@ export default {
     },
     async exportData() {
       try {
-        const title = 'Eligibility Annex';
-        const xlsxData = await this.gatherReportData();
-
-        downloadXLSX(
-          xlsxData,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
+        const result = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex', status: this.filterStatus === 'all' ? null : this.filterStatus });
+        if (!result.data) return;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_Eligibility Annex Report.docx`
         );
         return true;
       } catch (error) {

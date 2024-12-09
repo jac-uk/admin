@@ -231,6 +231,16 @@
       />
 
       <TextField
+        v-if="isMobile"
+        :id="`editable-field-${id}`"
+        v-model="localField"
+        type="mobile"
+        :required="isRequired"
+        :display-label="displayLabel"
+        :label="errorFieldName"
+      />
+
+      <TextField
         v-if="isText || isRoute"
         :id="`editable-field-${id}`"
         v-model="localField"
@@ -495,6 +505,9 @@ export default {
     },
     isPhone() {
       return this.type === 'tel';
+    },
+    isMobile() {
+      return this.type === 'mobile';
     },
     isText() {
       return this.type === 'text';

@@ -32,7 +32,7 @@
             Type
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ $filters.lookup(application.firstAssessorType) }}
+            {{ $filters.lookup(application.firstAssessorType) }} assessor
           </dd>
         </div>
 
@@ -126,7 +126,7 @@
             Type
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ $filters.lookup(application.secondAssessorType) }}
+            {{ $filters.lookup(application.secondAssessorType) }} assessor
           </dd>
         </div>
 

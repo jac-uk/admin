@@ -54,6 +54,7 @@ const APPLICATION_STATUS = {
   SHORTLISTING_PASSED: 'shortlistingOutcomePassed',
   SHORTLISTING_FAILED: 'shortlistingOutcomeFailed',
   FULL_APPLICATION_NOT_SUBMITTED: 'fullApplicationNotSubmitted',
+  FULL_APPLICATION_SUBMITTED: 'fullApplicationSubmitted',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
   ELIGIBILITY_SCC_FAILED: 'eligibilitySCCFailed',
   CHARACTER_AND_SELECTION_SCC_PASSED: 'characterAndSelectionSCCPassed',

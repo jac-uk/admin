@@ -40,13 +40,14 @@
               </select>
               <button
                 class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-                @click="openModal('modalRefSaveReport')"
+                :disabled="isLoading || columns.length === 0"
+                @click="generateReport"
               >
-                Save Report
+                Generate Report
               </button>
               <button
                 class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-                :disabled="isLoading || !data"
+                :disabled="isLoading || !data || columns.length === 0"
                 @click="downloadReport"
               >
                 Download Report
@@ -61,7 +62,8 @@
       />
       <div class="govuk-inset-text govuk-!-margin-bottom-7">
         <p class="govuk-body">
-          This report is experimental. Please provide feedback if something doesn't look right.
+          <!-- This report is experimental. Please provide feedback if something doesn't look right. -->
+          Choose the fields you wish to include in your custom report from the dropdown below and then click 'generate' to produce your report on screen. Only candidates with the status 'Applied' will be included in the report.<br>Download the report when you are satisfied with the content.
         </p>
       </div>
       <div class="govuk-grid-row">
@@ -137,67 +139,9 @@
         </div>
       </div>
 
-      <div class="govuk-grid-row govuk-!-margin-top-3 govuk-!-margin-bottom-3">
-        <div class="govuk-grid-column-one-third">
-          <h2>Application status</h2>
-          <CheckboxGroup
-            id="select-status"
-            v-model="statuses"
-            label=""
-          >
-            <CheckboxItem
-              v-for="(status) in STATUS"
-              :key="status"
-              :value="status"
-              :label="$filters.lookup(status)"
-            />
-          </CheckboxGroup>
-        </div>
-
-        <div class="govuk-grid-column-two-thirds">
-          <h2>Stage</h2>
-          <div class="govuk-button-group">
-            <select
-              v-model="selectedStage"
-              class="govuk-select"
-            >
-              <option value="all">
-                All
-              </option>
-              <option
-                v-for="stage in availableStages"
-                :key="stage"
-                :value="stage"
-              >
-                {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
-              </option>
-            </select>
-          </div>
-          <div class="govuk-button-group">
-            <select
-              v-if="availableStatuses && availableStatuses.length > 0"
-              v-model="selectedStageStatus"
-              class="govuk-select"
-            >
-              <option
-                value="all"
-              >
-                All
-              </option>
-              <option
-                v-for="item in availableStatuses"
-                :key="item"
-                :value="item"
-              >
-                {{ $filters.lookup(item) }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div
         v-if="columns.length > 0"
+        id="column-list"
         class="panel govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
@@ -381,12 +325,9 @@ import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import { escapeValue } from '@/helpers/csv';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
@@ -398,8 +339,6 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
-    CheckboxGroup,
-    CheckboxItem,
   },
   mixins: [permissionMixin],
   data() {
@@ -416,7 +355,7 @@ export default {
       customReportName: null,
       selectedColumn: '',
       whereClauses: [],
-      columns: [],
+      columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
       warnings: '',
       warningTimeout: null,
       groups: [
@@ -558,6 +497,12 @@ export default {
             'secondAssessorPhone',
           ],
         },
+        {
+          name: 'Resignation from the Department for Work and Pensions (DWP)',
+          keys: [
+            'resignationFromDWP.workingAtDWP',
+          ],
+        },
       ],
       keys: {
         referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
@@ -655,6 +600,7 @@ export default {
         'equalityAndDiversitySurvey.attendedOutreachEvents': { label: 'Attended outreach events', type: String },
         'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme': { label: 'Participated In judicial workshadowing Scheme', type: String },
         'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
+        'resignationFromDWP.workingAtDWP': { label: 'Currently work at the Department for Work and Pensions (DWP)?', type: Boolean },
       },
     };
   },
@@ -694,7 +640,7 @@ export default {
     },
     columns: {
       handler: function() {
-        this.getApplicationRecords();
+        this.data = null;
       },
       deep: true,
     },
@@ -812,17 +758,32 @@ export default {
       this.columns = report.columns;
       this.whereClauses = report.whereClauses;
     },
+    generateReport() {
+      this.getApplicationRecords();
+      // Scroll to the list of columns
+      const element = document.querySelector('#column-list'); // Replace with the actual element selector
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
     downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
       const csv = [[...header]];
+
       for (let i = 0; i < this.data.data.length; i++) {
         csv.push([...this.columns.map(col => this.data.data[i][col])]);
       }
 
       // Convert the 2D array to CSV, ensuring values are properly escaped
+      const escapeValue = value => {
+        if (value == null) return ''; // Handle null or undefined
+        const escaped = String(value).replace(/"/g, '""'); // Escape double quotes
+        return `"${escaped}"`; // Enclose in double quotes
+      };
+
       const mappedCSV = csv
-        .map(row => row.map(escapeValue).join(',')) // Escape each value and join them with commas
-        .join('\n'); // Join each row with a newline
+        .map(row => row.map(escapeValue).join(',')) // Escape each value and join with commas
+        .join('\n'); // Join rows with a newline
 
       const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
       const encodedUri = encodeURI(csvContent);
@@ -832,6 +793,7 @@ export default {
       document.body.appendChild(link);
       link.click();
     },
+
     getDraggableKey(item) {
       // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
       // value to item-key
