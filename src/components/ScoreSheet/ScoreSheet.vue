@@ -180,21 +180,14 @@
       <TitleBar @click="$refs['findApplicationModal'].closeModal()">
         Find an application
       </TitleBar>
-      <!-- <FindAnApplication
-        v-model="selectedApplication"
-        :data="data"
-        :search-fields="['referenceNumber']"
-        @update:model-value="onApplicationFound"
-        @cancel="selectedApplication = null; $refs['findApplicationModal'].closeModal()"
-      /> -->
       <div style="padding: 0 20px 0 20px; min-height: 300px">
         <PredictiveSearch
           id="find-a-candidate"
           v-model="selectedApplication"
-          hint="Type any part of reference number"
+          :hint="searchHint"
           :show-full-list-on-focus="false"
           :data="data"
-          :search-fields="['referenceNumber']"
+          :search-fields="searchFields"
           required
           @update:model-value="onApplicationFound"
         />
@@ -337,6 +330,18 @@ export default {
         columns.push({ title: 'Disability', parent: 'diversity', ref: 'disability' });
       }
       return columns;
+    },
+    searchFields() {
+      if (this.data[0].fullName) {
+        return ['referenceNumber', 'fullName'];
+      }
+      return ['referenceNumber'];
+    },
+    searchHint() {
+      if (this.data[0].fullName) {
+        return 'Type any part of candidate name or reference number';
+      }
+      return 'Type any part of reference number';
     },
   },
   methods: {
