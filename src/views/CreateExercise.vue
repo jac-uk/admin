@@ -161,6 +161,10 @@
                 value="downloads"
                 label="Exercise Downloads"
               />
+              <CheckboxItem
+                value="additionalSettings"
+                label="Selection Set-up"
+              />
             </CheckboxGroup>
           </RadioItem>
 
