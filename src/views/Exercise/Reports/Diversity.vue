@@ -1045,7 +1045,7 @@ export default {
       return '';
     },
     isNotApplied() {
-      return this.activeTab !== 'applied';
+      return ![EXERCISE_STAGE.APPLIED, EXERCISE_STAGE.SHORTLISTING].includes(this.activeTab);
     },
   },
   watch: {
