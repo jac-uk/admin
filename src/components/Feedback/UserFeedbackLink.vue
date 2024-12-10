@@ -1,9 +1,36 @@
+<script setup>
+import { ref } from 'vue';
+import { onClickOutside } from '@vueuse/core';
+
+const emit = defineEmits(['openFeedbackModal']);
+
+const menuRef = ref(null);
+const menuOpen = ref(false);
+
+onClickOutside(menuRef, () => {
+  menuOpen.value = false;
+});
+
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value;
+};
+
+const closeMenu = () => {
+  menuOpen.value = false;
+};
+
+const openFeedbackModal = () => {
+  emit('openFeedbackModal');
+  closeMenu();
+};
+</script>
+
 <template>
   <div class="user-feedback-link">
     <button
       class="report-issue"
       type="button"
-      @click="$emit('openFeedbackModal')"
+      @click="toggleMenu"
     >
       <svg
         viewBox="0 0 17.583 19.237"
@@ -14,53 +41,96 @@
           fill="#1d70b8"
         />
       </svg>
-      <span class="fourteenpx">Report an issue</span>
+      <span class="fourteenpx" />
     </button>
+
+    <div
+      v-if="menuOpen"
+      ref="menuRef"
+      class="user-feedback-menu"
+    >
+      <p>Choose one of the options below:</p>
+      <button
+        type="button"
+        @click="openFeedbackModal"
+      >
+        > Raise an issue for yourself
+      </button>
+      <button
+        type="button"
+        @click="openFeedbackModal"
+      >
+        > Raise and issue for another user
+      </button>
+      <button
+        type="button"
+        @click="openFeedbackModal"
+      >
+        > Ask a question
+      </button>
+    </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'UserFeedbackLink',
-  emits: ['openFeedbackModal'],
-};
-</script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss">
 .user-feedback-link {
   position: fixed;
-  /*bottom: 2em;*/
   left: 1em;
-  /*display: inline-flex;*/
-  background-color: white;
+  background-color: transparent;
   padding: 5px;
 }
+
 button.report-issue {
-    border-radius: 2em;
-    background-color: #f3f2f1;
-    padding: 0.5em 0.8em;
-    border: 1px solid #D2D2D2FF;
-    line-height: 1em;
-    align-items: center;
-    font-size: 1em !important;
-    text-align: center;
-    font-family: "GDS Transport", arial, sans-serif;
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #f3f2f1;
+  padding: 0.7em;
+  border: 1px solid #D2D2D2FF;
+  line-height: 1em;
+  align-items: center;
+  font-size: 1em !important;
+  text-align: center;
+  font-family: "GDS Transport", arial, sans-serif;
+  cursor: pointer;
 }
 button.report-issue:hover,
 button.report-issue:focus,
 button.report-issue:active {
-    background-color: #D2D2D2FF;
+  background-color: #D2D2D2FF;
 }
+
 .fourteenpx {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .report-issue__icon {
-    fill: #1d70b8;
-    width: 1em !important;
-    height: 1.05em !important;
-    margin-right: 0.3em;
+  fill: #1d70b8;
+  width: 1em !important;
+  height: 1.05em !important;
 }
 
+.user-feedback-menu {
+  width: max-content;
+  position: absolute;
+  bottom: 100%;
+  left: 100%;
+  background-color: white;
+  padding: 0.5em;
+  border: 1px solid #D2D2D2FF;
+  border-radius: 0.5em;
+}
+.user-feedback-menu button {
+  display: block;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  background: white;
+  border: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+.user-feedback-menu button:hover {
+  background-color: #f3f2f1;
+}
 </style>
