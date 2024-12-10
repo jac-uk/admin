@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
+import { USER_FEEDBACK_TYPES } from '@/helpers/constants';
 
 const emit = defineEmits(['openFeedbackModal']);
 
@@ -19,8 +20,8 @@ const closeMenu = () => {
   menuOpen.value = false;
 };
 
-const openFeedbackModal = () => {
-  emit('openFeedbackModal');
+const openFeedbackModal = (type) => {
+  emit('openFeedbackModal', type);
   closeMenu();
 };
 </script>
@@ -52,19 +53,19 @@ const openFeedbackModal = () => {
       <p>Choose one of the options below:</p>
       <button
         type="button"
-        @click="openFeedbackModal"
+        @click="() => openFeedbackModal(USER_FEEDBACK_TYPES.YOURSELF)"
       >
         > Raise an issue for yourself
       </button>
       <button
         type="button"
-        @click="openFeedbackModal"
+        @click="() => openFeedbackModal(USER_FEEDBACK_TYPES.ANOTHER_USER)"
       >
         > Raise and issue for another user
       </button>
       <button
         type="button"
-        @click="openFeedbackModal"
+        @click="() => openFeedbackModal(USER_FEEDBACK_TYPES.QUESTION)"
       >
         > Ask a question
       </button>
