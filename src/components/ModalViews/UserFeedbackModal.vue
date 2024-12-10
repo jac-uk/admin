@@ -1,6 +1,6 @@
 <template>
   <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-    Raise A Support Issue With This Page
+    {{ title }}
     <a
       class="close-link"
       @click="closeFeedbackModal(true)"
@@ -28,10 +28,19 @@
 
 <script>
 import FeedbackForm from '@/components/Feedback/FeedbackForm.vue';
+import { USER_FEEDBACK_TYPES } from '@/helpers/constants';
+
 export default {
   name: 'UserFeedbackModal',
   components: {
     FeedbackForm,
+  },
+  props: {
+    type: {
+      type: String,
+      required: true,
+      default: '',
+    },
   },
   emits: ['close'],
   data() {
@@ -40,6 +49,18 @@ export default {
     };
   },
   computed: {
+    title() {
+      switch (this.type) {
+      case USER_FEEDBACK_TYPES.YOURSELF:
+        return 'Raise an Admin support issue with this page';
+      case USER_FEEDBACK_TYPES.ANOTHER_USER:
+        return 'Raise a support issue with this page for another user';
+      case USER_FEEDBACK_TYPES.QUESTION:
+        return 'Ask a question';
+      default:
+        return '';
+      }
+    },
     bugReport() {
       return this.$store.state.bugReport.record;
     },

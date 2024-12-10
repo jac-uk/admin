@@ -48,7 +48,7 @@
     <UserFeedbackLink
       v-show="showFeedbackLink"
       :style="{ 'bottom': linkBottom }"
-      @open-feedback-modal="openFeedbackModal()"
+      @open-feedback-modal="openFeedbackModal"
     />
 
     <Modal
@@ -57,7 +57,10 @@
       data-html2canvas-ignore
       class="fixed-width-modal"
     >
-      <UserFeedbackModal @close="$refs['feedbackModal'].closeModal()" />
+      <UserFeedbackModal
+        :type="userFeedbackType"
+        @close="$refs['feedbackModal'].closeModal()"
+      />
     </Modal>
 
     <footer
@@ -197,6 +200,7 @@ export default {
       linkBottom: '',
       isMounted: false,
       observer: null,
+      userFeedbackType: '',
     };
   },
   computed: {
@@ -507,7 +511,8 @@ export default {
         this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
       }
     },
-    async openFeedbackModal() {
+    async openFeedbackModal(type) {
+      this.userFeedbackType = type;
       this.$refs.feedbackModal.openModal();
     },
     async copyToClipboard() {
