@@ -88,6 +88,7 @@ import ExerciseReportsSift from '@/views/Exercise/Reports/Sift.vue';
 import ExerciseReportsSelectionDays from '@/views/Exercise/Reports/SelectionDays.vue';
 import ExerciseReportsScenario from '@/views/Exercise/Reports/Scenario.vue';
 import ExerciseReportsCommissionerConflicts from '@/views/Exercise/Reports/CommissionerConflicts.vue';
+import ExerciseReportsSccSummary from '@/views/Exercise/Reports/SccSummary.vue';
 
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList.vue';
@@ -1230,6 +1231,15 @@ const routes = [
             meta: {
               requiresAuth: true,
               title: 'Commissioner Conflicts | Exercise Reports',
+            },
+          },
+          {
+            name: 'scc-summary',
+            path: 'scc-summary',
+            component: ExerciseReportsSccSummary,
+            meta: {
+              requiresAuth: true,
+              title: 'SCC Summary | Exercise Reports',
             },
           },
         ],

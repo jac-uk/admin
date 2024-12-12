@@ -1417,6 +1417,10 @@ function availableReportLinks(exercise) {
       title: 'Custom',
       name: 'custom',
     },
+    {
+      title: 'SCC Summary Page',
+      name: 'scc-summary',
+    },
   ];
 
   if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {

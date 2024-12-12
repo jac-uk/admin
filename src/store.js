@@ -50,6 +50,8 @@ import bugReport from '@/store/bugReports/document';
 import releases from '@/store/releases';
 import candidateSettings from '@/store/candidateSettings';
 
+import exerciseReportSccSummary from '@/store/exercise/reports/sccSummary';
+
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -74,6 +76,7 @@ const store = createStore({
     exerciseCreateJourney,
     exerciseDiversity,
     exerciseDocument,
+    exerciseReportSccSummary,
     invitations,
     lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
     lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
