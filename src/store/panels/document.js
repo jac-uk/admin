@@ -64,7 +64,12 @@ export default {
       });
       await batch.commit();
       const applicationsData = {};
-      applicationRecords.forEach(applicationRecord => applicationsData[applicationRecord.id] = { referenceNumber: applicationRecord.application.referenceNumber });
+      applicationRecords.forEach(applicationRecord => {
+        applicationsData[applicationRecord.id] = { referenceNumber: applicationRecord.application.referenceNumber };
+        if (type != 'sift') {
+          applicationsData[applicationRecord.id].fullName = applicationRecord.candidate.fullName;
+        }
+      });
       await context.dispatch('update', {
         id: panelId,
         data: {
@@ -108,5 +113,9 @@ export default {
     data: (state) => () => {
       return clone(state.record);
     },
+    markingScheme: (state) => {
+      if (state.record === null) return null;
+      return clone(state.record.markingScheme);
+    }
   },
 };
