@@ -2,6 +2,7 @@
 
 import clone from 'clone';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics.js';
+import { SELECTION_CATEGORIES, CAPABILITIES } from './exerciseHelper.js';
 
 export {
   SCORESHEET_TOOLS,
@@ -288,9 +289,39 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
   return isComplete;
 }
 
+function sortedMarkingScheme(markingScheme) {
+  const selection_categories = Object.values(SELECTION_CATEGORIES).map(o => o.value);
+  const capabilities = Object.values(CAPABILITIES).map(o => o.value);
+
+  // sort groups
+  markingScheme.sort((a, b) => {
+    const posA = selection_categories.indexOf(a.ref);
+    const posB = selection_categories.indexOf(b.ref);
+    if (posA === posB) return 0;  // same
+    if (posA === -1) return 1;  // a after b (unknown items move to end)
+    if (posB === -1) return -1;  // a before b (unknown items move to end)
+    return posA - posB;
+  });
+
+  // sort children
+  markingScheme.forEach(item => {
+    if (item.type === 'group') {
+      item.children.sort((a, b) => {
+        const posA = capabilities.indexOf(a.ref);
+        const posB = capabilities.indexOf(b.ref);
+        if (posA === posB) return 0;  // same
+        if (posA === -1) return 1;  // a after b (unknown items move to end)
+        if (posB === -1) return -1;  // a before b (unknown items move to end)
+        return posA - posB;
+      });
+    }
+  });
+}
+
 function markingScheme2Columns(markingScheme, editable = false) {
   const columns = [];
   if (!markingScheme) return columns;
+  sortedMarkingScheme(markingScheme);
   const numGroups = markingScheme.filter(item => item.type === 'group').length;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
@@ -308,6 +339,7 @@ function markingScheme2Columns(markingScheme, editable = false) {
 function markingScheme2ColumnHeaders(markingScheme) {
   const headers = [];
   if (!markingScheme) return headers;
+  sortedMarkingScheme(markingScheme);
   let columns = 0;
   markingScheme.forEach(item => {
     if (item.type === 'group') {

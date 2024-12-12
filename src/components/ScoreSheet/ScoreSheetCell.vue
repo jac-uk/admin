@@ -33,9 +33,10 @@
           :key="option.value"
           :value="option.value"
         >
+          {{ option.label }}
           <template v-if="lookupColumnValue(row, column) && lookupColumnValue(row, column) != option.label">
-            {{ lookupColumnValue(row, column) }} &rarr;
-          </template>{{ option.label }}
+            from {{ lookupColumnValue(row, column) }}
+          </template>
         </option>
       </select>
     </template>

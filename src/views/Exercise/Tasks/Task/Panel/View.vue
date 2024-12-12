@@ -78,7 +78,7 @@
       <ScoreSheet
         ref="scoreSheet"
         data-key="id"
-        :marking-scheme="panel.markingScheme"
+        :marking-scheme="markingScheme"
         :data="scoreSheetData"
         :columns-before="[{ title: 'Application', ref: 'referenceNumber', class: 'table-cell-application' }]"
         :editable="canEditScoreSheet"
@@ -302,6 +302,9 @@ export default {
     },
     panel() {
       return this.$store.state.panel.record;
+    },
+    markingScheme() {
+      return this.$store.getters['panel/markingScheme'];
     },
     panellists() {
       const orderedPanellists = [...this.$store.state.panel.panellists];
