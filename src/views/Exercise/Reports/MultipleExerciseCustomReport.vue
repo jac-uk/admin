@@ -1,120 +1,80 @@
 <template>
   <div class="govuk-grid-row">
-    <h2 class="govuk-heading-l">
-      Multiple Exercise Custom report
-    </h2>
     <div
-      class="moj-page-header-actions__actions float-right"
+      class="govuk-grid-column-full"
     >
-      <div class="moj-button-menu">
-        <div class="moj-button-menu__wrapper">
-          <!-- <p>Load saved report:</p> -->
-          <!-- <select
-            v-if="customReports.length > 0"
-            class="govuk-select govuk-!-margin-right-3"
-            :disabled="isLoading"
-            @change="selectReport($event)"
-          >
-            <option>
-              Select a saved report...
-            </option>
-            <optgroup label="Your saved reports">
-              <option
-                v-for="(report, reportIndex) in customReports"
-                :key="reportIndex"
-                :value="reportIndex"
+      <div class="moj-page-header-actions govuk-!-margin-bottom-2">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Multiple Exercise Custom report
+          </h2>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
+                :disabled="isLoading || selectedColumns.length === 0"
+                @click="generateReport"
               >
-                {{ report.name }}
-              </option>
-            </optgroup>
-          </select> -->
-          <button
-            class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-            :disabled="isLoading || selectedColumns.length === 0"
-            @click="generateReport"
-          >
-            Generate Report
-          </button>
-          <button
-            class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-            :disabled="isLoading || !data || selectedColumns.length === 0"
-            @click="downloadReport"
-          >
-            Download Report
-          </button>
+                Generate Report
+              </button>
+              <button
+                class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
+                :disabled="isLoading || !data || selectedColumns.length === 0"
+                @click="downloadReport"
+              >
+                Download Report
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="govuk-inset-text govuk-!-margin-bottom-2">
+          <p class="govuk-body">
+            <!-- This report is experimental. Please provide feedback if something doesn't look right. -->
+            Choose the fields you wish to include in your custom report from the dropdown below and then click 'generate' to produce your report on screen. Only candidates with the status 'Applied' will be included in the report.<br>Download the report when you are satisfied with the content.
+          </p>
         </div>
       </div>
-    </div>
-    <div class="govuk-inset-text govuk-!-margin-bottom-2">
-      <p class="govuk-body">
-        <!-- This report is experimental. Please provide feedback if something doesn't look right. -->
-        Choose the fields you wish to include in your custom report from the dropdown below and then click 'generate' to produce your report on screen. Only candidates with the status 'Applied' will be included in the report.<br>Download the report when you are satisfied with the content.
-      </p>
-    </div>
-    <!-- Exercises -->
-    <div class="govuk-grid-row panel govuk-!-margin-bottom-3">
-      <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select Exercises to display: </span>
-      <div class="govuk-heading-m govuk-!-margin-bottom-0">
-        <select
-          v-model="selectedExercise"
-          class="govuk-select"
-          @change="selectExercise($event)"
-        >
-          <option
-            value=""
-            disabled
-            selected
-          >
-            Select...
-          </option>
-          <option
-            v-for="(exercise, index) in exerciseNames"
-            :key="index"
-            :label="exercise.name"
-          >
-            {{ exercise.referenceNumber + ": " + exercise.name }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div
-      v-if="selectedExercises.length > 0"
-      id="exercise-list"
-      class="panel govuk-!-margin-bottom-3"
-    >
-      <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
-        Selected Exercises:
-      </h2>
 
-      <div
-        v-if="selectedExercises.length"
-      >
-        <template
-          v-for="(element, index) in selectedExercises"
-          :key="index"
-        >
-          <div
-            :data-index="index"
-            class="govuk-!-margin-right-3 moj-filter__tag"
-            @click="removeExercise"
-          >
-            {{ element }}
+      <div class="govuk-grid-row">
+        <!-- Exercises -->
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-3">
+            <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select Exercises to display: </span>
+            <div class="govuk-heading-m govuk-!-margin-bottom-0">
+              <select
+                v-model="selectedExercise"
+                class="govuk-select"
+                @change="selectExercise($event)"
+              >
+                <option
+                  value=""
+                  disabled
+                  selected
+                >
+                  Select...
+                </option>
+                <option
+                  v-for="(exercise, index) in exerciseNames"
+                  :key="index"
+                  :label="exercise.name"
+                  :value="exercise.id"
+                >
+                  {{ exercise.referenceNumber + ": " + exercise.name }}
+                </option>
+              </select>
+            </div>
           </div>
-        </template>
-      </div>
+        </div>
 
-      <div class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0">
-        Click to remove
-      </div>
-    </div>
-
-    <!-- Columns -->
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full-width">
-        <div class="panel govuk-!-margin-bottom-3">
-          <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select a column to display: </span>
-          <div class="govuk-heading-m govuk-!-margin-bottom-0">
-            <div>
+        <!-- Columns -->
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-3">
+            <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select a column to display: </span>
+            <div class="govuk-heading-m govuk-!-margin-bottom-0">
               <select
                 v-model="selectedColumn"
                 class="govuk-select"
@@ -142,88 +102,135 @@
           </div>
         </div>
       </div>
-      <!--
-      <div class="govuk-grid-column-one-half">
-        <div class="govuk-!-margin-bottom-3">
-          <div class="govuk-heading-m govuk-!-margin-bottom-0">
-            <div class="govuk-radios__item-container govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-              <div class="govuk-radios__item">
-                <input
-                  id="showData"
-                  v-model="type"
-                  type="radio"
-                  value="showData"
-                  class="govuk-radios__input"
-                  :disabled="isLoading"
+
+      <div class="govuk-grid-row">
+        <!-- exercises -->
+        <div
+          id="exercise-list"
+          class="govuk-grid-column-one-half"
+        >
+          <div
+            class="panel govuk-!-margin-bottom-3"
+          >
+            <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+              Selected Exercises:
+            </h2>
+
+            <div
+              v-if="selectedExercises.length"
+            >
+              <template
+                v-for="(exerciseId, index) in selectedExercises"
+                :key="index"
+              >
+                <div
+                  :data-index="index"
+                  class="govuk-!-margin-right-3 moj-filter__tag"
+                  @click="removeExercise"
                 >
-                <label
-                  for="showData"
-                  class="govuk-label govuk-radios__label"
-                >Show Individual Records</label>
-              </div>
+                  {{ exerciseNameFromId(exerciseId) }}
+                </div>
+              </template>
             </div>
-            <div class="govuk-radios__item-container">
-              <div class="govuk-radios__item">
-                <input
-                  id="count"
-                  v-model="type"
-                  type="radio"
-                  value="count"
-                  class="govuk-radios__input"
-                  :disabled="isLoading"
+
+            <div
+              v-if="selectedExercises.length"
+              class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0"
+            >
+              Click to remove
+            </div>
+          </div>
+        </div>
+
+        <!-- columns -->
+        <div
+          id="column-list"
+          class="govuk-grid-column-one-half"
+        >
+          <div
+            class="panel govuk-!-margin-bottom-3"
+          >
+            <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+              Show columns:
+            </h2>
+
+            <draggable
+              v-if="selectedColumns.length"
+              v-model="selectedColumns"
+              item-key="getDraggableKey"
+              @click="removeColumn"
+            >
+              <template #item="{element, index}">
+                <div
+                  :data-index="index"
+                  :class="'govuk-!-margin-right-3 ' + (defaultColumns.includes(element) ? 'moj-filter__tag no-remove' : 'moj-filter__tag')"
                 >
-                <label
-                  for="count"
-                  class="govuk-label govuk-radios__label"
-                >Count Records</label>
-              </div>
+                  {{ keys[element].label }}
+                </div>
+              </template>
+            </draggable>
+
+            <div class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+              Click to remove, drag to re-order
             </div>
           </div>
         </div>
       </div>
-      -->
     </div>
+  </div>
 
-    <div
-      v-if="selectedColumns.length > 0"
-      id="column-list"
-      class="panel govuk-!-margin-bottom-3"
-    >
-      <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
-        Show columns:
-      </h2>
+  <LoadingMessage
+    v-if="isLoading"
+    :load-failed="loadFailed"
+  />
 
-      <draggable
-        v-if="selectedColumns.length"
-        v-model="selectedColumns"
-        item-key="getDraggableKey"
-        @click="removeColumn"
-      >
-        <template #item="{element, index}">
-          <div
-            :data-index="index"
-            class="govuk-!-margin-right-3 moj-filter__tag"
+  <div
+    v-if="data"
+    class="govuk-!-margin-top-9"
+    style="overflow: auto;"
+  >
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th
+            v-for="(column, columnIndex) in selectedColumns"
+            :key="columnIndex"
+            class="govuk-table__header"
           >
-            {{ keys[element].label }}
-          </div>
-        </template>
-      </draggable>
-
-      <div class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0">
-        Click to remove, drag to re-order
-      </div>
-    </div>
-
-    <div v-if="data">
-      {{ data }}
-    </div>
+            {{ keys[column].label }}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr
+          v-for="(row, rowIndex) of data.data"
+          :key="rowIndex"
+          class="govuk-table__row"
+        >
+          <td
+            v-for="(column, columnIndex) in selectedColumns"
+            :key="columnIndex"
+            :style="{
+              'white-space': keys[column]?.nowrap ? 'nowrap' : ''
+            }"
+            class="govuk-table__cell"
+          >
+            {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { functions } from '@/firebase';
+import { customReportConstants } from '@/helpers/customReportConstants';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
 import { mapState } from 'vuex';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
@@ -231,260 +238,26 @@ draggable.compatConfig = { MODE: 3 };
 export default {
   name: 'MultipleExerciseCustomReport',
   components: {
+    LoadingMessage,
     draggable,
   },
   data(){
     return {
+      defaultColumns: [
+        'exerciseRef',
+        'referenceNumber',
+      ],
       isLoading: null,
       data: null,
       selectedColumn: '',
-      selectedColumns: [],
+      selectedColumns: [
+        'exerciseRef',
+        'referenceNumber',
+      ],
       selectedExercise: '',
       selectedExercises: [],
-      groups: [
-        {
-          name: 'Application Info',
-          keys: [
-            'referenceNumber',
-            'personalDetails.dateOfBirth',
-            'personalDetails.placeOfBirth',
-            'personalDetails.title',
-            'personalDetails.citizenship',
-            'personalDetails.firstName',
-            'personalDetails.middleNames',
-            'personalDetails.lastName',
-            'personalDetails.fullName',
-            'personalDetails.suffix',
-            'personalDetails.previousNames',
-            'personalDetails.professionalName',
-            'personalDetails.phone',
-            'personalDetails.nationalInsuranceNumber',
-            'personalDetails.email',
-            'personalDetails.reasonableAdjustments',
-            'personalDetails.reasonableAdjustmentsDetails',
-            'personalDetails.address.current',
-            'personalDetails.address.currentMoreThan5Years',
-            'personalDetails.address.previous',
-            'personalDetails.VATNumbers',
-            'status',
-            'appliedAt',
-            'applyingUnderSchedule2d',
-            'applyingUnderSchedule2Three',
-            '_processing.status',
-            '_processing.stage',
-          ],
-        },
-        {
-          name: 'Welsh',
-          keys: [
-            'applyingForWelshPost',
-            'canReadAndWriteWelsh',
-            'canSpeakWelsh',
-          ],
-        },
-        {
-          name: 'Equality and Diversity',
-          keys: [
-            'equalityAndDiversitySurvey.shareData',
-            'equalityAndDiversitySurvey.professionalBackground',
-            'equalityAndDiversitySurvey.currentLegalRole',
-            'equalityAndDiversitySurvey.feePaidJudicialRole',
-            'equalityAndDiversitySurvey.stateOrFeeSchool',
-            'equalityAndDiversitySurvey.oxbridgeUni',
-            'equalityAndDiversitySurvey.firstGenerationStudent',
-            'equalityAndDiversitySurvey.ethnicGroup',
-            'equalityAndDiversitySurvey.gender',
-            'equalityAndDiversitySurvey.changedGender',
-            'equalityAndDiversitySurvey.sexualOrientation',
-            'equalityAndDiversitySurvey.disability',
-            'equalityAndDiversitySurvey.disabilityDetails',
-            'equalityAndDiversitySurvey.religionFaith',
-            'equalityAndDiversitySurvey.attendedOutreachEvents',
-            'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme',
-            'equalityAndDiversitySurvey.hasTakenPAJE',
-          ],
-        },
-        {
-          name: 'Part Time Working Preferences',
-          keys: [
-            'interestedInPartTime',
-            'partTimeWorkingPreferencesDetails',
-          ],
-        },
-        {
-          name: 'Qualifications and Experience',
-          keys: [
-            'qualifications',
-            'feePaidOrSalariedJudge',
-            'feePaidOrSalariedSatForThirtyDays',
-            'feePaidOrSalariedSittingDaysDetails',
-            'declaredAppointmentInQuasiJudicialBody',
-            'experience',
-            'experienceUnderSchedule2Three',
-            'quasiJudicialSittingDaysDetails',
-            'quasiJudicialSatForThirtyDays',
-            'skillsAquisitionDetails',
-          ],
-        },
-        {
-          name: 'Gaps in Employment',
-          keys: [
-            'employmentGaps',
-          ],
-        },
-        {
-          name: 'Memberships',
-          keys: [
-            'professionalMemberships',
-            'otherProfessionalMemberships',
-            'otherProfessionalMembershipsNumber',
-            'otherProfessionalMembershipsInformation',
-            'otherProfessionalMembershipsDate',
-            'royalInstituteBritishArchitectsNumber',
-            'royalInstituteBritishArchitectsInformation',
-            'royalInstituteBritishArchitectsDate',
-            'royalInstitutionCharteredSurveyorsDate',
-            'royalInstitutionCharteredSurveyorsNumber',
-            'royalCollegeOfPsychiatristsDate',
-            'generalMedicalCouncilConditional',
-            'generalMedicalCouncilNumber',
-            'generalMedicalCouncilConditionalDetails',
-            'generalMedicalCouncilConditionalEndDate',
-            'generalMedicalCouncilDate',
-            'charteredAssociationBuildingEngineersNumber',
-            'charteredInstituteBuildingInformation',
-            'charteredInstituteBuildingNumber',
-            'charteredInstituteEnvironmentalHealthInformation',
-            'charteredInstituteEnvironmentalHealthDate',
-          ],
-        },
-        {
-          name: 'Reasonable Length of Service',
-          keys: [
-            'canGiveReasonableLOS',
-            'cantGiveReasonableLOSDetails',
-          ],
-        },
-        {
-          name: 'Assessor',
-          keys: [
-            'firstAssessorType',
-            'firstAssessorEmail',
-            'firstAssessorTitle',
-            'firstAssessorFullName',
-            'firstAssessorPhone',
-            'secondAssessorType',
-            'secondAssessorEmail',
-            'secondAssessorTitle',
-            'secondAssessorFullName',
-            'secondAssessorPhone',
-          ],
-        },
-        {
-          name: 'Resignation from the Department for Work and Pensions (DWP)',
-          keys: [
-            'resignationFromDWP.workingAtDWP',
-          ],
-        },
-      ],
-      keys: {
-        referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
-        applyingForWelshPost: { label: 'Applying for Welsh Post?', type: Boolean },
-        canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
-        canSpeakWelsh: { label: 'Can speak Welsh?', type: Boolean },
-        employmentGaps: { label: 'Employment gaps', type: 'Array of objects' },
-        firstAssessorType: { label: 'First Assessor Type', type: String },
-        firstAssessorEmail: { label: 'First Assessor Email', type: String, nowrap: true },
-        firstAssessorTitle: { label: 'First Assessor Title', type: String, nowrap: true },
-        firstAssessorFullName: { label: 'First Assessor Full Name', type: String, nowrap: true },
-        firstAssessorPhone: { label: 'First Assessor Phone', type: String, nowrap: true },
-        secondAssessorType: { label: 'Second Assessor Type', type: String },
-        secondAssessorEmail: { label: 'Second Assessor Email', type: String, nowrap: true },
-        secondAssessorTitle: { label: 'Second Assessor Title', type: String, nowrap: true },
-        secondAssessorFullName: { label: 'Second Assessor Full Name', type: String, nowrap: true },
-        secondAssessorPhone: { label: 'Second Assessor Phone', type: String, nowrap: true },
-        royalInstitutionCharteredSurveyorsDate: { label: 'Royal Institution Chartered Surveyors Date', type: Date },
-        royalInstituteBritishArchitectsInformation: { label: 'Royal Institute of British Architects Information', type: String },
-        otherProfessionalMemberships: { label: 'Other Professional Memberships', type: String },
-        otherProfessionalMembershipsNumber: { label: 'Other Professional Memberships Number', type: String },
-        otherProfessionalMembershipsInformation: { label: 'Other Professional Memberships Information', type: String },
-        generalMedicalCouncilConditional: { label: 'General Medical Council Conditional', type: String },
-        charteredAssociationBuildingEngineersNumber: { label: 'Chartered Association Building Engineers Number', type: String },
-        charteredInstituteBuildingInformation: { label: 'Chartered Institute Building Information', type: String },
-        generalMedicalCouncilConditionalDetails: { label: 'General Medical Council Conditional Details', type: String },
-        generalMedicalCouncilNumber: { label: 'General Medical Council Number', type: String },
-        royalInstituteBritishArchitectsNumber: { label: 'Royal Institute of British Architects Number', type: String },
-        charteredInstituteEnvironmentalHealthInformation: { label: 'Chartered Institute Environmental Health Information', type: String },
-        royalCollegeOfPsychiatristsDate: { label: 'Royal College of Psychiatrists Date', type: Date },
-        royalInstituteBritishArchitectsDate: { label: 'Royal Institute of British Architects Date', type: Date },
-        charteredInstituteBuildingNumber: { label: 'Chartered Institute Building Number', type: String },
-        generalMedicalCouncilDate: { label: 'General Medical Council Date', type: Date },
-        otherProfessionalMembershipsDate: { label: 'Other Professional Memberships Date', type: Date },
-        generalMedicalCouncilConditionalEndDate: { label: 'General Medical Council Condition End Date', type: Date },
-        professionalMemberships: { label: 'Professional memberships', type: 'Array of strings' },
-        charteredInstituteEnvironmentalHealthDate: { label: 'Chartered Institute Environmental Health Date', type: Date },
-        royalInstitutionCharteredSurveyorsNumber: { label: 'Royal Institution of Chartered Surveyors Number', type: String },
-        status: { label: 'Application status', type: String },
-        appliedAt: { label: 'Application date', type: Date },
-        interestedInPartTime: { label: 'Interested in part time?', type: Boolean },
-        partTimeWorkingPreferencesDetails: { label: 'Salaried part-time work (SPTW) - Details', type: String },
-        applyingUnderSchedule2d: { label: 'Applying under schedule 2d?', type: Boolean },
-        canGiveReasonableLOS: { label: 'Can work a reasonable length of service', type: Boolean },
-        cantGiveReasonableLOSDetails: { label: 'Can work a reasonable length of service (details)', type: String },
-        applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
-        '_processing.status': { label: 'Status (admin)', type: String },
-        '_processing.stage': { label: 'Stage', type: String },
-        'personalDetails.phone': { label: 'Phone', type: String, nowrap: true },
-        'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String, nowrap: true },
-        'personalDetails.email': { label: 'Email', type: String, nowrap: true },
-        'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
-        'personalDetails.reasonableAdjustmentsDetails': { label: 'Reasonable adjustments details', type: String },
-        'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date, nowrap: true },
-        'personalDetails.placeOfBirth': { label: 'Place of birth', type: String, nowrap: true },
-        'personalDetails.title': { label: 'Title', type: String, nowrap: true },
-        'personalDetails.citizenship': { label: 'Citizenship', type: String, nowrap: true },
-        'personalDetails.firstName': { label: 'First Name', type: String, nowrap: true },
-        'personalDetails.middleNames': { label: 'Middle name(s)', type: String, nowrap: true },
-        'personalDetails.lastName': { label: 'Last Name', type: String, nowrap: true },
-        'personalDetails.fullName': { label: 'Full Name', type: String, nowrap: true },
-        'personalDetails.suffix': { label: 'Suffix', type: String },
-        'personalDetails.previousNames': { label: 'Previous known name(s)', type: String },
-        'personalDetails.professionalName': { label: 'Professional name', type: String, nowrap: true },
-        'personalDetails.address.current': { label: 'Current Address', type: String },
-        'personalDetails.address.currentMoreThan5Years': { label: 'Has lived at this address for more than 5 years', type: Boolean },
-        'personalDetails.address.previous': { label: 'Previous Addresses', type: String },
-        'personalDetails.VATNumbers': { label: 'VAT registration number', type: String },
-        qualifications: { label: 'Qualifications', type: 'Array of objects' },
-        feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
-        feePaidOrSalariedSatForThirtyDays: { label: 'Fee paid or salaried sat for thirty days?', type: Boolean },
-        feePaidOrSalariedSittingDaysDetails: { label: 'Fee paid or salaried sitting days details', type: String },
-        declaredAppointmentInQuasiJudicialBody: { label: 'Have you declared an appointment or appointments in a quasi-judicial body in this application?', type: Boolean },
-        quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
-        quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
-        skillsAquisitionDetails: { label: 'Skills acquisition details', type: String },
-        experience: { label: 'Post-qualification experience', type: String },
-        experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
-        // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
-        // locationPreferences: { label: 'Location Preferences', type: String },
-        'equalityAndDiversitySurvey.shareData': { label: 'Agreed to share data', type: Boolean },
-        'equalityAndDiversitySurvey.professionalBackground': { label: 'Professional background', type: String },
-        'equalityAndDiversitySurvey.currentLegalRole': { label: 'Current legal role', type: String },
-        'equalityAndDiversitySurvey.feePaidJudicialRole': { label: 'Held fee-paid judicial role', type: String },
-        'equalityAndDiversitySurvey.stateOrFeeSchool': { label: 'Attended state or fee-paying school', type: String },
-        'equalityAndDiversitySurvey.oxbridgeUni': { label: 'Attended Oxbridge universities', type: String },
-        'equalityAndDiversitySurvey.firstGenerationStudent': { label: 'First generation to go to university', type: String },
-        'equalityAndDiversitySurvey.ethnicGroup': { label: 'Ethnic group', type: String },
-        'equalityAndDiversitySurvey.gender': { label: 'Sex', type: String },
-        'equalityAndDiversitySurvey.changedGender': { label: 'Gender is the same as sex assigned at birth', type: String },
-        'equalityAndDiversitySurvey.sexualOrientation': { label: 'Sexual orientation', type: String },
-        'equalityAndDiversitySurvey.disability': { label: 'Disability', type: String },
-        'equalityAndDiversitySurvey.disabilityDetails': { label: 'Disability details', type: String },
-        'equalityAndDiversitySurvey.religionFaith': { label: 'Religion', type: String },
-        'equalityAndDiversitySurvey.attendedOutreachEvents': { label: 'Attended outreach events', type: String },
-        'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme': { label: 'Participated In judicial workshadowing Scheme', type: String },
-        'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
-        'resignationFromDWP.workingAtDWP': { label: 'Currently work at the Department for Work and Pensions (DWP)?', type: Boolean },
-      },
+      groups: customReportConstants.groups,
+      keys: customReportConstants.keys,
     };
   },
   computed: {
@@ -523,40 +296,39 @@ export default {
     },
     removeColumn(event) {
       const index = event.target.getAttribute('data-index');
-      this.selectedColumns.splice(index, 1);
+      if (!['exerciseRef', 'referenceNumber'].includes(this.selectedColumns[index])){
+        this.selectedColumns.splice(index, 1);
+      }
     },
     generateReport() {
-      console.log('generateReport');
-      // this.getApplicationRecords();
-      // // Scroll to the list of columns
-      // const element = document.querySelector('#column-list'); // Replace with the actual element selector
-      // if (element) {
-      //   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // }
+      this.getMultipleApplicationRecords();
+      // Scroll to the list of columns
+      const element = document.querySelector('#column-list'); // Replace with the actual element selector
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     },
-    async getApplicationRecords() {
-      console.log('getApplicationRecords');
-      // this.isLoading = true;
-      // this.data = null;
-      // if (this.columns.length > 0) {
-      //   this.data = await httpsCallable(functions, 'getApplicationData')({
-      //     exerciseId: this.exercise.id,
-      //     columns: this.columns,
-      //     type: this.type,
-      //     whereClauses: this.whereClauses,
-      //     statuses: this.statuses,
-      //     stage: this.selectedStage === 'all' ? null : this.selectedStage,
-      //     stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
-      //   });
-      // }
-      // this.isLoading = false;
+    async getMultipleApplicationRecords() {
+      this.isLoading = true;
+      this.data = null;
+      if (this.selectedExercises.length > 1) {
+        this.data = await httpsCallable(functions, 'getMultipleApplicationData')(
+          this.selectedExercises,
+          {
+            columns: this.selectedColumns,
+            stage: this.selectedStage === 'all' ? null : this.selectedStage,
+            stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
+          }
+        );
+      }
+      this.isLoading = false;
     },
     downloadReport() {
-      const header = [...this.columns].map(col => this.keys[col].label);
+      const header = [...this.selectedColumns].map(col => this.keys[col].label);
       const csv = [[...header]];
 
       for (let i = 0; i < this.data.data.length; i++) {
-        csv.push([...this.columns.map(col => this.data.data[i][col])]);
+        csv.push([...this.selectedColumns.map(col => this.data.data[i][col])]);
       }
 
       // Convert the 2D array to CSV, ensuring values are properly escaped
@@ -574,9 +346,20 @@ export default {
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'custom_report.csv');
+      link.setAttribute('download', 'multiple_exercise_custom_report.csv');
       document.body.appendChild(link);
       link.click();
+    },
+    isUsingFilter(key) {
+      // return true if the column is a filter column
+      return ['_processing.stage', '_processing.status'].includes(key);
+    },
+    exerciseNameFromId(exerciseId){
+      if (this.exerciseNames.length) {
+        return this.exerciseNames.filter(exercise => exerciseId == exercise.id)[0].name;
+      } else {
+        return exerciseId;
+      }
     },
   },
 };
@@ -591,5 +374,10 @@ td:first-letter {
 }
 .moj-filter__tag {
   cursor: pointer;
+}
+.no-remove:after {
+  background-image: none;
+  margin-left: none;
+  width: unset;
 }
 </style>
