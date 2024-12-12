@@ -341,6 +341,14 @@ export default {
         }
         exerciseContent.push(
           {
+            title: 'Multiple Exercise Custom Report',
+            link: () => {
+              this.$router.push({ name: 'multiple-exercise-custom-report' });
+            },
+          }
+        );
+        exerciseContent.push(
+          {
             title: 'My favourites',
             link: () => {
               this.$store.dispatch('exerciseCollection/showFavourites');
