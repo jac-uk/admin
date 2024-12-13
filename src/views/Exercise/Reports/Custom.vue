@@ -442,17 +442,31 @@ export default {
     async getApplicationRecords() {
       this.isLoading = true;
       this.data = null;
-      if (this.columns.length > 0) {
-        this.data = await httpsCallable(functions, 'getApplicationData')({
-          exerciseId: this.exercise.id,
-          columns: this.columns,
-          type: this.type,
-          whereClauses: this.whereClauses,
-          statuses: this.statuses,
-          stage: this.selectedStage === 'all' ? null : this.selectedStage,
-          stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
-        });
+
+      try {
+        if (this.columns.length > 0) {
+          const response = await httpsCallable(functions, 'getApplicationData')({
+            exerciseId: this.exercise.id,
+            columns: this.columns,
+            type: this.type,
+            whereClauses: this.whereClauses,
+            statuses: this.statuses,
+            stage: this.selectedStage === 'all' ? null : this.selectedStage,
+            stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
+          });
+
+          if (response === null) {
+            this.redirectToErrorPage();
+          } else {
+            this.data = response;
+          }
+        }
+      } catch (e) {
+        this.isLoading = false;
+        this.loadFailed = true;
+        throw e;
       }
+
       this.isLoading = false;
     },
     selectColumn(event) {

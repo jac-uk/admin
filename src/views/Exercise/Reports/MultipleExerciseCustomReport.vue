@@ -248,6 +248,7 @@ export default {
         'referenceNumber',
       ],
       isLoading: null,
+      loadFailed: null,
       data: null,
       selectedColumn: '',
       selectedColumns: [
@@ -311,12 +312,26 @@ export default {
     async getMultipleApplicationRecords() {
       this.isLoading = true;
       this.data = null;
-      if (this.selectedExercises.length > 0) {
-        this.data = await httpsCallable(functions, 'getMultipleApplicationData')({
-          exerciseIds: this.selectedExercises,
-          columns: this.selectedColumns,
-        });
+
+      try {
+        if (this.selectedExercises.length > 0) {
+          const response = await httpsCallable(functions, 'getMultipleApplicationData')({
+            exerciseIds: this.selectedExercises,
+            columns: this.selectedColumns,
+          });
+
+          if (response === null) {
+            this.redirectToErrorPage();
+          } else {
+            this.data = response;
+          }
+        }
+      } catch (e) {
+        this.isLoading = false;
+        this.loadFailed = true;
+        throw e;
       }
+
       this.isLoading = false;
     },
     downloadReport() {
