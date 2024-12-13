@@ -312,14 +312,10 @@ export default {
       this.isLoading = true;
       this.data = null;
       if (this.selectedExercises.length > 1) {
-        this.data = await httpsCallable(functions, 'getMultipleApplicationData')(
-          this.selectedExercises,
-          {
-            columns: this.selectedColumns,
-            stage: this.selectedStage === 'all' ? null : this.selectedStage,
-            stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
-          }
-        );
+        this.data = await httpsCallable(functions, 'getMultipleApplicationData')({
+          exerciseIds: this.selectedExercises,
+          columns: this.selectedColumns,
+        });
       }
       this.isLoading = false;
     },
