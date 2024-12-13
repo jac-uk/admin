@@ -15,8 +15,9 @@ import defaultView from './New/default.vue';
 import expired from './New/expired.vue';
 import qualifyingTest from './New/qualifyingTest.vue';
 import stageOutcome from './New/stageOutcome.vue';
+import noApplications from './New/noApplications.vue';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
-import { getTimelineTasks } from '@/helpers/exerciseHelper';
+import { getTimelineTasks, taskEntryStatus } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -24,6 +25,7 @@ export default {
     expired,
     qualifyingTest,
     stageOutcome,
+    noApplications,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -31,6 +33,11 @@ export default {
       required: true,
       type: String,
     },
+  },
+  data() {
+    return {
+      totalApplications: 0,
+    };
   },
   computed: {
     exercise() {
@@ -54,6 +61,7 @@ export default {
           return 'expired';
         }
       } else {
+        if (!this.totalApplications) return 'noApplications';
         switch (this.type) {
         case TASK_TYPE.SHORTLISTING_OUTCOME:
         case TASK_TYPE.SELECTION_OUTCOME:
@@ -66,13 +74,20 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     const task = this.$store.getters['tasks/getTask'](this.type);
     if (task && task.status) {
       this.$router.replace({
         name: getExpectedRouteName(this.type),
         params: this.$route.params,
       });
+    } else {
+      // check we have applications
+      const entryStatus = taskEntryStatus(this.exercise, this.type);
+      if (entryStatus) {
+        const count = await this.$store.dispatch('applicationRecords/getCount', { status: entryStatus, exerciseId: this.exercise.id });
+        this.totalApplications = count;
+      }
     }
   },
 };
