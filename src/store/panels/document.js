@@ -116,6 +116,6 @@ export default {
     markingScheme: (state) => {
       if (state.record === null) return null;
       return clone(state.record.markingScheme);
-    }
+    },
   },
 };
