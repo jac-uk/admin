@@ -100,7 +100,7 @@ export default {
       }
       const snap = await getCountFromServer(queryRef);
       return snap.data().count;
-    }
+    },
   },
   state: {
     records: [],

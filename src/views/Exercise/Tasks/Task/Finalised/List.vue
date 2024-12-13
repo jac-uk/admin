@@ -29,7 +29,10 @@
             {{ totalFailed }}
           </h2>
         </div>
-        <div v-if="hasParticipation" class="govuk-grid-column-one-quarter">
+        <div
+          v-if="hasParticipation"
+          class="govuk-grid-column-one-quarter"
+        >
           <span class="govuk-body-s govuk-!-margin-bottom-0">
             Not started
           </span>
