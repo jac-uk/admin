@@ -3,6 +3,7 @@
 import { TASK_TYPE } from '@/helpers/constants';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import { toYesNo } from '@jac-uk/jac-kit/filters/filters';
 
 export {
   OUTCOME,
@@ -416,11 +417,11 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
   }
 }
 
-function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently only for QTs
+function xlsxData(didNotTake, failed, task, diversityData, type) {
   const rows = [];
   const headers = [];
   headers.push('Ref');
-  if (type === TASK_TYPE.QUALIFYING_TEST) {
+  if (task.type === TASK_TYPE.QUALIFYING_TEST) {
     if (type === DOWNLOAD_TYPES.full.value) {
       headers.push('Full name');
       headers.push('Email');
@@ -431,27 +432,28 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       headers.push('Z_SJT');
       headers.push('Z_CAT');
     }
+    headers.push('Rank');
     headers.push('Z_Overall');
   } else {
     if (type === DOWNLOAD_TYPES.full.value) {
       headers.push('Full name');
       headers.push('Email');
     }
+    headers.push('Rank');
     headers.push('Score');
   }
-  headers.push('Rank');
   // headers.push('Notes');
-  headers.push('Outcome');
   headers.push('Female');
-  headers.push('Ethnic minority');
+  headers.push('Ethnic Minority');
   headers.push('Solicitor');
-  headers.push('Disabled');
+  headers.push('Disability');
+  headers.push('Outcome');
   rows.push(headers);
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
     row.push(item.ref);
-    if (type === TASK_TYPE.QUALIFYING_TEST) {
-      if (type === DOWNLOAD_TYPES.full.value) { // TODO: will never go into this block
+    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+      if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
         row.push(item.scoreSheet.qualifyingTest.SJ.score);
@@ -461,32 +463,33 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
         row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
         row.push(item.scoreSheet.qualifyingTest.CA.zScore);
       }
+      row.push(item.rank);
       row.push(item.zScore);
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
       }
+      row.push(item.rank);
       row.push(item.score);
     }
-    row.push(item.rank); // TODO rank
     // row.push(''); // TODO notes
-    if (item.hasOwnProperty('pass')) {
-      item.pass ? row.push(OUTCOME.PASS.value) : row.push(OUTCOME.FAIL.value);
-    } else {
-      row.push('');
-    }
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+      row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)));
+      row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)));
+      row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
+      row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
     } else {
       row.push();
       row.push();
       row.push();
       row.push();
+    }
+    if (item.hasOwnProperty('pass')) {
+      item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
+    } else {
+      row.push('');
     }
     rows.push(row);
   });
@@ -505,9 +508,8 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push('');
     }
     row.push('');
-    row.push(''); // TODO rank
+    row.push('');
     // row.push(''); // TODO notes
-    row.push('noTestSubmitted');
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
@@ -520,6 +522,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push();
       row.push();
     }
+    row.push('noTestSubmitted');
     rows.push(row);
   });
   // add failed
@@ -537,9 +540,8 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push('');
     }
     row.push('');
-    row.push(''); // TODO rank
+    row.push('');
     // row.push(''); // TODO notes
-    row.push('failedFirstTest');
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
@@ -552,6 +554,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently
       row.push();
       row.push();
     }
+    row.push('failedFirstTest');
     rows.push(row);
   });
   return rows;
