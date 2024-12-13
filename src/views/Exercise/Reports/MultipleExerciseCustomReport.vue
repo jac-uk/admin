@@ -311,7 +311,7 @@ export default {
     async getMultipleApplicationRecords() {
       this.isLoading = true;
       this.data = null;
-      if (this.selectedExercises.length > 1) {
+      if (this.selectedExercises.length > 0) {
         this.data = await httpsCallable(functions, 'getMultipleApplicationData')({
           exerciseIds: this.selectedExercises,
           columns: this.selectedColumns,
