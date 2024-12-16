@@ -19,6 +19,7 @@
       </div>
       <FeedbackForm
         v-else
+        :type="type"
         @close="closeFeedbackModal(false)"
         @success="showConfirmationModal = true"
       />
