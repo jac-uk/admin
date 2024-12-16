@@ -84,9 +84,17 @@ export default {
     } else {
       // check we have applications
       const entryStatus = taskEntryStatus(this.exercise, this.type);
-      if (entryStatus) {
+      if (entryStatus != '') {
         const count = await this.$store.dispatch('applicationRecords/getCount', { status: entryStatus, exerciseId: this.exercise.id });
         this.totalApplications = count;
+      } else {
+        if (this?.exercise?._applicationRecords?.status?.blank) {
+          this.totalApplications = this.exercise._applicationRecords.status.blank;
+        } else if (this?.exercise?._applicationRecords?.shortlisting) {
+          this.totalApplications = this.exercise._applicationRecords.shortlisting;
+        } else if (this?.exercise?._applications?.applied) {
+          this.totalApplications = this.exercise._applications.applied;
+        }
       }
     }
   },

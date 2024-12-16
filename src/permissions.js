@@ -388,6 +388,23 @@ const PERMISSIONS = {
       },
     },
   },
+  tasks: {
+    label: 'Tasks',
+    permissions: {
+      canCreate: {
+        label: 'Can create tasks',
+        value: 't1',
+      },
+      canUpdate: {
+        label: 'Can update tasks',
+        value: 't2',
+      },
+      canEditScoreCalculation: {
+        label: 'Can edit score calculation',
+        value: 't3',
+      },
+    },
+  },
 };
 
 export default PERMISSIONS;

@@ -25,12 +25,7 @@
         class="marking-scheme"
         data-key="ref"
         :data="group.children"
-        :columns="[
-          { title: $filters.lookup(group.ref) },
-          { title: '' },
-          { title: '' },
-          { title: '' },
-        ]"
+        :columns="tableColumns(group)"
         local-data
       >
         <template #row="{row, index}">
@@ -40,7 +35,7 @@
           <TableCell>
             {{ getMarkingType(row.type).label }}
           </TableCell>
-          <TableCell>
+          <TableCell v-if="hasPermissions([PERMISSIONS.tasks.permissions.canEditScoreCalculation.value])">
             <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
                 <input
@@ -113,6 +108,7 @@ import TitleBar from '@/components/Page/TitleBar.vue';
 import AddMarkingSchemeItem from './AddMarkingSchemeItem.vue';
 import { functions } from '@/firebase';
 import { getMarkingType } from '@/helpers/scoreSheetHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -126,6 +122,7 @@ export default {
     AddMarkingSchemeItem,
   },
   beforeRouteEnter: beforeRouteEnter,
+  mixins: [permissionMixin],
   props: {
     type: {
       required: true,
@@ -136,11 +133,6 @@ export default {
     const task = this.$store.getters['tasks/getTask'](this.type);
     return {
       markingScheme: task.markingScheme,
-      tableColumns: [
-        { title: 'Criteria' },
-        { title: 'Type' },
-        { title: '' },
-      ],
       currentGroup: null,
     };
   },
@@ -162,6 +154,14 @@ export default {
     },
   },
   methods: {
+    tableColumns(group) {
+      const columns = [];
+      columns.push({ title: this.$filters.lookup(group.ref) });
+      columns.push({ title: '' });
+      if (this.hasPermissions([this.PERMISSIONS.tasks.permissions.canEditScoreCalculation.value])) columns.push({ title: '' });
+      columns.push({ title: '' });
+      return columns;
+    },
     getMarkingType(type) {
       return getMarkingType(type);
     },
