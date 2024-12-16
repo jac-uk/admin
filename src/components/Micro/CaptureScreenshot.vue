@@ -1,16 +1,19 @@
 <template>
   <div>
-    <label class="screenshot-label govuk-heading-m govuk-!-margin-bottom-2">Capture Screenshot</label>
-
     <a
-      class="screenshot-link"
+      class="screenshot-link govuk-!-margin-bottom-2"
       title="Capture Screenshot"
       alt="Capture Screenshot"
       @click="captureScreenshot"
-    ><img
-      src="@/assets/screenshot.png"
-      style="width: 25px"
-    ></a>
+    >
+      <label class="screenshot-label govuk-heading-m">
+        Capture Screenshot
+      </label>
+      <img
+        src="@/assets/screenshot.png"
+        style="width: 25px"
+      >
+    </a>
     <div
       v-if="thumbnail"
       ref="thumbnailContainer"
@@ -115,6 +118,7 @@ export default {
   vertical-align: middle;
 }
 .screenshot-label {
+  cursor: pointer;
   display: inline-block;
   margin-right: 30px;
 }
