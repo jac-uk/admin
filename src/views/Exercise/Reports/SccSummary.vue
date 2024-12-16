@@ -34,9 +34,14 @@
         </div>
       </div>
     </div>
-
     <div
-      v-if="exerciseReportSccSummary"
+      v-if="isLoading"
+      class="govuk-grid-column-full"
+    >
+      <LoadingMessage />
+    </div>
+    <div
+      v-else-if="exerciseReportSccSummary"
       class="govuk-grid-column-full"
     >
       <dl class="govuk-summary-list">
@@ -367,13 +372,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, reactive, watchEffect } from 'vue';
+import { computed, onMounted, onBeforeUnmount, reactive, watchEffect, ref } from 'vue';
 import store from '@/store';
 import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import { downloadBase64File } from '@/helpers/file';
 import { hasPermissions } from '@/services/permissionService';
 import PERMISSIONS from '@/permissions';
@@ -381,12 +387,15 @@ import PERMISSIONS from '@/permissions';
 const exerciseReportSccSummary = computed(() => store.state.exerciseReportSccSummary.record || {});
 const exercise = computed(() => store.state.exerciseDocument.record || {});
 const shortlistingMethods = computed(() => exerciseReportSccSummary.value.methodOfShortlistingArray || []);
+const isLoading = ref(false);
 
 const sccSummaryForm = reactive({});
 
 onMounted(async () => {
+  isLoading.value = true;
   await getData();
   store.dispatch('exerciseReportSccSummary/bind', exercise.value.id);
+  isLoading.value = false;
 });
 
 onBeforeUnmount(() => {
