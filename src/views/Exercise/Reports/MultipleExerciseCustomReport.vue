@@ -1,6 +1,9 @@
 <template>
   <div class="govuk-grid-row">
     <div
+      v-if="hasPermissions([
+        PERMISSIONS.applications.permissions.canReadApplications.value
+      ])"
       class="govuk-grid-column-full"
     >
       <div class="moj-page-header-actions govuk-!-margin-bottom-2">
@@ -60,10 +63,10 @@
                 <option
                   v-for="(exercise, index) in exerciseNames"
                   :key="index"
-                  :label="exercise.name"
+                  :label="exercise.referenceNumber"
                   :value="exercise.id"
                 >
-                  {{ exercise.referenceNumber + ": " + exercise.name }}
+                  <!-- {{ exercise.referenceNumber + ": " + exercise.name }} -->
                 </option>
               </select>
             </div>
@@ -128,7 +131,7 @@
                   class="govuk-!-margin-right-3 moj-filter__tag"
                   @click="removeExercise"
                 >
-                  {{ exerciseNameFromId(exerciseId) }}
+                  {{ exerciseFromId(exerciseId).referenceNumber + ' - ' + exerciseFromId(exerciseId).name.slice(0,30) + (exerciseFromId(exerciseId).name.length > 30 ? '...' : '') }}
                 </div>
               </template>
             </div>
@@ -231,6 +234,7 @@ import draggable from 'vuedraggable';
 import _ from 'lodash';
 import { mapState } from 'vuex';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
@@ -241,6 +245,7 @@ export default {
     LoadingMessage,
     draggable,
   },
+  mixins: [permissionMixin],
   data(){
     return {
       defaultColumns: [
@@ -271,6 +276,11 @@ export default {
         };
       }),
     }),
+  },
+  beforeMount(){
+    if (!this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])){
+      this.$router.replace({ path: '/exercises' });
+    }
   },
   mounted(){
     this.fetchAllExercises();
@@ -365,9 +375,9 @@ export default {
       // return true if the column is a filter column
       return ['_processing.stage', '_processing.status'].includes(key);
     },
-    exerciseNameFromId(exerciseId){
+    exerciseFromId(exerciseId){
       if (this.exerciseNames.length) {
-        return this.exerciseNames.filter(exercise => exerciseId == exercise.id)[0].name;
+        return this.exerciseNames.filter(exercise => exerciseId == exercise.id)[0];
       } else {
         return exerciseId;
       }
