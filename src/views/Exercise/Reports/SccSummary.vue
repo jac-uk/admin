@@ -18,16 +18,9 @@
                     PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
                   ])
                 "
-                class="govuk-!-margin-right-2"
                 :action="downloadSccSummaryReport"
               >
                 Download SCC Summary
-              </ActionButton>
-              <ActionButton
-                type="primary"
-                :action="refreshReport"
-              >
-                Refresh
               </ActionButton>
             </div>
           </div>
@@ -170,19 +163,7 @@
             Method of shortlisting
           </dt>
           <dd class="govuk-summary-list__value">
-            <Select
-              id="shortlistingMethod"
-              v-model="sccSummaryForm.shortlistingMethod"
-              @update:model-value="saveSccSummary('shortlistingMethod', $event)"
-            >
-              <option
-                v-for="shortlistingMethod in shortlistingMethods"
-                :key="shortlistingMethod"
-                :value="shortlistingMethod"
-              >
-                {{ shortlistingMethod }}
-              </option>
-            </Select>
+            {{ sccSummaryForm.shortlistingMethod }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -378,7 +359,6 @@ import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import { downloadBase64File } from '@/helpers/file';
 import { hasPermissions } from '@/services/permissionService';
@@ -386,7 +366,6 @@ import PERMISSIONS from '@/permissions';
 
 const exerciseReportSccSummary = computed(() => store.state.exerciseReportSccSummary.record || {});
 const exercise = computed(() => store.state.exerciseDocument.record || {});
-const shortlistingMethods = computed(() => exerciseReportSccSummary.value.methodOfShortlistingArray || []);
 const isLoading = ref(false);
 
 const sccSummaryForm = reactive({});
@@ -404,15 +383,6 @@ onBeforeUnmount(() => {
 
 const saveSccSummary = async (field, value) => {
   await store.dispatch('exerciseReportSccSummary/update', { exerciseId: exercise.value.id, data: { [field]: value } });
-};
-
-const refreshReport = async () => {
-  try {
-    const result = await getData();
-    return result;
-  } catch (error) {
-    return;
-  }
 };
 
 const getData = async () => {
