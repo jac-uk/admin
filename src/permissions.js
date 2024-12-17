@@ -251,6 +251,10 @@ const PERMISSIONS = {
         label: 'Can approve late applications',
         value: 'a6',
       },
+      canCreateTestApplications: {
+        label: 'Can create test applications',
+        value: 'a7',
+      },
     },
   },
   applicationRecords: {
@@ -385,6 +389,23 @@ const PERMISSIONS = {
       canReadReleases: {
         label: 'Can read releases',
         value: 'r1',
+      },
+    },
+  },
+  tasks: {
+    label: 'Tasks',
+    permissions: {
+      canCreate: {
+        label: 'Can create tasks',
+        value: 't1',
+      },
+      canUpdate: {
+        label: 'Can update tasks',
+        value: 't2',
+      },
+      canEditScoreCalculation: {
+        label: 'Can edit score calculation',
+        value: 't3',
       },
     },
   },
