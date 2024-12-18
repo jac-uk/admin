@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { writeBatch, query, doc, collection, where, serverTimestamp } from '@firebase/firestore';
+import { writeBatch, query, doc, collection, where, serverTimestamp, getCountFromServer } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -88,6 +88,18 @@ export default {
       const localMsg = context.state.message;
       context.commit('message', null);
       return localMsg;
+    },
+    getCount: async (context, params) => {
+      let queryRef = query(
+        collectionRef,
+        where('exercise.id', '==', params.exerciseId),
+        where('active', '==', true)
+      );
+      if (params.status) {
+        queryRef = query(queryRef, where('status', '==', params.status));
+      }
+      const snap = await getCountFromServer(queryRef);
+      return snap.data().count;
     },
   },
   state: {

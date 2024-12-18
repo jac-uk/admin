@@ -2,6 +2,7 @@
 
 import clone from 'clone';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics.js';
+import { SELECTION_CATEGORIES, CAPABILITIES } from './exerciseHelper.js';
 
 export {
   SCORESHEET_TOOLS,
@@ -22,13 +23,15 @@ export {
   markingScheme2ColumnHeaders,
   markingTypeHasOptions,
   markingTypeGetOptions,
-  getScoreSheetItemTotal
+  getScoreSheetItemTotal,
+  getApplicationData
 };
 
 const SCORESHEET_TOOLS = {
   FIND: 'find',
   COPY: 'copy',
   PASTE: 'paste',
+  EDIT: 'edit',
   SCORE: 'score',
   DIVERSITY: 'diversity',
 };
@@ -86,6 +89,18 @@ const MARKING_TYPE = {
       { value: 'Basic', label: 'Basic' },
       { value: 'Medium', label: 'Medium' },
       { value: 'High', label: 'High' },
+    ],
+    includeInScore: false,
+  },
+  REASON_FOR_CHANGE: {
+    value: 'reasonForChange',
+    label: 'Reason for change',
+    options: [
+      { value: '', label: '' },
+      { value: 'moderation', label: 'Moderation' },
+      { value: 'human-error', label: 'Human error' },
+      { value: 'scc', label: 'SCC request' },
+      { value: 'write-up', label: 'Write-up change' },
     ],
     includeInScore: false,
   },
@@ -152,27 +167,31 @@ function getCompleteScoreSheet(task) {
   return populatedScoreSheet;
 }
 
-function getScoreSheetTotal(markingScheme, scoreSheet) {
+function getScoreSheetTotal(markingScheme, scoreSheet, changes) {
   let score = 0;
   if (!markingScheme) return score;
   if (!scoreSheet) return score;
   markingScheme.forEach(item => {
     if (item.type === MARKING_TYPE.GROUP.value) {
       item.children.forEach(child => {
-        score += getScoreSheetItemTotal(child, scoreSheet[item.ref]);
+        const change = changes && changes[item.ref] && changes[item.ref][child.ref];
+        score += getScoreSheetItemTotal(child, scoreSheet[item.ref], change);
       });
     } else {
-      score += getScoreSheetItemTotal(item, scoreSheet);
+      const change = changes && changes[item.ref];
+      score += getScoreSheetItemTotal(item, scoreSheet, change);
     }
   });
   return score;
 }
 
-function getScoreSheetItemTotal(item, scoreSheet) {
+function getScoreSheetItemTotal(item, scoreSheet, change) {
+  // console.log('getScoreSheetItemTotal', item, scoreSheet, change);
   if (item.includeInScore) {
     switch (item.type) {
     case MARKING_TYPE.GRADE.value:
       if (scoreSheet[item.ref] && GRADE_VALUES[scoreSheet[item.ref]]) {
+        if (change) return GRADE_VALUES[change];  // only returns change if we have an original grade
         return GRADE_VALUES[scoreSheet[item.ref]];
       }
       break;
@@ -270,9 +289,39 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
   return isComplete;
 }
 
+function sortedMarkingScheme(markingScheme) {
+  const selection_categories = Object.values(SELECTION_CATEGORIES).map(o => o.value);
+  const capabilities = Object.values(CAPABILITIES).map(o => o.value);
+
+  // sort groups
+  markingScheme.sort((a, b) => {
+    const posA = selection_categories.indexOf(a.ref);
+    const posB = selection_categories.indexOf(b.ref);
+    if (posA === posB) return 0;  // same
+    if (posA === -1) return 1;  // a after b (unknown items move to end)
+    if (posB === -1) return -1;  // a before b (unknown items move to end)
+    return posA - posB;
+  });
+
+  // sort children
+  markingScheme.forEach(item => {
+    if (item.type === 'group') {
+      item.children.sort((a, b) => {
+        const posA = capabilities.indexOf(a.ref);
+        const posB = capabilities.indexOf(b.ref);
+        if (posA === posB) return 0;  // same
+        if (posA === -1) return 1;  // a after b (unknown items move to end)
+        if (posB === -1) return -1;  // a before b (unknown items move to end)
+        return posA - posB;
+      });
+    }
+  });
+}
+
 function markingScheme2Columns(markingScheme, editable = false) {
   const columns = [];
   if (!markingScheme) return columns;
+  sortedMarkingScheme(markingScheme);
   const numGroups = markingScheme.filter(item => item.type === 'group').length;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
@@ -290,6 +339,7 @@ function markingScheme2Columns(markingScheme, editable = false) {
 function markingScheme2ColumnHeaders(markingScheme) {
   const headers = [];
   if (!markingScheme) return headers;
+  sortedMarkingScheme(markingScheme);
   let columns = 0;
   markingScheme.forEach(item => {
     if (item.type === 'group') {
@@ -310,4 +360,13 @@ function markingScheme2ColumnHeaders(markingScheme) {
     }
   });
   return headers;
+}
+
+function getApplicationData(task, applicationId) {
+  if (!task) return {};
+  if (!applicationId) return {};
+  if (!task.applications) return {};
+  const application = task.applications.find(application => application.id === applicationId);
+  if (!application) return {};
+  return application;
 }

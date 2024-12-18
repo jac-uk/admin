@@ -5,7 +5,7 @@
         Applications
       </span>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
+        <div :class="hasParticipation ? 'govuk-grid-column-one-quarter' : 'govuk-grid-column-one-third'">
           <span class="govuk-body-s govuk-!-margin-bottom-0">
             Total
           </span>
@@ -13,7 +13,7 @@
             {{ totalApplications }}
           </h2>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div :class="hasParticipation ? 'govuk-grid-column-one-quarter' : 'govuk-grid-column-one-third'">
           <span class="govuk-body-s govuk-!-margin-bottom-0">
             Passed
           </span>
@@ -21,7 +21,7 @@
             {{ totalPassed }}
           </h2>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div :class="hasParticipation ? 'govuk-grid-column-one-quarter' : 'govuk-grid-column-one-third'">
           <span class="govuk-body-s govuk-!-margin-bottom-0">
             Failed
           </span>
@@ -29,7 +29,10 @@
             {{ totalFailed }}
           </h2>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div
+          v-if="hasParticipation"
+          class="govuk-grid-column-one-quarter"
+        >
           <span class="govuk-body-s govuk-!-margin-bottom-0">
             Not started
           </span>
@@ -80,14 +83,7 @@
           {{ row.count }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          <RouterLink
-            v-if="editable"
-            :to="{ name: 'exercise-task-finalised-score', params: { id: exercise.id, type: type, score: row.score } }"
-            class="govuk-link"
-          >
-            {{ $filters.formatNumber(row.score, 2) }}
-          </RouterLink>
-          <span v-else>{{ $filters.formatNumber(row.score, 2) }}</span>
+          {{ $filters.formatNumber(row.score, 2) }}
         </TableCell>
         <template v-if="showDiversity">
           <TableCell :title="tableColumns[3].title">
@@ -230,10 +226,10 @@
         <PredictiveSearch
           id="find-a-candidate"
           v-model="selectedApplication"
-          hint="Type any part of reference number"
+          :hint="searchHint"
           :show-full-list-on-focus="false"
           :data="scoreData"
-          :search-fields="['ref']"
+          :search-fields="searchFields"
           required
           @update:model-value="onApplicationFound"
         />
@@ -258,7 +254,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import ChangeOutcome from './ChangeOutcome.vue';
 import ConfigureExport from './ConfigureExport.vue';
-import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, downloadMeritList, getDownloadTypes } from './meritListHelper';
+import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from './meritListHelper';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
@@ -353,6 +349,21 @@ export default {
     },
     totalDidNotParticipate() {
       return totalDidNotParticipate(this.task, this.scoreType, this.scores);
+    },
+    hasParticipation() {
+      return hasParticipation(this.task);
+    },
+    searchFields() {
+      if (this.scoreData[0].fullName) {
+        return ['ref', 'fullName'];
+      }
+      return ['ref'];
+    },
+    searchHint() {
+      if (this.scoreData[0].fullName) {
+        return 'Type any part of candidate name or reference number';
+      }
+      return 'Type any part of reference number';
     },
   },
   methods: {
