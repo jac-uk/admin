@@ -64,7 +64,7 @@
               Create demo applications
             </button>
             <ActionButton
-              v-if="isTesting"
+              v-if="isTesting && hasPermissions([PERMISSIONS.applications.permissions.canCreateTestApplications.value])"
               ref="createTestApplicationsBtn"
               :action="createTestApplications"
             >
