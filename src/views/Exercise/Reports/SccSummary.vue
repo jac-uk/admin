@@ -234,7 +234,14 @@
             Dates of selection days
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ selectionDays }}
+            <ul class="govuk-list">
+              <li
+                v-for="selectionDay in selectionDays"
+                :key="selectionDay"
+              >
+                {{ selectionDay }}
+              </li>
+            </ul>
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -370,8 +377,7 @@ const exercise = computed(() => store.state.exerciseDocument.record || {});
 const selectionDays = computed(() => {
   const rawData = exercise.value.selectionDays || [];
   return rawData.map((s) => createSelectionDay(s))
-    .map((s) => s.location ? `${s.location} - ${s.dateString}` : s.dateString)
-    .join(', ');
+    .map((s) => s.location ? `${s.location} - ${s.dateString}` : s.dateString);
 });
 const isLoading = ref(false);
 
