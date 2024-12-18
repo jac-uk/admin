@@ -31,9 +31,6 @@
           Start
         </button>
         <ActionButton
-          v-if="hasPermissions([
-            PERMISSIONS.notifications.permissions.canUpdateNotifications.value
-          ])"
           class="govuk-!-margin-left-4"
           :action="processNow"
         >
