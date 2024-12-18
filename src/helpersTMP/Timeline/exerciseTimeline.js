@@ -27,8 +27,9 @@ const getDateAndTimeString = (date, startTime, endTime) => {
   return `${dateString} - ${startTimeString} to ${endTimeString}`;
 };
 
-const createSelectionDay = (selectionDay) => {
+export const createSelectionDay = (selectionDay) => {
   const selectionDayEntry = {
+    location: selectionDay.selectionDayLocation,
     entry: `Selection Day - ${selectionDay.selectionDayLocation}`,
     date: selectionDay.selectionDayStart,
     dateString: null,

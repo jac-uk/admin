@@ -234,7 +234,7 @@
             Dates of selection days
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ sccSummaryForm.datesOfSelectionDays }}
+            {{ selectionDays }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -363,9 +363,16 @@ import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import { downloadBase64File } from '@/helpers/file';
 import { hasPermissions } from '@/services/permissionService';
 import PERMISSIONS from '@/permissions';
+import { createSelectionDay } from '@/helpersTMP/Timeline/exerciseTimeline';
 
 const exerciseReportSccSummary = computed(() => store.state.exerciseReportSccSummary.record || {});
 const exercise = computed(() => store.state.exerciseDocument.record || {});
+const selectionDays = computed(() => {
+  const rawData = exercise.value.selectionDays || [];
+  return rawData.map((s) => createSelectionDay(s))
+    .map((s) => s.location ? `${s.location} - ${s.dateString}` : s.dateString)
+    .join(', ');
+});
 const isLoading = ref(false);
 
 const sccSummaryForm = reactive({});
