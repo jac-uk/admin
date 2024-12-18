@@ -403,7 +403,9 @@ export default {
           }, id: newBugReport.id });
         }
 
-        if (!this.isQuestion) {
+        if (this.isQuestion) {
+          // TODO: Create a Slack message
+        } else {
           // Create a Zenhub issue
           await httpsCallable(functions, 'createZenhubIssue')({
             bugReportId: newBugReport.id,
