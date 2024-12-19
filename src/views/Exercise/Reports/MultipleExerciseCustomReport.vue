@@ -268,13 +268,22 @@ export default {
   },
   computed: {
     ...mapState({
-      exerciseNames: state => state.exerciseCollection.records.map(record => {
-        return {
-          name: record.name,
-          referenceNumber: record.referenceNumber,
-          id: record.id,
-        };
-      }),
+      exerciseNames: state => {
+        return state.exerciseCollection.records
+
+          .map(record => ({
+            name: record.name,
+            referenceNumber: record.referenceNumber,
+            id: record.id,
+          }))
+
+          .sort((a, b) => {
+            // Extract numeric parts from referenceNumber
+            const numA = parseInt(a.referenceNumber.slice(3), 10);
+            const numB = parseInt(b.referenceNumber.slice(3), 10);
+            return numA - numB; //sort
+          });
+      },
     }),
   },
   beforeMount(){
