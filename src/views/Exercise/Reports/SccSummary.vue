@@ -67,7 +67,7 @@
             <TextField
               id="vacanciesByJurisdictionChamber"
               v-model="sccSummaryForm.vacanciesByJurisdictionChamber"
-              type="number"
+              type="text"
               @update:model-value="saveSccSummary('vacanciesByJurisdictionChamber', $event)"
             />
           </dd>
