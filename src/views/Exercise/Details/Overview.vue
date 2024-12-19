@@ -345,6 +345,9 @@ export default {
           if (this.exercise.inviteOnly) {
             data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-details-invitations' , done: this.exerciseProgress.invitations, approved: this.approvalProgress['invitations'] });
           }
+          if (this.exercise._processingVersion >= 2) {
+            data.push({ title: 'Selection set-up', id: 'exercise-details-selection-setup', done: this.exerciseProgress.additionalSettings, approved: this.approvalProgress['additionalSettings'] });
+          }
         }
       }
       return data;

@@ -77,6 +77,7 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue'
 import { CAPABILITIES, SELECTION_CATEGORIES } from '../../../../helpers/exerciseHelper';
 
 const competenciesCapabilities = [
+  CAPABILITIES.L,
   CAPABILITIES.EJ,
   CAPABILITIES.PBK,
   CAPABILITIES.ACI,
@@ -92,6 +93,7 @@ const skillsAbilitiesCapabilities = [
   CAPABILITIES.LJ,
   CAPABILITIES.PQ,
   CAPABILITIES.L,
+  CAPABILITIES.WE,
 ];
 const skillsAbilitiesSelectionCategories = [
   SELECTION_CATEGORIES.INTERVIEW,
@@ -150,7 +152,7 @@ export default {
     'formData.assessmentFramework': function (newValue) {
       // set default capabilities and selection categories based on the assessment framework
       if (newValue === 'competencies') {
-        this.formData.capabilities = competenciesCapabilities.map(item => item.value);
+        this.formData.capabilities = competenciesCapabilities.map(item => item.value).filter(item => item !== CAPABILITIES.L.value);
         this.formData.selectionCategories = competenciesSelectionCategories.map(item => item.value);
       } else if (newValue === 'skills-abilities') {
         this.formData.capabilities = skillsAbilitiesCapabilities.map(item => item.value);

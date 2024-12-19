@@ -5,8 +5,9 @@
     :class="column.editable ? 'table-cell-score': 'table-cell-value'"
   >
     <template v-if="!column.editable">
-      <span v-if="column.parent">{{ lookupColumnValue(column, row.scoreSheet[column.parent][column.ref]) }}</span>
-      <span v-else>{{ lookupColumnValue(column, row.scoreSheet[column.ref]) }}</span>
+      {{ lookupColumnValue(row, column) }}
+      <span v-if="lookupColumnValue(row, column) && lookupChangedValue(row, column)"> &rarr; </span>
+      {{ lookupChangedValue(row, column) }}
     </template>
 
     <template v-else>
@@ -33,6 +34,9 @@
           :value="option.value"
         >
           {{ option.label }}
+          <template v-if="lookupColumnValue(row, column) && lookupColumnValue(row, column) != option.label">
+            from {{ lookupColumnValue(row, column) }}
+          </template>
         </option>
       </select>
     </template>
@@ -76,9 +80,17 @@ export default {
     localValue: {
       get() {
         if (this.column.parent) {
-          return this.row.scoreSheet[this.column.parent][this.column.ref];
+          if (this.row.changes[this.column.parent] && this.row.changes[this.column.parent][this.column.ref]) {
+            return this.row.changes[this.column.parent][this.column.ref];
+          } else {
+            return this.row.scoreSheet[this.column.parent][this.column.ref];
+          }
         } else {
-          return this.row.scoreSheet[this.column.ref];
+          if (this.row.changes[this.column.ref]) {
+            return this.row.changes[this.column.ref];
+          } else {
+            return this.row.scoreSheet[this.column.ref];
+          }
         }
       },
       set(value) {
@@ -93,13 +105,33 @@ export default {
     getOptions(type) {
       return markingTypeGetOptions(type);
     },
-    lookupColumnValue(column, value) {
+    lookupColumnValue(row, column) {
+      let value;
+      if (column.parent) {
+        value = row.scoreSheet[column.parent][column.ref];
+      } else {
+        value = row.scoreSheet[column.ref];
+      }
       if (this.hasOptions(column.type)) {
         const options = this.getOptions(column.type);
         const option = options.find(option => option.value === value);
         if (option) return option.label;
       }
       return value;
+    },
+    lookupChangedValue(row, column) {
+      let changedValue;
+      if (column.parent) {
+        if (row.changes && row.changes[column.parent] && row.changes[column.parent][column.ref]) changedValue = row.changes[column.parent][column.ref];
+      } else {
+        if (row.changes && row.changes[column.ref]) changedValue = row.changes[column.ref];
+      }
+      if (this.hasOptions(column.type)) {
+        const options = this.getOptions(column.type);
+        const option = options.find(option => option.value === changedValue);
+        if (option) return option.label;
+      }
+      return changedValue;
     },
     onKeyDown(event, rowIndex, colIndex) {
       let newRow = rowIndex;
@@ -159,6 +191,9 @@ export default {
   }
   .table-cell-value {
     padding: 10px !important;
+  }
+  s {
+    color: govuk-colour("mid-grey");
   }
 }
 </style>

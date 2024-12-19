@@ -60,7 +60,7 @@
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              {{ applications.length }}
+              {{ totalRequiredApplications }}
             </h2>
           </div>
         </div>
@@ -78,19 +78,20 @@
       <ScoreSheet
         ref="scoreSheet"
         data-key="id"
-        :marking-scheme="panel.markingScheme"
+        :marking-scheme="markingScheme"
         :data="scoreSheetData"
         :columns-before="[{ title: 'Application', ref: 'referenceNumber', class: 'table-cell-application' }]"
         :editable="canEditScoreSheet"
         :moderation="isModerationRequired"
         :tools="scoreSheetTools"
+        @updated="onScoreSheetUpdated"
       >
         <template #columns-before="{row}">
           <TableCell
             class="table-cell-application nowrap sticky-left"
             :class="{ 'highlight': row.highlight }"
           >
-            {{ row.referenceNumber }}
+            {{ row.fullName || row.referenceNumber }}
           </TableCell>
         </template>
       </ScoreSheet>
@@ -191,7 +192,7 @@
 </template>
 
 <script>
-import { serverTimestamp } from '@firebase/firestore';
+import { serverTimestamp, deleteField } from '@firebase/firestore';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -200,7 +201,7 @@ import PanelForm from './components/AddEdit.vue';
 import EditPanellists from './Panellists/Edit.vue';
 import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
-import { SCORESHEET_TOOLS, getScoreSheetTotal, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity } from '@/helpers/scoreSheetHelper';
+import { SCORESHEET_TOOLS, getScoreSheetTotal, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity, getApplicationData } from '@/helpers/scoreSheetHelper';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
 export default {
@@ -231,7 +232,7 @@ export default {
       isEditingPanellists: false,
       roles: [
         ROLES.CHAIR,
-        ROLES.JUDICIAL,
+        // ROLES.JUDICIAL,
         ROLES.INDEPENDENT,
         ROLES.OTHER,
       ],
@@ -269,10 +270,12 @@ export default {
         const row = {
           id: applicationId,
           referenceNumber: this.panel.applications[applicationId].referenceNumber,
+          fullName: getApplicationData(this.task, applicationId).fullName,
           scoreSheet: this.panel.scoreSheet[applicationId],
-          score: getScoreSheetTotal(this.panel.markingScheme, this.panel.scoreSheet[applicationId]),
           // report: this.panel.reports ? this.panel.reports[applicationId] : null,
+          changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
         };
+        row.score = getScoreSheetTotal(this.task.markingScheme, this.panel.scoreSheet[applicationId], row.changes),
         rows.push(row);
       });
       if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
@@ -283,7 +286,7 @@ export default {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     canEditScoreSheet() {
-      return false;
+      return true;
     },
     isModerationRequired() {
       return false;
@@ -300,6 +303,9 @@ export default {
     panel() {
       return this.$store.state.panel.record;
     },
+    markingScheme() {
+      return this.$store.getters['panel/markingScheme'];
+    },
     panellists() {
       const orderedPanellists = [...this.$store.state.panel.panellists];
       return orderedPanellists.sort((first, second) => {
@@ -314,6 +320,13 @@ export default {
     },
     applications() {
       return this.$store.state.panel.applications;
+    },
+    totalRequiredApplications() {
+      if (!this.panel.applicationIds) return 0;
+      if (this.panel.applicationIdsOptional && this.panel.applicationIdsOptional.length) {
+        return this.panel.applicationIds.length - this.panel.applicationIdsOptional.length;
+      }
+      return this.panel.applicationIds.length;
     },
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
@@ -356,7 +369,7 @@ export default {
     ) {
       this.tabs.unshift({
         ref: 'scoreSheet',
-        title: 'Score sheet',
+        title: 'Grade sheet',
       });
       this.activeTab = 'scoreSheet';
     }
@@ -428,38 +441,16 @@ export default {
       await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
       return true;
     },
-    // async resetPanelExport() {
-    //   const data = {
-    //     status: PANEL_STATUS.DRAFT,
-    //   };
-    //   await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
-    // },
-    // async exportToGoogleDrive() {
-    //   console.log('export. TODO re-include export trigger');
-    //   const data = {
-    //     applicationIds: this.applications.map(application => application.id),
-    //     applications: {},
-    //     panellists: {},
-    //     capabilities: this.capabilities,
-    //     grades: this.grades,
-    //     scoreSheet: {},
-    //     status: PANEL_STATUS.CREATED,
-    //   };
-    //   this.applications.forEach(application => {
-    //     data.applications[application.id] = {
-    //       referenceNumber: application.application.referenceNumber,
-    //       // TODO include fullName for non name-blind
-    //     };
-    //     data.scoreSheet[application.id] = emptyScoreSheet({ type: this.panel.type, capabilities: this.capabilities }).scoreSheet;
-    //   });
-    //   this.panellists.filter(panellist => this.panel.panellistIds.indexOf(panellist.id) >= 0).forEach(panellist => {
-    //     data.panellists[panellist.id] = {
-    //       fullName: panellist.fullName,
-    //       // TODO include other details e.g. phone, email?
-    //     };
-    //   });
-    //   await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
-    // },
+    async onScoreSheetUpdated({ id, ref, parent, newValue }) {
+      const panel = this.panel;
+      const originalValue = parent ? panel.scoreSheet[id][parent][ref] : panel.scoreSheet[id][ref];
+      const valueToSave = newValue === originalValue ? deleteField() : newValue;
+      const saveData = {};
+      if (parent) saveData[`changes.${id}.${parent}.${ref}`] = valueToSave;
+      else saveData[`changes.${id}.${ref}`] = valueToSave;
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData });
+      return true;
+    },
   },
 };
 </script>

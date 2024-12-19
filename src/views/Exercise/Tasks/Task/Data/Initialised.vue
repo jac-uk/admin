@@ -22,13 +22,10 @@
       :key="group.ref"
     >
       <Table
+        class="marking-scheme"
         data-key="ref"
         :data="group.children"
-        :columns="[
-          { title: $filters.lookup(group.ref) },
-          { title: '' },
-          { title: '' },
-        ]"
+        :columns="tableColumns(group)"
         local-data
       >
         <template #row="{row, index}">
@@ -37,6 +34,24 @@
           </TableCell>
           <TableCell>
             {{ getMarkingType(row.type).label }}
+          </TableCell>
+          <TableCell v-if="hasPermissions([PERMISSIONS.tasks.permissions.canEditScoreCalculation.value])">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input
+                  :id="`include-in-score-${index}`"
+                  v-model="row.includeInScore"
+                  class="govuk-checkboxes__input"
+                  type="checkbox"
+                  @click.stop
+                  @change="onChangeIncludeInScore(group, index)"
+                >
+                <label
+                  class="govuk-label govuk-checkboxes__label"
+                  :for="`include-in-score-${index}`"
+                >Include in score</label>
+              </div>
+            </div>
           </TableCell>
           <TableCell>
             <ActionButton
@@ -93,6 +108,7 @@ import TitleBar from '@/components/Page/TitleBar.vue';
 import AddMarkingSchemeItem from './AddMarkingSchemeItem.vue';
 import { functions } from '@/firebase';
 import { getMarkingType } from '@/helpers/scoreSheetHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -105,6 +121,7 @@ export default {
     ProgressBar,
     AddMarkingSchemeItem,
   },
+  mixins: [permissionMixin],
   beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
@@ -116,11 +133,6 @@ export default {
     const task = this.$store.getters['tasks/getTask'](this.type);
     return {
       markingScheme: task.markingScheme,
-      tableColumns: [
-        { title: 'Criteria' },
-        { title: 'Type' },
-        { title: '' },
-      ],
       currentGroup: null,
     };
   },
@@ -142,6 +154,14 @@ export default {
     },
   },
   methods: {
+    tableColumns(group) {
+      const columns = [];
+      columns.push({ title: this.$filters.lookup(group.ref) });
+      columns.push({ title: '' });
+      if (this.hasPermissions([this.PERMISSIONS.tasks.permissions.canEditScoreCalculation.value])) columns.push({ title: '' });
+      columns.push({ title: '' });
+      return columns;
+    },
     getMarkingType(type) {
       return getMarkingType(type);
     },
@@ -174,6 +194,15 @@ export default {
     btnCancelAdd() {
       this.$refs.modalAddMarkingSchemeItem.closeModal();
     },
+    async onChangeIncludeInScore() {
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { markingScheme: this.markingScheme } } );
+    },
   },
 };
 </script>
+
+<style>
+.marking-scheme td {
+  vertical-align: middle;
+}
+</style>
