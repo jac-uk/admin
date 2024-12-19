@@ -121,8 +121,8 @@ export default {
     ProgressBar,
     AddMarkingSchemeItem,
   },
-  beforeRouteEnter: beforeRouteEnter,
   mixins: [permissionMixin],
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,
