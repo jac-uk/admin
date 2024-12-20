@@ -1423,6 +1423,10 @@ function availableReportLinks(exercise) {   // TODO this code is a bit specific 
       title: 'Custom',
       name: 'custom',
     },
+    {
+      title: 'SCC Summary Page',
+      name: 'scc-summary',
+    },
   ];
 
   if (exercise._processingVersion < 3) {

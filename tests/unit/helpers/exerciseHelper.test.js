@@ -1551,6 +1551,7 @@ describe('availableReportLinks', () => {
         { title: 'Merit List', name: 'merit-list' },
         { title: 'Outreach', name: 'outreach' },
         { title: 'Reasonable Adjustments', name: 'reasonable-adjustments' },
+        { title: 'SCC Summary Page', name: 'scc-summary' },
         { title: 'Statutory Consultation', name: 'statutory-consultation' },
       ];
       expect(availableReportLinks(exercise)).toEqual(expectedLinks);
@@ -1572,6 +1573,7 @@ describe('availableReportLinks', () => {
         { title: 'Merit List', name: 'merit-list' },
         { title: 'Outreach', name: 'outreach' },
         { title: 'Reasonable Adjustments', name: 'reasonable-adjustments' },
+        { title: 'SCC Summary Page', name: 'scc-summary' },
         { title: 'Statutory Consultation', name: 'statutory-consultation' },
       ];
       expect(availableReportLinks(exercise)).toEqual(expectedLinks);
