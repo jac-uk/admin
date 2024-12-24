@@ -240,11 +240,12 @@
               <div>
                 <a
                   v-if="(isNotRequested || isRequested) && testAssessmentUrl"
-                  target="_blank"
-                  :href="`${testAssessmentUrl}/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
-                  style="display: block; line-height: 40px; white-space: nowrap;"
+                  style="display: block; line-height: 40px; white-space: nowrap; min-width: 250px;"
+                  href="javascript: void(0)"
+                  class="govuk-link"
+                  @click="onTestAppClick(row)"
                 >
-                  Test the assessments app
+                  {{ !loadingTestAppLink ? 'Test the assessments app' : 'Creating link...' }}
                 </a>
 
                 <ActionButton
@@ -430,6 +431,7 @@ export default {
       modalParams: null,
       modalCallback: null,
       selectedItems: [],
+      loadingTestAppLink: false,
     };
   },
   computed: {
@@ -690,6 +692,25 @@ export default {
     },
     resetSelectedItems() {
       this.selectedItems = [];
+    },
+    async onTestAppClick(assessment) {
+      try {
+        this.loadingTestAppLink = true;
+        const response = await httpsCallable(functions, 'getTestAssessmentAppLink')({
+          assessmentId: assessment.id,
+        });
+        if (response && response.data) {
+          window.open(response.data, '_blank'); // eslint-disable-line
+          return;
+        }
+        //window.open(`${this.testAssessmentUrl}/assessment/${assessment.id}`, '_blank');
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loadingTestAppLink = false;
+      }
+
     },
   },
 };
