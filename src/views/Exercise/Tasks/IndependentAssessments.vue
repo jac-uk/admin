@@ -103,7 +103,7 @@
           ])"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
+          @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'request' }, testRequest)"
         >
           Test request
         </button>
