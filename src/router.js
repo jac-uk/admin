@@ -210,7 +210,7 @@ const routes = [
       title: 'Notifications',
     },
     beforeEnter: (to, from, next) => {
-      if (hasPermissions([PERMISSIONS.users.permissions.canReadNotifications.value])) {
+      if (hasPermissions([PERMISSIONS.notifications.permissions.canReadNotifications.value])) {
         next();
       }
       next({ name: 'page-not-found' });
