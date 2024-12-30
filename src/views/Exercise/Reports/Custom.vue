@@ -358,7 +358,7 @@ export default {
       columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
       warnings: '',
       warningTimeout: null,
-      groups: [
+      defaultGroups: [
         {
           name: 'Application Info',
           keys: [
@@ -504,7 +504,7 @@ export default {
           ],
         },
       ],
-      keys: {
+      defaultKeys: {
         referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
         applyingForWelshPost: { label: 'Applying for Welsh Post?', type: Boolean },
         canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
@@ -602,6 +602,7 @@ export default {
         'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
         'resignationFromDWP.workingAtDWP': { label: 'Currently work at the Department for Work and Pensions (DWP)?', type: Boolean },
       },
+      workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
     };
   },
   computed: {
@@ -619,6 +620,40 @@ export default {
       if (this.selectedStage === 'all') return null;
       const statuses = availableStatuses(this.exercise, this.selectedStage);
       return statuses;
+    },
+    groups() {
+      return this.defaultGroups.concat(this.preferenceGroups);
+    },
+    keys() {
+      return _.merge(this.defaultKeys, this.preferenceKeys);
+    },
+    preferenceGroups() {
+      const groups = [];
+
+      for (const preference of this.workingPreferences) {
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          const keys = questions.map((q) => `${preference}.${q.id}`);
+          groups.push({
+            name: _.startCase(preference),
+            keys,
+          });
+        }
+      }
+      return groups;
+    },
+    preferenceKeys() {
+      const keys = {};
+
+      for (const preference of this.workingPreferences) {
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          for (const question of questions) {
+            keys[`${preference}.${question.id}`] = { label: question.question, type: String };
+          }
+        }
+      }
+      return keys;
     },
   },
   watch: {
