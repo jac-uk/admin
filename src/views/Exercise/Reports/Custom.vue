@@ -381,10 +381,27 @@ export default {
       return statuses;
     },
     groups() {
-      return this.defaultGroups.concat(this.preferenceGroups);
+      let groups = this.defaultGroups.slice();
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        groups = groups.concat([
+          {
+            name: 'Experience',
+            keys: ['experience'],
+          },
+        ]);
+
+      }
+      groups = groups.concat(this.preferenceGroups);
+      return groups;
     },
     keys() {
-      return _.merge(this.defaultKeys, this.preferenceKeys);
+      let keys = _.clone(this.defaultKeys);
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        keys = _.merge(keys, {
+          experience: { label: 'Experience', type: String },
+        });
+      }
+      return _.merge(keys, this.preferenceKeys);
     },
     preferenceGroups() {
       const groups = [];
