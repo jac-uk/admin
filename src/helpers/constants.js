@@ -272,6 +272,12 @@ const WORKING_BASIS = {
   VOLUNTARY: 'voluntary',
 };
 
+const USER_FEEDBACK_TYPES = {
+  YOURSELF: 'yourself',
+  ANOTHER_USER: 'another-user',
+  QUESTION: 'question',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
@@ -294,7 +300,8 @@ export {
   DEFAULT_WORD_COUNT,
   SELF_ASSESSMENT_COMPETENCIES_QUESTIONS,
   WORKING_BASIS,
-  LANGUAGES
+  LANGUAGES,
+  USER_FEEDBACK_TYPES
 };
 
 // end
