@@ -247,6 +247,7 @@ export default {
       client: null,
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
+        type: this.type,
         url: '',
         criticality: '',
         issue: '',
@@ -404,7 +405,11 @@ export default {
         }
 
         if (this.isQuestion) {
-          // TODO: Create a Slack message
+          // Create a Slack message
+          await httpsCallable(functions, 'createSlackMessage')({
+            bugReportId: newBugReport.id,
+            userId: this.userId,
+          });
         } else {
           // Create a Zenhub issue
           await httpsCallable(functions, 'createZenhubIssue')({
