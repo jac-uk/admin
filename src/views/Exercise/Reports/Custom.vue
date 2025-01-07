@@ -323,6 +323,7 @@ import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import { customReportConstants } from '@/helpers/customReportConstants';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
@@ -358,250 +359,8 @@ export default {
       columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
       warnings: '',
       warningTimeout: null,
-      groups: [
-        {
-          name: 'Application Info',
-          keys: [
-            'referenceNumber',
-            'personalDetails.dateOfBirth',
-            'personalDetails.placeOfBirth',
-            'personalDetails.title',
-            'personalDetails.citizenship',
-            'personalDetails.firstName',
-            'personalDetails.middleNames',
-            'personalDetails.lastName',
-            'personalDetails.fullName',
-            'personalDetails.suffix',
-            'personalDetails.previousNames',
-            'personalDetails.professionalName',
-            'personalDetails.phone',
-            'personalDetails.nationalInsuranceNumber',
-            'personalDetails.email',
-            'personalDetails.reasonableAdjustments',
-            'personalDetails.reasonableAdjustmentsDetails',
-            'personalDetails.address.current',
-            'personalDetails.address.currentMoreThan5Years',
-            'personalDetails.address.previous',
-            'personalDetails.VATNumbers',
-            'status',
-            'appliedAt',
-            'applyingUnderSchedule2d',
-            'applyingUnderSchedule2Three',
-            '_processing.status',
-            '_processing.stage',
-          ],
-        },
-        {
-          name: 'Welsh',
-          keys: [
-            'applyingForWelshPost',
-            'canReadAndWriteWelsh',
-            'canSpeakWelsh',
-          ],
-        },
-        {
-          name: 'Equality and Diversity',
-          keys: [
-            'equalityAndDiversitySurvey.shareData',
-            'equalityAndDiversitySurvey.professionalBackground',
-            'equalityAndDiversitySurvey.currentLegalRole',
-            'equalityAndDiversitySurvey.feePaidJudicialRole',
-            'equalityAndDiversitySurvey.stateOrFeeSchool',
-            'equalityAndDiversitySurvey.oxbridgeUni',
-            'equalityAndDiversitySurvey.firstGenerationStudent',
-            'equalityAndDiversitySurvey.ethnicGroup',
-            'equalityAndDiversitySurvey.gender',
-            'equalityAndDiversitySurvey.changedGender',
-            'equalityAndDiversitySurvey.sexualOrientation',
-            'equalityAndDiversitySurvey.disability',
-            'equalityAndDiversitySurvey.disabilityDetails',
-            'equalityAndDiversitySurvey.religionFaith',
-            'equalityAndDiversitySurvey.attendedOutreachEvents',
-            'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme',
-            'equalityAndDiversitySurvey.hasTakenPAJE',
-          ],
-        },
-        {
-          name: 'Part Time Working Preferences',
-          keys: [
-            'interestedInPartTime',
-            'partTimeWorkingPreferencesDetails',
-          ],
-        },
-        {
-          name: 'Qualifications and Experience',
-          keys: [
-            'qualifications',
-            'feePaidOrSalariedJudge',
-            'feePaidOrSalariedSatForThirtyDays',
-            'feePaidOrSalariedSittingDaysDetails',
-            'declaredAppointmentInQuasiJudicialBody',
-            'experience',
-            'experienceUnderSchedule2Three',
-            'quasiJudicialSittingDaysDetails',
-            'quasiJudicialSatForThirtyDays',
-            'skillsAquisitionDetails',
-          ],
-        },
-        {
-          name: 'Gaps in Employment',
-          keys: [
-            'employmentGaps',
-          ],
-        },
-        {
-          name: 'Memberships',
-          keys: [
-            'professionalMemberships',
-            'otherProfessionalMemberships',
-            'otherProfessionalMembershipsNumber',
-            'otherProfessionalMembershipsInformation',
-            'otherProfessionalMembershipsDate',
-            'royalInstituteBritishArchitectsNumber',
-            'royalInstituteBritishArchitectsInformation',
-            'royalInstituteBritishArchitectsDate',
-            'royalInstitutionCharteredSurveyorsDate',
-            'royalInstitutionCharteredSurveyorsNumber',
-            'royalCollegeOfPsychiatristsDate',
-            'generalMedicalCouncilConditional',
-            'generalMedicalCouncilNumber',
-            'generalMedicalCouncilConditionalDetails',
-            'generalMedicalCouncilConditionalEndDate',
-            'generalMedicalCouncilDate',
-            'charteredAssociationBuildingEngineersNumber',
-            'charteredInstituteBuildingInformation',
-            'charteredInstituteBuildingNumber',
-            'charteredInstituteEnvironmentalHealthInformation',
-            'charteredInstituteEnvironmentalHealthDate',
-          ],
-        },
-        {
-          name: 'Reasonable Length of Service',
-          keys: [
-            'canGiveReasonableLOS',
-            'cantGiveReasonableLOSDetails',
-          ],
-        },
-        {
-          name: 'Assessor',
-          keys: [
-            'firstAssessorType',
-            'firstAssessorEmail',
-            'firstAssessorTitle',
-            'firstAssessorFullName',
-            'firstAssessorPhone',
-            'secondAssessorType',
-            'secondAssessorEmail',
-            'secondAssessorTitle',
-            'secondAssessorFullName',
-            'secondAssessorPhone',
-          ],
-        },
-        {
-          name: 'Resignation from the Department for Work and Pensions (DWP)',
-          keys: [
-            'resignationFromDWP.workingAtDWP',
-          ],
-        },
-      ],
-      keys: {
-        referenceNumber: { label: 'Candidate reference number', type: String, nowrap: true },
-        applyingForWelshPost: { label: 'Applying for Welsh Post?', type: Boolean },
-        canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
-        canSpeakWelsh: { label: 'Can speak Welsh?', type: Boolean },
-        employmentGaps: { label: 'Employment gaps', type: 'Array of objects' },
-        firstAssessorType: { label: 'First Assessor Type', type: String },
-        firstAssessorEmail: { label: 'First Assessor Email', type: String, nowrap: true },
-        firstAssessorTitle: { label: 'First Assessor Title', type: String, nowrap: true },
-        firstAssessorFullName: { label: 'First Assessor Full Name', type: String, nowrap: true },
-        firstAssessorPhone: { label: 'First Assessor Phone', type: String, nowrap: true },
-        secondAssessorType: { label: 'Second Assessor Type', type: String },
-        secondAssessorEmail: { label: 'Second Assessor Email', type: String, nowrap: true },
-        secondAssessorTitle: { label: 'Second Assessor Title', type: String, nowrap: true },
-        secondAssessorFullName: { label: 'Second Assessor Full Name', type: String, nowrap: true },
-        secondAssessorPhone: { label: 'Second Assessor Phone', type: String, nowrap: true },
-        royalInstitutionCharteredSurveyorsDate: { label: 'Royal Institution Chartered Surveyors Date', type: Date },
-        royalInstituteBritishArchitectsInformation: { label: 'Royal Institute of British Architects Information', type: String },
-        otherProfessionalMemberships: { label: 'Other Professional Memberships', type: String },
-        otherProfessionalMembershipsNumber: { label: 'Other Professional Memberships Number', type: String },
-        otherProfessionalMembershipsInformation: { label: 'Other Professional Memberships Information', type: String },
-        generalMedicalCouncilConditional: { label: 'General Medical Council Conditional', type: String },
-        charteredAssociationBuildingEngineersNumber: { label: 'Chartered Association Building Engineers Number', type: String },
-        charteredInstituteBuildingInformation: { label: 'Chartered Institute Building Information', type: String },
-        generalMedicalCouncilConditionalDetails: { label: 'General Medical Council Conditional Details', type: String },
-        generalMedicalCouncilNumber: { label: 'General Medical Council Number', type: String },
-        royalInstituteBritishArchitectsNumber: { label: 'Royal Institute of British Architects Number', type: String },
-        charteredInstituteEnvironmentalHealthInformation: { label: 'Chartered Institute Environmental Health Information', type: String },
-        royalCollegeOfPsychiatristsDate: { label: 'Royal College of Psychiatrists Date', type: Date },
-        royalInstituteBritishArchitectsDate: { label: 'Royal Institute of British Architects Date', type: Date },
-        charteredInstituteBuildingNumber: { label: 'Chartered Institute Building Number', type: String },
-        generalMedicalCouncilDate: { label: 'General Medical Council Date', type: Date },
-        otherProfessionalMembershipsDate: { label: 'Other Professional Memberships Date', type: Date },
-        generalMedicalCouncilConditionalEndDate: { label: 'General Medical Council Condition End Date', type: Date },
-        professionalMemberships: { label: 'Professional memberships', type: 'Array of strings' },
-        charteredInstituteEnvironmentalHealthDate: { label: 'Chartered Institute Environmental Health Date', type: Date },
-        royalInstitutionCharteredSurveyorsNumber: { label: 'Royal Institution of Chartered Surveyors Number', type: String },
-        status: { label: 'Application status', type: String },
-        appliedAt: { label: 'Application date', type: Date },
-        interestedInPartTime: { label: 'Interested in part time?', type: Boolean },
-        partTimeWorkingPreferencesDetails: { label: 'Salaried part-time work (SPTW) - Details', type: String },
-        applyingUnderSchedule2d: { label: 'Applying under schedule 2d?', type: Boolean },
-        canGiveReasonableLOS: { label: 'Can work a reasonable length of service', type: Boolean },
-        cantGiveReasonableLOSDetails: { label: 'Can work a reasonable length of service (details)', type: String },
-        applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
-        '_processing.status': { label: 'Status (admin)', type: String },
-        '_processing.stage': { label: 'Stage', type: String },
-        'personalDetails.phone': { label: 'Phone', type: String, nowrap: true },
-        'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String, nowrap: true },
-        'personalDetails.email': { label: 'Email', type: String, nowrap: true },
-        'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
-        'personalDetails.reasonableAdjustmentsDetails': { label: 'Reasonable adjustments details', type: String },
-        'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date, nowrap: true },
-        'personalDetails.placeOfBirth': { label: 'Place of birth', type: String, nowrap: true },
-        'personalDetails.title': { label: 'Title', type: String, nowrap: true },
-        'personalDetails.citizenship': { label: 'Citizenship', type: String, nowrap: true },
-        'personalDetails.firstName': { label: 'First Name', type: String, nowrap: true },
-        'personalDetails.middleNames': { label: 'Middle name(s)', type: String, nowrap: true },
-        'personalDetails.lastName': { label: 'Last Name', type: String, nowrap: true },
-        'personalDetails.fullName': { label: 'Full Name', type: String, nowrap: true },
-        'personalDetails.suffix': { label: 'Suffix', type: String },
-        'personalDetails.previousNames': { label: 'Previous known name(s)', type: String },
-        'personalDetails.professionalName': { label: 'Professional name', type: String, nowrap: true },
-        'personalDetails.address.current': { label: 'Current Address', type: String },
-        'personalDetails.address.currentMoreThan5Years': { label: 'Has lived at this address for more than 5 years', type: Boolean },
-        'personalDetails.address.previous': { label: 'Previous Addresses', type: String },
-        'personalDetails.VATNumbers': { label: 'VAT registration number', type: String },
-        qualifications: { label: 'Qualifications', type: 'Array of objects' },
-        feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
-        feePaidOrSalariedSatForThirtyDays: { label: 'Fee paid or salaried sat for thirty days?', type: Boolean },
-        feePaidOrSalariedSittingDaysDetails: { label: 'Fee paid or salaried sitting days details', type: String },
-        declaredAppointmentInQuasiJudicialBody: { label: 'Have you declared an appointment or appointments in a quasi-judicial body in this application?', type: Boolean },
-        quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
-        quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
-        skillsAquisitionDetails: { label: 'Skills acquisition details', type: String },
-        experience: { label: 'Post-qualification experience', type: String },
-        experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
-        // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
-        // locationPreferences: { label: 'Location Preferences', type: String },
-        'equalityAndDiversitySurvey.shareData': { label: 'Agreed to share data', type: Boolean },
-        'equalityAndDiversitySurvey.professionalBackground': { label: 'Professional background', type: String },
-        'equalityAndDiversitySurvey.currentLegalRole': { label: 'Current legal role', type: String },
-        'equalityAndDiversitySurvey.feePaidJudicialRole': { label: 'Held fee-paid judicial role', type: String },
-        'equalityAndDiversitySurvey.stateOrFeeSchool': { label: 'Attended state or fee-paying school', type: String },
-        'equalityAndDiversitySurvey.oxbridgeUni': { label: 'Attended Oxbridge universities', type: String },
-        'equalityAndDiversitySurvey.firstGenerationStudent': { label: 'First generation to go to university', type: String },
-        'equalityAndDiversitySurvey.ethnicGroup': { label: 'Ethnic group', type: String },
-        'equalityAndDiversitySurvey.gender': { label: 'Sex', type: String },
-        'equalityAndDiversitySurvey.changedGender': { label: 'Gender is the same as sex assigned at birth', type: String },
-        'equalityAndDiversitySurvey.sexualOrientation': { label: 'Sexual orientation', type: String },
-        'equalityAndDiversitySurvey.disability': { label: 'Disability', type: String },
-        'equalityAndDiversitySurvey.disabilityDetails': { label: 'Disability details', type: String },
-        'equalityAndDiversitySurvey.religionFaith': { label: 'Religion', type: String },
-        'equalityAndDiversitySurvey.attendedOutreachEvents': { label: 'Attended outreach events', type: String },
-        'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme': { label: 'Participated In judicial workshadowing Scheme', type: String },
-        'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
-        'resignationFromDWP.workingAtDWP': { label: 'Currently work at the Department for Work and Pensions (DWP)?', type: Boolean },
-      },
+      groups: customReportConstants.groups,
+      keys: customReportConstants.keys,
     };
   },
   computed: {
@@ -683,17 +442,31 @@ export default {
     async getApplicationRecords() {
       this.isLoading = true;
       this.data = null;
-      if (this.columns.length > 0) {
-        this.data = await httpsCallable(functions, 'getApplicationData')({
-          exerciseId: this.exercise.id,
-          columns: this.columns,
-          type: this.type,
-          whereClauses: this.whereClauses,
-          statuses: this.statuses,
-          stage: this.selectedStage === 'all' ? null : this.selectedStage,
-          stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
-        });
+
+      try {
+        if (this.columns.length > 0) {
+          const response = await httpsCallable(functions, 'getApplicationData')({
+            exerciseId: this.exercise.id,
+            columns: this.columns,
+            type: this.type,
+            whereClauses: this.whereClauses,
+            statuses: this.statuses,
+            stage: this.selectedStage === 'all' ? null : this.selectedStage,
+            stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
+          });
+
+          if (response === null) {
+            this.redirectToErrorPage();
+          } else {
+            this.data = response;
+          }
+        }
+      } catch (e) {
+        this.isLoading = false;
+        this.loadFailed = true;
+        throw e;
       }
+
       this.isLoading = false;
     },
     selectColumn(event) {

@@ -339,6 +339,16 @@ export default {
             }
           );
         }
+        if (this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
+          exerciseContent.push(
+            {
+              title: 'Multiple Exercise Custom Report',
+              link: () => {
+                this.$router.push({ name: 'multiple-exercise-custom-report' });
+              },
+            }
+          );
+        }
         exerciseContent.push(
           {
             title: 'My favourites',
