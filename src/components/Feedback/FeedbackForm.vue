@@ -403,20 +403,10 @@ export default {
             screenshot: screenshot,
           }, id: newBugReport.id });
         }
-
-        if (this.isQuestion) {
-          // Create a Slack message
-          await httpsCallable(functions, 'createSlackMessage')({
-            bugReportId: newBugReport.id,
-            userId: this.userId,
-          });
-        } else {
-          // Create a Zenhub issue
-          await httpsCallable(functions, 'createZenhubIssue')({
-            bugReportId: newBugReport.id,
-            userId: this.userId,
-          });
-        }
+        await httpsCallable(functions, 'createZenhubIssue')({
+          bugReportId: newBugReport.id,
+          userId: this.userId,
+        });
         this.$emit('success');
         return true;
       }
