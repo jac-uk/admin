@@ -44,7 +44,7 @@
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
-        Location preferences 123
+        Location preferences
       </h2>
 
       <dl
