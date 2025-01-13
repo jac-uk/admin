@@ -13,7 +13,6 @@ const filePath = computed(() => {
 });
 
 onMounted(async () => {
-  console.log('filePath', filePath.value);
   const storageRef = firebaseRef(storage, filePath.value);
   fileUrl.value = await getDownloadURL(storageRef);
 });
