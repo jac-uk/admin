@@ -61,7 +61,7 @@ const openFeedbackModal = (type) => {
         type="button"
         @click="() => openFeedbackModal(USER_FEEDBACK_TYPES.ANOTHER_USER)"
       >
-        > Raise and issue for another user
+        > Raise an issue for another user
       </button>
       <button
         type="button"
