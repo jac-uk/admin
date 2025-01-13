@@ -33,6 +33,7 @@
 <script>
 import QuestionConfigView from '@/components/QuestionConfig/View.vue';
 import WorkingPreferencesQuestionView from '@/components/WorkingPreferencesQuestion/View.vue';
+import { isNewAdditionalWorkingPreferencesQuestionType } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'AdditionalWorkingPreferences',
@@ -47,8 +48,8 @@ export default {
     },
   },
   computed: {
-    isNewQuestionType(){
-      return this.exercise.additionalWorkingPreferences && this.exercise.additionalWorkingPreferences.some((el) => 'groupAnswers' in el);
+    isNewQuestionType() {
+      return isNewAdditionalWorkingPreferencesQuestionType(this.exercise);
     },
   },
 };
