@@ -321,7 +321,10 @@
 import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
-import _ from 'lodash';
+import _clone from 'lodash/clone';
+import _merge from 'lodash/merge';
+import _startCase from 'lodash/startCase';
+import _includes from 'lodash/includes';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { customReportConstants } from '@/helpers/customReportConstants';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
@@ -396,13 +399,13 @@ export default {
       return groups;
     },
     keys() {
-      let keys = _.clone(this.defaultKeys);
+      let keys = _clone(this.defaultKeys);
       if (this.exercise.typeOfExercise === 'non-legal') {
-        keys = _.merge(keys, {
+        keys = _merge(keys, {
           experience: { label: 'Experience', type: String },
         });
       }
-      return _.merge(keys, this.preferenceKeys);
+      return _merge(keys, this.preferenceKeys);
     },
     preferenceGroups() {
       const groups = [];
@@ -440,7 +443,7 @@ export default {
         if (questions.length) {
           const keys = questions.map((q) => `${preference}.${q.id}`);
           groups.push({
-            name: _.startCase(preference),
+            name: _startCase(preference),
             keys,
           });
         }
@@ -550,7 +553,7 @@ export default {
       this.isLoading = false;
     },
     selectColumn(event) {
-      if (!_.includes(this.columns, event.target.value)) {
+      if (!_includes(this.columns, event.target.value)) {
         this.columns.push(event.target.value);
       }
       this.selectedColumn = '';
