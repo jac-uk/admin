@@ -420,7 +420,7 @@ export default {
           keys: ['locationPreferences'],
         });
       }
-      if (Array.isArray(this.exercise.additionalWorkingPreferences) && this.exercise.additionalWorkingPreferences && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+      if (this.exercise?.additionalWorkingPreferences?.length && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
         const keys = [];
         this.exercise.additionalWorkingPreferences.forEach((question, i) => {
           keys.push(`additionalWorkingPreferences ${i}`);
