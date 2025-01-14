@@ -63,7 +63,7 @@
                 <option
                   v-for="(exercise, index) in exerciseNames"
                   :key="index"
-                  :label="exercise.referenceNumber"
+                  :label="exerciseLabel(exercise)"
                   :value="exercise.id"
                 >
                   <!-- {{ exercise.referenceNumber + ": " + exercise.name }} -->
@@ -278,10 +278,15 @@ export default {
           }))
 
           .sort((a, b) => {
-            // Extract numeric parts from referenceNumber
-            const numA = parseInt(a.referenceNumber.slice(3), 10);
-            const numB = parseInt(b.referenceNumber.slice(3), 10);
-            return numA - numB; //sort
+            if (a.referenceNumber && b.referenceNumber) {
+              // Extract numeric parts from referenceNumber
+              const numA = parseInt(a.referenceNumber.slice(3), 10);
+              const numB = parseInt(b.referenceNumber.slice(3), 10);
+              return numA - numB; //sort
+            } else {
+              return 0;
+            }
+            return true;
           });
       },
     }),
@@ -295,6 +300,11 @@ export default {
     this.fetchAllExercises();
   },
   methods: {
+    exerciseLabel(ex) {
+      if (!!ex.referenceNumber) return ex.referenceNumber;
+      if (!!ex.name) return ex.name.length > 10 ? ex.name.slice(0, 10) + '...' : ex.name;
+      return ex.id;
+    },
     fetchAllExercises() {
       this.$store.dispatch('exerciseCollection/getAll');
     },
