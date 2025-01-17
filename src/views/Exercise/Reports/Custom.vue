@@ -67,6 +67,16 @@
         </p>
       </div>
       <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-0">
+          <Checkbox
+            id="include-withdrawn-candidates"
+            v-model="includeWithdrawnCandidates"
+          >
+            Include withdrawn candidates
+          </Checkbox>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-3">
             <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select a column to display: </span>
@@ -333,7 +343,7 @@ import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { isNewAdditionalWorkingPreferencesQuestionType } from '../../../helpers/exerciseHelper';
-
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
 
@@ -344,6 +354,7 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
+    Checkbox,
   },
   mixins: [permissionMixin],
   data() {
@@ -366,6 +377,7 @@ export default {
       defaultGroups: customReportConstants.groups,
       defaultKeys: customReportConstants.keys,
       workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
+      includeWithdrawnCandidates: false,
     };
   },
   computed: {
@@ -488,6 +500,13 @@ export default {
         this.getApplicationRecords();
       },
       deep: true,
+    },
+    includeWithdrawnCandidates: function (newValue) {
+      if (newValue) {
+        this.statuses.push(STATUS.WITHDRAWN);
+      } else {
+        this.statuses = this.statuses.filter(status => status !== STATUS.WITHDRAWN);
+      }
     },
     selectedStage: function () {
       this.selectedStageStatus = 'all';
