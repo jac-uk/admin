@@ -143,16 +143,6 @@
     </div>
     <!-- // END PANELS -->
 
-    <!-- SELECTION DAYS -->
-    <div
-      v-if="hasSelectionDayTimetable"
-      v-show="activeTab == 'dates'"
-    >
-      [ selection days ]
-      {{ selectionDays }}
-    </div>
-    <!-- // END SELECTION DAYS -->
-
     <!-- TIMETABLE -->
     <div
       v-if="hasSelectionDayTimetable"
@@ -160,7 +150,7 @@
     >
       <ActionButton
         type="primary"
-        :disabled="false"
+        :disabled="!timetable.length"
         :action="generateTimetable"
       >
         Generate timetable
@@ -183,56 +173,6 @@
           <li>etc</li>
         </ul>
       </div>
-
-      <div
-        class="govuk-grid-row"
-      >
-        <div class="govuk-grid-column-one-half">
-          <a
-            class="govuk-link govuk-!-margin-right-4"
-            @click="alert('Under construction :)')"
-          >Find an application</a>
-        </div>
-        <div class="govuk-grid-column-one-half text-right">
-          <a
-            class="govuk-link"
-            @click="alert('Under construction :)')"
-          >Export</a>
-          <a
-            class="govuk-link govuk-!-margin-left-4"
-            @click="alert('Under construction :)')"
-          >Expand all</a>
-        </div>
-      </div>
-      <Table
-        :data="timetable"
-        data-key="date"
-        :columns="tableColumnsTimetable"
-        :page-size="500"
-        local-data
-      >
-        <template #row="{row}">
-          <TableCell :title="tableColumnsTimetable[0].title">
-            <RouterLink
-              :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.id } }"
-            >
-              {{ row.name }}
-            </RouterLink>
-          </TableCell>
-          <TableCell :title="tableColumnsTimetable[1].title">
-            {{ $filters.formatDate(row.date) }}
-          </TableCell>
-          <TableCell :title="tableColumnsTimetable[2].title">
-            {{ row.location }}
-          </TableCell>
-          <TableCell :title="tableColumnsTimetable[3].title">
-            {{ row.totalSlots }}
-          </TableCell>
-          <TableCell :title="tableColumnsTimetable[4].title">
-            {{ row.applicationIds ? row.applicationIds.length : 0 }}
-          </TableCell>
-        </template>
-      </Table>
     </div>
     <!-- // END TIMETABLE -->
 
@@ -345,13 +285,6 @@ export default {
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Panel' },
       ],
-      tableColumnsTimetable: [
-        { title: 'Panel' },
-        { title: 'Date' },
-        { title: 'Location' },
-        { title: 'Number of slots' },
-        { title: 'Applications' },
-      ],
       hasTimetableMessage: false,
     };
   },
@@ -384,7 +317,7 @@ export default {
         ref: 'panels',
         title: 'Panels',
       });
-      if (this.hasSelectionDayTimetable) {
+      if (this.hasSelectionDayTimetable && this.timetable.length) {
         // data.push({
         //   ref: 'dates',
         //   title: 'Selection Days',
@@ -439,11 +372,13 @@ export default {
     timetable() {
       const data = [];
       this.panels.forEach(panel => {
-        panel.timetable.forEach(item => {
-          if (item.totalSlots > 0) {
-            data.push({ id: panel.id, name: panel.name, ...item });
-          }
-        });
+        if (panel.timetable) {
+          panel.timetable.forEach(item => {
+            if (item.totalSlots > 0) {
+              data.push({ id: panel.id, name: panel.name, ...item });
+            }
+          });
+        }
       });
       return data;
     },
@@ -543,6 +478,7 @@ export default {
       }
     },
     async generateTimetable() {
+      // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
       return new Promise((resolve) => {
         setTimeout(() => {
           this.hasTimetableMessage = true;

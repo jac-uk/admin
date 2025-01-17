@@ -302,7 +302,7 @@ export default {
       const tabs = [];
       tabs.push({ ref: 'panellists', title: 'Panellists' });
       if (this.hasSelectionDayTimetable) {
-        tabs.push({ ref: 'capacity', title: 'Availability' });
+        tabs.push({ ref: 'capacity', title: 'Slots' });
       }
       tabs.push({ ref: 'applications', title: 'Applications' });
       tabs.push({ ref: 'edit', title: 'Edit' });
