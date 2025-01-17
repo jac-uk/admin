@@ -91,25 +91,28 @@
     <div v-show="activeTab == 'capacity'">
       <Table
         :data="timetable"
-        dataKey="date"
+        data-key="date"
         :columns="tableColumnsCapacity"
         :page-size="500"
         local-data
       >
-      <template #footer>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell" colspan="2"></td>
-          <TableCell>
-            <ActionButton
-              type="primary"
-              :disabled="false"
-              :action="savePanelAvailability"
-            >
-              Save changes
-            </ActionButton>
-          </TableCell>
-        </tr>
-      </template>
+        <template #footer>
+          <tr class="govuk-table__row">
+            <td
+              class="govuk-table__cell"
+              colspan="2"
+            />
+            <TableCell>
+              <ActionButton
+                type="primary"
+                :disabled="false"
+                :action="savePanelAvailability"
+              >
+                Save changes
+              </ActionButton>
+            </TableCell>
+          </tr>
+        </template>
         <template #row="{row, rowIndex}">
           <TableCell :title="tableColumnsCapacity[0].title">
             {{ $filters.formatDate(row.date) }}
@@ -513,7 +516,7 @@ export default {
     },
     async savePanelAvailability() {
       const data = {
-        timetable: this.timetable
+        timetable: this.timetable,
       };
       await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
       return true;

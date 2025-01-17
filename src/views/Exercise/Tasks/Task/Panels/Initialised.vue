@@ -144,14 +144,20 @@
     <!-- // END PANELS -->
 
     <!-- SELECTION DAYS -->
-    <div v-if="hasSelectionDayTimetable" v-show="activeTab == 'dates'">
+    <div
+      v-if="hasSelectionDayTimetable"
+      v-show="activeTab == 'dates'"
+    >
       [ selection days ]
       {{ selectionDays }}
     </div>
     <!-- // END SELECTION DAYS -->
 
     <!-- TIMETABLE -->
-    <div v-if="hasSelectionDayTimetable" v-show="activeTab == 'timetable'">
+    <div
+      v-if="hasSelectionDayTimetable"
+      v-show="activeTab == 'timetable'"
+    >
       <ActionButton
         type="primary"
         :disabled="false"
@@ -160,8 +166,13 @@
         Generate timetable
       </ActionButton>
 
-      <div v-if="hasTimetableMessage" class="govuk-inset-text govuk-!-margin-top-0">
-        <p class="govuk-body">Useful information from the Generate Timetable function about why the timetable is not complete. Such as:</p>
+      <div
+        v-if="hasTimetableMessage"
+        class="govuk-inset-text govuk-!-margin-top-0"
+      >
+        <p class="govuk-body">
+          Useful information from the Generate Timetable function about why the timetable is not complete. Such as:
+        </p>
         <ul class="govuk-list govuk-list--bullet">
           <li>There are more candidates than slots</li>
           <li>The following candidates are only available on one day</li>
@@ -195,12 +206,12 @@
       </div>
       <Table
         :data="timetable"
-        dataKey="date"
+        data-key="date"
         :columns="tableColumnsTimetable"
         :page-size="500"
         local-data
       >
-        <template #row="{row, rowIndex}">
+        <template #row="{row}">
           <TableCell :title="tableColumnsTimetable[0].title">
             <RouterLink
               :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.id } }"
@@ -507,7 +518,7 @@ export default {
           timetable.forEach(item => {
             if (item.date == date && item.location === location) {
               if (!item.applicationIds) item.applicationIds = [];
-              item.applicationIds = [ ...new Set(item.applicationIds.concat(this.selectedItems)) ];
+              item.applicationIds = [...new Set(item.applicationIds.concat(this.selectedItems))];
             }
           });
           console.log('timetable', timetable);

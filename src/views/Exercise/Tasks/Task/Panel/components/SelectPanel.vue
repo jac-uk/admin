@@ -25,7 +25,10 @@
             {{ $filters.formatDate(item.date) }} {{ item.location }} ({{ item.totalSlots }} slots)
           </option>
         </optgroup>
-        <option v-else :value="panel.id">
+        <option
+          v-else
+          :value="panel.id"
+        >
           {{ panel.name }}
         </option>
       </template>
