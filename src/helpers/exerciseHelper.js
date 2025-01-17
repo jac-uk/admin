@@ -21,7 +21,8 @@ hasSelfAssessment,
 exerciseApplicationParts,
 configuredApplicationParts,
 applicationContentList,
-unselectedApplicationParts
+unselectedApplicationParts,
+isNewAdditionalWorkingPreferencesQuestionType
 */
 
 export {
@@ -103,7 +104,8 @@ export {
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
   isJAC00187,
-  isPublished
+  isPublished,
+  isNewAdditionalWorkingPreferencesQuestionType
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -1562,4 +1564,8 @@ function canApplyFullApplicationSubmitted(exercise) {
   const applyFullApplicationSubmitted = isStagedExercise && exercise.applicationOpenDate >= new Date(2024, 7, 18);
 
   return applyFullApplicationSubmitted;
+}
+
+function isNewAdditionalWorkingPreferencesQuestionType(exercise) {
+  return exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.some((el) => 'groupAnswers' in el);
 }

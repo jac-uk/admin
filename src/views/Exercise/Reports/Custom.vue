@@ -91,7 +91,7 @@
                       :key="keyIndex"
                       :value="key"
                     >
-                      {{ keys[key].label }}
+                      {{ keys[key] ? keys[key]?.label : `${key} not found` }}
                     </option>
                   </optgroup>
                 </select>
@@ -321,7 +321,10 @@
 import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
-import _ from 'lodash';
+import _clone from 'lodash/clone';
+import _merge from 'lodash/merge';
+import _startCase from 'lodash/startCase';
+import _includes from 'lodash/includes';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { customReportConstants } from '@/helpers/customReportConstants';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
@@ -329,6 +332,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { isNewAdditionalWorkingPreferencesQuestionType } from '../../../helpers/exerciseHelper';
 
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
@@ -359,8 +363,9 @@ export default {
       columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
       warnings: '',
       warningTimeout: null,
-      groups: customReportConstants.groups,
-      keys: customReportConstants.keys,
+      defaultGroups: customReportConstants.groups,
+      defaultKeys: customReportConstants.keys,
+      workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
     };
   },
   computed: {
@@ -378,6 +383,103 @@ export default {
       if (this.selectedStage === 'all') return null;
       const statuses = availableStatuses(this.exercise, this.selectedStage);
       return statuses;
+    },
+    groups() {
+      let groups = this.defaultGroups.slice();
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        groups = groups.concat([
+          {
+            name: 'Experience',
+            keys: ['experience'],
+          },
+        ]);
+
+      }
+      groups = groups.concat(this.preferenceGroups);
+      return groups;
+    },
+    keys() {
+      let keys = _clone(this.defaultKeys);
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        keys = _merge(keys, {
+          experience: { label: 'Experience', type: String },
+        });
+      }
+      return _merge(keys, this.preferenceKeys);
+    },
+    preferenceGroups() {
+      const groups = [];
+
+      // handle old worker prefs data structure
+      if (this.exercise.jurisdictionQuestion) {
+        groups.push({
+          name: 'Jurisdiction Preferences',
+          keys: ['jurisdictionPreferences'],
+        });
+      }
+      if (this.exercise.locationQuestion) {
+        groups.push({
+          name: 'Location Preferences',
+          keys: ['locationPreferences'],
+        });
+      }
+      if (this.exercise?.additionalWorkingPreferences?.length && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+        const keys = [];
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          keys.push(`additionalWorkingPreferences ${i}`);
+        });
+        groups.push({
+          name: 'Additional Working Preferences',
+          keys: keys,
+        });
+      }
+
+      // handle new worker prefs data structure
+      for (const preference of this.workingPreferences) {
+        if (preference === 'additionalWorkingPreferences' && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+          continue;
+        }
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          const keys = questions.map((q) => `${preference}.${q.id}`);
+          groups.push({
+            name: _startCase(preference),
+            keys,
+          });
+        }
+      }
+      return groups;
+    },
+    preferenceKeys() {
+      const keys = {};
+
+      // handle old worker prefs data structure
+      if (this.exercise.jurisdictionQuestion) {
+        keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
+      }
+      if (this.exercise.locationQuestion) {
+        keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
+      }
+
+      if (!isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          keys[`additionalWorkingPreferences ${i}`] = { label: question.question, type: String };
+        });
+      }
+
+      // handle new worker prefs data structure
+      for (const preference of this.workingPreferences) {
+        if (preference === 'additionalWorkingPreferences' && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+          continue;
+        }
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          for (const question of questions) {
+            keys[`${preference}.${question.id}`] = { label: question.question, type: String };
+          }
+        }
+      }
+      return keys;
     },
   },
   watch: {
@@ -417,25 +519,6 @@ export default {
     },
   },
   created() {
-    // if report can include working prefs answers, add them under working prefs title
-    if (this.exercise.jurisdictionQuestion || this.exercise.locationQuestion) {
-      this.groups.splice(1, 0, { name: 'Working Preferences', keys: [] });
-      const workingPrefsIndex = this.groups.findIndex((group) => group.name === 'Working Preferences');
-      if (this.exercise.jurisdictionQuestion) {
-        this.groups[workingPrefsIndex].keys.push('jurisdictionPreferences');
-        this.keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
-      }
-      if (this.exercise.locationQuestion) {
-        this.groups[workingPrefsIndex].keys.push('locationPreferences');
-        this.keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
-      }
-      if (this.exercise.additionalWorkingPreferences) {
-        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
-          this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
-          this.keys[`additionalWorkingPreferences ${i}`] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
-        });
-      }
-    }
     this.getReports();
   },
   methods: {
@@ -470,7 +553,7 @@ export default {
       this.isLoading = false;
     },
     selectColumn(event) {
-      if (!_.includes(this.columns, event.target.value)) {
+      if (!_includes(this.columns, event.target.value)) {
         this.columns.push(event.target.value);
       }
       this.selectedColumn = '';
