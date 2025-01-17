@@ -17,7 +17,7 @@
       v-if="hasApplicationsWithoutPanels"
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      Please create panels and allocate applications to those panels.
+      Please create panels and assign applications to those panels.
     </p>
     <p
       v-else-if="hasPanelsWithoutPanellists"
@@ -63,7 +63,7 @@
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <p class="govuk-body govuk-!-margin-bottom-0">
             Applications
-            <span class="govuk-caption-m">Not yet assigned to a panel</span>
+            <span class="govuk-caption-m">Not yet assigned</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
             {{ applicationsWithoutPanels.length }}
@@ -143,6 +143,88 @@
     </div>
     <!-- // END PANELS -->
 
+    <!-- SELECTION DAYS -->
+    <div v-if="hasSelectionDayTimetable" v-show="activeTab == 'dates'">
+      [ selection days ]
+      {{ selectionDays }}
+    </div>
+    <!-- // END SELECTION DAYS -->
+
+    <!-- TIMETABLE -->
+    <div v-if="hasSelectionDayTimetable" v-show="activeTab == 'timetable'">
+      <ActionButton
+        type="primary"
+        :disabled="false"
+        :action="generateTimetable"
+      >
+        Generate timetable
+      </ActionButton>
+
+      <div v-if="hasTimetableMessage" class="govuk-inset-text govuk-!-margin-top-0">
+        <p class="govuk-body">Useful information from the Generate Timetable function about why the timetable is not complete. Such as:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>There are more candidates than slots</li>
+          <li>The following candidates are only available on one day</li>
+          <li>The following candidates clash with every panellist</li>
+          <li>The following dates are oversubscribed</li>
+          <li>The following dates have no candidates</li>
+          <li>The following panellists have conflicts with lots of candidates</li>
+          <li>etc</li>
+        </ul>
+      </div>
+
+      <div
+        class="govuk-grid-row"
+      >
+        <div class="govuk-grid-column-one-half">
+          <a
+            class="govuk-link govuk-!-margin-right-4"
+            @click="alert('Under construction :)')"
+          >Find an application</a>
+        </div>
+        <div class="govuk-grid-column-one-half text-right">
+          <a
+            class="govuk-link"
+            @click="alert('Under construction :)')"
+          >Export</a>
+          <a
+            class="govuk-link govuk-!-margin-left-4"
+            @click="alert('Under construction :)')"
+          >Expand all</a>
+        </div>
+      </div>
+      <Table
+        :data="timetable"
+        dataKey="date"
+        :columns="tableColumnsTimetable"
+        :page-size="500"
+        local-data
+      >
+        <template #row="{row, rowIndex}">
+          <TableCell :title="tableColumnsTimetable[0].title">
+            <RouterLink
+              :to="{ name: `exercise-task-panel`, params: { type: type, panelId: row.id } }"
+            >
+              {{ row.name }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumnsTimetable[1].title">
+            {{ $filters.formatDate(row.date) }}
+          </TableCell>
+          <TableCell :title="tableColumnsTimetable[2].title">
+            {{ row.location }}
+          </TableCell>
+          <TableCell :title="tableColumnsTimetable[3].title">
+            {{ row.totalSlots }}
+          </TableCell>
+          <TableCell :title="tableColumnsTimetable[4].title">
+            {{ row.applicationIds ? row.applicationIds.length : 0 }}
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+    <!-- // END TIMETABLE -->
+
     <!-- APPLICATIONS -->
     <div v-show="activeTab == 'applications'">
       <Table
@@ -205,7 +287,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps, TASK_TYPE } from '@/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -252,6 +334,14 @@ export default {
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Panel' },
       ],
+      tableColumnsTimetable: [
+        { title: 'Panel' },
+        { title: 'Date' },
+        { title: 'Location' },
+        { title: 'Number of slots' },
+        { title: 'Applications' },
+      ],
+      hasTimetableMessage: false,
     };
   },
   computed: {
@@ -283,6 +373,16 @@ export default {
         ref: 'panels',
         title: 'Panels',
       });
+      if (this.hasSelectionDayTimetable) {
+        // data.push({
+        //   ref: 'dates',
+        //   title: 'Selection Days',
+        // });
+        data.push({
+          ref: 'timetable',
+          title: 'Timetable',
+        });
+      }
       if (this.hasApplicationsWithoutPanels) {
         data.push({
           ref: 'applications',
@@ -313,6 +413,34 @@ export default {
       if (!this.selectedItems.length) return null;
       return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0);
     },
+    hasSelectionDayTimetable() {
+      return this.task.type === TASK_TYPE.SELECTION_DAY && this.task._preSelectionDayQuestionnaire;
+    },
+    selectionDays() {
+      if (this.hasSelectionDayTimetable) {
+        const form = this.$store.getters['candidateForm/data']();
+        if (form) {
+          return form.candidateAvailabilityDates;
+        }
+      }
+      return null;
+    },
+    timetable() {
+      const data = [];
+      this.panels.forEach(panel => {
+        panel.timetable.forEach(item => {
+          if (item.totalSlots > 0) {
+            data.push({ id: panel.id, name: panel.name, ...item });
+          }
+        });
+      });
+      return data;
+    },
+  },
+  async created() {
+    if (this.hasSelectionDayTimetable) {
+      await this.$store.dispatch('candidateForm/bind', this.task._preSelectionDayQuestionnaire.formId);
+    }
   },
   methods: {
     btnNext,
@@ -365,20 +493,33 @@ export default {
     },
     async selectPanel(data) {
       if (data && data.panelId) {
+        let panelId = data.panelId;
+        let panel, date, location, timetable;
+        if (this.hasSelectionDayTimetable) {
+          const parts = data.panelId.split('__');
+          console.log('parts', parts);
+          panelId = parts[0];
+          date = parts[1];
+          location = parts[2];
+          panel = this.$store.getters['panels/getPanel'](panelId);
+          console.log('panel', panel);
+          timetable = panel.timetable;
+          timetable.forEach(item => {
+            if (item.date == date && item.location === location) {
+              if (!item.applicationIds) item.applicationIds = [];
+              item.applicationIds = [ ...new Set(item.applicationIds.concat(this.selectedItems)) ];
+            }
+          });
+          console.log('timetable', timetable);
+        }
         // update panel with new ids
         await this.$store.dispatch('panel/addApplications', {
-          panelId: data.panelId,
+          panelId: panelId,
           type: this.type,
           applicationIds: this.selectedItems,
           applicationRecords: this.selectedApplications,
+          timetable,
         });
-        // // update applicationRecords
-        // const updates = this.selectedItems.map(applicationId => {
-        //   const update = {};
-        //   update[`${this.type}.panelId`] = data.panelId;
-        //   return { id: applicationId, data: update };
-        // });
-        // await this.$store.dispatch('candidateApplications/update', updates);
         this.selectedItems = [];
       }
       this.$refs['setPanelModal'].closeModal();
@@ -389,6 +530,17 @@ export default {
           this.activeTab = 'panels';
         }
       }
+    },
+    async generateTimetable() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          this.hasTimetableMessage = true;
+          resolve(true);
+        }, 3000);
+      });
+    },
+    alert(message) {
+      window.alert(message);
     },
   },
 };

@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
@@ -40,19 +40,7 @@
           </div>
         </div>
 
-        <div class="govuk-grid-column-one-third">
-          <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">{{ $filters.lookup(type) }} Dates</span>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ $filters.showAlternative($filters.formatDate(panel.dateFrom), "Unknown") }} -
-              {{ $filters.showAlternative($filters.formatDate(panel.dateTo), "Unknown") }}
-            </h2>
-          </div>
-        </div>
-
-        <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
             <div class="govuk-caption-m">
               Applications
@@ -71,6 +59,7 @@
       />
     </div>
 
+    <!-- GRADESHEET -->
     <div
       v-if="panel.scoreSheet"
       v-show="activeTab == 'scoreSheet'"
@@ -96,6 +85,52 @@
         </template>
       </ScoreSheet>
     </div>
+    <!-- END GRADESHEET -->
+
+    <!-- CAPACITY -->
+    <div v-show="activeTab == 'capacity'">
+      <Table
+        :data="timetable"
+        dataKey="date"
+        :columns="tableColumnsCapacity"
+        :page-size="500"
+        local-data
+      >
+      <template #footer>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell" colspan="2"></td>
+          <TableCell>
+            <ActionButton
+              type="primary"
+              :disabled="false"
+              :action="savePanelAvailability"
+            >
+              Save changes
+            </ActionButton>
+          </TableCell>
+        </tr>
+      </template>
+        <template #row="{row, rowIndex}">
+          <TableCell :title="tableColumnsCapacity[0].title">
+            {{ $filters.formatDate(row.date) }}
+          </TableCell>
+          <TableCell :title="tableColumnsCapacity[1].title">
+            {{ row.location }}
+          </TableCell>
+          <TableCell :title="tableColumnsCapacity[2].title">
+            <input
+              :id="`row-${rowIndex}`"
+              v-model="row.totalSlots"
+              type="number"
+              class="govuk-input govuk-input--width-2"
+              spellcheck="false"
+              autocomplete="off"
+            >
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+    <!-- END CAPACITY -->
 
     <!-- APPLICATIONS LIST -->
     <div v-show="activeTab == 'applications'">
@@ -193,6 +228,7 @@
 
 <script>
 import { serverTimestamp, deleteField } from '@firebase/firestore';
+import { TASK_TYPE } from '@/helpers/exerciseHelper';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -229,6 +265,11 @@ export default {
         { title: 'Reference number' },
         { title: 'Name' },
       ],
+      tableColumnsCapacity: [
+        { title: 'Date' },
+        { title: 'Location' },
+        { title: 'Number of slots' },
+      ],
       isEditingPanellists: false,
       roles: [
         ROLES.CHAIR,
@@ -243,6 +284,7 @@ export default {
         SCORESHEET_TOOLS.SCORE,
         SCORESHEET_TOOLS.DIVERSITY,
       ],
+      timetable: [],
     };
     return data;
   },
@@ -256,7 +298,9 @@ export default {
     tabs() {
       const tabs = [];
       tabs.push({ ref: 'panellists', title: 'Panellists' });
-      // tabs.push({ ref: 'slots', title: 'Selection Days' });
+      if (this.hasSelectionDayTimetable) {
+        tabs.push({ ref: 'capacity', title: 'Availability' });
+      }
       tabs.push({ ref: 'applications', title: 'Applications' });
       tabs.push({ ref: 'edit', title: 'Edit' });
       return tabs;
@@ -301,7 +345,7 @@ export default {
       return this.$route.params.panelId;
     },
     panel() {
-      return this.$store.state.panel.record;
+      return this.$store.getters['panel/data']();
     },
     markingScheme() {
       return this.$store.getters['panel/markingScheme'];
@@ -357,17 +401,33 @@ export default {
     processingProgress() {
       return this.processingTotal - this.processingRemaining;
     },
+    hasSelectionDayTimetable() {
+      return this.task.type === TASK_TYPE.SELECTION_DAY && this.task._preSelectionDayQuestionnaire;
+    },
   },
   async created() {
     await this.$store.dispatch('panel/bind', this.panelId);
     if (this.panel && this.panel.panellistIds) {
       this.$store.dispatch('panel/bindPanellists', { ids: this.panel.panellistIds });
     }
+    if (this.hasSelectionDayTimetable) {
+      await this.$store.dispatch('candidateForm/bind', this.task._preSelectionDayQuestionnaire.formId);
+      if (this.panel && this.panel.timetable) {
+        this.timetable = this.panel.timetable;
+      } else {
+        const form = this.$store.getters['candidateForm/data']();
+        if (form) {
+          const defaultData = [];
+          form.candidateAvailabilityDates.forEach(item => defaultData.push({ ...item, totalSlots: 0 }));
+          this.timetable = defaultData;
+        }
+      }
+    }
     if (
       this.panel &&
       this.panel.scoreSheet
     ) {
-      this.tabs.unshift({
+      this.tabs.unshift({   // TODO check this. `tabs` is a computed property
         ref: 'scoreSheet',
         title: 'Grade sheet',
       });
@@ -449,6 +509,13 @@ export default {
       if (parent) saveData[`changes.${id}.${parent}.${ref}`] = valueToSave;
       else saveData[`changes.${id}.${ref}`] = valueToSave;
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData });
+      return true;
+    },
+    async savePanelAvailability() {
+      const data = {
+        timetable: this.timetable
+      };
+      await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
       return true;
     },
   },
