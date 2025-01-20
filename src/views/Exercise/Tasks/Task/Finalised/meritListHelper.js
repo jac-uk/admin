@@ -184,8 +184,17 @@ function scores(task, scoreType, exerciseDiversity) {
   // add outcome stats
   if (task.hasOwnProperty('passMark')) {
     scoresInDescendingOrder.forEach(key => {
-      const score = parseFloat(key);
-      if (score >= task.passMark) {
+      const score = scoreType === 'gradeScore' ? key : parseFloat(key);
+      let isScoreGreaterOrEqual = false;
+      if (scoreType === 'gradeScore') {
+        const parts = task.passMark.split(':');
+        isScoreGreaterOrEqual =
+          scoreMap[score].grade < parts[0] ||
+          (scoreMap[score].grade === parts[0] && scoreMap[score].score >= parseInt(parts[1]));
+      } else {
+        isScoreGreaterOrEqual = score >= task.passMark;
+      }
+      if (isScoreGreaterOrEqual) {
         if (task.overrides && task.overrides.fail) {
           const failMatches = Object.keys(task.overrides.fail).filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
           scoreMap[score].outcome.fail = failMatches.length;
@@ -240,7 +249,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
     }
     if (!data.hasOwnProperty('pass')) {
       if (task.hasOwnProperty('passMark')) {
-        data.pass = isPass(task, data.id, data.score);
+        data.pass = isPass(task, data.id, scoreData[scoreType]);
       }
     }
     return data;
@@ -342,9 +351,24 @@ function getOverrideReasons() {
 //   return match ? match.code : '';
 // }
 
+function isPassingGradeScore(passMark, score) {
+  if (!passMark) return false;
+  if (!score) return false;
+  const passParts = passMark.split(':');
+  const scoreParts = score.split(':');
+  if (scoreParts[0] < passParts[0]) return true;
+  if (scoreParts[0] > passParts[0]) return false;
+  if (parseInt(scoreParts[1]) >= parseInt(passParts[1])) return true;
+  return false;
+}
+
 function isPassingScore(task, score) {
-  if (task && task.passMark && task.passMark <= score) {
-    return true;
+  if (!task) return false;
+  if (!task.passMark) return false;
+  if (scoreType(task) === 'gradeScore') {
+    return isPassingGradeScore(task.passMark, score);
+  } else {
+    if (task.passMark <= score) return true;
   }
   return false;
 }

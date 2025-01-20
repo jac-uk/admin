@@ -69,6 +69,7 @@
         ><span v-if="areAllScoresExpanded">Collapse all</span><span v-else>Expand all</span></a>
       </div>
     </div>
+
     <Table
       data-key="score"
       :data="scores"
@@ -394,10 +395,10 @@ export default {
       }
     },
     getScoreDataForScore(score) {
-      return this.scoreData.filter(item => item.score === score);
+      return this.scoreData.filter(item => item[this.scoreType] === score );
     },
     isPass(row) {
-      return isPass(this.task, row.id, row.score);
+      return isPass(this.task, row.id, row[this.scoreType]);
     },
     openChangeOutcomeModal(item) {
       if (this.editable) {
