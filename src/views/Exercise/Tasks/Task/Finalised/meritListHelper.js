@@ -86,22 +86,21 @@ function scoreType(task) {
 function hasOverallGrade(task) {
   if (!task) return false;
   if (!task.markingScheme) return false;
-  switch (task.type) {
-  case TASK_TYPE.SIFT:
+  if (task.type === TASK_TYPE.SIFT) {
     const sift = task.markingScheme.find(item => item.ref === TASK_TYPE.SIFT);
     if (!sift) return false;
     if (!sift.children) return false;
     const siftOverallGrade = sift.children.find(item => item.ref === 'OVERALL');
     return siftOverallGrade ? true : false;
-  case TASK_TYPE.SELECTION_DAY:
+  }
+  if (task.type === TASK_TYPE.SELECTION_DAY) {
     const selectionDay = task.markingScheme.find(item => item.ref === 'overall');
     if (!selectionDay) return false;
     if (!selectionDay.children) return false;
     const selectionDayOverallGrade = selectionDay.children.find(item => item.ref === 'OVERALL');
     return selectionDayOverallGrade ? true : false;
-  default:
-    return false;
   }
+  return false;
 }
 
 function scores(task, scoreType, exerciseDiversity) {
@@ -153,7 +152,9 @@ function scores(task, scoreType, exerciseDiversity) {
   // add rank and cumulative diversity
   let scoresInDescendingOrder;
   if (scoreType === 'gradeScore') { // keys of form Grade:Score
-    scoresInDescendingOrder = Object.entries(scoreMap).sort(( [keyA, a], [keyB, b]) => {
+    scoresInDescendingOrder = Object.entries(scoreMap).sort(( keyValueA, keyValueB) => {
+      const a = keyValueA[1];
+      const b = keyValueB[1];
       if (a.grade > b.grade) return 1;
       if (a.grade < b.grade) return -1;
       if (a.score > b.score) return -1;

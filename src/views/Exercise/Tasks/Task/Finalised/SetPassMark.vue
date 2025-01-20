@@ -14,9 +14,13 @@
         :key="scoreData.score"
         :value="scoreData.score"
       >
-        <template v-if="scoreType === 'gradeScore'">{{ scoreData.score }}</template>
-        <template v-else>{{ $filters.formatNumber(scoreData.score, 2) }}</template>
-         ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
+        <template v-if="scoreType === 'gradeScore'">
+          {{ scoreData.score }}
+        </template>
+        <template v-else>
+          {{ $filters.formatNumber(scoreData.score, 2) }}
+        </template>
+        ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
       </option>
     </Select>
   </Form>
