@@ -79,7 +79,29 @@ function scoreType(task) {
   if (!task) return 'score';
   if (task.scoreType) return task.scoreType;
   if (task.finalScores && task.finalScores[0].hasOwnProperty('percent')) return 'percent';
+  if (hasOverallGrade(task)) return 'gradeScore';
   return 'score';
+}
+
+function hasOverallGrade(task) {
+  if (!task) return false;
+  if (!task.markingScheme) return false;
+  switch (task.type) {
+  case TASK_TYPE.SIFT:
+    const sift = task.markingScheme.find(item => item.ref === TASK_TYPE.SIFT);
+    if (!sift) return false;
+    if (!sift.children) return false;
+    const siftOverallGrade = sift.children.find(item => item.ref === 'OVERALL');
+    return siftOverallGrade ? true : false;
+  case TASK_TYPE.SELECTION_DAY:
+    const selectionDay = task.markingScheme.find(item => item.ref === 'overall');
+    if (!selectionDay) return false;
+    if (!selectionDay.children) return false;
+    const selectionDayOverallGrade = selectionDay.children.find(item => item.ref === 'OVERALL');
+    return selectionDayOverallGrade ? true : false;
+  default:
+    return false;
+  }
 }
 
 function scores(task, scoreType, exerciseDiversity) {
@@ -113,6 +135,10 @@ function scores(task, scoreType, exerciseDiversity) {
         },
       };
     }
+    if (scoreType === 'gradeScore') {
+      scoreMap[scoreData[scoreType]].grade = scoreData.grade;
+      scoreMap[scoreData[scoreType]].score = scoreData.score;
+    }
     scoreMap[scoreData[scoreType]].applicationIds.push(scoreData.id);
     scoreMap[scoreData[scoreType]].count += 1;
     const ref = scoreData.ref.split('-')[1];
@@ -125,7 +151,18 @@ function scores(task, scoreType, exerciseDiversity) {
   });
 
   // add rank and cumulative diversity
-  const scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
+  let scoresInDescendingOrder;
+  if (scoreType === 'gradeScore') { // keys of form Grade:Score
+    scoresInDescendingOrder = Object.entries(scoreMap).sort(( [keyA, a], [keyB, b]) => {
+      if (a.grade > b.grade) return 1;
+      if (a.grade < b.grade) return -1;
+      if (a.score > b.score) return -1;
+      if (a.score < b.score) return 1;
+      return 0;
+    }).map(item => item[0]);
+  } else {
+    scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
+  }
   let prevScore;
   scoresInDescendingOrder.forEach(score => {
     if (prevScore) {
@@ -169,11 +206,14 @@ function scores(task, scoreType, exerciseDiversity) {
   }
 
   // return
-  return scoresInDescendingOrder.map(score => {
-    return {
-      score: parseFloat(score),
-      ...scoreMap[score],
-    };
+  return scoresInDescendingOrder.map(key => {
+    const data = { ...scoreMap[key] };
+    if (scoreType === 'gradeScore') {
+      data.score = key;
+    } else {
+      data.score = parseFloat(key);
+    }
+    return data;
   });
 }
 

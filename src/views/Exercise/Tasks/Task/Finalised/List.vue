@@ -84,7 +84,12 @@
           {{ row.count }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ $filters.formatNumber(row.score, 2) }}
+          <template v-if="scoreType == 'gradeScore'">
+            {{ row.score }}
+          </template>
+          <template v-else>
+            {{ $filters.formatNumber(row.score, 2) }}
+          </template>
         </TableCell>
         <template v-if="showDiversity">
           <TableCell :title="tableColumns[3].title">
