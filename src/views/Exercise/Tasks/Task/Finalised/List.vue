@@ -61,6 +61,7 @@
         <input class="search-input govuk-input govuk-input--width-10 govuk-!-margin-left-2" id="search" name="search" type="text">
       </div> -->
       <div class="govuk-grid-column-one-half text-right">
+        <!-- TODO: Ranked by Overall grade + score -->
         <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
         <a
           class="govuk-link govuk-!-margin-left-4"
