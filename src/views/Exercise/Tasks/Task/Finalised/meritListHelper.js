@@ -226,7 +226,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
     const data = {
       ...application,
       ...scoreData,
-      score: scoreData[scoreType],
+      // score: scoreData[scoreType],
       diversity: {},
     };
     const ref = scoreData.ref.split('-')[1];
@@ -244,8 +244,19 @@ function scoreData(task, scoreType, exerciseDiversity) {
       }
     }
     return data;
-  }).sort((a, b) => b.score - a.score);
+  }).sort((a, b) => {
+    if (scoreType === 'gradeScore') {
+      if (a.grade > b.grade) return 1;
+      if (a.grade < b.grade) return -1;
+      if (a.score > b.score) return -1;
+      if (a.score < b.score) return 1;
+      return 0;
+    } else {
+      return b.score - a.score;
+    }
+  });
 
+  // add rank and count
   let prevScore;
   let prevRank = 1;
   let prevCount = 0;
@@ -458,6 +469,7 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
 }
 
 function xlsxData(didNotTake, failed, task, diversityData, type) {
+  const taskScoreType = scoreType(task);
   const rows = [];
   const headers = [];
   headers.push('Ref');
@@ -480,7 +492,11 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       headers.push('Email');
     }
     headers.push('Rank');
-    headers.push('Score');
+    if (taskScoreType === 'gradeScore') {
+      headers.push('Grade:score');
+    } else {
+      headers.push('Score');
+    }
   }
   // headers.push('Notes');
   headers.push('Female');
@@ -511,7 +527,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.email);
       }
       row.push(item.rank);
-      row.push(item.score);
+      row.push(item[taskScoreType]);
     }
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];

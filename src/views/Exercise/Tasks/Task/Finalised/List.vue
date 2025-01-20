@@ -437,8 +437,8 @@ export default {
     downloadMeritList(saveData) {
       const title = this.$filters.lookup(this.type);
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
-      let didNotTake = []; // TODO task.applications.filter( no score )
-      let failed = []; // TODO check for pass mark; check for overrides
+      let didNotTake = [];
+      let failed = [];
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
