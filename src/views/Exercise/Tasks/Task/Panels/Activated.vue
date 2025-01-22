@@ -255,6 +255,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
 import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity, getApplicationData } from '@/helpers/scoreSheetHelper';
+import { scoreType, getOverallGrade } from '../Finalised/meritListHelper';
 import { functions } from '@/firebase';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
@@ -359,6 +360,9 @@ export default {
       if (!this.panels) return [];
       return this.panels.map(panel => { return { title: panel.name }; });
     },
+    scoreType() {
+      return scoreType(this.task);
+    },
     scoreSheetData() {
       const rows = [];
       this.panels.forEach(panel => {
@@ -381,12 +385,15 @@ export default {
             changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
           };
           row.score = getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId], row.changes);
+          if (this.scoreType === 'gradeScore') {
+            row.grade = getOverallGrade(this.task, panel.scoreSheet[applicationId]);
+          }
           rows.push(row);
         });
       });
       if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
-      scoreSheetRowsAddRank(rows);
-      // TODO might want add custom sort here
+      scoreSheetRowsAddRank(this.scoreType, rows);
+      // TODO might want to add custom sort here
       return rows;
     },
     stats() {
