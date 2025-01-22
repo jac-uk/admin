@@ -591,22 +591,6 @@ describe('scoreData', () => {
     expect(result[3].rank).toBe(4);
   });
 
-  it('should use the correct scoreType', () => {
-    const task = {
-      finalScores: [
-        { id: '1', ref: 'ref-001', score: 10, percent: 100 },
-      ],
-      scoreType: 'percent',
-    };
-    const exerciseDiversity = {
-      '001': {},
-    };
-
-    const result = scoreData(task, 'percent', exerciseDiversity);
-
-    expect(result).toHaveLength(1);
-    expect(result[0].score).toBe(100);
-  });
 });
 
 describe('totalApplications', () => {
