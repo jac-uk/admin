@@ -57,7 +57,7 @@
             class="govuk-!-margin-top-1"
           >
             <button
-              v-if="isReadyForTesting && !isArchived"
+              v-if="isReadyForTesting && !isArchived && hasPermissions([PERMISSIONS.applications.permissions.canCreateTestApplications.value])"
               class="govuk-button govuk-button--secondary"
               @click="changeNoOfTestApplications()"
             >
