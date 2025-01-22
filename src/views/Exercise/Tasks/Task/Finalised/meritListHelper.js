@@ -25,7 +25,9 @@ export {
   totalDidNotParticipate,
   hasParticipation,
   downloadMeritList,
-  getDownloadTypes
+  getDownloadTypes,
+  getOverallGrade,
+  sortFunctionGradeScore
 };
 
 const OUTCOME = {
@@ -103,6 +105,18 @@ function hasOverallGrade(task) {
   return false;
 }
 
+function getOverallGrade(task, scoreSheet) {
+  if (!task) return false;
+  switch (task.type) {
+  case TASK_TYPE.SIFT:
+    return scoreSheet[task.type].OVERALL;
+  case TASK_TYPE.SELECTION_DAY:
+    return scoreSheet.overall.OVERALL;
+  default:
+    return '';
+  }
+}
+
 function scores(task, scoreType, exerciseDiversity) {
   if (!task) return [];
   if (!exerciseDiversity) return [];
@@ -155,11 +169,7 @@ function scores(task, scoreType, exerciseDiversity) {
     scoresInDescendingOrder = Object.entries(scoreMap).sort(( keyValueA, keyValueB) => {
       const a = keyValueA[1];
       const b = keyValueB[1];
-      if (a.grade > b.grade) return 1;
-      if (a.grade < b.grade) return -1;
-      if (a.score > b.score) return -1;
-      if (a.score < b.score) return 1;
-      return 0;
+      return sortFunctionGradeScore(a, b);
     }).map(item => item[0]);
   } else {
     scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
@@ -227,6 +237,14 @@ function scores(task, scoreType, exerciseDiversity) {
   });
 }
 
+function sortFunctionGradeScore(a, b) {
+  if (a.grade > b.grade) return 1;
+  if (a.grade < b.grade) return -1;
+  if (a.score > b.score) return -1;
+  if (a.score < b.score) return 1;
+  return 0;
+}
+
 function scoreData(task, scoreType, exerciseDiversity) {
   if (!task) return [];
   if (!task.finalScores) return [];
@@ -256,11 +274,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
     return data;
   }).sort((a, b) => {
     if (scoreType === 'gradeScore') {
-      if (a.grade > b.grade) return 1;
-      if (a.grade < b.grade) return -1;
-      if (a.score > b.score) return -1;
-      if (a.score < b.score) return 1;
-      return 0;
+      return sortFunctionGradeScore(a, b);
     } else {
       return b.score - a.score;
     }
