@@ -287,10 +287,10 @@ function scoreData(task, scoreType, exerciseDiversity) {
   let prevRank = 1;
   let prevCount = 0;
   sortedScoreData.forEach(scoreData => {
-    if (scoreData.score === prevScore) {
+    if (scoreData[scoreType] === prevScore) {
       prevCount++;
     } else {
-      prevScore = scoreData.score;
+      prevScore = scoreData[scoreType];
       prevRank = prevRank + prevCount;
       prevCount = 1;
     }
