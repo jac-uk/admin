@@ -255,7 +255,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
 import { SCORESHEET_TOOLS, getScoreSheetTotal, GRADE_VALUES, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity, getApplicationData } from '@/helpers/scoreSheetHelper';
-import { scoreType, getOverallGrade } from '../Finalised/meritListHelper';
+import { scoreType, getOverallGrade } from '@/helpers/meritListHelper';
 import { functions } from '@/firebase';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
 
@@ -386,7 +386,8 @@ export default {
           };
           row.score = getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId], row.changes);
           if (this.scoreType === 'gradeScore') {
-            row.grade = getOverallGrade(this.task, panel.scoreSheet[applicationId]);
+            row.grade = getOverallGrade(this.task, panel.scoreSheet[applicationId], row.changes);
+            row.gradeScore = `${row.grade}:${row.score}`;
           }
           rows.push(row);
         });

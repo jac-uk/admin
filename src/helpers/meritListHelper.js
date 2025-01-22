@@ -105,12 +105,14 @@ function hasOverallGrade(task) {
   return false;
 }
 
-function getOverallGrade(task, scoreSheet) {
+function getOverallGrade(task, scoreSheet, changes) {
   if (!task) return false;
   switch (task.type) {
   case TASK_TYPE.SIFT:
+    if (changes && changes[task.type] && changes[task.type].OVERALL) return changes[task.type].OVERALL;
     return scoreSheet[task.type].OVERALL;
   case TASK_TYPE.SELECTION_DAY:
+    if (changes && changes.overall && changes.overall.OVERALL) return changes.overall.OVERALL;
     return scoreSheet.overall.OVERALL;
   default:
     return '';

@@ -72,7 +72,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from './helper';
-import { scoreType, scores, scoreData, totalPassed, totalFailed } from './Finalised/meritListHelper';
+import { scoreType, scores, scoreData, totalPassed, totalFailed } from '@/helpers/meritListHelper';
 import { getTaskSteps } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';

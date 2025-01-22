@@ -55,7 +55,7 @@ import Form from '@/components/Page/Form.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
-import { getDefaultOutcome, getCurrentOutcome, getNewOutcome, getOverrideReasons, isPassingScore, getOverride } from './meritListHelper';
+import { getDefaultOutcome, getCurrentOutcome, getNewOutcome, getOverrideReasons, isPassingScore, getOverride } from '@/helpers/meritListHelper';
 
 export default {
   name: 'SelectPanel',

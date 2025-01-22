@@ -261,7 +261,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import ChangeOutcome from './ChangeOutcome.vue';
 import ConfigureExport from './ConfigureExport.vue';
-import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from './meritListHelper';
+import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from '@/helpers/meritListHelper';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
