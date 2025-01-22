@@ -384,9 +384,9 @@ export default {
             outcome: panel.outcome,
             changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
           };
-          row.score = getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId], row.changes);
+          row.score = getScoreSheetTotal(this.task.markingScheme, row.scoreSheet, row.changes);
           if (this.scoreType === 'gradeScore') {
-            row.grade = getOverallGrade(this.task, panel.scoreSheet[applicationId], row.changes);
+            row.grade = getOverallGrade(this.task, row.scoreSheet, row.changes);
             row.gradeScore = `${row.grade}:${row.score}`;
           }
           rows.push(row);
