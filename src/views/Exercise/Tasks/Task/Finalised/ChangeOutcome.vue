@@ -83,13 +83,13 @@ export default {
   },
   computed: {
     isPassingScore() {
-      return isPassingScore(this.task, this.item.score);
+      return isPassingScore(this.task, this.item);
     },
   },
   created() {
-    this.formData.defaultOutcome = getDefaultOutcome(this.task, this.item.score).value;
-    this.formData.currentOutcome = getCurrentOutcome(this.task, this.item.score).value;
-    this.formData.newOutcome = getNewOutcome(this.task, this.item.score).value;
+    this.formData.defaultOutcome = getDefaultOutcome(this.task, this.item).value;
+    this.formData.currentOutcome = getCurrentOutcome(this.task, this.item).value;
+    this.formData.newOutcome = getNewOutcome(this.task, this.item).value;
     const override = getOverride(this.task, this.item.id);
     if (override) {
       this.formData.changeOutcome = true;

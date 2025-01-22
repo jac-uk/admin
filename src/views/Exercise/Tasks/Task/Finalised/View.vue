@@ -385,7 +385,7 @@ export default {
   methods: {
     hasDiversityCharacteristic,
     isPass(row) {
-      return isPass(this.task, row.id, row.score);
+      return isPass(this.task, row.id, row);
     },
     toggleShowDetail() {
       this.showDetail = !this.showDetail;

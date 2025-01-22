@@ -368,57 +368,57 @@ function getOverrideReasons() {
 //   return match ? match.code : '';
 // }
 
-function isPassingGradeScore(passMark, score) {
+function isPassingGradeScore(passMark, scoreData) {
   if (!passMark) return false;
-  if (!score) return false;
+  if (!scoreData) return false;
   const passParts = passMark.split(':');
-  const scoreParts = score.split(':');
-  if (scoreParts[0] < passParts[0]) return true;
-  if (scoreParts[0] > passParts[0]) return false;
-  if (parseInt(scoreParts[1]) >= parseInt(passParts[1])) return true;
+  if (scoreData.grade < passParts[0]) return true;
+  if (scoreData.grade > passParts[0]) return false;
+  if (parseInt(scoreData.score) >= parseInt(passParts[1])) return true;
   return false;
 }
 
-function isPassingScore(task, score) {
+function isPassingScore(task, scoreData) {
   if (!task) return false;
   if (!task.passMark) return false;
-  if (scoreType(task) === 'gradeScore') {
-    return isPassingGradeScore(task.passMark, score);
+  const type = scoreType(task);
+  if (type === 'gradeScore') {
+    return isPassingGradeScore(task.passMark, scoreData);
   } else {
-    if (task.passMark <= score) return true;
+    if (task.passMark <= scoreData[type]) return true;
   }
   return false;
 }
 
-function isPass(task, applicationId, score) {
+function isPass(task, applicationId, scoreData) {
   const override = getOverride(task, applicationId);
   if (override) {
     return override.outcome === OUTCOME.PASS.value;
   }
-  if (isPassingScore(task, score)) {
+  if (isPassingScore(task, scoreData)) {
     return true;
   }
   return false;
 }
 
-function getDefaultOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getDefaultOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;
   }
 }
 
-function getNewOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getNewOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.FAIL;
   } else {
     return OUTCOME.PASS;
   }
 }
 
-function getCurrentOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getCurrentOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;

@@ -398,7 +398,7 @@ export default {
       return this.scoreData.filter(item => item[this.scoreType] === score );
     },
     isPass(row) {
-      return isPass(this.task, row.id, row[this.scoreType]);
+      return isPass(this.task, row.id, row);
     },
     openChangeOutcomeModal(item) {
       if (this.editable) {
