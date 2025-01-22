@@ -270,7 +270,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
     }
     if (!data.hasOwnProperty('pass')) {
       if (task.hasOwnProperty('passMark')) {
-        data.pass = isPass(task, data.id, scoreData[scoreType]);
+        data.pass = isPass(task, data.id, scoreData);
       }
     }
     return data;
