@@ -153,6 +153,7 @@ export default {
       return this.report && this.report.headers;
     },
   },
+
   created() {
     this.unsubscribe = onSnapshot(
       doc(firestore, `exercises/${this.exercise.id}/reports/handover`),
@@ -207,12 +208,10 @@ export default {
     },
     async exportData() {
       const title = 'Handover Report';
-      const data = this.gatherReportData();
-      /**
-       * Make the 'Judicial experience' (column S) can display multiple lines.
-       *
-       * @link: https://github.com/dtjohnson/xlsx-populate?tab=readme-ov-file#styles-1
-       */
+
+      // Strip the first four columns of data as they aren't needed for export (only for display in the table above)
+      const data = this.gatherReportData().map(row => row.slice(4));
+
       const styles = {
         row: {
           1: {
@@ -220,11 +219,11 @@ export default {
             fill: 'eeeeee',
           },
         },
-        column: {
-          'S': {
-            wrapText: true,
-          },
-        },
+        // column: {
+        //   'S': {
+        //     wrapText: true,  // display multiple lines
+        //   },
+        // },
       };
       const freezePanes = [
         {
