@@ -187,7 +187,7 @@ export default {
     },
     async refreshReport() {
       try {
-        await httpsCallable(functions, 'generateHandoverReport')({ exerciseId: this.exercise.id }, true);
+        await httpsCallable(functions, 'generateHandoverReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;
