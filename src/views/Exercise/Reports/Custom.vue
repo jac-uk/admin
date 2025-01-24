@@ -67,6 +67,16 @@
         </p>
       </div>
       <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-0">
+          <Checkbox
+            id="include-withdrawn-candidates"
+            v-model="includeWithdrawnCandidates"
+          >
+            Include withdrawn candidates
+          </Checkbox>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-3">
             <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select a column to display: </span>
@@ -212,7 +222,7 @@
             <tr
               v-for="(row, rowIndex) of data.data"
               :key="rowIndex"
-              class="govuk-table__row"
+              :class="['govuk-table__row', isWithdrawn(row) ? 'withdrawn' : '']"
             >
               <td
                 v-for="(column, columnIndex) in columns"
@@ -333,7 +343,8 @@ import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { isNewAdditionalWorkingPreferencesQuestionType } from '../../../helpers/exerciseHelper';
-
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
 
@@ -344,6 +355,7 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
+    Checkbox,
   },
   mixins: [permissionMixin],
   data() {
@@ -366,6 +378,7 @@ export default {
       defaultGroups: customReportConstants.groups,
       defaultKeys: customReportConstants.keys,
       workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
+      includeWithdrawnCandidates: false,
     };
   },
   computed: {
@@ -488,6 +501,13 @@ export default {
         this.getApplicationRecords();
       },
       deep: true,
+    },
+    includeWithdrawnCandidates: function (newValue) {
+      if (newValue) {
+        this.statuses.push(STATUS.WITHDRAWN);
+      } else {
+        this.statuses = this.statuses.filter(status => status !== STATUS.WITHDRAWN);
+      }
     },
     selectedStage: function () {
       this.selectedStageStatus = 'all';
@@ -624,30 +644,30 @@ export default {
     },
     downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
-      const csv = [[...header]];
-
-      for (let i = 0; i < this.data.data.length; i++) {
-        csv.push([...this.columns.map(col => this.data.data[i][col])]);
-      }
-
-      // Convert the 2D array to CSV, ensuring values are properly escaped
-      const escapeValue = value => {
-        if (value == null) return ''; // Handle null or undefined
-        const escaped = String(value).replace(/"/g, '""'); // Escape double quotes
-        return `"${escaped}"`; // Enclose in double quotes
+      const xlsxData = [[...header]];
+      const highlightStyle = {
+        fill: 'eeeeee',
+      };
+      const styles = {
+        row: {},
       };
 
-      const mappedCSV = csv
-        .map(row => row.map(escapeValue).join(',')) // Escape each value and join with commas
-        .join('\n'); // Join rows with a newline
+      for (let i = 0; i < this.data.data.length; i++) {
+        xlsxData.push([...this.columns.map(col => this.data.data[i][col])]);
+        if (this.data.data[i]?._status === STATUS.WITHDRAWN) {
+          styles.row[i + 2] = highlightStyle;
+        }
+      }
 
-      const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'custom_report.csv');
-      document.body.appendChild(link);
-      link.click();
+      downloadXLSX(
+        xlsxData,
+        {
+          title: 'Custom report',
+          sheetName: 'Custom report',
+          fileName: 'custom-report.xlsx',
+          styles,
+        }
+      );
     },
 
     getDraggableKey(item) {
@@ -659,6 +679,9 @@ export default {
     isUsingFilter(key) {
       // return true if the column is a filter column
       return ['_processing.stage', '_processing.status'].includes(key);
+    },
+    isWithdrawn(application) {
+      return application._status === STATUS.WITHDRAWN;
     },
   },
 };
@@ -673,5 +696,8 @@ td:first-letter {
 }
 .moj-filter__tag {
   cursor: pointer;
+}
+.withdrawn {
+  background-color: govuk-colour("light-grey");
 }
 </style>
