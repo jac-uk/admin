@@ -155,6 +155,9 @@ import Users from '@/views/Users/Users.vue';
 // Latest Releases
 import ReleasesList from '@/views/ReleasesList.vue';
 
+// Bug reports
+import BugReportsScreenshot from '@/views/BugReports/Screenshot.vue';
+
 const routes = [
   {
     path: '/:pathMatch(.*)*',
@@ -186,6 +189,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Latest Releases',
+    },
+  },
+  {
+    path: '/bug-reports/screenshot/:id',
+    name: 'bug-reports-screenshot',
+    component: BugReportsScreenshot,
+    meta: {
+      requiresAuth: true,
+      title: 'Bug Reports | Screenshot',
     },
   },
   {

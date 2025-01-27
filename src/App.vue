@@ -48,16 +48,18 @@
     <UserFeedbackLink
       v-show="showFeedbackLink"
       :style="{ 'bottom': linkBottom }"
-      @open-feedback-modal="openFeedbackModal()"
+      @open-feedback-modal="openFeedbackModal"
     />
 
     <Modal
       v-if="isSignedIn"
       ref="feedbackModal"
       data-html2canvas-ignore
-      class="fixed-width-modal"
     >
-      <UserFeedbackModal @close="$refs['feedbackModal'].closeModal()" />
+      <UserFeedbackModal
+        :type="userFeedbackType"
+        @close="$refs['feedbackModal'].closeModal()"
+      />
     </Modal>
 
     <footer
@@ -170,7 +172,8 @@
 
 <script>
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';import { auth } from '@/firebase';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import { auth } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
@@ -179,6 +182,7 @@ import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 import { isApproved, isArchived, isPublished } from '@/helpers/exerciseHelper';
 import { logEvent } from '@/helpers/logEvent';
 import TabMenu from '@/components/Navigation/TabMenu1.vue';
+
 export default {
   name: 'App',
   components: {
@@ -197,6 +201,7 @@ export default {
       linkBottom: '',
       isMounted: false,
       observer: null,
+      userFeedbackType: '',
     };
   },
   computed: {
@@ -507,7 +512,8 @@ export default {
         this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
       }
     },
-    async openFeedbackModal() {
+    async openFeedbackModal(type) {
+      this.userFeedbackType = type;
       this.$refs.feedbackModal.openModal();
     },
     async copyToClipboard() {

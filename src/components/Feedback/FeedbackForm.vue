@@ -3,35 +3,6 @@
     <ErrorSummary
       :errors="errors"
     />
-    <RadioGroup
-      id="feedback-for-proxy"
-      v-model="feedbackForProxy"
-      label="Are you raising this issue for yourself or a candidate?"
-      :inline="true"
-    >
-      <RadioItem
-        value="0"
-        label="Myself"
-      />
-      <RadioItem
-        value="1"
-        label="Candidate"
-      />
-    </RadioGroup>
-
-    <div
-      class="govuk-warning-text"
-    >
-      <span
-        class="govuk-warning-text__icon"
-        aria-hidden="true"
-      >!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
-        <span v-else>Please ensure you are on the relevant page before raising the issue</span>
-      </strong>
-    </div>
 
     <TextField
       v-if="!reporterSlackUID"
@@ -42,101 +13,188 @@
       required
     />
 
-    <RadioGroup
-      v-show="feedbackForProxy === '1'"
-      id="cps-device"
-      v-model="formData.cpsDevice"
-      label="Is the candidate using a CPS device?"
-      :inline="true"
-    >
-      <RadioItem
-        value="0"
-        label="No"
+    <div v-if="isYourself">
+      <div class="govuk-warning-text">
+        <span
+          class="govuk-warning-text__icon"
+          aria-hidden="true"
+        >!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          <span>Please ensure you are on the relevant page before raising the issue</span>
+        </strong>
+      </div>
+      <CaptureScreenshot
+        id="capture-screenshot"
+        ref="screenshot"
       />
-      <RadioItem
-        value="1"
-        label="Yes"
-      />
-    </RadioGroup>
-
-    <CaptureScreenshot
-      v-if="!showFormForProxy"
-      id="capture-screenshot"
-      ref="screenshot"
-    />
-
-    <Select
-      id="criticality"
-      v-model="formData.criticality"
-      label="How critical is this issue"
-      required
-    >
-      <option
-        value=""
-        selected
+      <Select
+        id="criticality"
+        v-model="formData.criticality"
+        label="How critical is this issue"
+        required
       >
-        Please select
-      </option>
-      <option
-        v-for="(criticalityType, key) in criticalityTypes"
-        :key="key"
-        :value="key"
-      >
-        {{ criticalityType }}
-      </option>
-    </Select>
+        <option
+          value=""
+          selected
+        >
+          Please select
+        </option>
+        <option
+          v-for="(criticalityType, key) in criticalityTypes"
+          :key="key"
+          :value="key"
+        >
+          {{ criticalityType }}
+        </option>
+      </Select>
+      <TextArea
+        id="issue"
+        v-model="formData.issue"
+        label="What happened? *"
+        rows="2"
+        required
+      />
+      <TextArea
+        id="expectation"
+        v-model="formData.expectation"
+        label="What did you expect to happen? *"
+        rows="2"
+        required
+      />
+    </div>
+    <div
+      v-else-if="isAnotherUser"
+      style="display: flex; gap: 20px;"
+    >
+      <div style="width: 50%;">
+        <div class="govuk-warning-text">
+          <span
+            class="govuk-warning-text__icon"
+            aria-hidden="true"
+          >!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            <span>Please ensure you are on the relevant page before raising the issue</span>
+            <span class="govuk-hint">
+              e.g. Candidate application page
+            </span>
+          </strong>
+        </div>
+        <RadioGroup
+          id="user-type"
+          v-model="formData.userType"
+          label="What is the user type?"
+          :inline="true"
+        >
+          <RadioItem
+            v-for="(userType, key) in userTypes"
+            :key="userType"
+            :value="userType"
+            :label="key"
+          />
+        </RadioGroup>
+        <RadioGroup
+          id="cps-device"
+          v-model="formData.cpsDevice"
+          label="Is the user using a CPS device?"
+          :inline="true"
+        >
+          <RadioItem
+            value="0"
+            label="No"
+          />
+          <RadioItem
+            value="1"
+            label="Yes"
+          />
+        </RadioGroup>
+        <Select
+          id="criticality"
+          v-model="formData.criticality"
+          label="How critical is this issue"
+          required
+        >
+          <option
+            value=""
+            selected
+          >
+            Please select
+          </option>
+          <option
+            v-for="(criticalityType, key) in criticalityTypes"
+            :key="key"
+            :value="key"
+          >
+            {{ criticalityType }}
+          </option>
+        </Select>
+        <TextField
+          id="name"
+          v-model="formData.candidate"
+          label="Name of user *"
+          type="text"
+          required
+        />
+      </div>
+      <div style="width: 50%;">
+        <TextField
+          v-if="formData.userType === userTypes.Candidate"
+          id="browser"
+          v-model="formData.browser"
+          label="User's browser (candidate only)"
+          type="text"
+          required
+        />
+        <TextField
+          v-if="formData.userType === userTypes.Candidate"
+          id="os"
+          v-model="formData.os"
+          label="User's operating system (candidate only)"
+          type="text"
+          required
+        />
+        <TextArea
+          id="issue"
+          v-model="formData.issue"
+          label="What happened? *"
+          rows="2"
+          required
+        />
+        <TextArea
+          id="expectation"
+          v-model="formData.expectation"
+          label="What did they expect to happen? *"
+          rows="2"
+          required
+        />
+      </div>
+    </div>
+    <div v-else-if="isQuestion">
+      <TextArea
+        id="question"
+        v-model="formData.question"
+        label="If you have a Digital platform-related question, not an issue - please ask it here:"
+        required
+      />
+    </div>
 
-    <template v-if="showFormForProxy">
-      <TextField
-        id="name"
-        v-model="formData.candidate"
-        label="Name of candidate"
-        type="text"
-        required
-      />
-      <TextField
-        id="browser"
-        v-model="formData.browser"
-        label="Candidate browser"
-        type="text"
-        required
-      />
-      <TextField
-        id="os"
-        v-model="formData.os"
-        label="Candidate operating system"
-        type="text"
-        required
-      />
-    </template>
-    <TextArea
-      id="issue"
-      v-model="formData.issue"
-      label="What happened?"
-      rows="2"
-      required
-    />
-    <TextArea
-      id="expectation"
-      v-model="formData.expectation"
-      :label="expectationLabel"
-      rows="2"
-      required
-    />
-    <button
-      type="button"
-      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-      @click="closeModal"
-    >
-      Cancel
-    </button>
-    <ActionButton
-      type="primary"
-      class="govuk-button"
-      :action="save"
-    >
-      Submit
-    </ActionButton>
+    <div class="text-right">
+      <button
+        type="button"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="closeModal"
+      >
+        Cancel
+      </button>
+      <ActionButton
+        type="primary"
+        class="govuk-button"
+        :action="save"
+      >
+        Submit
+      </ActionButton>
+    </div>
   </div>
 </template>
 
@@ -155,6 +213,7 @@ import { functions } from '@/firebase';
 import SlackLookupError from '@/errors/slackLookupError';
 import UserError from '@/errors/userError';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { USER_FEEDBACK_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'FeedbackForm',
@@ -169,13 +228,26 @@ export default {
     ActionButton,
   },
   extends: Form,
+  props: {
+    type: {
+      type: String,
+      required: true,
+      default: '',
+    },
+  },
   emits: ['close', 'success'],
   data() {
+    const userTypes = {
+      Candidate: 'candidate',
+      Assessor: 'assessor',
+      Panellist: 'panellist',
+    };
+
     return {
-      feedbackForProxy: '0',
       client: null,
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
+        type: this.type,
         url: '',
         criticality: '',
         issue: '',
@@ -186,8 +258,11 @@ export default {
         browser: '',
         os: '',
         cpsDevice: '0',
+        userType: userTypes.Candidate,
+        question: '',
       },
       errors: [],
+      userTypes,
       criticalityTypes: {
         Critical: 'Critical - a response will be provided within 2 hours',
         Major: 'Major - a response will be provided within 24 hours',
@@ -224,12 +299,14 @@ export default {
     applicationReferenceNumber() {
       return this.$store.state.application.record ? this.$store.state.application.record.referenceNumber : null;
     },
-    showFormForProxy() {
-      return this.feedbackForProxy === '1';
+    isYourself() {
+      return this.type === USER_FEEDBACK_TYPES.YOURSELF;
     },
-    expectationLabel() {
-      const str = this.showFormForProxy ? 'they' : 'you';
-      return `What did ${str} expect to happen?`;
+    isAnotherUser() {
+      return this.type === USER_FEEDBACK_TYPES.ANOTHER_USER;
+    },
+    isQuestion() {
+      return this.type === USER_FEEDBACK_TYPES.QUESTION;
     },
     bugReportId() {
       return this.$store.state.bugReport.record ? this.$store.state.bugReport.record.id : null;
@@ -239,17 +316,6 @@ export default {
     },
   },
   watch: {
-    showFormForProxy(newVal) {
-      if (newVal) {
-        this.formData.browser = '';
-        this.formData.os = '';
-      }
-      else {
-        this.formData.candidate = '';
-        this.formData.browser = `${this.client.name} ${this.client.version}`;
-        this.formData.os = this.client.os;
-      }
-    },
     newReporterSlackUID() {
       this.checkSlackMemberIdOnBlur = true;
       this.hasSlackIdOnLoad = false;
@@ -257,8 +323,6 @@ export default {
   },
   async mounted() {
     this.client = detect();
-    this.formData.browser = `${this.client.name} ${this.client.version}`;
-    this.formData.os = this.client.os;
     this.formData.url = window.location.href;
     this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
@@ -297,6 +361,7 @@ export default {
     async save() {
       try {
         this.validate();
+        if (!this.isValid()) return false;
         if (!this.userId) {
           throw new UserError('Your user is missing a uid field.');
         }
@@ -316,6 +381,15 @@ export default {
           id: this.applicationId,
           referenceNumber: this.applicationReferenceNumber,
         };
+
+        if (this.isAnotherUser) {
+          this.formData.browser = '';
+          this.formData.os = '';
+        } else {
+          this.formData.candidate = '';
+          this.formData.browser = `${this.client.name} ${this.client.version}`;
+          this.formData.os = this.client.os;
+        }
 
         let screenshot = null;
         const newBugReport = await this.$store.dispatch('bugReport/create', this.formData);
@@ -338,7 +412,7 @@ export default {
       }
       catch (e) {
         let msg, id = '';
-        const reportErrorTo = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
+        const reportErrorTo = this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
         if (e instanceof SlackLookupError) {
           id = 'slackUID';
           msg = e.message;
