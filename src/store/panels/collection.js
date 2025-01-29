@@ -4,6 +4,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import clone from 'clone';
 
 const collectionName = 'panels';
 const collectionRef = collection(firestore, collectionName);
@@ -51,5 +52,11 @@ export default {
     records: [],
     applicationsWithoutPanels: [],
   },
-  getters: { },
+  getters: {
+    getPanel: (state) => (panelId) => {
+      if (state.records.length === 0) return null;
+      const result = state.records.find(item => item.id === panelId);
+      return clone(result);
+    },
+  },
 };
