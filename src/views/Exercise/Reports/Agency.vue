@@ -716,13 +716,7 @@ export default {
         { title: 'Current or proposed role/profession of the subject within the agency', ref: '' },
         { title: 'Supervised or Unsupervised access', ref: '' },
         { title: 'Is this check for a company', ref: '' },
-        { title: 'Title', ref: 'title' },
-        { title: '*Surname or Company Name', ref: 'lastName' },
-        { title: 'Previous Surname (include maiden names and any other names changed by deed poll)', ref: '' },
-        { title: '*Forename', ref: 'firstName' },
-        { title: 'Middle Name', ref: 'middleNames' },
-        { title: 'Previous known name(s)', ref: 'previousNames' },
-        { title: 'Any Other Names used:', ref: 'otherNames' },
+        ...this.getNameHeaders(),
         { title: '*Date of birth (DD/MM/YYYY)', ref: 'dateOfBirth' },
         { title: 'Place of Birth (Town)', ref: '' },
         { title: 'Place of Birth (County)', ref: 'placeOfBirth' },
@@ -757,8 +751,7 @@ export default {
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Our Ref', ref: '' },
         { title: 'NI NO', ref: 'nationalInsuranceNumber' },
-        { title: 'Surname', ref: 'lastName' },
-        { title: 'Forename(s)', ref: 'firstName' },
+        ...this.getNameHeaders(),
         { title: 'D.O.B', ref: 'dateOfBirth' },
         { title: 'VAT Reg', ref: 'hmrcVATNumbers' },
         { title: 'Issues declared by candidate', ref: '' },
@@ -783,8 +776,7 @@ export default {
       const reportData = [];
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
-        { title: 'Surname', ref: 'lastName' },
-        { title: 'Forename(s)', ref: 'firstName' },
+        ...this.getNameHeaders(),
       ];
       headers.push(...this.toBsbQualificationReportHeaders(this.bsbRows));
 
@@ -802,8 +794,7 @@ export default {
       const reportData = [];
       const headers = [
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
-        { title: 'Surname', ref: 'lastName' },
-        { title: 'Forename(s)', ref: 'firstName' },
+        ...this.getNameHeaders(),
       ];
       headers.push(...this.toSraQualificationReportHeaders(this.sraRows));
 
@@ -921,6 +912,18 @@ export default {
         headers.push({ title: `Registration Number ${i}`, ref: `bsbRegistrationNumber${i}` });
       }
       return headers;
+    },
+    getNameHeaders() {
+      return [
+        { title: 'Title', ref: 'title' },
+        { title: '*First Name', ref: 'firstName' },
+        { title: 'Middle name(s)', ref: 'middleNames' },
+        { title: '*Last Name or Company Name', ref: 'lastName' },
+        { title: 'Suffix', ref: 'suffix' },
+        { title: 'Previous known name(s)', ref: 'previousNames' },
+        { title: 'Professional names', ref: 'professionalName' },
+        { title: 'Any Other Names used:', ref: 'otherNames' },
+      ];
     },
   },
 };
