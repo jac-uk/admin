@@ -61,6 +61,7 @@
         <input class="search-input govuk-input govuk-input--width-10 govuk-!-margin-left-2" id="search" name="search" type="text">
       </div> -->
       <div class="govuk-grid-column-one-half text-right">
+        <!-- TODO: Ranked by Overall grade + score -->
         <span class="govuk-body-s">Ranked by {{ $filters.lookup(scoreType) }}</span>
         <a
           class="govuk-link govuk-!-margin-left-4"
@@ -68,6 +69,7 @@
         ><span v-if="areAllScoresExpanded">Collapse all</span><span v-else>Expand all</span></a>
       </div>
     </div>
+
     <Table
       data-key="score"
       :data="scores"
@@ -83,7 +85,12 @@
           {{ row.count }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ $filters.formatNumber(row.score, 2) }}
+          <template v-if="scoreType == 'gradeScore'">
+            {{ row.score }}
+          </template>
+          <template v-else>
+            {{ $filters.formatNumber(row.score, 2) }}
+          </template>
         </TableCell>
         <template v-if="showDiversity">
           <TableCell :title="tableColumns[3].title">
@@ -254,7 +261,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import ChangeOutcome from './ChangeOutcome.vue';
 import ConfigureExport from './ConfigureExport.vue';
-import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from './meritListHelper';
+import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from '@/helpers/meritListHelper';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
@@ -388,10 +395,10 @@ export default {
       }
     },
     getScoreDataForScore(score) {
-      return this.scoreData.filter(item => item.score === score);
+      return this.scoreData.filter(item => item[this.scoreType] === score );
     },
     isPass(row) {
-      return isPass(this.task, row.id, row.score);
+      return isPass(this.task, row.id, row);
     },
     openChangeOutcomeModal(item) {
       if (this.editable) {
@@ -431,8 +438,8 @@ export default {
     downloadMeritList(saveData) {
       const title = this.$filters.lookup(this.type);
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
-      let didNotTake = []; // TODO task.applications.filter( no score )
-      let failed = []; // TODO check for pass mark; check for overrides
+      let didNotTake = [];
+      let failed = [];
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;

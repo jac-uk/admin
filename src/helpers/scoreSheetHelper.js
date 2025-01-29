@@ -3,6 +3,7 @@
 import clone from 'clone';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from './diversityCharacteristics.js';
 import { SELECTION_CATEGORIES, CAPABILITIES } from './exerciseHelper.js';
+import { sortFunctionGradeScore } from './meritListHelper';
 
 export {
   SCORESHEET_TOOLS,
@@ -210,19 +211,26 @@ function getScoreSheetItemTotal(item, scoreSheet, change) {
   return 0;
 }
 
-function scoreSheetRowsAddRank(scoreSheetData) {
-  scoreSheetData.sort((a, b) => b.score - a.score);
+function scoreSheetRowsAddRank(scoreType, scoreSheetData) {
+  scoreSheetData.sort((a, b) => {
+    if (scoreType === 'gradeScore') {
+      return sortFunctionGradeScore(a, b);
+    } else {
+      return b.score - a.score;
+    }
+  });
+
   let currentScore = null;
   let countAtCurrentScore = 0;
   let currentRank = 1;
   scoreSheetData.forEach(row => {
     if (currentScore === null) {
-      currentScore = row.score;
+      currentScore = row[scoreType];
     }
-    if (row.score === currentScore) {
+    if (row[scoreType] === currentScore) {
       countAtCurrentScore += 1;
     } else {
-      currentScore = row.score;
+      currentScore = row[scoreType];
       currentRank += countAtCurrentScore;
       countAtCurrentScore = 1;
     }

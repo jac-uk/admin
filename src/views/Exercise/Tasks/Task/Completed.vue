@@ -45,7 +45,7 @@ import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
-import { scoreType, scores, scoreData } from './Finalised/meritListHelper';
+import { scoreType, scores, scoreData } from '@/helpers/meritListHelper';
 import MeritList from './Finalised/List.vue';
 
 export default {

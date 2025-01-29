@@ -170,6 +170,7 @@ const lookup = (value) => {
     percent: 'Percent',
     zScore: 'Z Score',
     grade: 'Grade',
+    gradeScore: 'Grade:Score',
 
     // reasonable adjustments reason
     'qualifying-test': 'Qualifying Test',
