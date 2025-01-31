@@ -65,6 +65,18 @@
           </div>
         </div>
       </div>
+
+      <div
+        v-if="panel.error"
+        class="govuk-grid-row govuk-!-margin-bottom-6"
+      >
+        <div class="govuk-grid-column-full">
+          <strong class="govuk-error-message">
+            {{ panel.error }}
+          </strong>
+        </div>
+      </div>
+
       <TabsList
         v-model:active-tab="activeTab"
         :tabs="tabs"
