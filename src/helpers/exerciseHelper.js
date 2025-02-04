@@ -581,6 +581,7 @@ function taskEntryStatus(exercise, type) {
   if (!exercise) return status;
   if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SECOND_STAGE_INVITED;  // TODO: remove this eventually: override entry status for EMP tie-breakers
   if (type === TASK_TYPE.SELECTION_DAY) return APPLICATION_STATUS.SHORTLISTING_PASSED;
+  if (type === TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE) return APPLICATION_STATUS.SHORTLISTING_PASSED;
   const prevTaskType = previousTaskType(exercise, type);
   if (prevTaskType) {
     switch (prevTaskType) {
