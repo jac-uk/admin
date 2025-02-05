@@ -481,10 +481,10 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
     if (item.hasOwnProperty('pass')) {
       item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
@@ -517,10 +517,10 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
     row.push('noTestSubmitted');
     rows.push(row);
@@ -549,10 +549,10 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
     row.push('failedFirstTest');
     rows.push(row);
