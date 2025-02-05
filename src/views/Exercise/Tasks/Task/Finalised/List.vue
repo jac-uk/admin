@@ -432,7 +432,7 @@ export default {
       const title = this.$filters.lookup(this.type);
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
       let didNotTake = []; // TODO task.applications.filter( no score )
-      let failed = []; // TODO check for pass mark; check for overrides
+      const failed = []; // TODO check for pass mark; check for overrides
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
@@ -441,10 +441,10 @@ export default {
         const didNotTakeCAT = CAT.applications.filter(item => !CAT.finalScores.find(scoreData => scoreData.id === item.id));
         const didNotTakeSJT = SJT.applications.filter(item => !SJT.finalScores.find(scoreData => scoreData.id === item.id));
         didNotTake = didNotTakeCAT.filter(item => didNotTakeSJT.find(app => app.id === item.id));
-        const failedCATIDs = CAT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
-        const failedSJTIDs = SJT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
-        const failedIDs = failedCATIDs.concat(failedSJTIDs).filter((value, index, array) => array.indexOf(value) === index);
-        failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
+        // const failedCATIDs = CAT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
+        // const failedSJTIDs = SJT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
+        // const failedIDs = failedCATIDs.concat(failedSJTIDs).filter((value, index, array) => array.indexOf(value) === index);
+        //failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
         break;
       }
       default:
