@@ -3,7 +3,7 @@
 import { TASK_TYPE } from '@/helpers/constants';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import { toYesNo } from '@jac-uk/jac-kit/filters/filters';
+import { toYesNo, lookup } from '@jac-uk/jac-kit/filters/filters';
 
 export {
   OUTCOME,
@@ -448,6 +448,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
   headers.push('Solicitor');
   headers.push('Disability');
   headers.push('Outcome');
+  headers.push('Status');
   rows.push(headers);
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
@@ -491,6 +492,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     } else {
       row.push('');
     }
+    row.push(lookup(item.status) || '');
     rows.push(row);
   });
   // add did not take
@@ -523,6 +525,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push('');
     }
     row.push('noTestSubmitted');
+    row.push(lookup(item.status) || '');
     rows.push(row);
   });
   // add failed
@@ -555,6 +558,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push('');
     }
     row.push('failedFirstTest');
+    row.push(lookup(item.status) || '');
     rows.push(row);
   });
   return rows;
