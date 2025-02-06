@@ -15,7 +15,8 @@ export default {
       let firestoreRef = query(
         collectionRef,
         where('exercise.id', '==', params.exerciseId),
-        where('active', '==', true)
+        where('active', '==', true),
+        where('status', '!=', 'withdrawn')
       );
 
       if (params.where.length === 0) {
