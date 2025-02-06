@@ -256,6 +256,7 @@ import ChangeOutcome from './ChangeOutcome.vue';
 import ConfigureExport from './ConfigureExport.vue';
 import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from './meritListHelper';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
+import _deepClone from 'lodash/cloneDeep';
 
 export default {
   components: {
@@ -431,25 +432,31 @@ export default {
     downloadMeritList(saveData) {
       const title = this.$filters.lookup(this.type);
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
+
+      const task = _deepClone(this.task);
+      // prevent duplicating with didNotTake and failed applications
+      task.finalScores = task.finalScores.filter(scoreData => scoreData?.scoreSheet?.qualifyingTest?.CA?.pass && scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass);
+
       let didNotTake = []; // TODO task.applications.filter( no score )
-      const failed = []; // TODO check for pass mark; check for overrides
+      let failed = []; // TODO check for pass mark; check for overrides
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
-        const CAT = this.$store.getters['tasks/getTask'](TASK_TYPE.CRITICAL_ANALYSIS);
-        const SJT = this.$store.getters['tasks/getTask'](TASK_TYPE.SITUATIONAL_JUDGEMENT);
-        const didNotTakeCAT = CAT.applications.filter(item => !CAT.finalScores.find(scoreData => scoreData.id === item.id));
-        const didNotTakeSJT = SJT.applications.filter(item => !SJT.finalScores.find(scoreData => scoreData.id === item.id));
-        didNotTake = didNotTakeCAT.filter(item => didNotTakeSJT.find(app => app.id === item.id));
-        // const failedCATIDs = CAT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
-        // const failedSJTIDs = SJT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
-        // const failedIDs = failedCATIDs.concat(failedSJTIDs).filter((value, index, array) => array.indexOf(value) === index);
-        //failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
+
+        // the applications did not take both of the tests
+        const didNotTakeIDs = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.score && !scoreData?.scoreSheet?.qualifyingTest?.SJ?.score).map(item => item.id);
+        didNotTake = this.task.applications.filter(application => didNotTakeIDs.includes(application.id));
+
+        // the applications failed one of the tests (excluding those that did not take)
+        let failedIDs = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.pass || !scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass).map(item => item.id);
+        failedIDs = failedIDs.filter(id => !didNotTakeIDs.includes(id));
+        failed = this.task.applications.filter(application => failedIDs.includes(application.id));
+
         break;
       }
       default:
       }
-      downloadMeritList(title, didNotTake, failed, this.task, this.exerciseDiversity, saveData.type, fileName);
+      downloadMeritList(title, didNotTake, failed, task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
     },
   },
