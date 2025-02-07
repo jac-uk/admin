@@ -1001,6 +1001,7 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
+          'Status',
         ],
       ],
       {
@@ -1030,6 +1031,7 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
+          'Status',
         ],
       ],
       {
@@ -1045,6 +1047,10 @@ describe('downloadMeritList', () => {
     const title = 'Test Title';
     const fileName = 'test-file';
     const mockTask = {
+      applications: [
+        { id: '1', 'status': 'applied' },
+        { id: '2', 'status': 'applied' },
+      ],
       finalScores: [
         { id: '1', ref: 'ref-001', score: 10, rank: 1, fullName: 'John Doe', email: 'john@example.com', pass: true },
         { id: '2', ref: 'ref-002', score: 9, rank: 2, fullName: 'Jane Smith', email: 'jane@example.com', pass: false },
@@ -1066,6 +1072,7 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
+          'Status',
         ],
         [
           'ref-001',
@@ -1078,6 +1085,7 @@ describe('downloadMeritList', () => {
           'No',
           'Yes',
           'Pass',
+          'Applied',
         ],
         [
           'ref-002',
@@ -1090,6 +1098,7 @@ describe('downloadMeritList', () => {
           'Yes',
           'No',
           'Fail',
+          'Applied',
         ],
       ],
       {
@@ -1104,7 +1113,7 @@ describe('downloadMeritList', () => {
     const title = 'Test Title';
     const fileName = 'test-file';
     const mockDidNotTake = [
-      { ref: 'ref-001', fullName: 'Alice Johnson', email: 'alice@example.com' },
+      { ref: 'ref-001', fullName: 'Alice Johnson', email: 'alice@example.com', status: 'applied' },
     ];
 
     downloadMeritList(title, mockDidNotTake, [], {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
@@ -1122,6 +1131,7 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
+          'Status',
         ],
         [
           'ref-001',
@@ -1140,6 +1150,7 @@ describe('downloadMeritList', () => {
           false,
           true,
           'noTestSubmitted',
+          'Applied',
         ],
       ],
       {
@@ -1155,7 +1166,7 @@ describe('downloadMeritList', () => {
     const fileName = 'test-file';
 
     const mockFailed = [
-      { ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com' },
+      { ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com', status: 'applied' },
     ];
 
     downloadMeritList(title, [], mockFailed, {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
@@ -1173,6 +1184,7 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
+          'Status',
         ],
         [
           'ref-002',
@@ -1191,6 +1203,7 @@ describe('downloadMeritList', () => {
           true,
           false,
           'failedFirstTest',
+          'Applied',
         ],
       ],
       {
