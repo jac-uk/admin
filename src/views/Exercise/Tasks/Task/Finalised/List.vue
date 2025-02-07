@@ -434,14 +434,14 @@ export default {
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
 
       const task = _deepClone(this.task);
-      // prevent duplicating with didNotTake and failed applications
-      task.finalScores = task.finalScores.filter(scoreData => scoreData?.scoreSheet?.qualifyingTest?.CA?.pass && scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass);
 
       let didNotTake = []; // TODO task.applications.filter( no score )
       let failed = []; // TODO check for pass mark; check for overrides
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
+        // prevent duplicating with didNotTake and failed applications
+        task.finalScores = task.finalScores.filter(scoreData => scoreData?.scoreSheet?.qualifyingTest?.CA?.pass && scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass);
 
         // the applications did not take both of the tests
         const didNotTakeIDs = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.score && !scoreData?.scoreSheet?.qualifyingTest?.SJ?.score).map(item => item.id);
