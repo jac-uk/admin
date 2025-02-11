@@ -2,6 +2,7 @@
 
 import { TASK_TYPE } from '@/helpers/constants';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { markingScheme2Columns } from '@/helpers/scoreSheetHelper';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { toYesNo } from '@jac-uk/jac-kit/filters/filters';
 
@@ -532,19 +533,19 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       headers.push('Full name');
       headers.push('Email');
     }
+    // include grade sheet
+    markingScheme2Columns(task.markingScheme).forEach(column => {
+      headers.push(column.title);
+    });
+    headers.push('Score');
     headers.push('Rank');
-    if (taskScoreType === 'gradeScore') {
-      headers.push('Grade:score');
-    } else {
-      headers.push('Score');
-    }
   }
+  headers.push('Outcome');
   // headers.push('Notes');
   headers.push('Female');
   headers.push('Ethnic Minority');
   headers.push('Solicitor');
   headers.push('Disability');
-  headers.push('Outcome');
   rows.push(headers);
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
@@ -567,8 +568,29 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.fullName);
         row.push(item.email);
       }
+      // add gradesheet data (inc changes)
+      markingScheme2Columns(task.markingScheme).forEach(column => {
+        if (column.parent) {
+          if (task.changes && task.changes[item.id] && task.changes[item.id][column.parent] && task.changes[item.id][column.parent][column.ref]) {
+            row.push(task.changes[item.id][column.parent][column.ref]);
+          } else {
+            row.push(item.scoreSheet[column.parent][column.ref]);
+          }
+        } else {
+          if (task.changes && task.changes[item.id] && task.changes[item.id][column.ref]) {
+            row.push(task.changes[item.id][column.ref]);
+          } else {
+            row.push(item.scoreSheet[column.ref]);
+          }
+        }
+      });
+      row.push(item.score);
       row.push(item.rank);
-      row.push(item[taskScoreType]);
+    }
+    if (item.hasOwnProperty('pass')) {
+      item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
+    } else {
+      row.push('');
     }
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
@@ -578,14 +600,9 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
-    }
-    if (item.hasOwnProperty('pass')) {
-      item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
-    } else {
+      row.push('');
+      row.push('');
+      row.push('');
       row.push('');
     }
     rows.push(row);
@@ -606,6 +623,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     }
     row.push('');
     row.push('');
+    row.push('noTestSubmitted');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
@@ -614,12 +632,11 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
-    row.push('noTestSubmitted');
     rows.push(row);
   });
   // add failed
@@ -638,6 +655,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     }
     row.push('');
     row.push('');
+    row.push('failedFirstTest');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
@@ -646,12 +664,11 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
-    row.push('failedFirstTest');
     rows.push(row);
   });
   return rows;
