@@ -479,12 +479,12 @@ export default {
     },
     async generateTimetable() {
       // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          this.hasTimetableMessage = true;
-          resolve(true);
-        }, 3000);
-      });
+      try {
+        await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
+        this.hasTimetableMessage = true;
+      } catch (error) {
+        return false;
+      }
     },
     alert(message) {
       window.alert(message);
