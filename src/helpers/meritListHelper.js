@@ -534,9 +534,11 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       headers.push('Email');
     }
     // include grade sheet
-    markingScheme2Columns(task.markingScheme).forEach(column => {
-      headers.push(column.title);
-    });
+    if (task.markingScheme) {
+      markingScheme2Columns(task.markingScheme).forEach(column => {
+        headers.push(column.title);
+      });
+    }
     headers.push('Score');
     headers.push('Rank');
   }
@@ -569,21 +571,23 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.email);
       }
       // add gradesheet data (inc changes)
-      markingScheme2Columns(task.markingScheme).forEach(column => {
-        if (column.parent) {
-          if (task.changes && task.changes[item.id] && task.changes[item.id][column.parent] && task.changes[item.id][column.parent][column.ref]) {
-            row.push(task.changes[item.id][column.parent][column.ref]);
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(column => {
+          if (column.parent) {
+            if (task.changes && task.changes[item.id] && task.changes[item.id][column.parent] && task.changes[item.id][column.parent][column.ref]) {
+              row.push(task.changes[item.id][column.parent][column.ref]);
+            } else {
+              row.push(item.scoreSheet[column.parent][column.ref]);
+            }
           } else {
-            row.push(item.scoreSheet[column.parent][column.ref]);
+            if (task.changes && task.changes[item.id] && task.changes[item.id][column.ref]) {
+              row.push(task.changes[item.id][column.ref]);
+            } else {
+              row.push(item.scoreSheet[column.ref]);
+            }
           }
-        } else {
-          if (task.changes && task.changes[item.id] && task.changes[item.id][column.ref]) {
-            row.push(task.changes[item.id][column.ref]);
-          } else {
-            row.push(item.scoreSheet[column.ref]);
-          }
-        }
-      });
+        });
+      }
       row.push(item.score);
       row.push(item.rank);
     }
@@ -611,18 +615,32 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
   didNotTake.forEach(item => {
     const row = [];
     row.push(item.ref);
-    if (type === DOWNLOAD_TYPES.full.value) {
-      row.push(item.fullName);
-      row.push(item.email);
+    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+      }
       row.push('');
       row.push('');
-      row.push('');
-      row.push('');
+    } else {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+      }
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(column => {
+          row.push('');
+        });
+      }
       row.push('');
       row.push('');
     }
-    row.push('');
-    row.push('');
     row.push('noTestSubmitted');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
@@ -643,18 +661,32 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
   failed.forEach(item => {
     const row = [];
     row.push(item.ref);
-    if (type === DOWNLOAD_TYPES.full.value) {
-      row.push(item.fullName);
-      row.push(item.email);
+    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+      }
       row.push('');
       row.push('');
-      row.push('');
-      row.push('');
+    } else {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+      }
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(column => {
+          row.push('');
+        });
+      }
       row.push('');
       row.push('');
     }
-    row.push('');
-    row.push('');
     row.push('failedFirstTest');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
