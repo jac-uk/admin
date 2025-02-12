@@ -22,10 +22,12 @@ const module = {
   },
   actions: {
     async getLatestReleases({ commit }) {
-      const records = await httpsCallable(functions, 'getLatestReleases')();
+      const records = await httpsCallable(functions, 'getLatestReleasesV2')();
       commit('setRecords', records.data);
       commit('setAvailability', records.data.length > 0);
       commit('setLastFetched', dayjs());
+
+      await httpsCallable(functions, 'ojTestCallable')();
     },
   },
   getters: {
