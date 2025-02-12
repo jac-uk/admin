@@ -511,7 +511,7 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
 }
 
 function xlsxData(didNotTake, failed, task, diversityData, type) {
-  const taskScoreType = scoreType(task);
+  // const taskScoreType = scoreType(task);
   const rows = [];
   const headers = [];
   headers.push('Ref');
