@@ -634,7 +634,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.email);
       }
       if (task.markingScheme) {
-        markingScheme2Columns(task.markingScheme).forEach(column => {
+        markingScheme2Columns(task.markingScheme).forEach(() => {
           row.push('');
         });
       }
@@ -680,7 +680,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.email);
       }
       if (task.markingScheme) {
-        markingScheme2Columns(task.markingScheme).forEach(column => {
+        markingScheme2Columns(task.markingScheme).forEach(() => {
           row.push('');
         });
       }
