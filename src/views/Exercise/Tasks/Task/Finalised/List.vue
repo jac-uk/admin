@@ -70,7 +70,7 @@
     </div>
     <Table
       data-key="score"
-      :data="scores"
+      :data="takenTestScores"
       :columns="tableColumns"
       local-data
       class="merit-list"
@@ -365,6 +365,9 @@ export default {
         return 'Type any part of candidate name or reference number';
       }
       return 'Type any part of reference number';
+    },
+    takenTestScores() {
+      return this.scores.filter(score => score.score > 0);
     },
   },
   methods: {
