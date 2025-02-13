@@ -432,7 +432,7 @@ export default {
       this.selectedApplication = null;
       this.$refs['exportModal'].openModal();
     },
-    downloadMeritList(saveData) {
+    async downloadMeritList(saveData) {
       const title = this.$filters.lookup(this.type);
       let fileName = `${this.exercise.referenceNumber}-${this.type}`;
 
@@ -440,6 +440,12 @@ export default {
 
       let didNotTake = []; // TODO task.applications.filter( no score )
       let failed = []; // TODO check for pass mark; check for overrides
+      let withdrawnBeforeQT = [];
+      const idToApplication = {};
+      task.applications.forEach(application => {
+        idToApplication[application.id] = application;
+      });
+
       switch (this.type) {
       case TASK_TYPE.QUALIFYING_TEST: {
         fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
@@ -447,19 +453,41 @@ export default {
         task.finalScores = task.finalScores.filter(scoreData => scoreData?.scoreSheet?.qualifyingTest?.CA?.pass && scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass);
 
         // the applications did not take both of the tests
-        const didNotTakeIDs = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.score && !scoreData?.scoreSheet?.qualifyingTest?.SJ?.score).map(item => item.id);
-        didNotTake = this.task.applications.filter(application => didNotTakeIDs.includes(application.id));
-
+        didNotTake = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.score && !scoreData?.scoreSheet?.qualifyingTest?.SJ?.score);
+        didNotTake = didNotTake.map(scoreData => {
+          const application = idToApplication[scoreData.id] || {};
+          return { ...application, ...scoreData };
+        });
+        const didNotTakeIds = didNotTake.map(scoreData => scoreData.id);
         // the applications failed one of the tests (excluding those that did not take)
-        let failedIDs = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.pass || !scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass).map(item => item.id);
-        failedIDs = failedIDs.filter(id => !didNotTakeIDs.includes(id));
-        failed = this.task.applications.filter(application => failedIDs.includes(application.id));
+        failed = this.task.finalScores.filter(scoreData => !scoreData?.scoreSheet?.qualifyingTest?.CA?.pass || !scoreData?.scoreSheet?.qualifyingTest?.SJ?.pass);
+        failed = failed.filter(scoreData => !didNotTakeIds.includes(scoreData.id));
+        failed = failed.map(scoreData => {
+          const application = idToApplication[scoreData.id] || {};
+          return { ...application, ...scoreData };
+        });
 
+        // the applications withdrawn before the tests
+        const withdrawnApplications = await this.$store.dispatch('applications/getApplicationsByStatus', { status: 'withdrawn', exerciseId: this.exercise.id });
+
+        withdrawnBeforeQT = withdrawnApplications.filter(application => !idToApplication[application.id]);
+        withdrawnBeforeQT = withdrawnBeforeQT.map(application => ({
+          id: application.id,
+          ref: application.referenceNumber,
+          fullName: application.personalDetails.fullName,
+          email: application.personalDetails.email,
+        }));
+        console.log('withdrawnApplications', withdrawnApplications);
+        console.log('withdrawnBeforeQT', withdrawnBeforeQT);
+
+        console.log('task.finalScores', this.task.finalScores);
+        console.log('didNotTake', didNotTake);
+        console.log('failed', failed);
         break;
       }
       default:
       }
-      downloadMeritList(title, didNotTake, failed, task, this.exerciseDiversity, saveData.type, fileName);
+      downloadMeritList(title, didNotTake, failed, withdrawnBeforeQT, task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
     },
   },

@@ -37,6 +37,9 @@ const OUTCOME = {
     value: 'fail',
     label: 'Fail',
   },
+  QT_NOT_STARTED: {
+    label: 'Qualifying test not started',
+  },
 };
 
 const OVERRIDE_REASON = {
@@ -399,12 +402,12 @@ function getOverride(task, applicationId) {
 //   });
 // }
 
-function downloadMeritList(title, didNotTake, failed, task, diversityData, type, fileName) {
+function downloadMeritList(title, didNotTake, failed, withdrawnBeforeQT, task, diversityData, type, fileName) {
   switch (type) {
   case DOWNLOAD_TYPES.full.value:
   case DOWNLOAD_TYPES.emp.value:
     downloadXLSX(
-      xlsxData(didNotTake, failed, task, diversityData, type),
+      xlsxData(didNotTake, failed, withdrawnBeforeQT, task, diversityData, type),
       {
         title: title,
         sheetName: DOWNLOAD_TYPES[type].sheetName,
@@ -417,7 +420,7 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
   }
 }
 
-function xlsxData(didNotTake, failed, task, diversityData, type) {
+function xlsxData(didNotTake, failed, withdrawnBeforeQT, task, diversityData, type) {
   const rows = [];
   const headers = [];
   headers.push('Ref');
@@ -448,7 +451,6 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
   headers.push('Solicitor');
   headers.push('Disability');
   headers.push('Outcome');
-  headers.push('Status');
   rows.push(headers);
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
@@ -492,7 +494,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     } else {
       row.push('');
     }
-    row.push(lookup(item.status) || '');
+
     rows.push(row);
   });
   // add did not take
@@ -502,10 +504,10 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     if (type === DOWNLOAD_TYPES.full.value) {
       row.push(item.fullName);
       row.push(item.email);
-      row.push('');
-      row.push('');
-      row.push('');
-      row.push('');
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
       row.push('');
       row.push('');
     }
@@ -524,8 +526,7 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push('');
       row.push('');
     }
-    row.push('noTestSubmitted');
-    row.push(lookup(item.status) || '');
+    row.push(OUTCOME.QT_NOT_STARTED.label);
     rows.push(row);
   });
   // add failed
@@ -535,10 +536,10 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     if (type === DOWNLOAD_TYPES.full.value) {
       row.push(item.fullName);
       row.push(item.email);
-      row.push('');
-      row.push('');
-      row.push('');
-      row.push('');
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
       row.push('');
       row.push('');
     }
@@ -557,8 +558,40 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push('');
       row.push('');
     }
-    row.push('failedFirstTest');
-    row.push(lookup(item.status) || '');
+    row.push(OUTCOME.FAIL.label);
+    rows.push(row);
+  });
+
+  // add withdrawn before QT applications
+  withdrawnBeforeQT.forEach(item => {
+    const row = [];
+    row.push(item.ref);
+    if (type === DOWNLOAD_TYPES.full.value) {
+      row.push(item.fullName);
+      row.push(item.email);
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
+      row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
+      row.push('');
+      row.push('');
+    }
+    row.push('');
+    row.push('');
+    // row.push(''); // TODO notes
+    const ref = item.ref.split('-')[1];
+    if (diversityData[ref]) {
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+    } else {
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+    }
+    row.push(lookup('withdrawn'));
     rows.push(row);
   });
   return rows;
