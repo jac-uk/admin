@@ -235,13 +235,13 @@ export default {
     },
     operationsSeniorManagers() {
       const role = this.roles.find(role => role.roleName === 'Operations Senior Manager');
-      if (!role) return [];
+      if (!role) return [ {email:'example@error.com'} ];
       const users = this.$store.getters['users/getUsersByRoleId'](role.id);
       return users;
     },
     operationsTeamMembers() {
       const role = this.roles.find(role => role.roleName === 'Operations Team Member');
-      if (!role) return [];
+      if (!role) return [ {email:'example@error.com'} ];
       const users = this.$store.getters['users/getUsersByRoleId'](role.id);
       return users;
     },
