@@ -915,7 +915,7 @@ describe('downloadMeritList', () => {
   });
 
   it('should returns false for an invalid download type', () => {
-    const result = downloadMeritList('Title', [], [], {}, {}, 'invalid-type', 'filename');
+    const result = downloadMeritList('Title', {}, {}, {}, 'invalid-type', 'filename');
     expect(result).toBe(false);
     expect(downloadXLSX).not.toHaveBeenCalled();
   });
@@ -926,7 +926,7 @@ describe('downloadMeritList', () => {
     const task = { /* mock task object */ };
     const diversityData = { /* mock diversity data */ };
 
-    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
+    downloadMeritList(title, {}, task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       expect.any(Array),
@@ -944,7 +944,7 @@ describe('downloadMeritList', () => {
     const task = { /* mock task object */ };
     const diversityData = { /* mock diversity data */ };
 
-    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
+    downloadMeritList(title, {}, task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       expect.any(Array),
@@ -958,8 +958,8 @@ describe('downloadMeritList', () => {
   });
 
   it('should return true for valid download types', () => {
-    const result1 = downloadMeritList('Title', [], [], {}, {}, DOWNLOAD_TYPES.full.value, 'filename');
-    const result2 = downloadMeritList('Title', [], [], {}, {}, DOWNLOAD_TYPES.emp.value, 'filename');
+    const result1 = downloadMeritList('Title', {}, {}, {}, DOWNLOAD_TYPES.full.value, 'filename');
+    const result2 = downloadMeritList('Title', {}, {}, {}, DOWNLOAD_TYPES.emp.value, 'filename');
 
     expect(result1).toBe(true);
     expect(result2).toBe(true);
@@ -986,7 +986,7 @@ describe('downloadMeritList', () => {
     const task = { /* mock task object */ };
     const diversityData = { /* mock diversity data */ };
 
-    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
+    downloadMeritList(title, {}, task, diversityData, DOWNLOAD_TYPES.full.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
@@ -1001,7 +1001,6 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
-          'Status',
         ],
       ],
       {
@@ -1019,7 +1018,7 @@ describe('downloadMeritList', () => {
     const task = { /* mock task object */ };
     const diversityData = { /* mock diversity data */ };
 
-    downloadMeritList(title, [], [], task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
+    downloadMeritList(title, {}, task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith([
         [
@@ -1031,7 +1030,6 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
-          'Status',
         ],
       ],
       {
@@ -1057,7 +1055,7 @@ describe('downloadMeritList', () => {
       ],
     };
 
-    downloadMeritList(title, [], [], mockTask, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
+    downloadMeritList(title, {}, mockTask, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
@@ -1072,7 +1070,6 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
-          'Status',
         ],
         [
           'ref-001',
@@ -1085,7 +1082,6 @@ describe('downloadMeritList', () => {
           'No',
           'Yes',
           'Pass',
-          'Applied',
         ],
         [
           'ref-002',
@@ -1098,7 +1094,6 @@ describe('downloadMeritList', () => {
           'Yes',
           'No',
           'Fail',
-          'Applied',
         ],
       ],
       {
@@ -1112,11 +1107,12 @@ describe('downloadMeritList', () => {
   it('should generate correct data for didNotTake', () => {
     const title = 'Test Title';
     const fileName = 'test-file';
-    const mockDidNotTake = [
-      { ref: 'ref-001', fullName: 'Alice Johnson', email: 'alice@example.com', status: 'applied' },
-    ];
+    const mockDidNotTake = { didNotTake: [
+        { ref: 'ref-001', fullName: 'Alice Johnson', email: 'alice@example.com', status: 'applied' },
+      ],
+    };
 
-    downloadMeritList(title, mockDidNotTake, [], {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
+    downloadMeritList(title, mockDidNotTake, {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
@@ -1131,7 +1127,6 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
-          'Status',
         ],
         [
           'ref-001',
@@ -1149,8 +1144,7 @@ describe('downloadMeritList', () => {
           true,
           false,
           true,
-          'noTestSubmitted',
-          'Applied',
+          'Qualifying test not started',
         ],
       ],
       {
@@ -1165,11 +1159,11 @@ describe('downloadMeritList', () => {
     const title = 'Test Title';
     const fileName = 'test-file';
 
-    const mockFailed = [
-      { ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com', status: 'applied' },
-    ];
+    const mockFailed = {
+      failed: [{ ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com', status: 'applied' }],
+    };
 
-    downloadMeritList(title, [], mockFailed, {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
+    downloadMeritList(title, mockFailed, {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
@@ -1184,7 +1178,6 @@ describe('downloadMeritList', () => {
           'Solicitor',
           'Disability',
           'Outcome',
-          'Status',
         ],
         [
           'ref-002',
@@ -1202,8 +1195,58 @@ describe('downloadMeritList', () => {
           false,
           true,
           false,
-          'failedFirstTest',
-          'Applied',
+          'Fail',
+        ],
+      ],
+      {
+        title: title,
+        sheetName: DOWNLOAD_TYPES.full.sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+  });
+
+  it('should generate correct data for withdrawn before QT applications', () => {
+    const title = 'Test Title';
+    const fileName = 'test-file';
+
+    const mockWithdrawnBeforeQT = {
+      withdrawnBeforeQT: [{ ref: 'ref-002', fullName: 'Bob Williams', email: 'bob@example.com', status: 'withdrawn' }],
+    };
+
+    downloadMeritList(title, mockWithdrawnBeforeQT, {}, mockDiversityData, DOWNLOAD_TYPES.full.value, fileName);
+
+    expect(downloadXLSX).toHaveBeenCalledWith(
+      [
+        [
+          'Ref',
+          'Full name',
+          'Email',
+          'Rank',
+          'Score',
+          'Female',
+          'Ethnic Minority',
+          'Solicitor',
+          'Disability',
+          'Outcome',
+        ],
+        [
+          'ref-002',
+          'Bob Williams',
+          'bob@example.com',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          false,
+          false,
+          true,
+          false,
+          'Withdrawn',
         ],
       ],
       {

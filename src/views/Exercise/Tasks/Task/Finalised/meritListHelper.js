@@ -402,6 +402,16 @@ function getOverride(task, applicationId) {
 //   });
 // }
 
+/**
+ *
+ * @param {*} title
+ * @param {object} scoreGroups { didNotTake: [], failed: [], withdrawnBeforeQT: [] }
+ * @param {*} task
+ * @param {*} diversityData
+ * @param {*} type
+ * @param {*} fileName
+ * @returns
+ */
 function downloadMeritList(title, scoreGroups, task, diversityData, type, fileName) {
   switch (type) {
   case DOWNLOAD_TYPES.full.value:
