@@ -250,6 +250,7 @@ import SelectPanel from '../Panel/components/SelectPanel.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { totalApplications } from '../Finalised/meritListHelper';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -480,11 +481,35 @@ export default {
     async generateTimetable() {
       // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
       try {
-        await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
-        this.hasTimetableMessage = true;
+        const res = await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
+        this.downloadTimetable(res.data);
       } catch (error) {
+        this.hasTimetableMessage = true;
         return false;
       }
+    },
+    async downloadTimetable(timetable) {
+      const reportData = [
+        ['Candidate', 'Date', 'Panel', 'Reasonable adjustment', 'Slot'],
+      ];
+      timetable.forEach(item => {
+        reportData.push([
+          item.candidateRef,
+          item.date,
+          item.panel,
+          item.reasonableAdjustment ? 'Yes' : 'No',
+          item.slot,
+        ]);
+      });
+
+      downloadXLSX(
+        reportData,
+        {
+          title: `${this.exercise.referenceNumber} - Selection Day Timetable`,
+          sheetName: 'Selection Day Timetable',
+          fileName: `${this.exercise.referenceNumber} - Selection Day Timetable.xlsx`,
+        }
+      );
     },
     alert(message) {
       window.alert(message);
