@@ -487,7 +487,11 @@ export default {
       }
       default:
       }
-      downloadMeritList(title, didNotTake, failed, withdrawnBeforeQT, task, this.exerciseDiversity, saveData.type, fileName);
+
+      const scoreGroups = {
+        didNotTake, failed, withdrawnBeforeQT,
+      };
+      downloadMeritList(title, scoreGroups, task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
     },
   },
