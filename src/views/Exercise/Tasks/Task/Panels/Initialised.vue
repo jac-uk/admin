@@ -490,15 +490,15 @@ export default {
     },
     async downloadTimetable(timetable) {
       const reportData = [
-        ['Candidate', 'Date', 'Panel', 'Reasonable adjustment', 'Slot'],
+        ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Reasonable adjustment'],
       ];
       timetable.forEach(item => {
         reportData.push([
-          item.candidateRef,
-          item.date,
-          item.panel,
-          item.reasonableAdjustment ? 'Yes' : 'No',
+          item.panel.name,
+          this.$filters.formatDate(item.date),
           item.slot,
+          item.candidateRef,
+          item.reasonableAdjustment ? 'Yes' : 'No',
         ]);
       });
 
