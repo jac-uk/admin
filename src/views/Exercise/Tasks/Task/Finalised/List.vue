@@ -367,7 +367,11 @@ export default {
       return 'Type any part of reference number';
     },
     takenTestScores() {
-      return this.scores.filter(score => score.score > 0);
+      if (this.scoreType === 'zScore') {
+        return this.scores;
+      } else {
+        return this.scores.filter(score => score.score > 0);
+      }
     },
   },
   methods: {
@@ -467,26 +471,27 @@ export default {
           return { ...application, ...scoreData };
         });
 
-        // the applications withdrawn before the tests
-        const withdrawnApplications = await this.$store.dispatch('applications/getApplicationsByStatus', { status: 'withdrawn', exerciseId: this.exercise.id });
-
-        withdrawnBeforeQT = withdrawnApplications.filter(application => !idToApplication[application.id]);
-        withdrawnBeforeQT = withdrawnBeforeQT.map(application => ({
-          id: application.id,
-          ref: application.referenceNumber,
-          fullName: application.personalDetails.fullName,
-          email: application.personalDetails.email,
-        }));
-        console.log('withdrawnApplications', withdrawnApplications);
-        console.log('withdrawnBeforeQT', withdrawnBeforeQT);
-
-        console.log('task.finalScores', this.task.finalScores);
-        console.log('didNotTake', didNotTake);
-        console.log('failed', failed);
         break;
       }
       default:
       }
+
+      // the applications withdrawn before the tests
+      const withdrawnApplications = await this.$store.dispatch('applications/getApplicationsByStatus', { status: 'withdrawn', exerciseId: this.exercise.id });
+
+      withdrawnBeforeQT = withdrawnApplications.filter(application => !idToApplication[application.id]);
+      withdrawnBeforeQT = withdrawnBeforeQT.map(application => ({
+        id: application.id,
+        ref: application.referenceNumber,
+        fullName: application.personalDetails.fullName,
+        email: application.personalDetails.email,
+      }));
+      console.log('withdrawnApplications', withdrawnApplications);
+      console.log('withdrawnBeforeQT', withdrawnBeforeQT);
+
+      console.log('task.finalScores', this.task.finalScores);
+      console.log('didNotTake', didNotTake);
+      console.log('failed', failed);
 
       const scoreGroups = {
         didNotTake, failed, withdrawnBeforeQT,

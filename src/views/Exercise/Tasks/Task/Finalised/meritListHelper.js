@@ -93,6 +93,9 @@ function scores(task, scoreType, exerciseDiversity) {
   // group scores
   const scoreMap = {};
   task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+    // skip null scores
+    if (scoreData[scoreType] === null) return;
+
     if (!scoreMap[scoreData[scoreType]]) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
@@ -165,6 +168,8 @@ function scores(task, scoreType, exerciseDiversity) {
           scoreMap[score].outcome.pass = passMatches.length;
           scoreMap[score].outcome.fail = scoreMap[score].count - passMatches.length;
         } else {
+          console.log('scoreMap', scoreMap);
+          console.log('score', score);
           scoreMap[score].outcome.fail = scoreMap[score].count;
         }
       }
@@ -473,11 +478,11 @@ function xlsxData(scoreGroups, task, diversityData, type) {
         row.push(item.scoreSheet.qualifyingTest.SJ.percent);
         row.push(item.scoreSheet.qualifyingTest.CA.score);
         row.push(item.scoreSheet.qualifyingTest.CA.percent);
-        row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
-        row.push(item.scoreSheet.qualifyingTest.CA.zScore);
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.zScore));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.zScore));
       }
       row.push(item.rank);
-      row.push(item.zScore);
+      row.push(formatScore(item.zScore));
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
@@ -517,25 +522,35 @@ function xlsxData(scoreGroups, task, diversityData, type) {
       scoreGroup.forEach(item => {
         const row = [];
         row.push(item.ref);
-        if (type === DOWNLOAD_TYPES.full.value) {
-          row.push(item.fullName);
-          row.push(item.email);
-          row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
-          row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
-          row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
-          row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
-          row.push('');
-          row.push('');
+        if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+          if (type === DOWNLOAD_TYPES.full.value) {
+            row.push(item.fullName);
+            row.push(item.email);
+            row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
+            row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
+            row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
+            row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.zScore));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.zScore));
+          }
+          row.push(formatScore(item.rank));
+          row.push(formatScore(item.zScore));
+        } else {
+          if (type === DOWNLOAD_TYPES.full.value) {
+            row.push(item.fullName);
+            row.push(item.email);
+          }
+          row.push(formatScore(item.rank));
+          row.push(formatScore(item.zScore));
         }
-        row.push('');
-        row.push('');
+
         // row.push(''); // TODO notes
         const ref = item.ref.split('-')[1];
         if (diversityData[ref]) {
-          row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
-          row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
-          row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
-          row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
         } else {
           row.push('');
           row.push('');
@@ -568,4 +583,9 @@ function getDownloadTypes(task) {
   // TODO: confirm if task affect the download types
   if (!task) return [];
   return Object.values(DOWNLOAD_TYPES);
+}
+
+function formatScore(score){
+  if (score === null || score === undefined) return 'n/a';
+  return score;
 }
