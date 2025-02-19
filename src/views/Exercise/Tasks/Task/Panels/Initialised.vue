@@ -484,12 +484,13 @@ export default {
         const res = await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
         if (!res || !res.data) throw new Error('No data returned');
         this.downloadTimetable(res.data);
+        return true;
       } catch (error) {
         this.hasTimetableMessage = true;
         return false;
       }
     },
-    async downloadTimetable(data) {
+    downloadTimetable(data) {
       const { timetable } = data;
       const reportData = [
         ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Reasonable adjustment'],
@@ -497,7 +498,7 @@ export default {
       timetable.forEach(item => {
         reportData.push([
           item.panel.name,
-          this.$filters.formatDate(item.date),
+          this.$filters.formatDate(new Date(item.date)),
           item.slot,
           item.candidateRef,
           item.reasonableAdjustment ? 'Yes' : 'No',
