@@ -482,13 +482,15 @@ export default {
       // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
       try {
         const res = await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
+        if (!res || !res.data) throw new Error('No data returned');
         this.downloadTimetable(res.data);
       } catch (error) {
         this.hasTimetableMessage = true;
         return false;
       }
     },
-    async downloadTimetable(timetable) {
+    async downloadTimetable(data) {
+      const { timetable } = data;
       const reportData = [
         ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Reasonable adjustment'],
       ];
