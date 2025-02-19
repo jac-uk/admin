@@ -498,7 +498,7 @@ export default {
       timetable.forEach(item => {
         reportData.push([
           item.panel.name,
-          this.$filters.formatDate(new Date(item.date)), // item.date is milliseconds
+          item.date,
           item.slot,
           item.candidateRef,
           item.reasonableAdjustment ? 'Yes' : 'No',
