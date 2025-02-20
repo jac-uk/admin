@@ -1,4 +1,4 @@
-import { query, collection, where } from '@firebase/firestore';
+import { query, collection, where, getDocs } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -30,6 +30,24 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    getApplicationsByStatus: async (context, params) => {
+      console.log('params', params);
+      const queryRef = query(
+        collection(firestore, 'applications'),
+        where('exerciseId', '==', params.exerciseId),
+        where('status', '==', params.status)
+      );
+      const snap = await getDocs(queryRef);
+      const result = [];
+      console.log('snap', snap);
+      snap.forEach(doc => {
+        result.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      return result;
+    },
   },
   state: {
     records: [],
