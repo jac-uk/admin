@@ -497,12 +497,6 @@ export default {
         fullName: application.personalDetails.fullName,
         email: application.personalDetails.email,
       }));
-      console.log('withdrawnApplications', withdrawnApplications);
-      console.log('withdrawnBeforeQT', withdrawnBeforeQT);
-
-      console.log('task.finalScores', this.task.finalScores);
-      console.log('didNotTake', didNotTake);
-      console.log('failed', failed);
 
       const scoreGroups = {
         didNotTake, failed, withdrawnBeforeQT,

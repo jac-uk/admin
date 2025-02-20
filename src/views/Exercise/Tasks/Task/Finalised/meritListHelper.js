@@ -168,8 +168,6 @@ function scores(task, scoreType, exerciseDiversity) {
           scoreMap[score].outcome.pass = passMatches.length;
           scoreMap[score].outcome.fail = scoreMap[score].count - passMatches.length;
         } else {
-          console.log('scoreMap', scoreMap);
-          console.log('score', score);
           scoreMap[score].outcome.fail = scoreMap[score].count;
         }
       }
@@ -515,12 +513,10 @@ function xlsxData(scoreGroups, task, diversityData, type) {
     rows.push(row);
   });
 
-  console.log('scoreGroups',scoreGroups);
   for (const groupName in scoreGroups) {
     if (Object.prototype.hasOwnProperty.call(scoreGroups, groupName)) {
       const scoreGroup = scoreGroups[groupName];
 
-      console.log('groupName',groupName);
       scoreGroup.forEach(item => {
         const row = [];
         row.push(item.ref);
