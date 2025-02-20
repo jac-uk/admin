@@ -474,10 +474,12 @@ function xlsxData(scoreGroups, task, diversityData, type) {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
-        row.push(item.scoreSheet.qualifyingTest.SJ.score);
-        row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-        row.push(item.scoreSheet.qualifyingTest.CA.score);
-        row.push(item.scoreSheet.qualifyingTest.CA.percent);
+        // If the CAT/SJT scores are zero, it represents a not taken, so we replace with 'n/a'
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.score, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.percent, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.score, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.percent, false));
+        // The z scores can be zero in some cases, so we keep the zero values.
         row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.zScore));
         row.push(formatScore(item.scoreSheet.qualifyingTest.CA.zScore));
       }
@@ -526,10 +528,12 @@ function xlsxData(scoreGroups, task, diversityData, type) {
           if (type === DOWNLOAD_TYPES.full.value) {
             row.push(item.fullName);
             row.push(item.email);
-            row.push(item?.scoreSheet?.qualifyingTest?.SJ?.score || '');
-            row.push(item?.scoreSheet?.qualifyingTest?.SJ?.percent || '');
-            row.push(item?.scoreSheet?.qualifyingTest?.CA?.score || '');
-            row.push(item?.scoreSheet?.qualifyingTest?.CA?.percent || '');
+            // If the CAT/SJT scores are zero, it represents a not taken, so we replace with 'n/a'
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.score, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.percent, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.score, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.percent, false));
+            // The z scores can be zero in some cases, so we keep the zero values.
             row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.zScore));
             row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.zScore));
           }
@@ -585,7 +589,7 @@ function getDownloadTypes(task) {
   return Object.values(DOWNLOAD_TYPES);
 }
 
-function formatScore(score){
-  if (score === null || score === undefined) return 'n/a';
+function formatScore(score, acceptZero = true) {
+  if (score === null || score === undefined || (!acceptZero && score === 0)) return 'n/a';
   return score;
 }
