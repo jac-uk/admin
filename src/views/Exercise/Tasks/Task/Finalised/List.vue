@@ -473,6 +473,17 @@ export default {
 
         break;
       }
+      case TASK_TYPE.CRITICAL_ANALYSIS:
+      case TASK_TYPE.SITUATIONAL_JUDGEMENT: {
+        // prevent duplicating with didNotTake and failed applications
+        task.finalScores = task.finalScores.filter(scoreData => scoreData?.score);
+        didNotTake = this.task.finalScores.filter(scoreData => !scoreData.score).map(scoreData => {
+          const application = idToApplication[scoreData.id] || {};
+          return { ...application, ...scoreData };
+        });
+
+        break;
+      }
       default:
       }
 
