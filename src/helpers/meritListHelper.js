@@ -2,6 +2,7 @@
 
 import { TASK_TYPE } from '@/helpers/constants';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { markingScheme2Columns } from '@/helpers/scoreSheetHelper';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { toYesNo } from '@jac-uk/jac-kit/filters/filters';
 
@@ -25,7 +26,9 @@ export {
   totalDidNotParticipate,
   hasParticipation,
   downloadMeritList,
-  getDownloadTypes
+  getDownloadTypes,
+  getOverallGrade,
+  sortFunctionGradeScore
 };
 
 const OUTCOME = {
@@ -79,7 +82,42 @@ function scoreType(task) {
   if (!task) return 'score';
   if (task.scoreType) return task.scoreType;
   if (task.finalScores && task.finalScores[0].hasOwnProperty('percent')) return 'percent';
+  if (hasOverallGrade(task)) return 'gradeScore';
   return 'score';
+}
+
+function hasOverallGrade(task) {
+  if (!task) return false;
+  if (!task.markingScheme) return false;
+  if (task.type === TASK_TYPE.SIFT) {
+    const sift = task.markingScheme.find(item => item.ref === TASK_TYPE.SIFT);
+    if (!sift) return false;
+    if (!sift.children) return false;
+    const siftOverallGrade = sift.children.find(item => item.ref === 'OVERALL');
+    return siftOverallGrade ? true : false;
+  }
+  if (task.type === TASK_TYPE.SELECTION_DAY) {
+    const selectionDay = task.markingScheme.find(item => item.ref === 'overall');
+    if (!selectionDay) return false;
+    if (!selectionDay.children) return false;
+    const selectionDayOverallGrade = selectionDay.children.find(item => item.ref === 'OVERALL');
+    return selectionDayOverallGrade ? true : false;
+  }
+  return false;
+}
+
+function getOverallGrade(task, scoreSheet, changes) {
+  if (!task) return false;
+  switch (task.type) {
+  case TASK_TYPE.SIFT:
+    if (changes && changes[task.type] && changes[task.type].OVERALL) return changes[task.type].OVERALL;
+    return scoreSheet[task.type].OVERALL;
+  case TASK_TYPE.SELECTION_DAY:
+    if (changes && changes.overall && changes.overall.OVERALL) return changes.overall.OVERALL;
+    return scoreSheet.overall.OVERALL;
+  default:
+    return '';
+  }
 }
 
 function scores(task, scoreType, exerciseDiversity) {
@@ -113,6 +151,10 @@ function scores(task, scoreType, exerciseDiversity) {
         },
       };
     }
+    if (scoreType === 'gradeScore') {
+      scoreMap[scoreData[scoreType]].grade = scoreData.grade;
+      scoreMap[scoreData[scoreType]].score = scoreData.score;
+    }
     scoreMap[scoreData[scoreType]].applicationIds.push(scoreData.id);
     scoreMap[scoreData[scoreType]].count += 1;
     const ref = scoreData.ref.split('-')[1];
@@ -125,7 +167,16 @@ function scores(task, scoreType, exerciseDiversity) {
   });
 
   // add rank and cumulative diversity
-  const scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
+  let scoresInDescendingOrder;
+  if (scoreType === 'gradeScore') { // keys of form Grade:Score
+    scoresInDescendingOrder = Object.entries(scoreMap).sort(( keyValueA, keyValueB) => {
+      const a = keyValueA[1];
+      const b = keyValueB[1];
+      return sortFunctionGradeScore(a, b);
+    }).map(item => item[0]);
+  } else {
+    scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
+  }
   let prevScore;
   scoresInDescendingOrder.forEach(score => {
     if (prevScore) {
@@ -147,8 +198,17 @@ function scores(task, scoreType, exerciseDiversity) {
   // add outcome stats
   if (task.hasOwnProperty('passMark')) {
     scoresInDescendingOrder.forEach(key => {
-      const score = parseFloat(key);
-      if (score >= task.passMark) {
+      const score = scoreType === 'gradeScore' ? key : parseFloat(key);
+      let isScoreGreaterOrEqual = false;
+      if (scoreType === 'gradeScore') {
+        const parts = task.passMark.split(':');
+        isScoreGreaterOrEqual =
+          scoreMap[score].grade < parts[0] ||
+          (scoreMap[score].grade === parts[0] && scoreMap[score].score >= parseInt(parts[1]));
+      } else {
+        isScoreGreaterOrEqual = score >= task.passMark;
+      }
+      if (isScoreGreaterOrEqual) {
         if (task.overrides && task.overrides.fail) {
           const failMatches = Object.keys(task.overrides.fail).filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
           scoreMap[score].outcome.fail = failMatches.length;
@@ -169,12 +229,23 @@ function scores(task, scoreType, exerciseDiversity) {
   }
 
   // return
-  return scoresInDescendingOrder.map(score => {
-    return {
-      score: parseFloat(score),
-      ...scoreMap[score],
-    };
+  return scoresInDescendingOrder.map(key => {
+    const data = { ...scoreMap[key] };
+    if (scoreType === 'gradeScore') {
+      data.score = key;
+    } else {
+      data.score = parseFloat(key);
+    }
+    return data;
   });
+}
+
+function sortFunctionGradeScore(a, b) {
+  if (a.grade > b.grade) return 1;
+  if (a.grade < b.grade) return -1;
+  if (a.score > b.score) return -1;
+  if (a.score < b.score) return 1;
+  return 0;
 }
 
 function scoreData(task, scoreType, exerciseDiversity) {
@@ -186,7 +257,7 @@ function scoreData(task, scoreType, exerciseDiversity) {
     const data = {
       ...application,
       ...scoreData,
-      score: scoreData[scoreType],
+      // score: scoreData[scoreType],
       diversity: {},
     };
     const ref = scoreData.ref.split('-')[1];
@@ -200,20 +271,27 @@ function scoreData(task, scoreType, exerciseDiversity) {
     }
     if (!data.hasOwnProperty('pass')) {
       if (task.hasOwnProperty('passMark')) {
-        data.pass = isPass(task, data.id, data.score);
+        data.pass = isPass(task, data.id, scoreData);
       }
     }
     return data;
-  }).sort((a, b) => b.score - a.score);
+  }).sort((a, b) => {
+    if (scoreType === 'gradeScore') {
+      return sortFunctionGradeScore(a, b);
+    } else {
+      return b.score - a.score;
+    }
+  });
 
+  // add rank and count
   let prevScore;
   let prevRank = 1;
   let prevCount = 0;
   sortedScoreData.forEach(scoreData => {
-    if (scoreData.score === prevScore) {
+    if (scoreData[scoreType] === prevScore) {
       prevCount++;
     } else {
-      prevScore = scoreData.score;
+      prevScore = scoreData[scoreType];
       prevRank = prevRank + prevCount;
       prevCount = 1;
     }
@@ -291,42 +369,57 @@ function getOverrideReasons() {
 //   return match ? match.code : '';
 // }
 
-function isPassingScore(task, score) {
-  if (task && task.passMark && task.passMark <= score) {
-    return true;
+function isPassingGradeScore(passMark, scoreData) {
+  if (!passMark) return false;
+  if (!scoreData) return false;
+  const passParts = passMark.split(':');
+  if (scoreData.grade < passParts[0]) return true;
+  if (scoreData.grade > passParts[0]) return false;
+  if (parseInt(scoreData.score) >= parseInt(passParts[1])) return true;
+  return false;
+}
+
+function isPassingScore(task, scoreData) {
+  if (!task) return false;
+  if (!task.passMark) return false;
+  const type = scoreType(task);
+  if (type === 'gradeScore') {
+    return isPassingGradeScore(task.passMark, scoreData);
+  } else {
+    if (task.passMark <= scoreData[type]) return true;
   }
   return false;
 }
 
-function isPass(task, applicationId, score) {
+function isPass(task, applicationId, scoreData) {
   const override = getOverride(task, applicationId);
   if (override) {
     return override.outcome === OUTCOME.PASS.value;
   }
-  if (isPassingScore(task, score)) {
+  if (isPassingScore(task, scoreData)) {
     return true;
   }
   return false;
 }
 
-function getDefaultOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getDefaultOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;
   }
 }
 
-function getNewOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getNewOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.FAIL;
   } else {
     return OUTCOME.PASS;
   }
 }
 
-function getCurrentOutcome(task, score) {
-  if (isPassingScore(task, score)) {
+function getCurrentOutcome(task, scoreData) {
+  if (isPassingScore(task, scoreData)) {
     return OUTCOME.PASS;
   } else {
     return OUTCOME.FAIL;
@@ -418,6 +511,7 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
 }
 
 function xlsxData(didNotTake, failed, task, diversityData, type) {
+  // const taskScoreType = scoreType(task);
   const rows = [];
   const headers = [];
   headers.push('Ref');
@@ -439,15 +533,21 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       headers.push('Full name');
       headers.push('Email');
     }
-    headers.push('Rank');
+    // include grade sheet
+    if (task.markingScheme) {
+      markingScheme2Columns(task.markingScheme).forEach(column => {
+        headers.push(column.title);
+      });
+    }
     headers.push('Score');
+    headers.push('Rank');
   }
+  headers.push('Outcome');
   // headers.push('Notes');
   headers.push('Female');
   headers.push('Ethnic Minority');
   headers.push('Solicitor');
   headers.push('Disability');
-  headers.push('Outcome');
   rows.push(headers);
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
@@ -470,8 +570,31 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
         row.push(item.fullName);
         row.push(item.email);
       }
-      row.push(item.rank);
+      // add gradesheet data (inc changes)
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(column => {
+          if (column.parent) {
+            if (task.changes && task.changes[item.id] && task.changes[item.id][column.parent] && task.changes[item.id][column.parent][column.ref]) {
+              row.push(task.changes[item.id][column.parent][column.ref]);
+            } else {
+              row.push(item.scoreSheet[column.parent][column.ref]);
+            }
+          } else {
+            if (task.changes && task.changes[item.id] && task.changes[item.id][column.ref]) {
+              row.push(task.changes[item.id][column.ref]);
+            } else {
+              row.push(item.scoreSheet[column.ref]);
+            }
+          }
+        });
+      }
       row.push(item.score);
+      row.push(item.rank);
+    }
+    if (item.hasOwnProperty('pass')) {
+      item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
+    } else {
+      row.push('');
     }
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
@@ -481,14 +604,9 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
       row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
-    }
-    if (item.hasOwnProperty('pass')) {
-      item.pass ? row.push(OUTCOME.PASS.label) : row.push(OUTCOME.FAIL.label);
-    } else {
+      row.push('');
+      row.push('');
+      row.push('');
       row.push('');
     }
     rows.push(row);
@@ -497,18 +615,33 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
   didNotTake.forEach(item => {
     const row = [];
     row.push(item.ref);
-    if (type === DOWNLOAD_TYPES.full.value) {
-      row.push(item.fullName);
-      row.push(item.email);
+    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+      }
       row.push('');
       row.push('');
-      row.push('');
-      row.push('');
+    } else {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+      }
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(() => {
+          row.push('');
+        });
+      }
       row.push('');
       row.push('');
     }
-    row.push('');
-    row.push('');
+    row.push('noTestSubmitted');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
@@ -517,30 +650,44 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
-    row.push('noTestSubmitted');
     rows.push(row);
   });
   // add failed
   failed.forEach(item => {
     const row = [];
     row.push(item.ref);
-    if (type === DOWNLOAD_TYPES.full.value) {
-      row.push(item.fullName);
-      row.push(item.email);
+    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+        row.push('');
+      }
       row.push('');
       row.push('');
-      row.push('');
-      row.push('');
+    } else {
+      if (type === DOWNLOAD_TYPES.full.value) {
+        row.push(item.fullName);
+        row.push(item.email);
+      }
+      if (task.markingScheme) {
+        markingScheme2Columns(task.markingScheme).forEach(() => {
+          row.push('');
+        });
+      }
       row.push('');
       row.push('');
     }
-    row.push('');
-    row.push('');
+    row.push('failedFirstTest');
     // row.push(''); // TODO notes
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
@@ -549,12 +696,11 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
     } else {
-      row.push();
-      row.push();
-      row.push();
-      row.push();
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
     }
-    row.push('failedFirstTest');
     rows.push(row);
   });
   return rows;

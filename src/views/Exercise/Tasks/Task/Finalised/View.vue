@@ -240,7 +240,7 @@ import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import _has from 'lodash/has';
 import _find from 'lodash/find';
-import { isPass } from './meritListHelper';
+import { isPass } from '@/helpers/meritListHelper';
 
 export default {
   components: {
@@ -385,7 +385,7 @@ export default {
   methods: {
     hasDiversityCharacteristic,
     isPass(row) {
-      return isPass(this.task, row.id, row.score);
+      return isPass(this.task, row.id, row);
     },
     toggleShowDetail() {
       this.showDetail = !this.showDetail;

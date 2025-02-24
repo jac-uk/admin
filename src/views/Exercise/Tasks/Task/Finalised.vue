@@ -32,7 +32,7 @@
       type="button"
       @click="$refs['setPassMarkModal'].openModal()"
     >
-      <span v-if="hasPassMark">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
+      <span v-if="hasPassMark">Pass mark {{ scoreType == 'gradeScore' ? task.passMark : $filters.formatNumber(task.passMark, 2) }}</span>
       <span v-else>Set pass mark</span>
     </button>
     <ActionButton
@@ -60,6 +60,7 @@
       <SetPassMark
         class="govuk-!-margin-6"
         :scores="scores"
+        :score-type="scoreType"
         :data="{ passMark: task.passMark }"
         @save="setPassMark"
         @cancel="$refs['setPassMarkModal'].closeModal()"
@@ -71,7 +72,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from './helper';
-import { scoreType, scores, scoreData, totalPassed, totalFailed } from './Finalised/meritListHelper';
+import { scoreType, scores, scoreData, totalPassed, totalFailed } from '@/helpers/meritListHelper';
 import { getTaskSteps } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
@@ -146,7 +147,8 @@ export default {
     },
     async setPassMark(data) {
       if (data) {
-        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), scoreType: this.scoreType } } );
+        const passMark = this.scoreType === 'gradeScore' ? data.passMark : parseFloat(data.passMark);
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: passMark, scoreType: this.scoreType } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
     },
