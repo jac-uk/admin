@@ -481,7 +481,12 @@ export default {
     async generateTimetable() {
       try {
         const res = await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
-        if (!res || !res.data) throw new Error('No data returned');
+        if (!res || !res.data) {
+          throw new Error('No data returned');
+        }
+        if (res.data.unassignedCandidates && res.data.unassignedCandidates.length) {
+          this.hasTimetableMessage = true;
+        }
         this.downloadTimetable(res.data);
         return true;
       } catch (error) {
