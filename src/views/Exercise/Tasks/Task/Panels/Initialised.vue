@@ -497,14 +497,15 @@ export default {
     downloadTimetable(data) {
       const { timetable } = data;
       const reportData = [
-        ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Reasonable adjustment'],
+        ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Candidate name', 'Reasonable adjustment'],
       ];
       timetable.forEach(item => {
         reportData.push([
           item.panel.name,
           item.date,
           item.slot,
-          item.candidateRef,
+          item.application.ref,
+          item.application.fullName,
           item.reasonableAdjustment ? 'Yes' : 'No',
         ]);
       });
