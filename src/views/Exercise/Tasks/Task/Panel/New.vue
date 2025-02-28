@@ -10,7 +10,6 @@
       New panel for {{ $filters.lookup(type) }}
     </h1>
     <PanelForm
-      :data="defaults"
       @save="savePanel"
       @cancel="cancel"
     />
@@ -39,36 +38,6 @@ export default {
     },
     exerciseId() {
       return this.exercise.id;
-    },
-    defaults() {
-      switch (this.type) {
-      case 'sift':
-        if (this.exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && this.exercise.nameBlindSiftStartDate) {
-          return {
-            dateFrom: this.exercise.nameBlindSiftStartDate,
-            dateTo: this.exercise.nameBlindSiftEndDate,
-          };
-        } else {
-          return {
-            dateFrom: this.exercise.siftStartDate,
-            dateTo: this.exercise.siftEndDate,
-          };
-        }
-      case 'selectionDay':
-        if (this.exercise.selectionDays && this.exercise.selectionDays.length) {
-          return {
-            dateFrom: this.exercise.selectionDays[0].selectionDayStart,
-            dateTo: this.exercise.selectionDays[0].selectionDayEnd,
-          };
-        }
-        break;
-      case 'scenario':
-        return {
-          dateFrom: this.exercise.scenarioTestOutcome,
-          dateTo: this.exercise.scenarioTestOutcome,
-        };
-      }
-      return {};
     },
   },
   methods: {

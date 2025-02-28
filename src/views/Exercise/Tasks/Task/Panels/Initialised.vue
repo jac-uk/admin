@@ -17,7 +17,7 @@
       v-if="hasApplicationsWithoutPanels"
       class="govuk-body govuk-!-margin-bottom-4"
     >
-      Please create panels and allocate applications to those panels.
+      Please create panels and assign applications to those panels.
     </p>
     <p
       v-else-if="hasPanelsWithoutPanellists"
@@ -63,7 +63,7 @@
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <p class="govuk-body govuk-!-margin-bottom-0">
             Applications
-            <span class="govuk-caption-m">Not yet assigned to a panel</span>
+            <span class="govuk-caption-m">Not yet assigned</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
             {{ applicationsWithoutPanels.length }}
@@ -143,6 +143,39 @@
     </div>
     <!-- // END PANELS -->
 
+    <!-- TIMETABLE -->
+    <div
+      v-if="hasSelectionDayTimetable"
+      v-show="activeTab == 'timetable'"
+    >
+      <ActionButton
+        type="primary"
+        :disabled="!timetable.length"
+        :action="generateTimetable"
+      >
+        Generate timetable
+      </ActionButton>
+
+      <div
+        v-if="hasTimetableMessage"
+        class="govuk-inset-text govuk-!-margin-top-0"
+      >
+        <p class="govuk-body">
+          Useful information from the Generate Timetable function about why the timetable is not complete. Such as:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>There are more candidates than slots</li>
+          <li>The following candidates are only available on one day</li>
+          <li>The following candidates clash with every panellist</li>
+          <li>The following dates are oversubscribed</li>
+          <li>The following dates have no candidates</li>
+          <li>The following panellists have conflicts with lots of candidates</li>
+          <li>etc</li>
+        </ul>
+      </div>
+    </div>
+    <!-- // END TIMETABLE -->
+
     <!-- APPLICATIONS -->
     <div v-show="activeTab == 'applications'">
       <Table
@@ -205,7 +238,7 @@
 <script>
 import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps, TASK_TYPE } from '@/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -252,6 +285,7 @@ export default {
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Panel' },
       ],
+      hasTimetableMessage: false,
     };
   },
   computed: {
@@ -283,6 +317,16 @@ export default {
         ref: 'panels',
         title: 'Panels',
       });
+      if (this.hasSelectionDayTimetable && this.timetable.length) {
+        // data.push({
+        //   ref: 'dates',
+        //   title: 'Selection Days',
+        // });
+        data.push({
+          ref: 'timetable',
+          title: 'Timetable',
+        });
+      }
       if (this.hasApplicationsWithoutPanels) {
         data.push({
           ref: 'applications',
@@ -313,6 +357,36 @@ export default {
       if (!this.selectedItems.length) return null;
       return this.applicationsWithoutPanels.filter(application => this.selectedItems.indexOf(application.id) >= 0);
     },
+    hasSelectionDayTimetable() {
+      return this.task.type === TASK_TYPE.SELECTION_DAY && this.task._preSelectionDayQuestionnaire;
+    },
+    selectionDays() {
+      if (this.hasSelectionDayTimetable) {
+        const form = this.$store.getters['candidateForm/data']();
+        if (form) {
+          return form.candidateAvailabilityDates;
+        }
+      }
+      return null;
+    },
+    timetable() {
+      const data = [];
+      this.panels.forEach(panel => {
+        if (panel.timetable) {
+          panel.timetable.forEach(item => {
+            if (item.totalSlots > 0) {
+              data.push({ id: panel.id, name: panel.name, ...item });
+            }
+          });
+        }
+      });
+      return data;
+    },
+  },
+  async created() {
+    if (this.hasSelectionDayTimetable) {
+      await this.$store.dispatch('candidateForm/bind', this.task._preSelectionDayQuestionnaire.formId);
+    }
   },
   methods: {
     btnNext,
@@ -365,20 +439,33 @@ export default {
     },
     async selectPanel(data) {
       if (data && data.panelId) {
+        let panelId = data.panelId;
+        let panel, date, location, timetable;
+        if (this.hasSelectionDayTimetable) {
+          const parts = data.panelId.split('__');
+          console.log('parts', parts);
+          panelId = parts[0];
+          date = parts[1];
+          location = parts[2];
+          panel = this.$store.getters['panels/getPanel'](panelId);
+          console.log('panel', panel);
+          timetable = panel.timetable;
+          timetable.forEach(item => {
+            if (item.date == date && item.location === location) {
+              if (!item.applicationIds) item.applicationIds = [];
+              item.applicationIds = [...new Set(item.applicationIds.concat(this.selectedItems))];
+            }
+          });
+          console.log('timetable', timetable);
+        }
         // update panel with new ids
         await this.$store.dispatch('panel/addApplications', {
-          panelId: data.panelId,
+          panelId: panelId,
           type: this.type,
           applicationIds: this.selectedItems,
           applicationRecords: this.selectedApplications,
+          timetable,
         });
-        // // update applicationRecords
-        // const updates = this.selectedItems.map(applicationId => {
-        //   const update = {};
-        //   update[`${this.type}.panelId`] = data.panelId;
-        //   return { id: applicationId, data: update };
-        // });
-        // await this.$store.dispatch('candidateApplications/update', updates);
         this.selectedItems = [];
       }
       this.$refs['setPanelModal'].closeModal();
@@ -389,6 +476,18 @@ export default {
           this.activeTab = 'panels';
         }
       }
+    },
+    async generateTimetable() {
+      // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          this.hasTimetableMessage = true;
+          resolve(true);
+        }, 3000);
+      });
+    },
+    alert(message) {
+      window.alert(message);
     },
   },
 };

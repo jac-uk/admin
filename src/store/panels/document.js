@@ -54,8 +54,10 @@ export default {
     delete: async (context, id) => {
       await deleteDoc(doc(collectionRef, id));
     },
-    addApplications: async (context, { panelId, type, applicationIds, applicationRecords }) => {
+    addApplications: async (context, { panelId, type, applicationIds, applicationRecords, timetable }) => {
       const batch = writeBatch(firestore);
+
+      // update application redcords
       applicationIds.forEach(applicationId => {
         const ref = doc(collection(firestore, 'applicationRecords'), applicationId);
         const data = {};
@@ -63,23 +65,27 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
-      const applicationsData = {};
+
+      // update panel
+      const saveData = {
+        applicationIds: arrayUnion(...applicationIds),
+      };
       applicationRecords.forEach(applicationRecord => {
-        applicationsData[applicationRecord.id] = { referenceNumber: applicationRecord.application.referenceNumber };
+        const arData = { referenceNumber: applicationRecord.application.referenceNumber };
         if (type != 'sift') {
-          applicationsData[applicationRecord.id].fullName = applicationRecord.candidate.fullName;
+          arData.fullName = applicationRecord.candidate.fullName;
         }
+        saveData[`applications.${applicationRecord.id}`] = arData;
       });
+      if (timetable) saveData.timetable = timetable;
       await context.dispatch('update', {
         id: panelId,
-        data: {
-          applicationIds: arrayUnion(...applicationIds),
-          applications: applicationsData,
-        },
+        data: saveData,
       });
     },
     removeApplications: async (context, { applicationIds }) => {
       const batch = writeBatch(firestore);
+      // update application records
       applicationIds.forEach(applicationId => {
         const ref = doc(collection(firestore, 'applicationRecords'), applicationId);
         const data = {};
@@ -87,11 +93,31 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
+      // update panel
+      const panel = context.state.record;
+      const saveData = {
+        applicationIds: arrayRemove(...applicationIds),
+      };
+      const applications = clone(panel.applications);
+      applicationIds.forEach(applicationId => delete applications[applicationId] );
+      saveData.applications = applications;
+      if (panel.timetable) {
+        const timetable = clone(panel.timetable);
+        applicationIds.forEach(applicationId => {
+          timetable.forEach(item => {
+            if (item.applicationIds) {
+              const index = item.applicationIds.indexOf(applicationId);
+              if (index >= 0) {
+                item.applicationIds.splice(index, 1);
+              }
+            }
+          });
+        });
+        saveData.timetable = timetable;
+      }
       await context.dispatch('update', {
         id: context.state.record.id,
-        data: {
-          applicationIds: arrayRemove(...applicationIds),
-        },
+        data: saveData,
       });
     },
   },

@@ -5,17 +5,33 @@
   >
     <Select
       id="exercise-state"
-      v-model="formData.panelId"
+      v-model="formData.panelId "
       label="Please select from the available options"
       required
     >
-      <option
+      <template
         v-for="panel in panels"
         :key="panel.id"
-        :value="panel.id"
       >
-        {{ panel.name }}
-      </option>
+        <optgroup
+          v-if="panel.timetable"
+          :label="panel.name"
+        >
+          <option
+            v-for="item in panel.timetable.filter(i => i.totalSlots > 0)"
+            :key="item"
+            :value="`${panel.id}__${item.date}__${item.location}`"
+          >
+            {{ $filters.formatDate(item.date) }} {{ item.location }} ({{ item.totalSlots }} slots)
+          </option>
+        </optgroup>
+        <option
+          v-else
+          :value="panel.id"
+        >
+          {{ panel.name }}
+        </option>
+      </template>
     </Select>
   </Form>
 </template>
