@@ -187,9 +187,9 @@
     :load-failed="loadFailed"
   />
   <div
-  v-if="data"
-  class="govuk-!-margin-top-9"
-  style="overflow: auto;"
+    v-if="data"
+    class="govuk-!-margin-top-9"
+    style="overflow: auto;"
   >
     <table class="govuk-table">
       <thead class="govuk-table__head">
@@ -198,15 +198,15 @@
             v-for="(column, columnIndex) in configuredColumns"
             :key="columnIndex"
           >
-          <th
-            class="govuk-table__header"
-          >
-          <span>
-            {{ preferenceLabel(column) }}
-          </span>
-        </th>
-      </template>
-      <hr>
+            <th
+              class="govuk-table__header"
+            >
+              <span>
+                {{ preferenceLabel(column) }}
+              </span>
+            </th>
+          </template>
+          <hr>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -219,11 +219,11 @@
             v-for="(column, columnIndex) in configuredColumns"
             :key="columnIndex"
           >
-          <td
-            :style="{
-            'white-space': keys[column]?.nowrap ? 'nowrap' : ''
-            }"
-            class="govuk-table__cell"
+            <td
+              :style="{
+                'white-space': keys[column]?.nowrap ? 'nowrap' : ''
+              }"
+              class="govuk-table__cell"
             >
               <span>
                 {{ formatQuestion(row, column) }}
@@ -244,7 +244,7 @@ import draggable from 'vuedraggable';
 import _includes from 'lodash/includes';
 import _merge from 'lodash/merge';
 import _clone from 'lodash/clone';
-import _startCase from 'lodash/startCase';
+// import _startCase from 'lodash/startCase';
 import { mapState } from 'vuex';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import permissionMixin from '@/permissionMixin';
@@ -367,7 +367,7 @@ export default {
       return _merge(keys, this.preferenceKeys);
     },
     configuredColumns() {
-    // Build mapped columns for each type of preference
+      // Build mapped columns for each type of preference
       const locationPrefColumns = this.locationPreferences.map(pref =>
         pref.id ? `locationPreferences.${pref.id}` : 'locationPreferences'
       );
@@ -378,7 +378,7 @@ export default {
 
       const additionalWorkingPrefColumns = [
         ...this.additionalWorkingPreferences.map(pref => `additionalWorkingPreferences.${pref.id}`),
-        ...this.oldAdditionalWorkingPreferences
+        ...this.oldAdditionalWorkingPreferences,
       ];
 
       let res = this.selectedColumns.filter(col =>
@@ -396,7 +396,7 @@ export default {
             // new
             res = [
               ...res,
-              ...locationPrefColumns.filter(col => col !== 'locationPreferences')
+              ...locationPrefColumns.filter(col => col !== 'locationPreferences'),
             ];
           } 
           if (this.locationQuestion.length) {
@@ -404,7 +404,7 @@ export default {
             res = [
               ...res,
               ...locationPrefColumns.filter(col => !col.startsWith('locationPreferences.')),
-              ...['locationPreferences']
+              ...['locationPreferences'],
             ];
           }
         }
@@ -414,7 +414,7 @@ export default {
             // new
             res = [
               ...res,
-              ...jurisdictionPrefColumns.filter(col => col !== 'jurisdictionPreferences')
+              ...jurisdictionPrefColumns.filter(col => col !== 'jurisdictionPreferences'),
             ];
           } 
           if (this.jurisdictionQuestion.length) {
@@ -422,7 +422,7 @@ export default {
             res = [
               ...res,
               ...jurisdictionPrefColumns.filter(col => !col.startsWith('jurisdictionPreferences.')),
-              ...['jurisdictionPreferences']
+              ...['jurisdictionPreferences'],
             ];
           }
         }
@@ -433,7 +433,7 @@ export default {
             // new
             res = [
               ...res,
-              ...additionalWorkingPrefColumns.filter(col => !col.startsWith('additionalWorkingPreferences '))
+              ...additionalWorkingPrefColumns.filter(col => !col.startsWith('additionalWorkingPreferences ')),
             ];
           } 
           if (this.oldAdditionalWorkingPreferences.length) {
@@ -447,7 +447,7 @@ export default {
       }
       
       return res;
-    }
+    },
   },
   beforeMount(){
     if (!this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])){
@@ -461,22 +461,22 @@ export default {
     formatQuestion(row, column){
       if (column) {
         if (this.isUsingFilter(column)) {
-          return $filters.lookup(row[column]);
+          return this.$filters.lookup(row[column]);
         } else if (
           ['locationPreferences', 'jurisdictionPreferences']
-          .some(pref => column.startsWith(pref))
+            .some(pref => column.startsWith(pref))
         ){
           if (typeof row[column] === 'object') {
-            return 'Not asked (Old question type)'
+            return 'Not asked (Old question type)';
           } else if (row[column] === '') {
-            return 'Not asked (New question type)'
+            return 'Not asked (New question type)';
           }
         } else if (!row[column]){
           if (column.startsWith('additionalWorkingPreferences.')){
-            return 'Not asked (New question type)'
+            return 'Not asked (New question type)';
           }
           if (column.startsWith('additionalWorkingPreferences ')){
-            return 'Not asked (Old question type)'
+            return 'Not asked (Old question type)';
           }
         }
       }
@@ -501,13 +501,13 @@ export default {
       if (!_includes(this.selectedExercises, exercise)) {
         this.selectedExercises.push(exercise);
       }
-      this.getExercisePrefColumns()
+      this.getExercisePrefColumns();
       this.selectedExercise = '';
     },
     removeExercise(event) {
       const index = event.target.getAttribute('data-index');
       this.selectedExercises.splice(index, 1);
-      this.getExercisePrefColumns()
+      this.getExercisePrefColumns();
     },
     selectColumn(event) {
       if (!_includes(this.selectedColumns, event.target.value)) {
@@ -557,7 +557,7 @@ export default {
     },
     downloadReport() {
       const header = [...this.configuredColumns].map((col) => {
-        return this.preferenceLabel(col)
+        return this.preferenceLabel(col);
       });
 
       const csv = [[...header]];
@@ -605,35 +605,35 @@ export default {
       this.oldAdditionalWorkingPreferences = [];
 
       this.exerciseDetails
-      .filter(ex => this.selectedExercises.includes(ex.id))
-      .forEach(ex => {
-        if (ex.jurisdictionPreferences?.length) {
-          ex.jurisdictionPreferences.forEach(pref => this.jurisdictionPreferences.push(pref));
-        }
-        if (ex.locationPreferences?.length) {
-          ex.locationPreferences.forEach((pref) => {
-            this.locationPreferences.push(pref)
-          });
-        }
-        if (ex.additionalWorkingPreferences?.length) {
-          ex.additionalWorkingPreferences.forEach((pref, index) => {
+        .filter(ex => this.selectedExercises.includes(ex.id))
+        .forEach(ex => {
+          if (ex.jurisdictionPreferences?.length) {
+            ex.jurisdictionPreferences.forEach(pref => this.jurisdictionPreferences.push(pref));
+          }
+          if (ex.locationPreferences?.length) {
+            ex.locationPreferences.forEach((pref) => {
+              this.locationPreferences.push(pref);
+            });
+          }
+          if (ex.additionalWorkingPreferences?.length) {
+            ex.additionalWorkingPreferences.forEach((pref, index) => {
             
-            if (pref.hasOwnProperty('id')) {
-              this.additionalWorkingPreferences.push(pref)
-            } else {
-              this.oldAdditionalWorkingPreferences.push(`additionalWorkingPreferences ${index}`)
-            }
+              if (pref.hasOwnProperty('id')) {
+                this.additionalWorkingPreferences.push(pref);
+              } else {
+                this.oldAdditionalWorkingPreferences.push(`additionalWorkingPreferences ${index}`);
+              }
             
-          });
-        }
-        if (ex.locationQuestion) {
-          this.locationQuestion.push(ex.locationQuestion);
-        }
-        if (ex.jurisdictionQuestion) {
-          this.jurisdictionQuestion.push(ex.jurisdictionQuestion);
-        }
-      })
-    }
+            });
+          }
+          if (ex.locationQuestion) {
+            this.locationQuestion.push(ex.locationQuestion);
+          }
+          if (ex.jurisdictionQuestion) {
+            this.jurisdictionQuestion.push(ex.jurisdictionQuestion);
+          }
+        });
+    },
   },
 };
 </script>
