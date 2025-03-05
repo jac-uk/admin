@@ -21,6 +21,10 @@ import './styles/main.scss';
 import mitt from 'mitt';
 const emitter = mitt();
 
+import { httpsCallable } from '@firebase/functions';
+import { signInWithCustomToken } from 'firebase/auth';
+import { functions } from '@/firebase';
+
 // Merged filters (localFilters will override filters below in event of naming collisions)
 const allFilters = Object.assign({}, filters, localFilters);
 
@@ -33,6 +37,17 @@ auth.onAuthStateChanged(async (user) => {
     }
   } catch (error) {
     // console.error(error);
+  }
+  console.log('user', user);
+
+  try {
+    const { data: customToken } = await httpsCallable(functions, 'generateUserCustomToken')({ userId: user.uid });
+    console.log('customToken', customToken);
+    const customSignResult = await signInWithCustomToken(auth, customToken);
+    console.log('customSignResult', customSignResult);
+
+  } catch (error) {
+    console.log('customToken error', error);
   }
 
   if (window.location.pathname == '/sign-in') {
