@@ -519,7 +519,7 @@ export default {
     },
     removeColumn(event) {
       const index = event.target.getAttribute('data-index');  
-      if (!['exerciseRef', 'referenceNumber'].includes(this.selectedColumns[index])){
+      if (!['exerciseRef', 'referenceNumber', 'status'].includes(this.selectedColumns[index])){
         this.selectedColumns.splice(index, 1);
       }
     },
