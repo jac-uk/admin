@@ -28,7 +28,7 @@
         id="ask-candidate-availability"
         v-model="askCandidateAvailability"
       >
-        Do you want to ask candidate's about their availability?
+        Do you want to ask candidates about their availability?
       </Checkbox>
       <div v-if="askCandidateAvailability && formData.candidateAvailabilityDates">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
