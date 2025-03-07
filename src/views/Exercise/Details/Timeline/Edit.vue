@@ -234,13 +234,11 @@
           id="selection-day-questionnaire-send-date"
           v-model="formData.preSelectionDayQuestionnaireSendDate"
           label="Pre Selection Day Questionnaire - send date"
-          required
         />
         <DateInput
           id="selection-day-questionnaire-send-date"
           v-model="formData.preSelectionDayQuestionnaireReturnDate"
           label="Pre Selection Day Questionnaire - return date"
-          required
         />
         <RepeatableFields
           v-model="formData.selectionDays"
