@@ -24,7 +24,13 @@
         Please finalise selection day interview dates and panellist details below
       </p>
 
-      <div v-if="formData.parts.indexOf('candidateAvailability') >= 0 && formData.candidateAvailabilityDates">
+      <Checkbox
+        id="ask-candidate-availability"
+        v-model="askCandidateAvailability"
+      >
+        Do you want to ask candidate's about their availability?
+      </Checkbox>
+      <div v-if="askCandidateAvailability && formData.candidateAvailabilityDates">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
           Which dates would you like to check for candidate availability?
         </h2>
@@ -73,10 +79,12 @@ import { functions } from '@/firebase';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import LocationDate from './LocationDate.vue';
 import { shallowRef } from 'vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 
 export default {
   components: {
     ErrorSummary,
+    Checkbox,
     CheckboxGroup,
     CheckboxItem,
     FullScreenButton,
@@ -121,7 +129,8 @@ export default {
       repeatableFields: shallowRef({
         LocationDate,
       }),
-      CandidateFormParts: candidateFormParts,
+      candidateFormParts,
+      askCandidateAvailability: true,
     };
   },
   computed: {
@@ -137,6 +146,15 @@ export default {
     },
     panellists() {
       return this.$store.state.panellists.records.map(item => ({ id: item.id, fullName: item.fullName }));
+    },
+  },
+  watch: {
+    askCandidateAvailability(newValue) {
+      if (newValue === true) {
+        this.formData.candidateFormParts = this.candidateFormParts;
+      } else {
+        this.formData.candidateFormParts = this.candidateFormParts.filter(part => part !== APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY);
+      }
     },
   },
   async created() {
