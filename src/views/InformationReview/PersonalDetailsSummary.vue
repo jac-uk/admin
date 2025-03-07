@@ -326,6 +326,17 @@
                 {{ $filters.lookup(key) }}
               </h5>
               <InformationReviewRenderer
+                v-if="key === 'country'"
+                type="selection"
+                :edit="editable"
+                :options="countries"
+                :data="currentAddress[key]"
+                :field="key"
+                :is-asked="isCharacterChecksAsked"
+                @change-field="changeCurrentAddress"
+              />
+              <InformationReviewRenderer
+                v-else
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
@@ -488,6 +499,7 @@
 import { cloneDeep } from 'lodash';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
+import { COUNTRIES } from '@/helpers/constants';
 
 export default {
   name: 'PersonalDetailsSummary',
@@ -535,6 +547,7 @@ export default {
       town: '',
       county: '',
       postcode: '',
+      country: '',
     };
 
     return {
@@ -548,6 +561,7 @@ export default {
       emptyVATNumberObject: {
         VATNumber: '',
       },
+      countries: COUNTRIES,
     };
   },
   computed: {
