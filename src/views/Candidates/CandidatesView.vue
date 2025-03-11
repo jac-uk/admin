@@ -161,6 +161,32 @@ export default {
       return this.$route.params.id || '';
     },
   },
+  watch: {
+    '$store.state.candidates.personalDetails': {
+      handler(newVal) {
+        this.personalDetails = newVal;
+      },
+      deep: true,
+    },
+    '$store.state.candidates.characterInformation': {
+      handler(newVal) {
+        this.characterInformation = newVal;
+      },
+      deep: true,
+    },
+    '$store.state.candidates.equalityAndDiversitySurvey': {
+      handler(newVal) {
+        this.equalityAndDiversity = newVal;
+      },
+      deep: true,
+    },
+    '$store.state.candidates.record': {
+      handler(newVal) {
+        this.candidateRecord = newVal;
+      },
+      deep: true,
+    },
+  },
   async created() {
     this.candidateId = this.getUserId || this.$route.params.id;
     await Promise.all([
