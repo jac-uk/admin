@@ -264,7 +264,7 @@ export default {
       defaultColumns: [
         'exerciseRef',
         'referenceNumber',
-        'status'
+        'status',
       ],
       isLoading: null,
       loadFailed: null,
