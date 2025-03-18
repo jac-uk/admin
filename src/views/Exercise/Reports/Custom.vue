@@ -553,8 +553,6 @@ export default {
       this.isLoading = false;
     },
     selectColumn(event) {
-      console.log(event.target.value);
-      
       if (!_includes(this.columns, event.target.value)) {
         this.columns.push(event.target.value);
       }
