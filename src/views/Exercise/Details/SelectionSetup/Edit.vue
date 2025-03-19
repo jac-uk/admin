@@ -12,6 +12,11 @@
           @save="save"
         />
 
+        <div class="govuk-inset-text">
+          <p class="govuk-body">This exercise is using the new Judicial Skills and Abilities Framework (JSAF).</p>
+          <button class="govuk-button govuk-button--secondary">Switch to Old framework</button>
+        </div>
+<!--
         <RadioGroup
           id="assessment-framework"
           v-model="formData.assessmentFramework"
@@ -25,21 +30,21 @@
             label="Skills & Abilities"
             value="skills-abilities"
           />
-        </RadioGroup>
+        </RadioGroup> -->
 
         <template v-if="formData.assessmentFramework">
           <CheckboxGroup
             id="capabilities"
             v-model="formData.capabilities"
             required
-            label="Selection Criteria"
+            label="Competencies"
             :messages="{required: 'Please choose at least one capability'}"
           >
             <CheckboxItem
               v-for="capability in capabilities"
-              :key="capability.value"
-              :value="capability.value"
-              :label="capability.description"
+              :key="capability.ref"
+              :value="capability.ref"
+              :label="capability.title"
             />
           </CheckboxGroup>
 
@@ -76,26 +81,43 @@ import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vu
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '../../../../helpers/exerciseHelper';
 
-const competenciesCapabilities = [
-  CAPABILITIES.L,
-  CAPABILITIES.EJ,
-  CAPABILITIES.PBK,
-  CAPABILITIES.ACI,
-  CAPABILITIES.WCO,
-  CAPABILITIES.MWE,
+const JSAF_COMPETENCY = {
+  LS: {
+    ref: 'LS',
+    title: 'Legal Skills'
+  },
+  DWI: {
+    ref: 'DWI',
+    title: 'Dealing with information'
+  },
+  CS: {
+    ref: 'CS',
+    title: 'Communication Skills'
+  },
+  PQ: {
+    ref: 'PQ',
+    title: 'Personal Qualities'
+  },
+  EW: {
+    ref: 'EW',
+    title: 'Effective Working'
+  },
+  L: {
+    ref: 'L',
+    title: 'Leadership'
+  },
+};
+
+const competenciesJSAF = [
+  JSAF_COMPETENCY.LS,
+  JSAF_COMPETENCY.DWI,
+  JSAF_COMPETENCY.CS,
+  JSAF_COMPETENCY.PQ,
+  JSAF_COMPETENCY.EW,
+  JSAF_COMPETENCY.L,
 ];
-const competenciesSelectionCategories = [
-  SELECTION_CATEGORIES.INTERVIEW,
-  SELECTION_CATEGORIES.SITUATIONAL,
-  SELECTION_CATEGORIES.ROLEPLAY,
-];
-const skillsAbilitiesCapabilities = [
-  CAPABILITIES.LJ,
-  CAPABILITIES.PQ,
-  CAPABILITIES.L,
-  CAPABILITIES.WE,
-];
-const skillsAbilitiesSelectionCategories = [
+
+const selectionCategoriesJSAF = [
   SELECTION_CATEGORIES.INTERVIEW,
   SELECTION_CATEGORIES.SITUATIONAL,
   SELECTION_CATEGORIES.LEADERSHIP,
@@ -128,24 +150,10 @@ export default {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
     capabilities() {
-      switch (this.formData.assessmentFramework) {
-      case 'competencies':
-        return competenciesCapabilities;
-      case 'skills-abilities':
-        return skillsAbilitiesCapabilities;
-      default:
-        return [];
-      }
+      return competenciesJSAF;
     },
     selectionCategories() {
-      switch (this.formData.assessmentFramework) {
-      case 'competencies':
-        return competenciesSelectionCategories;
-      case 'skills-abilities':
-        return skillsAbilitiesSelectionCategories;
-      default:
-        return [];
-      }
+      return selectionCategoriesJSAF;
     },
   },
   watch: {
