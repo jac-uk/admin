@@ -171,7 +171,6 @@ export default {
         ...this.formData,
       };
 
-      console.log('save', saveData);
       await this.$store.dispatch('candidateForm/update', { saveData, formId: this.task.formId });
       await this.btnContinue();
     },
