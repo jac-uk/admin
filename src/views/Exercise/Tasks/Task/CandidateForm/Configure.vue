@@ -24,32 +24,37 @@
         Please finalise selection day interview dates and panellist details below
       </p>
 
-      <div v-if="formData.parts.indexOf('candidateAvailability') >= 0 && formData.candidateAvailabilityDates">
+      <Checkbox
+        id="ask-candidate-availability"
+        v-model="askCandidateAvailability"
+      >
+        Do you want to ask candidates about their availability?
+      </Checkbox>
+      <div v-if="askCandidateAvailability && formData.candidateAvailabilityDates">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
           Which dates would you like to check for candidate availability?
         </h2>
         <RepeatableFields
           v-model="formData.candidateAvailabilityDates"
           :component="repeatableFields.LocationDate"
+          ident="candidate-availability-date"
           :allow-empty="false"
           required
         />
       </div>
 
-      <CheckboxGroup
-        v-if="formData.parts.indexOf('panelConflicts') >= 0"
-        id="panellists"
-        v-model="formData.panellists"
-        label="Which panellists should be checked for panel conflicts?"
-        required
-      >
-        <CheckboxItem
-          v-for="panellist in panellists"
-          :key="panellist.id"
-          :value="{ id: panellist.id, name: panellist.fullName }"
-          :label="panellist.fullName"
+      <div v-if="formData.parts.indexOf('panelConflicts') >= 0">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+          Add panellists (first name last name) to be checked for panel conflicts
+        </h2>
+        <RepeatableFields
+          v-model="formData.panellists"
+          :component="repeatableFields.Panellist"
+          ident="panellist"
+          type-name="panellist"
+          :allow-empty="true"
         />
-      </CheckboxGroup>
+      </div>
 
       <button class="govuk-button">
         Save and continue
@@ -67,18 +72,17 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { functions } from '@/firebase';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import LocationDate from './LocationDate.vue';
 import { shallowRef } from 'vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import Panellist from './Panellist.vue';
 
 export default {
   components: {
     ErrorSummary,
-    CheckboxGroup,
-    CheckboxItem,
+    Checkbox,
     FullScreenButton,
     ProgressBar,
     RepeatableFields,
@@ -120,8 +124,10 @@ export default {
       },
       repeatableFields: shallowRef({
         LocationDate,
+        Panellist,
       }),
-      CandidateFormParts: candidateFormParts,
+      candidateFormParts,
+      askCandidateAvailability: true,
     };
   },
   computed: {
@@ -135,17 +141,21 @@ export default {
       const steps = getTaskSteps(this.exercise, this.type, this.task);
       return steps;
     },
-    panellists() {
-      return this.$store.state.panellists.records.map(item => ({ id: item.id, fullName: item.fullName }));
+  },
+  watch: {
+    askCandidateAvailability(newValue) {
+      if (newValue === true) {
+        this.formData.candidateFormParts = this.candidateFormParts;
+      } else {
+        this.formData.candidateFormParts = this.candidateFormParts.filter(part => part !== APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY);
+      }
     },
   },
   async created() {
-    this.$store.dispatch('panellists/bind', {});
     await this.$store.dispatch('candidateForm/bind', this.task.formId);
     const candidateForm = this.$store.getters['candidateForm/data']();
     this.formData.openDate = candidateForm.openDate;
     this.formData.closeDate = candidateForm.closeDate;
-    this.formData.panellists = candidateForm.panellists ? candidateForm.panellists : [];
     this.formData.candidateAvailabilityDates = candidateForm.candidateAvailabilityDates ? candidateForm.candidateAvailabilityDates : [];
   },
   methods: {
@@ -160,6 +170,7 @@ export default {
         },
         ...this.formData,
       };
+
       await this.$store.dispatch('candidateForm/update', { saveData, formId: this.task.formId });
       await this.btnContinue();
     },
