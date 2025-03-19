@@ -250,6 +250,7 @@ import SelectPanel from '../Panel/components/SelectPanel.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { totalApplications } from '@/helpers/meritListHelper';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -478,13 +479,45 @@ export default {
       }
     },
     async generateTimetable() {
-      // TODO here we will call our cloud function, display any useful messages and download the data to xlsx
-      return new Promise((resolve) => {
-        setTimeout(() => {
+      try {
+        const res = await httpsCallable(functions, 'generateSelectionDayTimetable')({ exerciseId: this.exercise.id });
+        if (!res || !res.data) {
+          throw new Error('No data returned');
+        }
+        if (res.data.unassignedCandidates && res.data.unassignedCandidates.length) {
           this.hasTimetableMessage = true;
-          resolve(true);
-        }, 3000);
+        }
+        this.downloadTimetable(res.data);
+        return true;
+      } catch (error) {
+        this.hasTimetableMessage = true;
+        return false;
+      }
+    },
+    downloadTimetable(data) {
+      const { timetable } = data;
+      const reportData = [
+        ['Panel', 'Date', 'Slot number', 'Candidate Ref', 'Candidate name', 'Reasonable adjustment'],
+      ];
+      timetable.forEach(item => {
+        reportData.push([
+          item.panel.name,
+          item.date,
+          item.slot,
+          item.application.ref,
+          item.application.fullName,
+          item.reasonableAdjustment ? 'Yes' : 'No',
+        ]);
       });
+
+      downloadXLSX(
+        reportData,
+        {
+          title: `${this.exercise.referenceNumber} - Selection Day Timetable`,
+          sheetName: 'Selection Day Timetable',
+          fileName: `${this.exercise.referenceNumber} - Selection Day Timetable.xlsx`,
+        }
+      );
     },
     alert(message) {
       window.alert(message);
