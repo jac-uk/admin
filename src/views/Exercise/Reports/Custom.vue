@@ -67,6 +67,16 @@
         </p>
       </div>
       <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-0">
+          <Checkbox
+            id="include-withdrawn-candidates"
+            v-model="includeWithdrawnCandidates"
+          >
+            Include withdrawn candidates
+          </Checkbox>
+        </div>
+      </div>
+      <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-3">
             <span class="govuk-caption-m govuk-!-margin-bottom-2"> Select a column to display: </span>
@@ -91,7 +101,7 @@
                       :key="keyIndex"
                       :value="key"
                     >
-                      {{ keys[key].label }}
+                      {{ keys[key] ? keys[key]?.label : `${key} not found` }}
                     </option>
                   </optgroup>
                 </select>
@@ -212,7 +222,7 @@
             <tr
               v-for="(row, rowIndex) of data.data"
               :key="rowIndex"
-              class="govuk-table__row"
+              :class="['govuk-table__row', isWithdrawn(row) ? 'withdrawn' : '']"
             >
               <td
                 v-for="(column, columnIndex) in columns"
@@ -321,7 +331,10 @@
 import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
-import _ from 'lodash';
+import _clone from 'lodash/clone';
+import _merge from 'lodash/merge';
+import _startCase from 'lodash/startCase';
+import _includes from 'lodash/includes';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { customReportConstants } from '@/helpers/customReportConstants';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
@@ -329,7 +342,9 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-
+import { isNewAdditionalWorkingPreferencesQuestionType } from '../../../helpers/exerciseHelper';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 // Prevents warnings and errors associated with using @vue/compat
 draggable.compatConfig = { MODE: 3 };
 
@@ -340,6 +355,7 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
+    Checkbox,
   },
   mixins: [permissionMixin],
   data() {
@@ -359,8 +375,10 @@ export default {
       columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
       warnings: '',
       warningTimeout: null,
-      groups: customReportConstants.groups,
-      keys: customReportConstants.keys,
+      defaultGroups: customReportConstants.groups,
+      defaultKeys: customReportConstants.keys,
+      workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
+      includeWithdrawnCandidates: false,
     };
   },
   computed: {
@@ -379,6 +397,103 @@ export default {
       const statuses = availableStatuses(this.exercise, this.selectedStage);
       return statuses;
     },
+    groups() {
+      let groups = this.defaultGroups.slice();
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        groups = groups.concat([
+          {
+            name: 'Experience',
+            keys: ['experience'],
+          },
+        ]);
+
+      }
+      groups = groups.concat(this.preferenceGroups);
+      return groups;
+    },
+    keys() {
+      let keys = _clone(this.defaultKeys);
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        keys = _merge(keys, {
+          experience: { label: 'Experience', type: String },
+        });
+      }
+      return _merge(keys, this.preferenceKeys);
+    },
+    preferenceGroups() {
+      const groups = [];
+
+      // handle old worker prefs data structure
+      if (this.exercise.jurisdictionQuestion) {
+        groups.push({
+          name: 'Jurisdiction Preferences',
+          keys: ['jurisdictionPreferences'],
+        });
+      }
+      if (this.exercise.locationQuestion) {
+        groups.push({
+          name: 'Location Preferences',
+          keys: ['locationPreferences'],
+        });
+      }
+      if (this.exercise?.additionalWorkingPreferences?.length && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+        const keys = [];
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          keys.push(`additionalWorkingPreferences ${i}`);
+        });
+        groups.push({
+          name: 'Additional Working Preferences',
+          keys: keys,
+        });
+      }
+
+      // handle new worker prefs data structure
+      for (const preference of this.workingPreferences) {
+        if (preference === 'additionalWorkingPreferences' && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+          continue;
+        }
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          const keys = questions.map((q) => `${preference}.${q.id}`);
+          groups.push({
+            name: _startCase(preference),
+            keys,
+          });
+        }
+      }
+      return groups;
+    },
+    preferenceKeys() {
+      const keys = {};
+
+      // handle old worker prefs data structure
+      if (this.exercise.jurisdictionQuestion) {
+        keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
+      }
+      if (this.exercise.locationQuestion) {
+        keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
+      }
+
+      if (!isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          keys[`additionalWorkingPreferences ${i}`] = { label: question.question, type: String };
+        });
+      }
+
+      // handle new worker prefs data structure
+      for (const preference of this.workingPreferences) {
+        if (preference === 'additionalWorkingPreferences' && !isNewAdditionalWorkingPreferencesQuestionType(this.exercise)) {
+          continue;
+        }
+        const questions = this.exercise[preference] || [];
+        if (questions.length) {
+          for (const question of questions) {
+            keys[`${preference}.${question.id}`] = { label: question.question, type: String };
+          }
+        }
+      }
+      return keys;
+    },
   },
   watch: {
     statuses: {
@@ -386,6 +501,13 @@ export default {
         this.getApplicationRecords();
       },
       deep: true,
+    },
+    includeWithdrawnCandidates: function (newValue) {
+      if (newValue) {
+        this.statuses.push(STATUS.WITHDRAWN);
+      } else {
+        this.statuses = this.statuses.filter(status => status !== STATUS.WITHDRAWN);
+      }
     },
     selectedStage: function () {
       this.selectedStageStatus = 'all';
@@ -417,25 +539,6 @@ export default {
     },
   },
   created() {
-    // if report can include working prefs answers, add them under working prefs title
-    if (this.exercise.jurisdictionQuestion || this.exercise.locationQuestion) {
-      this.groups.splice(1, 0, { name: 'Working Preferences', keys: [] });
-      const workingPrefsIndex = this.groups.findIndex((group) => group.name === 'Working Preferences');
-      if (this.exercise.jurisdictionQuestion) {
-        this.groups[workingPrefsIndex].keys.push('jurisdictionPreferences');
-        this.keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
-      }
-      if (this.exercise.locationQuestion) {
-        this.groups[workingPrefsIndex].keys.push('locationPreferences');
-        this.keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
-      }
-      if (this.exercise.additionalWorkingPreferences) {
-        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
-          this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
-          this.keys[`additionalWorkingPreferences ${i}`] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
-        });
-      }
-    }
     this.getReports();
   },
   methods: {
@@ -470,7 +573,7 @@ export default {
       this.isLoading = false;
     },
     selectColumn(event) {
-      if (!_.includes(this.columns, event.target.value)) {
+      if (!_includes(this.columns, event.target.value)) {
         this.columns.push(event.target.value);
       }
       this.selectedColumn = '';
@@ -541,30 +644,30 @@ export default {
     },
     downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
-      const csv = [[...header]];
-
-      for (let i = 0; i < this.data.data.length; i++) {
-        csv.push([...this.columns.map(col => this.data.data[i][col])]);
-      }
-
-      // Convert the 2D array to CSV, ensuring values are properly escaped
-      const escapeValue = value => {
-        if (value == null) return ''; // Handle null or undefined
-        const escaped = String(value).replace(/"/g, '""'); // Escape double quotes
-        return `"${escaped}"`; // Enclose in double quotes
+      const xlsxData = [[...header]];
+      const highlightStyle = {
+        fill: 'eeeeee',
+      };
+      const styles = {
+        row: {},
       };
 
-      const mappedCSV = csv
-        .map(row => row.map(escapeValue).join(',')) // Escape each value and join with commas
-        .join('\n'); // Join rows with a newline
+      for (let i = 0; i < this.data.data.length; i++) {
+        xlsxData.push([...this.columns.map(col => this.data.data[i][col])]);
+        if (this.data.data[i]?._status === STATUS.WITHDRAWN) {
+          styles.row[i + 2] = highlightStyle;
+        }
+      }
 
-      const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'custom_report.csv');
-      document.body.appendChild(link);
-      link.click();
+      downloadXLSX(
+        xlsxData,
+        {
+          title: 'Custom report',
+          sheetName: 'Custom report',
+          fileName: 'custom-report.xlsx',
+          styles,
+        }
+      );
     },
 
     getDraggableKey(item) {
@@ -576,6 +679,9 @@ export default {
     isUsingFilter(key) {
       // return true if the column is a filter column
       return ['_processing.stage', '_processing.status'].includes(key);
+    },
+    isWithdrawn(application) {
+      return application._status === STATUS.WITHDRAWN;
     },
   },
 };
@@ -590,5 +696,8 @@ td:first-letter {
 }
 .moj-filter__tag {
   cursor: pointer;
+}
+.withdrawn {
+  background-color: govuk-colour("light-grey");
 }
 </style>

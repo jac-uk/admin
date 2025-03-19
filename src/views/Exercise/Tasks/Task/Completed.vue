@@ -25,6 +25,7 @@
     <ProgressBar :steps="taskSteps" />
 
     <MeritList
+      v-if="hasMeritList"
       :exercise-id="exercise.id"
       :task="task"
       :scores="scores"
@@ -32,6 +33,39 @@
       :score-type="scoreType"
       :show-diversity="false"
     />
+
+    <div v-else class="panel govuk-!-margin-bottom-6 govuk-!-padding-bottom-2">
+      <span class="govuk-caption-m">
+        Applications
+      </span>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-body-s govuk-!-margin-bottom-0">
+            Total
+          </span>
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ task._stats.totalApplications }}
+          </h2>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-body-s govuk-!-margin-bottom-0">
+            Completed
+          </span>
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ task._stats.completed }}
+          </h2>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <span class="govuk-body-s govuk-!-margin-bottom-0">
+            Not completed
+          </span>
+          <h2 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-padding-0">
+            {{ task._stats.notCompleted }}
+          </h2>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -45,7 +79,7 @@ import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
-import { scoreType, scores, scoreData } from './Finalised/meritListHelper';
+import { scoreType, scores, scoreData } from '@/helpers/meritListHelper';
 import MeritList from './Finalised/List.vue';
 
 export default {
@@ -96,6 +130,9 @@ export default {
         TASK_TYPE.SCENARIO,
         TASK_TYPE.SITUATIONAL_JUDGEMENT,
       ].includes(this.type);
+    },
+    hasMeritList() {
+      return this.task?.finalScores;
     },
   },
   async created() {

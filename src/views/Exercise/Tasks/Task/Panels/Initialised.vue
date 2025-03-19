@@ -249,7 +249,7 @@ import TitleBar from '@/components/Page/TitleBar.vue';
 import SelectPanel from '../Panel/components/SelectPanel.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
-import { totalApplications } from '../Finalised/meritListHelper';
+import { totalApplications } from '@/helpers/meritListHelper';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {

@@ -146,7 +146,7 @@
                 v-for="(answer, sortedAnswerIndex) in sortedAnswers.answers"
                 :key="answer"
               >
-                {{ `${config.answers.find(ans => ans.id === answer).answer}${(sortedAnswerIndex + 1 < sortedAnswers.answers.length) ? ', ' : ''}` }}
+                {{ `${config?.answers?.find(ans => ans.id === answer)?.answer}${(sortedAnswerIndex + 1 < sortedAnswers.answers.length) ? ', ' : ''}` }}
               </span>
             </p>
           </div>
@@ -155,7 +155,7 @@
           v-else-if="isSingleChoice"
         >
           <!-- Render single-choice answer -->
-          {{ config.answers.find(ans => ans.id === value).answer }}
+          {{ config?.answers?.find && config?.answers?.find(ans => ans.id === value)?.answer }}
         </div>
         <div
           v-else-if="isMultipleChoice"
@@ -660,7 +660,7 @@ export default {
       }
     },
     getConfigAnswer(answerId) {
-      const match = this.config.answers.find(ans => ans.id === answerId);
+      const match = this.config?.answers?.find(ans => ans.id === answerId);
       return match ? match.answer : '';
     },
   },

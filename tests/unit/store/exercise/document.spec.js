@@ -9,9 +9,7 @@ import { vi, it, describe, beforeEach, afterEach } from 'vitest';
  * So, the mock module can be imported by src/store/exercise/document.js
  */
 vi.doMock('@/firebase', () => {
-  const firebase = require('firebase-mock');
-  const firestore = firebase.MockFirebaseSdk().firestore();
-  firestore.autoFlush();
+  const firestore = vi.fn();
   return { firestore };
 });
 

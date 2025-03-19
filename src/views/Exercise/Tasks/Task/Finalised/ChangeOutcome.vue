@@ -55,7 +55,7 @@ import Form from '@/components/Page/Form.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
-import { getDefaultOutcome, getCurrentOutcome, getNewOutcome, getOverrideReasons, isPassingScore, getOverride } from './meritListHelper';
+import { getDefaultOutcome, getCurrentOutcome, getNewOutcome, getOverrideReasons, isPassingScore, getOverride } from '@/helpers/meritListHelper';
 
 export default {
   name: 'SelectPanel',
@@ -83,13 +83,13 @@ export default {
   },
   computed: {
     isPassingScore() {
-      return isPassingScore(this.task, this.item.score);
+      return isPassingScore(this.task, this.item);
     },
   },
   created() {
-    this.formData.defaultOutcome = getDefaultOutcome(this.task, this.item.score).value;
-    this.formData.currentOutcome = getCurrentOutcome(this.task, this.item.score).value;
-    this.formData.newOutcome = getNewOutcome(this.task, this.item.score).value;
+    this.formData.defaultOutcome = getDefaultOutcome(this.task, this.item).value;
+    this.formData.currentOutcome = getCurrentOutcome(this.task, this.item).value;
+    this.formData.newOutcome = getNewOutcome(this.task, this.item).value;
     const override = getOverride(this.task, this.item.id);
     if (override) {
       this.formData.changeOutcome = true;

@@ -7,13 +7,9 @@ import { collection, orderBy as firebaseOrderBy } from '@firebase/firestore';
 /**
 * @vitest-environment jsdom
 */
-
-vi.mock('@/firebase', () => {
-  const firebase = require('firebase-mock');
-  const firestore = firebase.MockFirebaseSdk().firestore();
-  firestore.autoFlush();
-  return { firestore };
-});
+vi.mock('@/firebase', () => ({
+  firestore: vi.fn(),
+}));
 
 vi.mock('vuexfire');
 

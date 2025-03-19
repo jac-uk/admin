@@ -70,6 +70,7 @@ export default {
         data.state = 'draft';
         data.published = false;
         data._applicationVersion = 3;
+        data._processingVersion = 3;
         data.favouriteOf = arrayUnion(rootState.auth.currentUser.uid);
         data.createdBy = rootState.auth.currentUser.uid;
         data.createdAt = serverTimestamp();

@@ -363,7 +363,8 @@ export default {
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads
-        && this.exerciseProgress.applicationProcess;
+        && this.exerciseProgress.applicationProcess
+        && (this.exercise._processingVersion < 2 || this.exerciseProgress.additionalSettings);
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;

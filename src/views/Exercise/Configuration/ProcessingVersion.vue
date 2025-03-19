@@ -59,7 +59,7 @@ export default {
   extends: Form,
   data() {
     const defaults = {
-      _processingVersion: 1,
+      _processingVersion: 3,
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {

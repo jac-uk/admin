@@ -21,7 +21,8 @@ hasSelfAssessment,
 exerciseApplicationParts,
 configuredApplicationParts,
 applicationContentList,
-unselectedApplicationParts
+unselectedApplicationParts,
+isNewAdditionalWorkingPreferencesQuestionType
 */
 
 export {
@@ -103,7 +104,8 @@ export {
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
   isJAC00187,
-  isPublished
+  isPublished,
+  isNewAdditionalWorkingPreferencesQuestionType
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -581,6 +583,7 @@ function taskEntryStatus(exercise, type) {
   if (!exercise) return status;
   if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SECOND_STAGE_INVITED;  // TODO: remove this eventually: override entry status for EMP tie-breakers
   if (type === TASK_TYPE.SELECTION_DAY) return APPLICATION_STATUS.SHORTLISTING_PASSED;
+  if (type === TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE) return APPLICATION_STATUS.SHORTLISTING_PASSED;
   const prevTaskType = previousTaskType(exercise, type);
   if (prevTaskType) {
     switch (prevTaskType) {
@@ -1562,4 +1565,8 @@ function canApplyFullApplicationSubmitted(exercise) {
   const applyFullApplicationSubmitted = isStagedExercise && exercise.applicationOpenDate >= new Date(2024, 7, 18);
 
   return applyFullApplicationSubmitted;
+}
+
+function isNewAdditionalWorkingPreferencesQuestionType(exercise) {
+  return exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.some((el) => 'groupAnswers' in el);
 }

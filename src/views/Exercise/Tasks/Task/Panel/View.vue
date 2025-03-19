@@ -53,6 +53,18 @@
           </div>
         </div>
       </div>
+
+      <div
+        v-if="panel.error"
+        class="govuk-grid-row govuk-!-margin-bottom-6"
+      >
+        <div class="govuk-grid-column-full">
+          <strong class="govuk-error-message">
+            {{ panel.error }}
+          </strong>
+        </div>
+      </div>
+
       <TabsList
         v-model:active-tab="activeTab"
         :tabs="tabs"
@@ -242,6 +254,7 @@ import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
 import { SCORESHEET_TOOLS, getScoreSheetTotal, scoreSheetRowsAddRank, scoreSheetRowsAddDiversity, getApplicationData } from '@/helpers/scoreSheetHelper';
 import ScoreSheet from '@/components/ScoreSheet/ScoreSheet.vue';
+import { scoreType, getOverallGrade } from '@/helpers/meritListHelper';
 
 export default {
   components: {
@@ -322,15 +335,22 @@ export default {
           // report: this.panel.reports ? this.panel.reports[applicationId] : null,
           changes: this.task.changes && this.task.changes[applicationId] ? this.task.changes[applicationId] : {},
         };
-        row.score = getScoreSheetTotal(this.task.markingScheme, this.panel.scoreSheet[applicationId], row.changes),
+        row.score = getScoreSheetTotal(this.task.markingScheme, row.scoreSheet, row.changes);
+        if (this.scoreType === 'gradeScore') {
+          row.grade = getOverallGrade(this.task, row.scoreSheet, row.changes);
+          row.gradeScore = `${row.grade}:${row.score}`;
+        }
         rows.push(row);
       });
       if (this.exerciseDiversity) scoreSheetRowsAddDiversity(rows, this.exerciseDiversity);
-      scoreSheetRowsAddRank(rows);
+      scoreSheetRowsAddRank(this.scoreType, rows);
       return rows;
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    scoreType() {
+      return scoreType(this.task);
     },
     canEditScoreSheet() {
       return true;

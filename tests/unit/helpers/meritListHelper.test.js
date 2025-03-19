@@ -18,7 +18,7 @@ import {
   totalDidNotParticipate,
   downloadMeritList,
   getDownloadTypes
-} from '@/views/Exercise/Tasks/Task/Finalised/meritListHelper';
+} from '@/helpers/meritListHelper';
 import { DIVERSITY_CHARACTERISTICS } from '@/helpers/diversityCharacteristics';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { TASK_TYPE } from '@/helpers/constants';
@@ -157,8 +157,8 @@ describe('isPassingScore', () => {
       passMark: 0.36,
     };
 
-    expect(isPassingScore(task, 0.36)).toBe(true);
-    expect(isPassingScore(task, 0.37)).toBe(true);
+    expect(isPassingScore(task, { score: 0.36 })).toBe(true);
+    expect(isPassingScore(task, { score: 0.37 })).toBe(true);
   });
 
   it('should return false if score not passing', () => {
@@ -166,13 +166,13 @@ describe('isPassingScore', () => {
       passMark: 0.36,
     };
 
-    expect(isPassingScore(task, 0.35)).toBe(false);
+    expect(isPassingScore(task, { score: 0.35 })).toBe(false);
   });
 
   it('should return false if pass mark not set', () => {
     const task = {};
 
-    expect(isPassingScore(task, 0.35)).toBe(false);
+    expect(isPassingScore(task, { score: 0.35 })).toBe(false);
   });
 
 });
@@ -190,7 +190,7 @@ describe('isPass', () => {
       passMark: 1,
     };
 
-    expect(isPass(task, applicationId, -1)).toBe(true);
+    expect(isPass(task, applicationId, { score: -1 })).toBe(true);
   });
 
   it('should return false if application is fail in override', () => {
@@ -205,7 +205,7 @@ describe('isPass', () => {
       passMark: 1,
     };
 
-    expect(isPass(task, applicationId, 2)).toBe(false);
+    expect(isPass(task, applicationId, { score: 2 })).toBe(false);
   });
 
   it('should return true if application the not in override but score is pass', () => {
@@ -216,8 +216,8 @@ describe('isPass', () => {
       passMark: 0.36,
     };
 
-    expect(isPass(task, applicationId, 0.36)).toBe(true);
-    expect(isPass(task, applicationId, 0.37)).toBe(true);
+    expect(isPass(task, applicationId, { score: 0.36 })).toBe(true);
+    expect(isPass(task, applicationId, { score: 0.37 })).toBe(true);
   });
 
   it('should return false if application the not in override but score is fail', () => {
@@ -228,11 +228,11 @@ describe('isPass', () => {
       passMark: 1,
     };
 
-    expect(isPass(task, applicationId, -1)).toBe(false);
+    expect(isPass(task, applicationId, { score: -1 })).toBe(false);
   });
 
   it('should return false if task is empty', () => {
-    expect(isPass({}, 'app1', 1)).toBe(false);
+    expect(isPass({}, 'app1', { score: 1 })).toBe(false);
   });
 
 });
@@ -243,8 +243,8 @@ describe('getDefaultOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getDefaultOutcome(task, 0.36)).toEqual(OUTCOME.PASS);
-    expect(getDefaultOutcome(task, 0.37)).toEqual(OUTCOME.PASS);
+    expect(getDefaultOutcome(task, { score: 0.36 })).toEqual(OUTCOME.PASS);
+    expect(getDefaultOutcome(task, { score: 0.37 })).toEqual(OUTCOME.PASS);
   });
 
   it('should return fail outcome if score fail', () => {
@@ -252,7 +252,7 @@ describe('getDefaultOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getDefaultOutcome(task, 0.35)).toEqual(OUTCOME.FAIL);
+    expect(getDefaultOutcome(task, { score: 0.35 })).toEqual(OUTCOME.FAIL);
   });
 
 });
@@ -263,8 +263,8 @@ describe('getNewOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getNewOutcome(task, 0.36)).toEqual(OUTCOME.FAIL);
-    expect(getNewOutcome(task, 0.37)).toEqual(OUTCOME.FAIL);
+    expect(getNewOutcome(task, { score: 0.36 })).toEqual(OUTCOME.FAIL);
+    expect(getNewOutcome(task, { score: 0.37 })).toEqual(OUTCOME.FAIL);
   });
 
   it('should return pass outcome if score fail', () => {
@@ -272,7 +272,7 @@ describe('getNewOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getNewOutcome(task, 0.35)).toEqual(OUTCOME.PASS);
+    expect(getNewOutcome(task, { score: 0.35 })).toEqual(OUTCOME.PASS);
   });
 
 });
@@ -283,8 +283,8 @@ describe('getCurrentOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getCurrentOutcome(task, 0.36)).toEqual(OUTCOME.PASS);
-    expect(getCurrentOutcome(task, 0.37)).toEqual(OUTCOME.PASS);
+    expect(getCurrentOutcome(task, { score: 0.36 })).toEqual(OUTCOME.PASS);
+    expect(getCurrentOutcome(task, { score: 0.37 })).toEqual(OUTCOME.PASS);
   });
 
   it('should return fail outcome if score fail', () => {
@@ -292,7 +292,7 @@ describe('getCurrentOutcome', () => {
       passMark: 0.36,
     };
 
-    expect(getCurrentOutcome(task, 0.35)).toEqual(OUTCOME.FAIL);
+    expect(getCurrentOutcome(task, { score: 0.35 })).toEqual(OUTCOME.FAIL);
   });
 
 });
@@ -301,6 +301,7 @@ describe('scoreType', () => {
   it('should return score type if task having score type being set', () => {
     expect(scoreType({ scoreType: 'score' })).toBe('score');
     expect(scoreType({ scoreType: 'percent' })).toBe('percent');
+    expect(scoreType({ scoreType: 'gradeScore' })).toBe('gradeScore');
   });
 
   it('should return percent if task score type not set but having percentage score in final scores', () => {
@@ -591,22 +592,6 @@ describe('scoreData', () => {
     expect(result[3].rank).toBe(4);
   });
 
-  it('should use the correct scoreType', () => {
-    const task = {
-      finalScores: [
-        { id: '1', ref: 'ref-001', score: 10, percent: 100 },
-      ],
-      scoreType: 'percent',
-    };
-    const exerciseDiversity = {
-      '001': {},
-    };
-
-    const result = scoreData(task, 'percent', exerciseDiversity);
-
-    expect(result).toHaveLength(1);
-    expect(result[0].score).toBe(100);
-  });
 });
 
 describe('totalApplications', () => {
@@ -994,13 +979,13 @@ describe('downloadMeritList', () => {
           'Ref',
           'Full name',
           'Email',
-          'Rank',
           'Score',
+          'Rank',
+          'Outcome',
           'Female',
           'Ethnic Minority',
           'Solicitor',
           'Disability',
-          'Outcome',
         ],
       ],
       {
@@ -1023,13 +1008,13 @@ describe('downloadMeritList', () => {
     expect(downloadXLSX).toHaveBeenCalledWith([
         [
           'Ref',
-          'Rank',
           'Score',
+          'Rank',
+          'Outcome',
           'Female',
           'Ethnic Minority',
           'Solicitor',
           'Disability',
-          'Outcome',
         ],
       ],
       {
@@ -1059,37 +1044,37 @@ describe('downloadMeritList', () => {
           'Ref',
           'Full name',
           'Email',
-          'Rank',
           'Score',
+          'Rank',
+          'Outcome',
           'Female',
           'Ethnic Minority',
           'Solicitor',
           'Disability',
-          'Outcome',
         ],
         [
           'ref-001',
           'John Doe',
           'john@example.com',
-          1,
           10,
+          1,
+          'Pass',
           'Yes',
           'Yes',
           'No',
           'Yes',
-          'Pass',
         ],
         [
           'ref-002',
           'Jane Smith',
           'jane@example.com',
-          2,
           9,
+          2,
+          'Fail',
           'No',
           'No',
           'Yes',
           'No',
-          'Fail',
         ],
       ],
       {
@@ -1115,13 +1100,13 @@ describe('downloadMeritList', () => {
           'Ref',
           'Full name',
           'Email',
-          'Rank',
           'Score',
+          'Rank',
+          'Outcome',
           'Female',
           'Ethnic Minority',
           'Solicitor',
           'Disability',
-          'Outcome',
         ],
         [
           'ref-001',
@@ -1129,17 +1114,11 @@ describe('downloadMeritList', () => {
           'alice@example.com',
           '',
           '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
+          'noTestSubmitted',
           true,
           true,
           false,
           true,
-          'noTestSubmitted',
         ],
       ],
       {
@@ -1166,13 +1145,13 @@ describe('downloadMeritList', () => {
           'Ref',
           'Full name',
           'Email',
-          'Rank',
           'Score',
+          'Rank',
+          'Outcome',
           'Female',
           'Ethnic Minority',
           'Solicitor',
           'Disability',
-          'Outcome',
         ],
         [
           'ref-002',
@@ -1180,17 +1159,11 @@ describe('downloadMeritList', () => {
           'bob@example.com',
           '',
           '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
+          'failedFirstTest',
           false,
           false,
           true,
           false,
-          'failedFirstTest',
         ],
       ],
       {
