@@ -284,12 +284,12 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
   markingScheme.forEach(item => {
     if (item.type === MARKING_TYPE.GROUP.value) {
       item.children.forEach(child => {
-        if (!scoreSheet[item.ref][child.ref]) {
+        if ([null, undefined, ''].indexOf(scoreSheet[item.ref][child.ref]) >= 0) {
           isComplete = false;
         }
       });
     } else {
-      if (!scoreSheet[item.ref]) {
+      if ([null, undefined, ''].indexOf(scoreSheet[item.ref]) >= 0) {
         isComplete = false;
       }
     }
