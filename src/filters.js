@@ -11,6 +11,7 @@ const lookup = (value) => {
     town: 'Town or city',
     county: 'County',
     postcode: 'Postcode',
+    country: 'Country',
     VATNumber: 'VAT number',
     characterInformation: 'Character information',
     equalityAndDiversitySurvey: 'Equality and diversity',

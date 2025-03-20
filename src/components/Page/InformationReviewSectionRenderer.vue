@@ -364,6 +364,19 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
+                v-if="key === 'country'"
+                type="selection"
+                :options="countries"
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                :extension="key"
+                :is-asked="isAsked"
+                @change-field="changeField"
+              />
+              <InformationReviewRenderer
+                v-else
                 :data="data[index][key]"
                 :field="field"
                 :edit="edit"
@@ -413,6 +426,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
 import { WORKING_BASIS } from '@/helpers/constants';
+import { COUNTRIES } from '@/helpers/constants';
 
 export default {
   name: 'InformationReviewSectionRenderer',
@@ -468,6 +482,7 @@ export default {
       WORKING_BASIS,
       workingBasisOptions: Object.values(WORKING_BASIS),
       currentIndex: null,
+      countries: COUNTRIES,
     };
   },
   computed: {
