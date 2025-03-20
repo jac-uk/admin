@@ -127,7 +127,10 @@ function scores(task, scoreType, exerciseDiversity) {
 
   // group scores
   const scoreMap = {};
-  task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+  console.log('task.finalScores', task.finalScores);
+  console.log('scoreType', scoreType);
+  task.finalScores
+      .filter(scoreData => scoreData[scoreType] !== null).forEach(scoreData => { // id | panelId | ref | score | scoreSheet
     if (!scoreMap[scoreData[scoreType]]) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
@@ -196,6 +199,7 @@ function scores(task, scoreType, exerciseDiversity) {
   });
 
   // add outcome stats
+  console.log('scoreMap', scoreMap);
   if (task.hasOwnProperty('passMark')) {
     scoresInDescendingOrder.forEach(key => {
       const score = scoreType === 'gradeScore' ? key : parseFloat(key);
