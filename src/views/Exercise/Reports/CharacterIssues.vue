@@ -239,6 +239,9 @@
                           :key="item.name"
                           class="govuk-list"
                         >
+                          <div style="text-decoration: underline;">
+                            {{ item.category }}
+                          </div>
                           <InformationReviewRenderer
                             v-if="item.date || editMode"
                             type="date"
