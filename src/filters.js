@@ -60,7 +60,7 @@ const lookup = (value) => {
     // Editable Application helpers
     date: 'Date',
     details: 'Details',
-    investigations: 'Investigations',
+    investigations: 'Investigation ongoing',
     orgBusinessName: 'Organisation or business',
     jobTitle: 'Job Title',
     tasks: 'Law-related tasks',

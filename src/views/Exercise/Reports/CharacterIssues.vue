@@ -261,7 +261,7 @@
                             v-if="issue.summary === 'Professional Conduct'"
                             :style="editMode ? '' : 'display: flex;'"
                           >
-                            Investigations:&nbsp;
+                            {{ $filters.lookup('investigations') }}:&nbsp;
                             <InformationReviewRenderer
                               v-if="(item.investigations !== null && item.investigations !== undefined) || editMode"
                               field="investigations"
