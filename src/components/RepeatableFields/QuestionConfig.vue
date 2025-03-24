@@ -76,10 +76,12 @@
       </div>
     </div>
 
-    <TextField
+    <RichTextInput
       id="working-preference-${type}-question"
       v-model="row.question"
       label="What question would you like to ask?"
+      hint=""
+      class="custom-html"
       required
     />
 
@@ -253,6 +255,7 @@ import AnswerGroup from '@/components/RepeatableFields/AnswerGroup.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
 import { shallowRef } from 'vue';
 import { getRandomString } from '@/helpers/helpers';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
 
 export default {
   name: 'QuestionConfig',
@@ -263,6 +266,7 @@ export default {
     RadioItem,
     Checkbox,
     Select,
+    RichTextInput,
   },
   props: {
     row: {

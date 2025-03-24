@@ -4,10 +4,14 @@
     class="govuk-summary-list__row"
   >
     <dt
-      class="govuk-summary-list__key"
+      :class="{'govuk-summary-list__key': !isHTMLValue}"
     >
       <span v-if="currentItem.topic">{{ currentItem.topic }}<br></span>
-      {{ currentItem.question }}
+      <CustomHTML
+        v-if="currentItem.question"
+        :value="currentItem.question"
+        style="margin-top: 20px;"
+      />
       <span
         class="govuk-hint"
       >
@@ -78,9 +82,12 @@
 </template>
 
 <script>
-
+import CustomHTML from '@jac-uk/jac-kit/components/CustomHTML.vue';
 export default {
   name: 'QuestionConfigView',
+  components: {
+    CustomHTML,
+  },
   props: {
     section: {
       type: String,
@@ -129,6 +136,9 @@ export default {
       } else {
         return false;
       }
+    },
+    isHTMLValue() {
+      return this.currentItem.question && this.currentItem.question.trim().charAt(0) === '<';
     },
   },
   methods: {
