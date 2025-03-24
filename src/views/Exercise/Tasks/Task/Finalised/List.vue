@@ -264,6 +264,7 @@ import ConfigureExport from './ConfigureExport.vue';
 import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotParticipate, hasParticipation, downloadMeritList, getDownloadTypes } from '@/helpers/meritListHelper';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 import _deepClone from 'lodash/cloneDeep';
+import _isEmpty from 'lodash/isEmpty';
 
 export default {
   components: {
@@ -376,6 +377,8 @@ export default {
     takenTestScores() {
       if (this.scoreType === 'zScore') {
         return this.scores;
+      } else if (this.scoreType === 'gradeScore') {
+        return this.scores.filter(score => !_isEmpty(score.score) );
       } else {
         return this.scores.filter(score => score.score > 0);
       }
