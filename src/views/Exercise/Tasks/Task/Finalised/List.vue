@@ -380,6 +380,9 @@ export default {
       } else if (this.scoreType === 'gradeScore') {
         return this.scores.filter(score => !_isEmpty(score.score) );
       } else {
+        // The line is made for accommodation of existing QT API behaviour, when creating score sheet, DP will call QT API to fetch scores, both 0 and not taken will have empty response from QT. So, we can't separate them at the moment.
+        // We couldn't update QT at that time, and the case would be rare,
+        // so we consider 0 score as the same as not taken, and not showing in the merit list.
         return this.scores.filter(score => score.score > 0);
       }
     },
