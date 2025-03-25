@@ -341,8 +341,10 @@
         class="govuk-summary-list"
       >
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key widerColumn">
-            {{ exercise.additionalWorkingPreferences[index].question }}
+          <dt :class="{'govuk-summary-list__key': !isHTMLValue(exercise.additionalWorkingPreferences[index].question), 'widerColumn': true}">
+            <CustomHTML
+              :value="exercise.additionalWorkingPreferences[index].question"
+            />
             <span
               v-if="!exercise.additionalWorkingPreferences[index].hasOwnProperty('groupAnswers')"
               class="govuk-body govuk-!-font-size-19"
@@ -415,12 +417,14 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import { isApplicationPartAsked } from '@/helpers/exerciseHelper';
+import CustomHTML from '@jac-uk/jac-kit/components/CustomHTML.vue';
 
 export default {
   name: 'PreferencesSummary',
   components: {
     InformationReviewRenderer,
     Banner,
+    CustomHTML,
   },
   props: {
     application: {
@@ -450,6 +454,9 @@ export default {
     },
   },
   methods: {
+    isHTMLValue(value) {
+      return value && value.trim().charAt(0) === '<';
+    },
     shouldRenderQuestion(item, section) {
       // If there's a linked question and its answer doesn't match this question's linked answer, do not render the question
       if (item.linkedQuestion && item.linkedAnswer) {
