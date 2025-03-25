@@ -341,7 +341,7 @@
         class="govuk-summary-list"
       >
         <div class="govuk-summary-list__row">
-          <dt :class="{'govuk-summary-list__key': !isHTMLValue(exercise.yesSalaryDetails), 'widerColumn': true}">
+          <dt :class="{'govuk-summary-list__key': !isHTMLValue(exercise.additionalWorkingPreferences[index].question), 'widerColumn': true}">
             <CustomHTML
               :value="exercise.additionalWorkingPreferences[index].question"
             />
