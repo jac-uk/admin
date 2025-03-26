@@ -61,7 +61,7 @@
                   Select...
                 </option>
                 <option
-                  v-for="(exercise, index) in exerciseNames"
+                  v-for="(exercise, index) in exerciseDetails"
                   :key="index"
                   :label="exercise.referenceNumber"
                   :value="exercise.id"
@@ -186,7 +186,6 @@
     v-if="isLoading"
     :load-failed="loadFailed"
   />
-
   <div
     v-if="data"
     class="govuk-!-margin-top-9"
@@ -195,13 +194,19 @@
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th
-            v-for="(column, columnIndex) in selectedColumns"
+          <template
+            v-for="(column, columnIndex) in configuredColumns"
             :key="columnIndex"
-            class="govuk-table__header"
           >
-            {{ keys[column].label }}
-          </th>
+            <th
+              class="govuk-table__header"
+            >
+              <span>
+                {{ preferenceLabel(column) }}
+              </span>
+            </th>
+          </template>
+          <hr>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -210,16 +215,21 @@
           :key="rowIndex"
           class="govuk-table__row"
         >
-          <td
-            v-for="(column, columnIndex) in selectedColumns"
+          <template
+            v-for="(column, columnIndex) in configuredColumns"
             :key="columnIndex"
-            :style="{
-              'white-space': keys[column]?.nowrap ? 'nowrap' : ''
-            }"
-            class="govuk-table__cell"
           >
-            {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
-          </td>
+            <td
+              :style="{
+                'white-space': keys[column]?.nowrap ? 'nowrap' : ''
+              }"
+              class="govuk-table__cell"
+            >
+              <span>
+                {{ formatQuestion(row, column) }}
+              </span>
+            </td>
+          </template>
         </tr>
       </tbody>
     </table>
@@ -231,7 +241,9 @@ import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import { customReportConstants } from '@/helpers/customReportConstants';
 import draggable from 'vuedraggable';
-import _ from 'lodash';
+import _includes from 'lodash/includes';
+import _merge from 'lodash/merge';
+import _clone from 'lodash/clone';
 import { mapState } from 'vuex';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import permissionMixin from '@/permissionMixin';
@@ -251,6 +263,7 @@ export default {
       defaultColumns: [
         'exerciseRef',
         'referenceNumber',
+        'status',
       ],
       isLoading: null,
       loadFailed: null,
@@ -259,24 +272,38 @@ export default {
       selectedColumns: [
         'exerciseRef',
         'referenceNumber',
+        'status',
       ],
       selectedExercise: '',
       selectedExercises: [],
-      groups: customReportConstants.groups,
-      keys: customReportConstants.keys,
+      defaultGroups: customReportConstants.groups,
+      defaultKeys: customReportConstants.keys,
+      workingPreferences: ['locationPreferences', 'jurisdictionPreferences',  'additionalWorkingPreferences'],
+      locationPreferences: [],
+      jurisdictionPreferences: [],
+      locationQuestion: [],
+      jurisdictionQuestion: [],
+      additionalWorkingPreferences: [],
+      oldAdditionalWorkingPreferences: [],
+      anyLegal: false,
     };
   },
   computed: {
     ...mapState({
-      exerciseNames: state => {
+      exerciseDetails: state => {
         return state.exerciseCollection.records
 
           .map(record => ({
             name: record.name,
             referenceNumber: record.referenceNumber,
             id: record.id,
+            locationPreferences: record.locationPreferences,
+            locationQuestion: record.locationQuestion,
+            jurisdictionPreferences: record.jurisdictionPreferences,
+            jurisdictionQuestion: record.jurisdictionQuestion,
+            additionalWorkingPreferences: record.additionalWorkingPreferences,
           }))
-
+            
           .sort((a, b) => {
             // Extract numeric parts from referenceNumber
             const numA = parseInt(a.referenceNumber.slice(3), 10);
@@ -285,6 +312,143 @@ export default {
           });
       },
     }),
+    preferenceGroups() {
+      const groups = [];
+      if ((this.jurisdictionPreferences.length || this.jurisdictionQuestion.length) || (this.locationPreferences.length || this.locationQuestion.length) || (this.additionalWorkingPreferences.length || this.oldAdditionalWorkingPreferences)) {
+        const keys = [];
+        if (this.jurisdictionPreferences.length || this.jurisdictionQuestion.length) {
+          keys.push('jurisdictionPreferences');
+        }
+        if (this.locationPreferences.length || this.locationQuestion.length) {
+          keys.push('locationPreferences');
+        }
+        if (this.additionalWorkingPreferences.length || this.oldAdditionalWorkingPreferences) {
+          keys.push('additionalWorkingPreferences');
+        }
+
+        groups.push({
+          name: 'Working Preferences',
+          keys: keys,
+        });
+      }
+      return groups;
+    },
+    preferenceKeys() {
+      const keys = {};
+      if (this.jurisdictionPreferences.length || this.jurisdictionQuestion.length) {
+        keys['jurisdictionPreferences'] = { label: 'All Jurisdiction Preferences', type: String };
+      }
+      if (this.locationPreferences.length || this.locationQuestion.length) {
+        keys['locationPreferences'] = { label: 'All Location Preferences', type: String };
+      }
+      if (this.additionalWorkingPreferences.length || this.oldAdditionalWorkingPreferences) {
+        keys['additionalWorkingPreferences'] = { label: 'All Additional Working Preferences', type: String };
+      }
+
+      return keys;
+    },
+    groups() {
+      let groups = this.defaultGroups.slice();
+      
+      groups = groups.concat([
+        {
+          name: 'Experience',
+          keys: ['experience'],
+        },
+      ]);
+      groups = groups.concat(this.preferenceGroups);
+      return groups;
+    },
+    keys() {
+      let keys = _clone(this.defaultKeys);
+      keys = _merge(keys, {
+        experience: { label: 'Experience', type: String },
+      });
+      
+      return _merge(keys, this.preferenceKeys);
+    },
+    configuredColumns() {
+      // Build mapped columns for each type of preference
+      const locationPrefColumns = this.locationPreferences.map(pref =>
+        pref.id ? `locationPreferences.${pref.id}` : 'locationPreferences'
+      );
+      
+      const jurisdictionPrefColumns = this.jurisdictionPreferences.map(pref =>
+        pref.id ? `jurisdictionPreferences.${pref.id}` : 'jurisdictionPreferences'
+      );
+
+      const additionalWorkingPrefColumns = [
+        ...this.additionalWorkingPreferences.map(pref => `additionalWorkingPreferences.${pref.id}`),
+        ...this.oldAdditionalWorkingPreferences,
+      ];
+
+      let res = this.selectedColumns.filter(col =>
+        !['locationPreferences', 'jurisdictionPreferences', 'additionalWorkingPreferences'].includes(col)
+      );
+
+      const hasLocationSelection = this.selectedColumns.includes('locationPreferences');
+      const hasJurisdictionSelection = this.selectedColumns.includes('jurisdictionPreferences');
+      const hasAdditionalWorkingSelection = this.selectedColumns.includes('additionalWorkingPreferences');
+      
+      if (this.selectedExercises.length > 0) {
+        // Process location preferences
+        if (hasLocationSelection) {
+          if (this.locationPreferences.length) {
+            // new
+            res = [
+              ...res,
+              ...locationPrefColumns.filter(col => col !== 'locationPreferences'),
+            ];
+          } 
+          if (this.locationQuestion.length) {
+            // old
+            res = [
+              ...res,
+              ...locationPrefColumns.filter(col => !col.startsWith('locationPreferences.')),
+              ...['locationPreferences'],
+            ];
+          }
+        }
+        // Process jurisdiction preferences
+        if (hasJurisdictionSelection) {
+          if (this.jurisdictionPreferences.length) {
+            // new
+            res = [
+              ...res,
+              ...jurisdictionPrefColumns.filter(col => col !== 'jurisdictionPreferences'),
+            ];
+          } 
+          if (this.jurisdictionQuestion.length) {
+            // old
+            res = [
+              ...res,
+              ...jurisdictionPrefColumns.filter(col => !col.startsWith('jurisdictionPreferences.')),
+              ...['jurisdictionPreferences'],
+            ];
+          }
+        }
+        // Process additional working preferences
+        if (hasAdditionalWorkingSelection) {
+          
+          if (this.additionalWorkingPreferences.length) {
+            // new
+            res = [
+              ...res,
+              ...additionalWorkingPrefColumns.filter(col => !col.startsWith('additionalWorkingPreferences ')),
+            ];
+          } 
+          if (this.oldAdditionalWorkingPreferences.length) {
+            // old
+            res = [
+              ...res,
+              ...additionalWorkingPrefColumns.filter(col => !col.startsWith('additionalWorkingPreferences.')),
+            ];
+          }
+        }
+      }
+      
+      return res;
+    },
   },
   beforeMount(){
     if (!this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])){
@@ -295,28 +459,66 @@ export default {
     this.fetchAllExercises();
   },
   methods: {
+    formatQuestion(row, column){
+      if (column) {
+        if (this.isUsingFilter(column)) {
+          return this.$filters.lookup(row[column]);
+        } else if (
+          ['locationPreferences', 'jurisdictionPreferences']
+            .some(pref => column.startsWith(pref))
+        ){
+          if (typeof row[column] === 'object') {
+            return 'Not asked (Old question type)';
+          } else if (row[column] === '') {
+            return 'Not asked (New question type)';
+          }
+        } else if (!row[column]){
+          if (column.startsWith('additionalWorkingPreferences.')){
+            return 'Not asked (New question type)';
+          }
+          if (column.startsWith('additionalWorkingPreferences ')){
+            return 'Not asked (Old question type)';
+          }
+        }
+      }
+      return row[column];
+    },
+    preferenceLabel(column) {    
+      if (this.isMatch(column)) {
+        if (column.includes('jurisdiction')) return 'Jurisdiction Preferences';
+        if (column.includes('location')) return 'Location Preferences';
+        if (column.includes('additionalWorkingPreferences')) return 'Additional Working Preferences';
+      }
+      return this.keys[column].label;
+    },
+    isMatch(column) {
+      return ['locationPreferences', 'jurisdictionPreferences', 'additionalWorkingPreferences'].some(word => word.includes(column) || column.includes(word));
+    },
     fetchAllExercises() {
       this.$store.dispatch('exerciseCollection/getAll');
     },
     selectExercise(event) {
-      if (!_.includes(this.selectedExercises, event.target.value)) {
-        this.selectedExercises.push(event.target.value);
+      const exercise = event.target.value;
+      if (!_includes(this.selectedExercises, exercise)) {
+        this.selectedExercises.push(exercise);
       }
+      this.getExercisePrefColumns();
       this.selectedExercise = '';
     },
     removeExercise(event) {
       const index = event.target.getAttribute('data-index');
       this.selectedExercises.splice(index, 1);
+      this.getExercisePrefColumns();
     },
     selectColumn(event) {
-      if (!_.includes(this.selectedColumns, event.target.value)) {
+      if (!_includes(this.selectedColumns, event.target.value)) {
         this.selectedColumns.push(event.target.value);
       }
       this.selectedColumn = '';
     },
     removeColumn(event) {
-      const index = event.target.getAttribute('data-index');
-      if (!['exerciseRef', 'referenceNumber'].includes(this.selectedColumns[index])){
+      const index = event.target.getAttribute('data-index');  
+      if (!['exerciseRef', 'referenceNumber', 'status'].includes(this.selectedColumns[index])){
         this.selectedColumns.splice(index, 1);
       }
     },
@@ -334,9 +536,10 @@ export default {
 
       try {
         if (this.selectedExercises.length > 0) {
+
           const response = await httpsCallable(functions, 'getMultipleApplicationData')({
             exerciseIds: this.selectedExercises,
-            columns: this.selectedColumns,
+            columns: this.configuredColumns,
           });
 
           if (response === null) {
@@ -354,11 +557,14 @@ export default {
       this.isLoading = false;
     },
     downloadReport() {
-      const header = [...this.selectedColumns].map(col => this.keys[col].label);
+      const header = [...this.configuredColumns].map((col) => {
+        return this.preferenceLabel(col);
+      });
+
       const csv = [[...header]];
 
       for (let i = 0; i < this.data.data.length; i++) {
-        csv.push([...this.selectedColumns.map(col => this.data.data[i][col])]);
+        csv.push([...this.configuredColumns.map(col => typeof this.data.data[i][col] === 'object' ? '' : this.data.data[i][col])]);
       }
 
       // Convert the 2D array to CSV, ensuring values are properly escaped
@@ -371,7 +577,7 @@ export default {
       const mappedCSV = csv
         .map(row => row.map(escapeValue).join(',')) // Escape each value and join with commas
         .join('\n'); // Join rows with a newline
-
+      
       const csvContent = `data:text/csv;charset=utf-8,${mappedCSV}`;
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
@@ -385,11 +591,49 @@ export default {
       return ['_processing.stage', '_processing.status'].includes(key);
     },
     exerciseFromId(exerciseId){
-      if (this.exerciseNames.length) {
-        return this.exerciseNames.filter(exercise => exerciseId == exercise.id)[0];
+      if (this.exerciseDetails.length) {
+        return this.exerciseDetails.filter(exercise => exerciseId == exercise.id)[0];
       } else {
         return exerciseId;
       }
+    },
+    getExercisePrefColumns(){
+      this.locationPreferences = [];
+      this.locationQuestion = [];
+      this.jurisdictionPreferences = [];
+      this.jurisdictionQuestion = [];
+      this.additionalWorkingPreferences = [];
+      this.oldAdditionalWorkingPreferences = [];
+
+      this.exerciseDetails
+        .filter(ex => this.selectedExercises.includes(ex.id))
+        .forEach(ex => {
+          if (ex.jurisdictionPreferences?.length) {
+            ex.jurisdictionPreferences.forEach(pref => this.jurisdictionPreferences.push(pref));
+          }
+          if (ex.locationPreferences?.length) {
+            ex.locationPreferences.forEach((pref) => {
+              this.locationPreferences.push(pref);
+            });
+          }
+          if (ex.additionalWorkingPreferences?.length) {
+            ex.additionalWorkingPreferences.forEach((pref, index) => {
+            
+              if (pref.hasOwnProperty('id')) {
+                this.additionalWorkingPreferences.push(pref);
+              } else {
+                this.oldAdditionalWorkingPreferences.push(`additionalWorkingPreferences ${index}`);
+              }
+            
+            });
+          }
+          if (ex.locationQuestion) {
+            this.locationQuestion.push(ex.locationQuestion);
+          }
+          if (ex.jurisdictionQuestion) {
+            this.jurisdictionQuestion.push(ex.jurisdictionQuestion);
+          }
+        });
     },
   },
 };
