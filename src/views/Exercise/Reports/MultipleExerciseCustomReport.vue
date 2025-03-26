@@ -244,7 +244,6 @@ import draggable from 'vuedraggable';
 import _includes from 'lodash/includes';
 import _merge from 'lodash/merge';
 import _clone from 'lodash/clone';
-// import _startCase from 'lodash/startCase';
 import { mapState } from 'vuex';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import permissionMixin from '@/permissionMixin';
