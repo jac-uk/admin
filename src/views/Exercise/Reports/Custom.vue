@@ -282,7 +282,7 @@
         </div>
       </div>
     </div>
-    <Modal
+    <!-- <Modal
       ref="modalRefSaveReport"
     >
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
@@ -307,8 +307,8 @@
           Cancel
         </button>
       </div>
-    </Modal>
-    <Modal
+    </Modal> -->
+    <!-- <Modal
       ref="modalRefReportSaved"
     >
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
@@ -323,7 +323,7 @@
           OK
         </button>
       </div>
-    </Modal>
+    </Modal> -->
   </div>
 </template>
 
@@ -539,7 +539,7 @@ export default {
     },
   },
   created() {
-    this.getReports();
+    //this.getReports();
   },
   methods: {
     async getApplicationRecords() {
@@ -608,27 +608,27 @@ export default {
       this.$refs[modalRef].closeModal();
       this.customReportName = null;
     },
-    async saveReport() {
-      if (this.customReports.map(r => r.name).includes(this.customReportName)) {
-        this.closeModal('modalRefSaveReport');
-        clearTimeout(this.warningTimeout);
-        this.warnings = 'Your report has not been saved. There is already a report with that name';
-        this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
-        return;
-      }
-      const reports = await httpsCallable(functions, 'customReport')({
-        columns: this.columns,
-        whereClauses: this.whereClauses,
-        name: this.customReportName,
-      });
-      this.customReports = reports.data;
-      this.closeModal('modalRefSaveReport');
-      this.openModal('modalRefReportSaved');
-    },
-    async getReports() {
-      const reports = await httpsCallable(functions, 'customReport')({});
-      this.customReports = reports.data;
-    },
+    // async saveReport() {
+    //   if (this.customReports.map(r => r.name).includes(this.customReportName)) {
+    //     this.closeModal('modalRefSaveReport');
+    //     clearTimeout(this.warningTimeout);
+    //     this.warnings = 'Your report has not been saved. There is already a report with that name';
+    //     this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
+    //     return;
+    //   }
+    //   const reports = await httpsCallable(functions, 'customReport')({
+    //     columns: this.columns,
+    //     whereClauses: this.whereClauses,
+    //     name: this.customReportName,
+    //   });
+    //   this.customReports = reports.data;
+    //   this.closeModal('modalRefSaveReport');
+    //   this.openModal('modalRefReportSaved');
+    // },
+    // async getReports() {
+    //   const reports = await httpsCallable(functions, 'customReport')({});
+    //   this.customReports = reports.data;
+    // },
     selectReport(event) {
       const report = this.customReports[event.target.value];
       this.columns = report.columns;
