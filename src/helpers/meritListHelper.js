@@ -4,7 +4,7 @@ import { TASK_TYPE } from '@/helpers/constants';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { markingScheme2Columns } from '@/helpers/scoreSheetHelper';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import { toYesNo } from '@jac-uk/jac-kit/filters/filters';
+import { toYesNo, lookup } from '@jac-uk/jac-kit/filters/filters';
 
 export {
   OUTCOME,
@@ -39,6 +39,9 @@ const OUTCOME = {
   FAIL: {
     value: 'fail',
     label: 'Fail',
+  },
+  QT_NOT_STARTED: {
+    label: 'Qualifying test not started',
   },
 };
 
@@ -127,7 +130,8 @@ function scores(task, scoreType, exerciseDiversity) {
 
   // group scores
   const scoreMap = {};
-  task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+  task.finalScores
+      .filter(scoreData => scoreData[scoreType] !== null).forEach(scoreData => { // id | panelId | ref | score | scoreSheet
     if (!scoreMap[scoreData[scoreType]]) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
@@ -492,12 +496,22 @@ function getOverride(task, applicationId) {
 //   });
 // }
 
-function downloadMeritList(title, didNotTake, failed, task, diversityData, type, fileName) {
+/**
+ *
+ * @param {*} title
+ * @param {object} scoreGroups { didNotTake: [], failed: [], withdrawnBeforeQT: [] }
+ * @param {*} task
+ * @param {*} diversityData
+ * @param {*} type
+ * @param {*} fileName
+ * @returns
+ */
+function downloadMeritList(title, scoreGroups, task, diversityData, type, fileName) {
   switch (type) {
   case DOWNLOAD_TYPES.full.value:
   case DOWNLOAD_TYPES.emp.value:
     downloadXLSX(
-      xlsxData(didNotTake, failed, task, diversityData, type),
+      xlsxData(scoreGroups, task, diversityData, type),
       {
         title: title,
         sheetName: DOWNLOAD_TYPES[type].sheetName,
@@ -510,7 +524,7 @@ function downloadMeritList(title, didNotTake, failed, task, diversityData, type,
   }
 }
 
-function xlsxData(didNotTake, failed, task, diversityData, type) {
+function xlsxData(scoreGroups, task, diversityData, type) {
   // const taskScoreType = scoreType(task);
   const rows = [];
   const headers = [];
@@ -556,15 +570,17 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
         row.push(item.email);
-        row.push(item.scoreSheet.qualifyingTest.SJ.score);
-        row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-        row.push(item.scoreSheet.qualifyingTest.CA.score);
-        row.push(item.scoreSheet.qualifyingTest.CA.percent);
-        row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
-        row.push(item.scoreSheet.qualifyingTest.CA.zScore);
+        // If the CAT/SJT scores are zero, it represents a not taken, so we replace with 'n/a'
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.score, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.percent, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.score, false));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.percent, false));
+        // The z scores can be zero in some cases, so we keep the zero values.
+        row.push(formatScore(item.scoreSheet.qualifyingTest.SJ.zScore));
+        row.push(formatScore(item.scoreSheet.qualifyingTest.CA.zScore));
       }
       row.push(item.rank);
-      row.push(item.zScore);
+      row.push(formatScore(item.zScore));
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
@@ -611,98 +627,72 @@ function xlsxData(didNotTake, failed, task, diversityData, type) {
     }
     rows.push(row);
   });
-  // add did not take
-  didNotTake.forEach(item => {
-    const row = [];
-    row.push(item.ref);
-    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
-      if (type === DOWNLOAD_TYPES.full.value) {
-        row.push(item.fullName);
-        row.push(item.email);
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-      }
-      row.push('');
-      row.push('');
-    } else {
-      if (type === DOWNLOAD_TYPES.full.value) {
-        row.push(item.fullName);
-        row.push(item.email);
-      }
-      if (task.markingScheme) {
-        markingScheme2Columns(task.markingScheme).forEach(() => {
+
+  for (const groupName in scoreGroups) {
+    if (Object.prototype.hasOwnProperty.call(scoreGroups, groupName)) {
+      const scoreGroup = scoreGroups[groupName];
+
+      scoreGroup.forEach(item => {
+        const row = [];
+        row.push(item.ref);
+        if (task.type === TASK_TYPE.QUALIFYING_TEST) {
+          if (type === DOWNLOAD_TYPES.full.value) {
+            row.push(item.fullName);
+            row.push(item.email);
+            // If the CAT/SJT scores are zero, it represents a not taken, so we replace with 'n/a'
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.score, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.percent, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.score, false));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.percent, false));
+            // The z scores can be zero in some cases, so we keep the zero values.
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.SJ?.zScore));
+            row.push(formatScore(item?.scoreSheet?.qualifyingTest?.CA?.zScore));
+          }
+          row.push(formatScore(item.rank));
+          row.push(formatScore(item.zScore));
+        } else {
+          if (type === DOWNLOAD_TYPES.full.value) {
+            row.push(item.fullName);
+            row.push(item.email);
+          }
+          row.push(formatScore(item.rank));
+          row.push(formatScore(item.zScore));
+        }
+
+        let outcome = '';
+        switch (groupName) {
+          case 'didNotTake':
+            outcome = OUTCOME.QT_NOT_STARTED.label;
+            break;
+          case 'failed':
+            outcome = OUTCOME.FAIL.label;
+            break;
+          case 'withdrawnBeforeQT':
+            outcome = lookup('withdrawn');
+            break;
+          default:
+            break;
+        }
+        row.push(outcome);
+
+        // row.push(''); // TODO notes
+        const ref = item.ref.split('-')[1];
+        if (diversityData[ref]) {
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)));
+          row.push(toYesNo(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)));
+        } else {
           row.push('');
-        });
-      }
-      row.push('');
-      row.push('');
-    }
-    row.push('noTestSubmitted');
-    // row.push(''); // TODO notes
-    const ref = item.ref.split('-')[1];
-    if (diversityData[ref]) {
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
-    } else {
-      row.push('');
-      row.push('');
-      row.push('');
-      row.push('');
-    }
-    rows.push(row);
-  });
-  // add failed
-  failed.forEach(item => {
-    const row = [];
-    row.push(item.ref);
-    if (task.type === TASK_TYPE.QUALIFYING_TEST) {
-      if (type === DOWNLOAD_TYPES.full.value) {
-        row.push(item.fullName);
-        row.push(item.email);
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-        row.push('');
-      }
-      row.push('');
-      row.push('');
-    } else {
-      if (type === DOWNLOAD_TYPES.full.value) {
-        row.push(item.fullName);
-        row.push(item.email);
-      }
-      if (task.markingScheme) {
-        markingScheme2Columns(task.markingScheme).forEach(() => {
           row.push('');
-        });
-      }
-      row.push('');
-      row.push('');
+          row.push('');
+          row.push('');
+        }
+
+        rows.push(row);
+      });
     }
-    row.push('failedFirstTest');
-    // row.push(''); // TODO notes
-    const ref = item.ref.split('-')[1];
-    if (diversityData[ref]) {
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
-      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
-    } else {
-      row.push('');
-      row.push('');
-      row.push('');
-      row.push('');
-    }
-    rows.push(row);
-  });
+  }
   return rows;
 }
 
@@ -710,4 +700,9 @@ function getDownloadTypes(task) {
   // TODO: confirm if task affect the download types
   if (!task) return [];
   return Object.values(DOWNLOAD_TYPES);
+}
+
+function formatScore(score, acceptZero = true) {
+  if (score === null || score === undefined || (!acceptZero && score === 0)) return 'n/a';
+  return score;
 }
