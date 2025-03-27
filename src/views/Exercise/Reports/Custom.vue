@@ -539,7 +539,7 @@ export default {
     },
   },
   created() {
-    this.getReports();
+    //this.getReports();
   },
   methods: {
     async getApplicationRecords() {
@@ -625,10 +625,10 @@ export default {
       this.closeModal('modalRefSaveReport');
       this.openModal('modalRefReportSaved');
     },
-    async getReports() {
-      const reports = await httpsCallable(functions, 'customReport')({});
-      this.customReports = reports.data;
-    },
+    // async getReports() {
+    //   const reports = await httpsCallable(functions, 'customReport')({});
+    //   this.customReports = reports.data;
+    // },
     selectReport(event) {
       const report = this.customReports[event.target.value];
       this.columns = report.columns;
