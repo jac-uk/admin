@@ -608,23 +608,23 @@ export default {
       this.$refs[modalRef].closeModal();
       this.customReportName = null;
     },
-    async saveReport() {
-      if (this.customReports.map(r => r.name).includes(this.customReportName)) {
-        this.closeModal('modalRefSaveReport');
-        clearTimeout(this.warningTimeout);
-        this.warnings = 'Your report has not been saved. There is already a report with that name';
-        this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
-        return;
-      }
-      const reports = await httpsCallable(functions, 'customReport')({
-        columns: this.columns,
-        whereClauses: this.whereClauses,
-        name: this.customReportName,
-      });
-      this.customReports = reports.data;
-      this.closeModal('modalRefSaveReport');
-      this.openModal('modalRefReportSaved');
-    },
+    // async saveReport() {
+    //   if (this.customReports.map(r => r.name).includes(this.customReportName)) {
+    //     this.closeModal('modalRefSaveReport');
+    //     clearTimeout(this.warningTimeout);
+    //     this.warnings = 'Your report has not been saved. There is already a report with that name';
+    //     this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
+    //     return;
+    //   }
+    //   const reports = await httpsCallable(functions, 'customReport')({
+    //     columns: this.columns,
+    //     whereClauses: this.whereClauses,
+    //     name: this.customReportName,
+    //   });
+    //   this.customReports = reports.data;
+    //   this.closeModal('modalRefSaveReport');
+    //   this.openModal('modalRefReportSaved');
+    // },
     // async getReports() {
     //   const reports = await httpsCallable(functions, 'customReport')({});
     //   this.customReports = reports.data;
