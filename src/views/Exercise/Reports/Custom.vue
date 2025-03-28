@@ -335,7 +335,7 @@ import _clone from 'lodash/clone';
 import _merge from 'lodash/merge';
 import _startCase from 'lodash/startCase';
 import _includes from 'lodash/includes';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+// import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { customReportConstants } from '@/helpers/customReportConstants';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
@@ -351,7 +351,6 @@ draggable.compatConfig = { MODE: 3 };
 export default {
   name: 'CustomReport',
   components: {
-    Modal,
     draggable,
     LoadingMessage,
     Banner,
