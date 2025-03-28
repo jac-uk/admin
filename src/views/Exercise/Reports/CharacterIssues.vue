@@ -239,6 +239,9 @@
                           :key="item.name"
                           class="govuk-list"
                         >
+                          <div style="text-decoration: underline;">
+                            {{ item.category }}
+                          </div>
                           <InformationReviewRenderer
                             v-if="item.date || editMode"
                             type="date"
@@ -258,7 +261,7 @@
                             v-if="issue.summary === 'Professional Conduct'"
                             :style="editMode ? '' : 'display: flex;'"
                           >
-                            Investigations:&nbsp;
+                            {{ $filters.lookup('investigations') }}:&nbsp;
                             <InformationReviewRenderer
                               v-if="(item.investigations !== null && item.investigations !== undefined) || editMode"
                               field="investigations"
@@ -273,7 +276,7 @@
                             v-if="issue.summary === 'Professional Conduct'"
                             :style="editMode ? '' : 'display: flex;'"
                           >
-                            Investigation conclusion date:&nbsp;
+                            {{ $filters.lookup('investigationConclusionDate') }}:&nbsp;
                             <InformationReviewRenderer
                               v-if="item.investigationConclusionDate || editMode"
                               field="investigationConclusionDate"
@@ -389,7 +392,7 @@
                                       v-if="item.investigationConclusionDate"
                                       class="govuk-body"
                                     >
-                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate) }}
+                                      {{ $filters.lookup('investigationConclusionDate') }}: {{ $filters.formatDate(item.investigationConclusionDate) }}
                                     </li>
                                   </template>
                                   <li v-if="item.details">

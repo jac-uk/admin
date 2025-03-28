@@ -34,7 +34,10 @@
       :show-diversity="false"
     />
 
-    <div v-else class="panel govuk-!-margin-bottom-6 govuk-!-padding-bottom-2">
+    <div
+      v-else
+      class="panel govuk-!-margin-bottom-6 govuk-!-padding-bottom-2"
+    >
       <span class="govuk-caption-m">
         Applications
       </span>
@@ -65,7 +68,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
