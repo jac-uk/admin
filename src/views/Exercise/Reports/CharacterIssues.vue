@@ -276,7 +276,7 @@
                             v-if="issue.summary === 'Professional Conduct'"
                             :style="editMode ? '' : 'display: flex;'"
                           >
-                            Investigation conclusion date:&nbsp;
+                            {{ $filters.lookup('investigationConclusionDate') }}:&nbsp;
                             <InformationReviewRenderer
                               v-if="item.investigationConclusionDate || editMode"
                               field="investigationConclusionDate"
@@ -392,7 +392,7 @@
                                       v-if="item.investigationConclusionDate"
                                       class="govuk-body"
                                     >
-                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate) }}
+                                      {{ $filters.lookup('investigationConclusionDate') }}: {{ $filters.formatDate(item.investigationConclusionDate) }}
                                     </li>
                                   </template>
                                   <li v-if="item.details">
