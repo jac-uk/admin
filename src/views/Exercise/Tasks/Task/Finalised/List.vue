@@ -92,6 +92,13 @@
             {{ $filters.formatNumber(row.score, 2) }}
           </template>
         </TableCell>
+        <!-- Percentile Rank -->
+        <template v-if="showPercentileRank">
+          <TableCell :title="tableColumns[3].title">
+            {{ row.percentileRank }}%
+          </TableCell>
+        </template>
+
         <template v-if="showDiversity">
           <TableCell :title="tableColumns[3].title">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)), 2) }}%
@@ -305,10 +312,14 @@ export default {
     },
   },
   data() {
+    const showPercentileRank = this.task.type === TASK_TYPE.QUALIFYING_TEST;
     const tableColumns = [];
     tableColumns.push({ title: 'Rank' });
     tableColumns.push({ title: 'Count' });
     tableColumns.push({ title: this.$filters.lookup(this.scoreType) });
+    if (showPercentileRank) {
+      tableColumns.push({ title: 'Percent' });
+    }
     if (this.showDiversity) {
       tableColumns.push({ title: 'Female' });
       tableColumns.push({ title: 'Ethnic Minority' });
@@ -318,6 +329,7 @@ export default {
     tableColumns.push({ title: 'Outcome' });
     tableColumns.push({ title: '' });
     return {
+      showPercentileRank,
       tableColumns: tableColumns,
       expandedScores: [],
       selectedItem: null,

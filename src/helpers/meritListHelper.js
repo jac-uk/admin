@@ -136,6 +136,8 @@ function scores(task, scoreType, exerciseDiversity) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
         count: 0,
+        cumulativeCount: 0,
+        percentileRank: 0,
         rank: 0,
         diversity: {
           female: 0,
@@ -231,6 +233,22 @@ function scores(task, scoreType, exerciseDiversity) {
       }
     });
   }
+
+  // Add cumulative count by count
+  let prevCumulativeCount = 0;
+  let scoreCount = 0;
+  scoresInDescendingOrder.forEach(key => {
+    const cumulativeCount = prevCumulativeCount + scoreMap[key].count;
+    scoreMap[key].cumulativeCount = cumulativeCount;
+    prevCumulativeCount = cumulativeCount;
+    scoreCount += scoreMap[key].count;
+  });
+
+  // Calculate percentile rank
+  scoresInDescendingOrder.forEach(key => {
+    const lowerScoreCount = scoreCount - (scoreMap[key].cumulativeCount - scoreMap[key].count);
+    scoreMap[key].percentileRank = ((lowerScoreCount / scoreCount) * 100).toFixed(2);
+  });
 
   // return
   return scoresInDescendingOrder.map(key => {
