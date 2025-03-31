@@ -371,7 +371,7 @@ export default {
       customReportName: null,
       selectedColumn: '',
       whereClauses: [],
-      columns: ['referenceNumber', 'personalDetails.fullName', 'status'],
+      columns: ['referenceNumber', 'personalDetails.fullName', '_processing.status'],
       warnings: '',
       warningTimeout: null,
       defaultGroups: customReportConstants.groups,
