@@ -163,6 +163,7 @@ function scores(task, scoreType, exerciseDiversity) {
     }
     scoreMap[scoreData[scoreType]].applicationIds.push(scoreData.id);
     scoreMap[scoreData[scoreType]].count += 1;
+    scoreMap[scoreData[scoreType]].percentileRank = scoreData?.percentileRank || null;
     const ref = scoreData.ref.split('-')[1];
     if (exerciseDiversity[ref]) {
       if (hasDiversityCharacteristic(exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)) scoreMap[scoreData[scoreType]].diversity.female += 1;
@@ -233,22 +234,6 @@ function scores(task, scoreType, exerciseDiversity) {
       }
     });
   }
-
-  // Add cumulative count by count
-  let prevCumulativeCount = 0;
-  let scoreCount = 0;
-  scoresInDescendingOrder.forEach(key => {
-    const cumulativeCount = prevCumulativeCount + scoreMap[key].count;
-    scoreMap[key].cumulativeCount = cumulativeCount;
-    prevCumulativeCount = cumulativeCount;
-    scoreCount += scoreMap[key].count;
-  });
-
-  // Calculate percentile rank
-  scoresInDescendingOrder.forEach(key => {
-    const lowerScoreCount = scoreCount - (scoreMap[key].cumulativeCount - scoreMap[key].count);
-    scoreMap[key].percentileRank = ((lowerScoreCount / scoreCount) * 100).toFixed(2);
-  });
 
   // return
   return scoresInDescendingOrder.map(key => {

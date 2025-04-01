@@ -94,7 +94,7 @@
         </TableCell>
         <!-- Percentile Rank -->
         <template v-if="showPercentileRank">
-          <TableCell :title="tableColumns[3].title">
+          <TableCell>
             {{ row.percentileRank }}%
           </TableCell>
         </template>
@@ -161,6 +161,14 @@
             <TableCell colspan="3">
               {{ item.fullName || item.ref }}
             </TableCell>
+
+            <!-- Percentile Rank -->
+            <template v-if="showPercentileRank">
+              <TableCell>
+                {{ row.percentileRank }}%
+              </TableCell>
+            </template>
+
             <template v-if="showDiversity">
               <TableCell :title="tableColumns[3].title">
                 {{ $filters.toYesNo(item.diversity.female) }}
