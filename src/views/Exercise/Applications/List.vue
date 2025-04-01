@@ -25,6 +25,15 @@
               Send reminders
             </button>
             <ActionButton
+              v-if="isClosed && hasPermissions([
+                PERMISSIONS.applications.permissions.canReadApplications.value
+              ])"
+              class="govuk-!-margin-bottom-0 govuk-!-margin-right-2"
+              :action="checkDuplicateApplications"
+            >
+              Check Duplicate Applications
+            </ActionButton>
+            <ActionButton
               v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
@@ -114,6 +123,13 @@
         @close="closeConfirmationModal()"
       />
     </Modal>
+
+    <Modal ref="duplicateApplicationmModal">
+      <DuplicateApplications
+        :applications="duplicateApplications"
+        @close="closeDuplicateApplicationModal()"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -130,6 +146,7 @@ import LateApplicationConfirmation from '@/components/ModalViews/LateApplication
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import DuplicateApplications from '@/components/ModalViews/DuplicateApplications.vue';
 
 export default {
   name: 'ApplicationsList',
@@ -141,6 +158,7 @@ export default {
     LateApplicationRequest,
     LateApplicationConfirmation,
     ActionButton,
+    DuplicateApplications,
   },
   mixins: [permissionMixin],
   props: {
@@ -148,6 +166,11 @@ export default {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      duplicateApplications: [],
+    };
   },
   computed: {
     tableColumns() {
@@ -195,6 +218,10 @@ export default {
     },
     closeConfirmationModal() {
       this.$refs.lateApplicationRequestConfirmModal.closeModal();
+    },
+
+    closeDuplicateApplicationModal() {
+      this.$refs.duplicateApplicationmModal.closeModal();
     },
     getTableData(params) {
       this.$store.dispatch(
@@ -269,6 +296,16 @@ export default {
     },
     closeApplicationReminderModal() {
       this.$refs.applicationReminderModal.closeModal();
+    },
+    async checkDuplicateApplications() {
+      try {
+        const response = await httpsCallable(functions, 'checkDuplicateApplications')({ exerciseId: this.exercise.id });
+        this.duplicateApplications = response.data?.duplicates || [];
+        this.$refs.duplicateApplicationmModal.openModal();
+        return true;
+      } catch (error) {
+        return;
+      }
     },
   },
 };
