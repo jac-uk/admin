@@ -78,13 +78,13 @@
       class="merit-list"
     >
       <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
+        <TableCell :title="titleLookup('rank')">
           <span class="govuk-body">{{ row.rank }}</span>
         </TableCell>
-        <TableCell :title="tableColumns[1].title">
+        <TableCell :title="titleLookup('count')">
           {{ row.count }}
         </TableCell>
-        <TableCell :title="tableColumns[2].title">
+        <TableCell :title="titleLookup(scoreType)">
           <template v-if="scoreType == 'gradeScore'">
             {{ row.score }}
           </template>
@@ -94,26 +94,26 @@
         </TableCell>
         <!-- Percentile Rank -->
         <template v-if="showPercentileRank">
-          <TableCell>
+          <TableCell :title="titleLookup('percent')">
             {{ row.percentileRank }}%
           </TableCell>
         </template>
 
         <template v-if="showDiversity">
-          <TableCell :title="tableColumns[3].title">
+          <TableCell :title="titleLookup('female')">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
-          <TableCell :title="tableColumns[4].title">
+          <TableCell :title="titleLookup('bame')">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
-          <TableCell :title="tableColumns[5].title">
+          <TableCell :title="titleLookup('solicitor')">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
-          <TableCell :title="tableColumns[6].title">
+          <TableCell :title="titleLookup('disability')">
             {{ $filters.formatNumber(100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
         </template>
-        <TableCell :title="showDiversity ? tableColumns[7].title : tableColumns[3].title">
+        <TableCell :title="titleLookup('outcome')">
           <template v-if="!isScoreExpanded(row.score)">
             <div
               v-if="row.outcome.pass"
@@ -158,32 +158,25 @@
             class="govuk-table__row extra-row"
             :class="{ 'highlight': item.ref == selectedApplication}"
           >
-            <TableCell colspan="3">
+            <TableCell colspan="4">
               {{ item.fullName || item.ref }}
             </TableCell>
 
-            <!-- Percentile Rank -->
-            <template v-if="showPercentileRank">
-              <TableCell>
-                {{ row.percentileRank }}%
-              </TableCell>
-            </template>
-
             <template v-if="showDiversity">
-              <TableCell :title="tableColumns[3].title">
+              <TableCell :title="titleLookup('female')">
                 {{ $filters.toYesNo(item.diversity.female) }}
               </TableCell>
-              <TableCell :title="tableColumns[4].title">
+              <TableCell :title="titleLookup('bame')">
                 {{ $filters.toYesNo(item.diversity.bame) }}
               </TableCell>
-              <TableCell :title="tableColumns[5].title">
+              <TableCell :title="titleLookup('solicitor')">
                 {{ $filters.toYesNo(item.diversity.solicitor) }}
               </TableCell>
-              <TableCell :title="tableColumns[6].title">
+              <TableCell :title="titleLookup('disability')">
                 {{ $filters.toYesNo(item.diversity.disability) }}
               </TableCell>
             </template>
-            <TableCell :title="showDiversity ? tableColumns[7].title : tableColumns[3].title">
+            <TableCell :title="titleLookup('outcome')">
               <strong
                 v-if="passMark && isPass(item)"
                 class="govuk-tag govuk-tag--green"
@@ -280,6 +273,7 @@ import { isPass, totalApplications, totalPassed, totalFailed, totalDidNotPartici
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 import _deepClone from 'lodash/cloneDeep';
 import _isEmpty from 'lodash/isEmpty';
+import _startCase from 'lodash/startCase';
 
 export default {
   components: {
@@ -322,19 +316,19 @@ export default {
   data() {
     const showPercentileRank = this.task.type === TASK_TYPE.QUALIFYING_TEST;
     const tableColumns = [];
-    tableColumns.push({ title: 'Rank' });
-    tableColumns.push({ title: 'Count' });
+    tableColumns.push({ title: this.titleLookup('rank') });
+    tableColumns.push({ title: this.titleLookup('count') });
     tableColumns.push({ title: this.$filters.lookup(this.scoreType) });
     if (showPercentileRank) {
-      tableColumns.push({ title: 'Percent' });
+      tableColumns.push({ title: this.titleLookup('percentile') });
     }
     if (this.showDiversity) {
-      tableColumns.push({ title: 'Female' });
-      tableColumns.push({ title: 'Ethnic Minority' });
-      tableColumns.push({ title: 'Solicitor' });
-      tableColumns.push({ title: 'Disability' });
+      tableColumns.push({ title: this.titleLookup('female') });
+      tableColumns.push({ title: this.titleLookup('ethnicMinority') });
+      tableColumns.push({ title: this.titleLookup('solicitor') });
+      tableColumns.push({ title: this.titleLookup('disability') });
     }
-    tableColumns.push({ title: 'Outcome' });
+    tableColumns.push({ title: this.titleLookup('outcome') });
     tableColumns.push({ title: '' });
     return {
       showPercentileRank,
@@ -528,6 +522,21 @@ export default {
       };
       downloadMeritList(title, scoreGroups, task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
+    },
+    titleLookup(key) {
+      const titleMap = {
+        rank: 'Rank',
+        count: 'Count',
+        score: this.$filters.lookup(this.scoreType),
+        percentile: 'Percent',
+        female: 'Female',
+        ethnicMinority: 'Ethnic Minority',
+        solicitor: 'Solicitor',
+        disability: 'Disability',
+        outcome: 'Outcome',
+      };
+
+      return titleMap[key] || _startCase(key);
     },
   },
 };
