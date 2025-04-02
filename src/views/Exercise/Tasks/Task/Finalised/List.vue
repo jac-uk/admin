@@ -43,6 +43,10 @@
       </div>
     </div>
 
+    <div class="govuk-grid-row govuk-!-margin-bottom-1">
+      <span class="govuk-body-s govuk-!-margin-left-3">* Diversity stats reflect total representation when each band is included, descending from the top</span>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <a
