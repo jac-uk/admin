@@ -545,6 +545,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
     }
     headers.push('Rank');
     headers.push('Z_Overall');
+    headers.push('Percentile');
   } else {
     if (type === DOWNLOAD_TYPES.full.value) {
       headers.push('Full name');
@@ -584,6 +585,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
       }
       row.push(item.rank);
       row.push(formatScore(item.zScore));
+      row.push(formatPercentile(item.percentileRank));
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
@@ -653,6 +655,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
           }
           row.push(formatScore(item.rank));
           row.push(formatScore(item.zScore));
+          row.push(formatPercentile(item.percentileRank));
         } else {
           if (type === DOWNLOAD_TYPES.full.value) {
             row.push(item.fullName);
@@ -708,4 +711,9 @@ function getDownloadTypes(task) {
 function formatScore(score, acceptZero = true) {
   if (score === null || score === undefined || (!acceptZero && score === 0)) return 'n/a';
   return score;
+}
+
+function formatPercentile(value, acceptZero = true) {
+  if (value === null || value === undefined || (!acceptZero && value === 0)) return 'n/a';
+  return `${value}%`;
 }
