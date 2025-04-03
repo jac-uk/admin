@@ -564,7 +564,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
     }
     headers.push('Rank');
     headers.push('Z_Overall');
-    headers.push('Z_Overall %');
+    headers.push('Percentile %');
   } else {
     if (type === DOWNLOAD_TYPES.full.value) {
       headers.push('Full name');

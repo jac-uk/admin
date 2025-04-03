@@ -98,8 +98,8 @@
         </TableCell>
         <!-- Percentile Rank -->
         <template v-if="showPercentileRank">
-          <TableCell :title="titleLookup('percent')">
-            {{ row.percentileRank }}
+          <TableCell :title="titleLookup('percentile')">
+            {{ row.percentileRank }}%
           </TableCell>
         </template>
 
@@ -324,7 +324,7 @@ export default {
     tableColumns.push({ title: this.titleLookup('count') });
     tableColumns.push({ title: this.$filters.lookup(this.scoreType) });
     if (showPercentileRank) {
-      tableColumns.push({ title: this.titleLookup('percent') });
+      tableColumns.push({ title: this.titleLookup('percentile') });
     }
     if (this.showDiversity) {
       tableColumns.push({ title: this.titleLookup('female') });
@@ -532,7 +532,7 @@ export default {
         rank: 'Rank',
         count: 'Count',
         score: this.$filters.lookup(this.scoreType),
-        percent: 'Percent',
+        percentile: 'Percentile',
         female: 'Female',
         ethnicMinority: 'Ethnic Minority',
         solicitor: 'Solicitor',
