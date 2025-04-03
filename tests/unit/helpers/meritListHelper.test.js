@@ -24,6 +24,24 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { TASK_TYPE } from '@/helpers/constants';
 import { vi } from 'vitest';
 
+const xlsxOptions = {
+  merges: ['A1:I1'], // For merge the cells of the note on the top
+  styles: {
+    row: {
+      1: { // Add yellow background for the note on the top
+        bold: true,
+        fill: 'FFFF00',
+      },
+      2: { // Add grey background and bold for the headers
+        bold: true,
+        fill: 'eeeeee',
+      },
+    },
+  },
+};
+
+const note = 'Diversity stats reflect total representation when each band is included, descending from the top';
+
 describe('getOverrideReasons', () => {
   it('should return override reasons', () => {
     expect(getOverrideReasons()).toEqual(Object.values(OVERRIDE_REASON));
@@ -919,6 +937,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.full.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
   });
@@ -937,6 +956,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.emp.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
 
@@ -976,6 +996,18 @@ describe('downloadMeritList', () => {
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
         [
+          note,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+        ],
+        [
           'Ref',
           'Full name',
           'Email',
@@ -992,6 +1024,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.full.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
 
@@ -1006,6 +1039,16 @@ describe('downloadMeritList', () => {
     downloadMeritList(title, {}, task, diversityData, DOWNLOAD_TYPES.emp.value, fileName);
 
     expect(downloadXLSX).toHaveBeenCalledWith([
+      [
+              note,
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+            ],
         [
           'Ref',
           'Score',
@@ -1021,6 +1064,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.emp.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
 
@@ -1040,6 +1084,18 @@ describe('downloadMeritList', () => {
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
+        [
+                note,
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+              ],
         [
           'Ref',
           'Full name',
@@ -1081,6 +1137,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.full.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
   });
@@ -1098,6 +1155,18 @@ describe('downloadMeritList', () => {
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
+        [
+                 note,
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+               ],
         [
           'Ref',
           'Full name',
@@ -1127,6 +1196,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.full.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
   });
@@ -1143,6 +1213,18 @@ describe('downloadMeritList', () => {
 
     expect(downloadXLSX).toHaveBeenCalledWith(
       [
+        [
+          note,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+        ],
         [
           'Ref',
           'Full name',
@@ -1172,6 +1254,7 @@ describe('downloadMeritList', () => {
         title: title,
         sheetName: DOWNLOAD_TYPES.full.sheetName,
         fileName: `${fileName}.xlsx`,
+        ...xlsxOptions,
       }
     );
   });
