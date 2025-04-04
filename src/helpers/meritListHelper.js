@@ -136,6 +136,8 @@ function scores(task, scoreType, exerciseDiversity) {
       scoreMap[scoreData[scoreType]] = {
         applicationIds: [],
         count: 0,
+        cumulativeCount: 0,
+        percentileRank: 0,
         rank: 0,
         diversity: {
           female: 0,
@@ -161,6 +163,7 @@ function scores(task, scoreType, exerciseDiversity) {
     }
     scoreMap[scoreData[scoreType]].applicationIds.push(scoreData.id);
     scoreMap[scoreData[scoreType]].count += 1;
+    scoreMap[scoreData[scoreType]].percentileRank = scoreData?.percentileRank || null;
     const ref = scoreData.ref.split('-')[1];
     if (exerciseDiversity[ref]) {
       if (hasDiversityCharacteristic(exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)) scoreMap[scoreData[scoreType]].diversity.female += 1;
@@ -527,6 +530,8 @@ function downloadMeritList(title, scoreGroups, task, diversityData, type, fileNa
 function xlsxData(scoreGroups, task, diversityData, type) {
   // const taskScoreType = scoreType(task);
   const rows = [];
+
+  // add headers
   const headers = [];
   headers.push('Ref');
   if (task.type === TASK_TYPE.QUALIFYING_TEST) {
@@ -542,6 +547,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
     }
     headers.push('Rank');
     headers.push('Z_Overall');
+    headers.push('Percentile %');
   } else {
     if (type === DOWNLOAD_TYPES.full.value) {
       headers.push('Full name');
@@ -563,6 +569,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
   headers.push('Solicitor');
   headers.push('Disability');
   rows.push(headers);
+
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
     row.push(item.ref);
@@ -581,6 +588,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
       }
       row.push(item.rank);
       row.push(formatScore(item.zScore));
+      row.push(formatScore(item.percentileRank));
     } else {
       if (type === DOWNLOAD_TYPES.full.value) {
         row.push(item.fullName);
@@ -650,6 +658,7 @@ function xlsxData(scoreGroups, task, diversityData, type) {
           }
           row.push(formatScore(item.rank));
           row.push(formatScore(item.zScore));
+          row.push(formatScore(item.percentileRank));
         } else {
           if (type === DOWNLOAD_TYPES.full.value) {
             row.push(item.fullName);
