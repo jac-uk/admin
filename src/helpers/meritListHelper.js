@@ -519,19 +519,6 @@ function downloadMeritList(title, scoreGroups, task, diversityData, type, fileNa
         title: title,
         sheetName: DOWNLOAD_TYPES[type].sheetName,
         fileName: `${fileName}.xlsx`,
-        merges: ['A1:I1'], // For merge the cells of the note on the top
-        styles: {
-          row: {
-            1: { // Add yellow background for the note on the top
-              bold: true,
-              fill: 'FFFF00',
-            },
-            2: { // Add grey background and bold for the headers
-              bold: true,
-              fill: 'eeeeee',
-            },
-          },
-        },
       }
     );
     return true;
@@ -543,10 +530,6 @@ function downloadMeritList(title, scoreGroups, task, diversityData, type, fileNa
 function xlsxData(scoreGroups, task, diversityData, type) {
   // const taskScoreType = scoreType(task);
   const rows = [];
-
-  // add note on the top of table
-  const note = ['Diversity stats reflect total representation when each band is included, descending from the top'];
-  rows.push(note);
 
   // add headers
   const headers = [];
@@ -586,9 +569,6 @@ function xlsxData(scoreGroups, task, diversityData, type) {
   headers.push('Solicitor');
   headers.push('Disability');
   rows.push(headers);
-
-  // add empty columns for note according to headers
-  note.push(...Array(headers.length - 1).fill(''));
 
   scoreData(task, scoreType(task), diversityData).forEach(item => {
     const row = [];
